@@ -1,0 +1,243 @@
+{
+  "metadata": {
+    "title": "JIBB — 日印ビジネスビューロー",
+    "description": "日本とインドをイノベーション、貿易、製造、テクノロジーを通じてつなぐ、国境を越えた産業協力エコシステム。"
+  },
+  "nav": {
+    "home": "ホーム",
+    "about": "私たちについて",
+    "services": "サービス",
+    "innovationHub": "イノベーションハブ",
+    "sectors": "セクター",
+    "membership": "メンバーシップ",
+    "events": "イベント",
+    "resources": "リソース",
+    "careers": "採用情報",
+    "contact": "お問い合わせ",
+    "ecosystem": "エコシステム",
+    "memberLogin": "会員ログイン",
+    "joinJibb": "JIBBに参加",
+    "switchLanguage": "English"
+  },
+  "aboutMenu": {
+    "whoWeAre": "JIBBのミッション、社会的インパクト、コアメンバーのご紹介",
+    "vision": "ビジョン＆ミッション",
+    "visionDesc": "私たちの長期目標と設立目的",
+    "leadership": "リーダーシップ",
+    "leadershipDesc": "ミッションを舵取りする理事会と経営陣",
+    "approach": "アプローチ",
+    "approachDesc": "国境を越えた貿易・事業創出の手法",
+    "ecosystem": "エコシステム",
+    "ecosystemDesc": "スタートアップと大企業の動的なネットワーク",
+    "partnerships": "グローバル連携",
+    "partnershipsDesc": "主要な機関とのパートナーシップ"
+  },
+  "servicesMenu": {
+    "marketEntry": "市場参入支援",
+    "marketEntryDesc": "海外市場へのスムーズな進出・立ち上げを支援",
+    "partnership": "パートナーシップ促進",
+    "partnershipDesc": "信頼できる現地パートナーとの戦略的マッチング",
+    "localization": "ローカリゼーション支援",
+    "localizationDesc": "現地の文化や市場に合わせたビジネス戦略の適応",
+    "investment": "投資支援",
+    "investmentDesc": "資本展開および投資アドバイザリー",
+    "jointVentures": "合弁事業（JV）",
+    "jointVenturesDesc": "付加価値の高い二国間共同事業の組成支援",
+    "consulting": "イノベーションコンサルティング",
+    "consultingDesc": "企業の先進的なイノベーション活動への支援",
+    "research": "リサーチ＆インサイト",
+    "researchDesc": "オーダーメイドの市場・商業インテリジェンス分析"
+  },
+  "hubMenu": {
+    "coe": "共同開発センター（CoE）",
+    "coeDesc": "技術実証と検証のための専用開発拠点",
+    "labs": "ラボラトリー",
+    "labsDesc": "共同研究のための高度なサンドボックス環境",
+    "incubation": "スタートアップ育成",
+    "incubationDesc": "二国間スタートアップのインキュベーション",
+    "research": "共同研究プログラム",
+    "researchDesc": "産学官が連携する先端技術共同プロジェクト",
+    "partners": "パートナー機関",
+    "partnersDesc": "日印の主要な大学・研究機関との連携",
+    "challenges": "イノベーション挑戦",
+    "challengesDesc": "重要課題を解決する技術コンテストの開催"
+  },
+  "resourcesMenu": {
+    "insights": "市場インサイト",
+    "insightsDesc": "国境を越えたビジネス動向の深掘り分析",
+    "reports": "業界レポート",
+    "reportsDesc": "年次・四半期セクターレポート",
+    "blog": "ニュース＆ブログ",
+    "blogDesc": "コラボレーションのストーリーと発表情報",
+    "media": "メディア＆プレス",
+    "mediaDesc": "プレスリリースと報道機関向けリソース",
+    "caseStudies": "ケーススタディ",
+    "caseStudiesDesc": "JIBB会員のリアルな成功事例のご紹介",
+    "newsletter": "メールマガジン",
+    "newsletterDesc": "最新の市場動向を毎週あなたの受信トレイにお届け"
+  },
+  "hero": {
+    "headline1": "イノベーションを推進。",
+    "headline2": "永続的なパートナーシップを構築。",
+    "subtext": "イノベーション、貿易、製造、国境を越えた協力を通じて日本とインドをつなぎます。",
+    "ctaJoin": "JIBBに参加",
+    "ctaExplore": "イノベーションハブを探索"
+  },
+  "story": {
+    "sectionTitle": "コラボレーションの物語",
+    "kenjiName": "ケンジ",
+    "kenjiRole": "テック企業幹部、東京",
+    "aaravName": "アーラヴ",
+    "aaravRole": "スタートアップ創設者、ノイダ",
+    "narration1": "朝日がJIBBイノベーションハブのモダンなガラス張りのラウンジに差し込んでいます。",
+    "narration2": "二つの国のエンジニアと起業家たちがスマートボードにアイデアを描いています。",
+    "narration3": "東京のテック企業幹部ケンジが、ノイダで次世代バッテリーソフトウェアを開発するスタートアップ創設者アーラヴの向かいに座っています。",
+    "kenji1": "取締役会がインド市場への進出を提案したとき、最初はためらいました。規制環境が非常に複雑に思えたのです。信頼できる製造パートナーをどう見つければよいか分かりませんでした。",
+    "aarav1": "その気持ちはよく分かります。私たちは逆の問題を抱えていました。ソフトウェアは開発できましたが、先進的な日本のハードウェアが必要でした。東京の企業に直接連絡しても、うまくいきませんでした。橋渡しが必要だったのです。",
+    "kenji2": "まさにそれが日印ビジネスビューローの役割です。会員になった瞬間、すべてが変わりました。JIBBは市場レポートだけでなく、段階的な参入戦略を提供し、ローカリゼーションも担当してくれました。",
+    "aarav2": "私たちにとっては、パートナーシップ促進が大きな転機でした。JIBBがケンジの会社に直接紹介してくれました。さらに、このイノベーションハブで統合製品のテストができること、最先端のラボラトリーにアクセスできることで、開発が数ヶ月も短縮されました。",
+    "kenji3": "施設は世界クラスです。同じ部屋で共同イノベーションできることが、多くの障壁を取り除きます。リソースを共有し、コストを削減し、より良い製品を一緒に作ります。ディアスポラネットワーキングイベントにはもう参加しましたか？",
+    "aarav3": "先週、初めてクラブミーティングに参加しました。3人の投資家と、新しい国境を越えたインセンティブについて説明してくれた政府関係者とつながりました。このようなアクセスは他では見つかりません。",
+    "kenji4": "その通りです。JIBBにアドバイスを求めるために参加するのではありません。生きた、呼吸するエコシステムに接続するために会員になるのです。イノベーションを推進し、永続的なパートナーシップを構築します。",
+    "aarav4": "私たちがその証拠です。私たちがソフトウェアを持ち込み、あなたがハードウェアを持ち込み、JIBBが私たちを結びつけてくれました。",
+    "ctaHeadline": "あなたの旅はここから始まります",
+    "ctaText": "あなたのリーチを拡大。国境なきイノベーション。JIBBに今すぐ参加して、あなた自身の成功ストーリーを始めましょう。",
+    "ctaJoin": "JIBBに参加",
+    "ctaExplore": "イノベーションハブを探索",
+    "ctaButton": "会員になる"
+  },
+  "whatWeDo": {
+    "sectionTitle": "私たちの活動",
+    "sectionSubtitle": "企業が国境を越えて協力し、拡大し、成功するための道筋を創出します。",
+    "marketEntry": {
+      "title": "市場参入支援",
+      "description": "段階的な参入戦略、ローカリゼーション支援、シームレスな国境を越えた拡大のための規制に関する深い洞察。"
+    },
+    "partnership": {
+      "title": "パートナーシップ促進",
+      "description": "両国の信頼できる顧客、合弁事業候補、製造パートナーとの接続。"
+    },
+    "innovation": {
+      "title": "イノベーション支援",
+      "description": "共同プロジェクト、リソース共有、共同開発を促進し、グローバル市場向けの画期的な製品を創出。"
+    },
+    "diaspora": {
+      "title": "ディアスポラネットワーキング",
+      "description": "インド人ディアスポラと日本のビジネス機会および異文化パートナーシップをつなぐ限定ネットワーキングイベント。"
+    },
+    "learnMore": "詳しく見る"
+  },
+  "sectors": {
+    "sectionTitle": "主要セクター",
+    "sectionSubtitle": "日印パートナーシップの未来を形作る産業全体での協力を推進。",
+    "semiconductor": "エレクトロニクス・半導体",
+    "ev": "自動車・電気自動車",
+    "electronics": "先端製造業",
+    "pharma": "医薬品",
+    "renewable": "再生可能エネルギー",
+    "infrastructure": "インフラストラクチャー",
+    "chemicals": "化学・先端材料",
+    "emerging": "新興技術"
+  },
+  "innovationHub": {
+    "sectionTitle": "イノベーションハブ",
+    "sectionSubtitle": "未熟なアイデアを市場対応のソリューションに変える場所。東京とノイダに拠点。",
+    "labs": {
+      "title": "研究所",
+      "description": "エレクトロニクス、EV、医薬品向けの先進的なR&D施設。"
+    },
+    "incubation": {
+      "title": "スタートアップインキュベーション",
+      "description": "ワークスペース、メンターシップ、投資家への直接アクセス。"
+    },
+    "research": {
+      "title": "研究プログラム",
+      "description": "主要技術領域にわたる共同研究。"
+    },
+    "collaboration": {
+      "title": "コラボレーション",
+      "description": "国境を越えた共同開発と技術共有。"
+    },
+    "ecosystem": {
+      "title": "エキスパートエコシステム",
+      "description": "業界専門家、政府関係者、起業家。"
+    },
+    "cta": "イノベーションハブを探索"
+  },
+  "membership": {
+    "sectionTitle": "メンバーシップ",
+    "sectionSubtitle": "イノベーター、企業、機関の強力な国境を越えたエコシステムに参加しましょう。",
+    "corporate": "法人",
+    "startup": "スタートアップ",
+    "institutional": "機関",
+    "government": "政府パートナー",
+    "individual": "個人",
+    "cta": "会員になる",
+    "recommended": "おすすめ"
+  },
+  "events": {
+    "sectionTitle": "今後のイベント",
+    "sectionSubtitle": "カンファレンス、ネットワーキングセッション、デレゲーション、ウェビナー。",
+    "viewAll": "すべてのイベントを見る",
+    "register": "登録する"
+  },
+  "partners": {
+    "sectionTitle": "パートナー・支援者",
+    "sectionSubtitle": "政府、機関、大学、業界リーダーとの協力。"
+  },
+  "insights": {
+    "sectionTitle": "インサイト・お知らせ",
+    "sectionSubtitle": "日印回廊からのレポート、政策アップデート、業界ニュース。",
+    "viewAll": "すべてのインサイトを見る"
+  },
+  "stats": {
+    "partnerships": "パートナーシップ",
+    "countries": "か国",
+    "leaders": "業界リーダー",
+    "programs": "イノベーションプログラム"
+  },
+  "footer": {
+    "tagline": "国境を越えたイノベーション＆産業協力エコシステム",
+    "quickLinks": "クイックリンク",
+    "services": "サービス",
+    "innovation": "イノベーション",
+    "resources": "リソース",
+    "connect": "つながる",
+    "newsletter": {
+      "title": "最新情報を受け取る",
+      "placeholder": "メールアドレスを入力",
+      "button": "登録"
+    },
+    "offices": {
+      "tokyoTitle": "東京オフィス",
+      "tokyoAddress": "東京、日本",
+      "noidaTitle": "ノイダオフィス",
+      "noidaAddress": "ノイダ、インド"
+    },
+    "copyright": "© {year} 日印ビジネスビューロー. 全著作権所有。",
+    "privacy": "プライバシーポリシー",
+    "terms": "利用規約"
+  },
+  "sectorsMenu": {
+    "desc": "日印協力を牽引する主要8大セクターをご紹介"
+  },
+  "membershipMenu": {
+    "desc": "企業、スタートアップ、機関連携のための最適なプラン"
+  },
+  "eventsMenu": {
+    "desc": "二国間カンファレンス、ウェビナー、商談会へのご案内"
+  },
+  "careersMenu": {
+    "desc": "日印交流と二国間ビジネスの未来を築くチームに参加"
+  },
+  "common": {
+    "learnMore": "詳しく見る",
+    "getStarted": "始める",
+    "contactUs": "お問い合わせ",
+    "readMore": "続きを読む",
+    "viewAll": "すべて表示",
+    "back": "戻る",
+    "loading": "読み込み中...",
+    "comingSoon": "近日公開"
+  }
+}

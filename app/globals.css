@@ -1,26 +1,511 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   JIBB DESIGN SYSTEM — Color Tokens & Theme Configuration
+   "Japan's precision meets India's innovation."
+
+   Typography: Inter (600–800 headings, 400–500 body)
+               Noto Sans JP (400–700 Japanese)
+   Spacing:    8px base grid
+   Radius:     8px buttons, 12px cards, 24px large elements
+   Shadows:    Subtle, layered
+   ============================================================ */
 
 @theme inline {
+  /* ---- Typography ---- */
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-inter);
+  --font-japanese: var(--font-noto-sans-jp);
+
+  /* ---- Shadcn color mapping ---- */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* ---- Charts ---- */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* ---- Sidebar ---- */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* ---- Border Radius (8px btn, 12px card, 24px large) ---- */
+  --radius-sm: 0.375rem;   /* 6px  */
+  --radius-md: 0.5rem;     /* 8px  — buttons */
+  --radius-lg: 0.75rem;    /* 12px — cards */
+  --radius-xl: 1rem;       /* 16px */
+  --radius-2xl: 1.25rem;   /* 20px */
+  --radius-3xl: 1.5rem;    /* 24px — large elements */
+  --radius-4xl: 2rem;      /* 32px */
+
+  /* ---- JIBB Brand Colors ---- */
+  --color-jibb-indigo: #243B6B;
+  --color-jibb-indigo-light: #2e4d8a;
+  --color-jibb-indigo-dark: #1a2d52;
+  --color-jibb-orange: #E98B2A;
+  --color-jibb-orange-light: #f0a455;
+  --color-jibb-orange-dark: #c97520;
+  --color-jibb-sakura: #D96C6C;
+  --color-jibb-sakura-light: #e28e8e;
+  --color-jibb-sakura-dark: #c05050;
+  --color-jibb-cream: #F8F7F4;
+  --color-jibb-warm-white: #FDFCFA;
+
+  /* ---- Shadows (layered, subtle) ---- */
+  --shadow-jibb-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.03);
+  --shadow-jibb: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-jibb-md: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  --shadow-jibb-lg: 0 8px 30px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-jibb-xl: 0 16px 48px rgba(0, 0, 0, 0.12), 0 8px 20px rgba(0, 0, 0, 0.06);
+  --shadow-jibb-glow: 0 0 20px rgba(36, 59, 107, 0.15);
+  --shadow-jibb-orange-glow: 0 0 20px rgba(233, 139, 42, 0.2);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ============================================================
+   JIBB Light Theme (Default)
+   ============================================================ */
+:root {
+  --background: #F8F7F4;
+  --foreground: #1A1A1A;
+
+  --card: #FFFFFF;
+  --card-foreground: #1A1A1A;
+
+  --popover: #FFFFFF;
+  --popover-foreground: #1A1A1A;
+
+  --primary: #243B6B;
+  --primary-foreground: #FFFFFF;
+
+  --secondary: #F0EDE8;
+  --secondary-foreground: #243B6B;
+
+  --muted: #F0EDE8;
+  --muted-foreground: #6B7280;
+
+  --accent: #E98B2A;
+  --accent-foreground: #FFFFFF;
+
+  --destructive: #D96C6C;
+
+  --border: #E5E2DC;
+  --input: #E5E2DC;
+  --ring: #243B6B;
+
+  --chart-1: #243B6B;
+  --chart-2: #E98B2A;
+  --chart-3: #D96C6C;
+  --chart-4: #2e4d8a;
+  --chart-5: #f0a455;
+
+  --radius: 0.75rem;
+
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #1A1A1A;
+  --sidebar-primary: #243B6B;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F0EDE8;
+  --sidebar-accent-foreground: #243B6B;
+  --sidebar-border: #E5E2DC;
+  --sidebar-ring: #243B6B;
+}
+
+/* ============================================================
+   JIBB Dark Theme
+   ============================================================ */
+.dark {
+  --background: #0F1629;
+  --foreground: #F0EDE8;
+
+  --card: #1A2340;
+  --card-foreground: #F0EDE8;
+
+  --popover: #1A2340;
+  --popover-foreground: #F0EDE8;
+
+  --primary: #7B9FE0;
+  --primary-foreground: #0F1629;
+
+  --secondary: #1E2D4D;
+  --secondary-foreground: #F0EDE8;
+
+  --muted: #1E2D4D;
+  --muted-foreground: #8B95A8;
+
+  --accent: #F0A455;
+  --accent-foreground: #0F1629;
+
+  --destructive: #E28E8E;
+
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: #7B9FE0;
+
+  --chart-1: #7B9FE0;
+  --chart-2: #F0A455;
+  --chart-3: #E28E8E;
+  --chart-4: #5A7DC0;
+  --chart-5: #D4893A;
+
+  --sidebar: #1A2340;
+  --sidebar-foreground: #F0EDE8;
+  --sidebar-primary: #7B9FE0;
+  --sidebar-primary-foreground: #0F1629;
+  --sidebar-accent: #1E2D4D;
+  --sidebar-accent-foreground: #F0EDE8;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #7B9FE0;
+}
+
+/* ============================================================
+   Base Styles & Typography System
+   ============================================================ */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  body {
+    @apply bg-background text-foreground overflow-x-hidden;
+    font-family: var(--font-inter), var(--font-noto-sans-jp), system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Japanese locale: prioritize Noto Sans JP */
+  html[lang="ja"] body {
+    font-family: var(--font-noto-sans-jp), var(--font-inter), system-ui, sans-serif;
+    font-feature-settings: "palt";
+    letter-spacing: 0.02em;
+  }
+
+  /* ---- Heading typography (weight 600–800) ---- */
+  h1 {
+    @apply text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1];
+  }
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-tight;
+  }
+  h3 {
+    @apply text-xl md:text-2xl font-semibold tracking-tight leading-snug;
+  }
+  h4 {
+    @apply text-lg md:text-xl font-semibold leading-snug;
+  }
+  h5 {
+    @apply text-base font-semibold leading-normal;
+  }
+  h6 {
+    @apply text-sm font-semibold leading-normal uppercase tracking-wide;
+  }
+
+  /* ---- Body typography (weight 400–500) ---- */
+  p {
+    @apply leading-relaxed;
+  }
+
+  /* ---- Focus ring ---- */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+
+  /* ---- Selection color ---- */
+  ::selection {
+    background-color: #243B6B;
+    color: #FFFFFF;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================================
+   Custom Utility Classes
+   ============================================================ */
+@layer utilities {
+  /* ---- JIBB Gradient Backgrounds ---- */
+  .bg-jibb-gradient {
+    background: linear-gradient(135deg, #243B6B 0%, #1a2d52 100%);
+  }
+  .bg-jibb-gradient-warm {
+    background: linear-gradient(135deg, #243B6B 0%, #E98B2A 100%);
+  }
+  .bg-jibb-gradient-subtle {
+    background: linear-gradient(180deg, #F8F7F4 0%, #FFFFFF 100%);
+  }
+  .bg-jibb-gradient-radial {
+    background: radial-gradient(ellipse at 30% 50%, rgba(36, 59, 107, 0.08) 0%, transparent 70%);
+  }
+
+  /* ---- Text gradient ---- */
+  .text-jibb-gradient {
+    background: linear-gradient(135deg, #243B6B 0%, #E98B2A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ---- Glass morphism ---- */
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  .glass-dark {
+    background: rgba(15, 22, 41, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .dark .glass {
+    background: rgba(26, 35, 64, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* ---- Japanese wave pattern ---- */
+  .wave-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='20' viewBox='0 0 100 20'%3E%3Cpath d='M21.184 20c.357-.13.72-.264 1.088-.402l1.768-.661C33.64 15.347 39.647 14 50 14c10.271 0 15.362 1.222 24.629 4.928.955.383 1.869.74 2.75 1.072h6.225c-2.51-.73-5.139-1.691-8.233-2.928C65.888 13.278 60.562 12 50 12c-10.626 0-16.855 1.397-26.66 5.063l-1.767.662c-2.475.923-4.66 1.674-6.724 2.275h6.335zm0-20C13.258 2.892 8.077 4 0 4V2c5.744 0 9.951-.574 14.85-2h6.334zM77.38 0C85.239 2.966 90.502 4 100 4V2c-6.842 0-11.386-.542-16.396-2h-6.225zM0 14c8.44 0 13.718-1.21 22.272-4.402l1.768-.661C33.64 5.347 39.647 4 50 4c10.271 0 15.362 1.222 24.629 4.928C84.112 12.722 89.438 14 100 14v-2c-10.271 0-15.362-1.222-24.629-4.928C65.888 3.278 60.562 2 50 2 39.374 2 33.145 3.397 23.34 7.063l-1.767.662C13.223 10.84 8.163 12 0 12v2z' fill='%23243B6B' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  /* ---- JIBB Shadows ---- */
+  .shadow-jibb-sm  { box-shadow: var(--shadow-jibb-sm); }
+  .shadow-jibb     { box-shadow: var(--shadow-jibb); }
+  .shadow-jibb-md  { box-shadow: var(--shadow-jibb-md); }
+  .shadow-jibb-lg  { box-shadow: var(--shadow-jibb-lg); }
+  .shadow-jibb-xl  { box-shadow: var(--shadow-jibb-xl); }
+  .shadow-jibb-glow        { box-shadow: var(--shadow-jibb-glow); }
+  .shadow-jibb-orange-glow { box-shadow: var(--shadow-jibb-orange-glow); }
+
+  /* ---- Section container ---- */
+  .section-container {
+    @apply max-w-7xl mx-auto px-6 lg:px-8;
+  }
+
+  /* ---- Section spacing (8px grid: py = 12 * 8 = 96px) ---- */
+  .section-spacing {
+    @apply py-24;
+  }
+
+  /* ---- Hide scrollbar ---- */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+/* ============================================================
+   Story Section — Premium Glassmorphic Chat Bubbles & Mobile FOUC Prevention
+   ============================================================ */
+/* Default hidden states for GSAP-controlled elements to prevent FOUC & touch-scrolling issues on load */
+.story-narration-wrap,
+.story-convo-wrap,
+.story-hs-wrap,
+.story-cta-wrap,
+.story-bg-warm,
+.story-hs-glow,
+.story-convo-bubble,
+.story-convo-pair-0,
+.story-convo-pair-1,
+.story-convo-pair-2,
+.story-convo-pair-3 {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.story-glass {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.72) 0%,
+    rgba(255, 255, 255, 0.52) 100%
+  );
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 4px 24px rgba(0, 0, 0, 0.04),
+    0 1px 4px rgba(0, 0, 0, 0.02);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.story-glass:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 8px 32px rgba(0, 0, 0, 0.06),
+    0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.story-glass-kenji {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.68) 0%,
+    rgba(36, 59, 107, 0.04) 100%
+  );
+  border-color: rgba(36, 59, 107, 0.08);
+}
+
+.story-glass-kenji:hover {
+  border-color: rgba(36, 59, 107, 0.15);
+}
+
+.story-glass-aarav {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.68) 0%,
+    rgba(233, 139, 42, 0.04) 100%
+  );
+  border-color: rgba(233, 139, 42, 0.08);
+}
+
+.story-glass-aarav:hover {
+  border-color: rgba(233, 139, 42, 0.15);
+}
+
+/* ============================================================
+   Navbar-specific: transparent-to-solid scroll transition
+   ============================================================ */
+.navbar-transparent {
+  background: transparent;
+  border-bottom-color: transparent;
+}
+.navbar-solid {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-jibb-sm);
+}
+.dark .navbar-solid {
+  background: rgba(15, 22, 41, 0.92);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+/* ============================================================
+   Bespoke Premium Animations & Micro-Interactions
+   ============================================================ */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes float-delayed {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+@keyframes wave-slide {
+  0% { background-position-x: 0px; }
+  100% { background-position-x: 100px; }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  .animate-float-delayed {
+    animation: float-delayed 8s ease-in-out infinite;
+    animation-delay: 2s;
+  }
+  .animate-glow-pulse {
+    animation: glow-pulse 4s ease-in-out infinite;
+  }
+  .animate-wave-slide {
+    animation: wave-slide 20s linear infinite;
+  }
+}
+
+/* ============================================================
+   Lenis Smooth Scrolling Baseline Configurations
+   ============================================================ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* ============================================================
+   Subtle Glassmorphic Premium Scrollbar Styles
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(36, 59, 107, 0.15); /* JIBB Light Indigo theme blend */
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 9999px;
+  transition: background 0.3s ease;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(240, 237, 232, 0.12); /* JIBB Dark Warm White blend */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(36, 59, 107, 0.35);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(240, 237, 232, 0.25);
 }

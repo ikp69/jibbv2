@@ -1,0 +1,539 @@
+"use client";
+
+import { useRef, useEffect, useState, useCallback } from "react";
+import Image from "next/image";
+import { Link } from "@/src/i18n/navigation";
+import { useTranslations } from "next-intl";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+/* ============================================================
+   CONVERSATION DATA STRUCTURE
+   Maps to i18n keys in messages/{locale}.json → story.*
+   ============================================================ */
+const MESSAGES: { speaker: "kenji" | "aarav"; key: string }[] = [
+  { speaker: "kenji", key: "kenji1" },
+  { speaker: "aarav", key: "aarav1" },
+  { speaker: "kenji", key: "kenji2" },
+  { speaker: "aarav", key: "aarav2" },
+  { speaker: "kenji", key: "kenji3" },
+  { speaker: "aarav", key: "aarav3" },
+  { speaker: "kenji", key: "kenji4" },
+  { speaker: "aarav", key: "aarav4" },
+];
+
+const NARRATION_KEYS = ["narration1", "narration2", "narration3"] as const;
+const CHAPTERS = [
+  "Intro",
+  "Narration",
+  "Pair 1",
+  "Pair 2",
+  "Pair 3",
+  "Pair 4",
+  "Converge",
+  "Handshake",
+  "Join"
+];
+
+/* ============================================================
+   STORY HERO — Scroll-Driven Cinematic Experience
+   ============================================================ */
+export function DesktopStoryHero() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations("story");
+  const [chapter, setChapter] = useState(0);
+  const [canReplay, setCanReplay] = useState(false);
+
+  /* ---- Navigation handlers ---- */
+  const handleSkip = useCallback(() => {
+    if (!sectionRef.current) return;
+    const bottom =
+      sectionRef.current.offsetTop + sectionRef.current.offsetHeight;
+    window.scrollTo({ top: bottom + 1, behavior: "smooth" });
+  }, []);
+
+  const handleReplay = useCallback(() => {
+    if (!sectionRef.current) return;
+    window.scrollTo({ top: sectionRef.current.offsetTop, behavior: "smooth" });
+  }, []);
+
+  /* ---- GSAP ScrollTrigger + Master Timeline ---- */
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({ ignoreMobileResize: true });
+
+    const ctx = gsap.context(() => {
+      /* ── Initial hidden states ── */
+      gsap.set(".story-narration-wrap", { autoAlpha: 0 });
+      gsap.set([".sn-0", ".sn-1", ".sn-2"], { autoAlpha: 0, y: 24 });
+      gsap.set(".story-convo-wrap", { autoAlpha: 0 });
+      gsap.set([".story-convo-pair-0", ".story-convo-pair-1", ".story-convo-pair-2", ".story-convo-pair-3"], {
+        autoAlpha: 0,
+        y: 20
+      });
+      gsap.set(".story-hs-wrap", { autoAlpha: 0, scale: 0.85 });
+      gsap.set(".story-hs-glow", { autoAlpha: 0, scale: 0.3 });
+      gsap.set(".story-cta-wrap", { autoAlpha: 0 });
+      gsap.set(".story-cta-content", { autoAlpha: 0, y: 40 });
+      gsap.set([".cta-text-1", ".cta-text-2", ".cta-text-3", ".cta-buttons"], { autoAlpha: 0, y: 20 });
+      gsap.set(".story-bg-warm", { autoAlpha: 0 });
+
+      MESSAGES.forEach((msg, i) => {
+        gsap.set(`.sb-${i}`, {
+          autoAlpha: 0,
+          x: msg.speaker === "kenji" ? -30 : 30,
+          scale: 0.98,
+        });
+      });
+
+      /* ── Build master timeline (9 scroll phases, 0 to 90 timeline units) ── */
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "bottom bottom",
+          pin: panelRef.current,
+          pinSpacing: false, // Prevents GSAP from adding extra height since we manually set 900vh
+          scrub: 0.6,
+          onUpdate: (self) => {
+            const p = self.progress;
+            const ch = Math.min(
+              CHAPTERS.length - 1,
+              Math.floor(p * CHAPTERS.length)
+            );
+            setChapter(ch);
+            setCanReplay(p > 0.1);
+          },
+        },
+      });
+
+      /* ═══════════════════════════════════════
+         PHASE 0 — INTRO  (timeline 0–10)
+         Title visible by default, then fades.
+         ═══════════════════════════════════════ */
+      tl.to(".story-intro-wrap", {
+        autoAlpha: 0,
+        y: -40,
+        duration: 3,
+        ease: "power2.in",
+      }, 5);
+
+      /* ═══════════════════════════════════════
+         PHASE 1 — NARRATION  (timeline 10–20)
+         Setting the scene, all sentences together.
+         ═══════════════════════════════════════ */
+      tl.to(".story-narration-wrap", { autoAlpha: 1, duration: 2 }, 10);
+      tl.to([".sn-0", ".sn-1", ".sn-2"], {
+        autoAlpha: 1,
+        y: 0,
+        duration: 3,
+        stagger: 0, // Fade all 3 lines in together
+        ease: "power2.out"
+      }, 10.5);
+      tl.to(".story-narration-wrap", { autoAlpha: 0, y: -20, duration: 2.5 }, 18.5);
+
+      /* ═══════════════════════════════════════
+         PHASE 2 — CONVO PAIR 1  (timeline 20–30)
+         ═══════════════════════════════════════ */
+      tl.to(".story-convo-wrap", { autoAlpha: 1, duration: 1 }, 20);
+      tl.to(".story-convo-pair-0", { autoAlpha: 1, y: 0, duration: 3, ease: "power2.out" }, 20.5);
+      tl.to([".sb-0", ".sb-1"], { autoAlpha: 1, x: 0, scale: 1, duration: 3, ease: "power2.out" }, 20.5);
+      // Mascot reactions
+      tl.to([".smk-img", ".sma-img"], { scale: 1.05, y: -4, duration: 1.5, ease: "power2.out" }, 20.5);
+      tl.to([".smk-img", ".sma-img"], { scale: 1, y: 0, duration: 1.5 }, 22);
+
+      /* ═══════════════════════════════════════
+         PHASE 3 — CONVO PAIR 2  (timeline 30–40)
+         ═══════════════════════════════════════ */
+      tl.to(".story-convo-pair-0", { autoAlpha: 0, y: -20, duration: 2.5, ease: "power2.in" }, 30);
+      tl.to(".story-convo-pair-1", { autoAlpha: 1, y: 0, duration: 3, ease: "power2.out" }, 31.5);
+      tl.to([".sb-2", ".sb-3"], { autoAlpha: 1, x: 0, scale: 1, duration: 3, ease: "power2.out" }, 31.5);
+      tl.to([".smk-img", ".sma-img"], { scale: 1.05, y: -4, duration: 1.5, ease: "power2.out" }, 31.5);
+      tl.to([".smk-img", ".sma-img"], { scale: 1, y: 0, duration: 1.5 }, 33);
+
+      /* ═══════════════════════════════════════
+         PHASE 4 — CONVO PAIR 3  (timeline 40–50)
+         ═══════════════════════════════════════ */
+      tl.to(".story-convo-pair-1", { autoAlpha: 0, y: -20, duration: 2.5, ease: "power2.in" }, 40);
+      tl.to(".story-convo-pair-2", { autoAlpha: 1, y: 0, duration: 3, ease: "power2.out" }, 41.5);
+      tl.to([".sb-4", ".sb-5"], { autoAlpha: 1, x: 0, scale: 1, duration: 3, ease: "power2.out" }, 41.5);
+      tl.to([".smk-img", ".sma-img"], { scale: 1.05, y: -4, duration: 1.5, ease: "power2.out" }, 41.5);
+      tl.to([".smk-img", ".sma-img"], { scale: 1, y: 0, duration: 1.5 }, 43);
+
+      /* ═══════════════════════════════════════
+         PHASE 5 — CONVO PAIR 4  (timeline 50–60)
+         ═══════════════════════════════════════ */
+      tl.to(".story-convo-pair-2", { autoAlpha: 0, y: -20, duration: 2.5, ease: "power2.in" }, 50);
+      tl.to(".story-convo-pair-3", { autoAlpha: 1, y: 0, duration: 3, ease: "power2.out" }, 51.5);
+      tl.to([".sb-6", ".sb-7"], { autoAlpha: 1, x: 0, scale: 1, duration: 3, ease: "power2.out" }, 51.5);
+      tl.to([".smk-img", ".sma-img"], { scale: 1.05, y: -4, duration: 1.5, ease: "power2.out" }, 51.5);
+      tl.to([".smk-img", ".sma-img"], { scale: 1, y: 0, duration: 1.5 }, 53);
+
+      /* ═══════════════════════════════════════
+         PHASE 6 — CONVERGENCE  (timeline 60–70)
+         Mascots meet in the center.
+         ═══════════════════════════════════════ */
+      tl.to(".story-convo-pair-3", { autoAlpha: 0, y: -20, duration: 2.5, ease: "power2.in" }, 60);
+      tl.to(".story-mascot-kenji", { x: "22vw", duration: 4, ease: "power2.inOut" }, 60.5);
+      tl.to(".story-mascot-aarav", { x: "-22vw", duration: 4, ease: "power2.inOut" }, 60.5);
+
+      /* ═══════════════════════════════════════
+         PHASE 7 — THE HANDSHAKE  (timeline 70–80)
+         Individual images fade out, handshake fades in.
+         ═══════════════════════════════════════ */
+      tl.to(".story-mascot-kenji", { autoAlpha: 0, duration: 2.5, ease: "power2.in" }, 70);
+      tl.to(".story-mascot-aarav", { autoAlpha: 0, duration: 2.5, ease: "power2.in" }, 70);
+      tl.to(".story-bg-warm", { autoAlpha: 0.35, duration: 3 }, 70);
+      tl.to(".story-hs-glow", { autoAlpha: 0.6, scale: 1.1, duration: 3, ease: "power2.out" }, 70);
+      tl.to(".story-hs-wrap", { autoAlpha: 1, scale: 1, duration: 3, ease: "back.out(1.2)" }, 70.5);
+
+      /* ═══════════════════════════════════════
+         PHASE 8 — FINAL CTA  (timeline 80–90)
+         ═══════════════════════════════════════ */
+      tl.to(".story-hs-wrap", { y: "-15vh", scale: 0.95, duration: 4, ease: "power2.inOut" }, 78);
+      tl.to(".story-hs-glow", { y: "-15vh", duration: 4, ease: "power2.inOut" }, 78);
+
+      tl.to(".story-cta-wrap", { autoAlpha: 1, duration: 2 }, 78);
+      tl.to(".story-cta-content", { autoAlpha: 1, y: 0, duration: 3, ease: "power2.out" }, 78.5);
+
+      tl.to(".cta-text-1", { autoAlpha: 1, y: 0, duration: 2, ease: "power2.out" }, 80);
+      tl.to(".cta-text-2", { autoAlpha: 1, y: 0, duration: 2, ease: "power2.out" }, 81.5);
+      tl.to(".cta-text-3", { autoAlpha: 1, y: 0, duration: 2, ease: "power2.out" }, 83);
+      tl.to(".cta-buttons", { autoAlpha: 1, y: 0, duration: 2, ease: "power2.out" }, 84.5);
+
+      tl.to([".story-mascot-kenji", ".story-mascot-aarav"], { display: "none", duration: 0.1 }, 80);
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* ============================================================
+     RENDER
+     ============================================================ */
+  return (
+    <section
+      ref={sectionRef}
+      id="story-hero"
+      className="relative"
+      style={{ height: "900vh" }}
+    >
+      {/* ━━━ Pinned Panel ━━━ */}
+      <div
+        ref={panelRef}
+        className="w-full relative overflow-hidden h-screen"
+        style={{ height: "100dvh" }}
+      >
+        {/* ═══════════ BACKGROUND LAYER ═══════════ */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Base JIBB V2 background image with optimal opacity */}
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.50]"
+            style={{ backgroundImage: "url('/jibb-v2-bg.png')" }}
+          />
+
+          {/* Warm glow overlay — revealed during handshake */}
+          <div
+            className="story-bg-warm absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(251,191,36,0.25) 0%, rgba(233,139,42,0.08) 40%, transparent 70%)",
+            }}
+          />
+
+          {/* Subtle grid texture */}
+          <div
+            className="absolute inset-0 opacity-[0.02]"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(36,59,107,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(36,59,107,0.3) 1px, transparent 1px)",
+              backgroundSize: "80px 80px",
+            }}
+          />
+        </div>
+
+        {/* ═══════════ CONTENT LAYER ═══════════ */}
+        <div className="relative z-10 h-full flex flex-col">
+          {/* ── Main Stage: Mascots + Center ── */}
+          <div className="flex-1 flex items-center justify-center px-4 md:px-8 lg:px-16 pt-20 md:pt-24 pb-4">
+            {/* ──── Kenji Mascot (Desktop) ──── */}
+            <div className="story-mascot-kenji hidden md:flex flex-col items-center gap-3 w-56 lg:w-64 xl:w-72 shrink-0 will-change-transform">
+              <div className="smk-img relative w-56 h-72 lg:w-64 lg:h-80 xl:w-72 xl:h-96 animate-float will-change-transform">
+                <Image
+                  src="/mascots/kenji.png"
+                  alt="Kenji — Tech Executive from Tokyo"
+                  fill
+                  className="object-contain drop-shadow-lg"
+                  sizes="(max-width: 1024px) 224px, (max-width: 1280px) 256px, 288px"
+                  priority
+                />
+              </div>
+              <span className="text-[11px] font-bold text-jibb-indigo/60 tracking-[0.15em] uppercase select-none">
+                {t("kenjiName")}
+              </span>
+            </div>
+
+            {/* ──── Center Stage ──── */}
+            <div className="story-stage flex-1 max-w-2xl mx-2 md:mx-6 lg:mx-10 h-[60vh] md:h-[62vh] relative">
+              {/* ▸ INTRO SCENE */}
+              <div className="story-intro-wrap absolute inset-0 flex flex-col items-center justify-center text-center z-20 px-4">
+                {/* Mobile mascots */}
+                <div className="flex md:hidden items-center justify-center gap-8 mb-8">
+                  <div className="relative w-32 h-40 sm:w-40 sm:h-48 animate-float">
+                    <Image
+                      src="/mascots/kenji.png"
+                      alt="Kenji"
+                      fill
+                      className="object-contain drop-shadow-md"
+                      sizes="(max-width: 640px) 128px, 160px"
+                      priority
+                    />
+                  </div>
+                  <div className="relative w-32 h-40 sm:w-40 sm:h-48 animate-float-delayed">
+                    <Image
+                      src="/mascots/aarav.png"
+                      alt="Aarav"
+                      fill
+                      className="object-contain drop-shadow-md"
+                      sizes="(max-width: 640px) 128px, 160px"
+                      priority
+                    />
+                  </div>
+                </div>
+
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl font-extrabold tracking-tight leading-[1.08]">
+                  <span className="text-foreground">Building Bridges,</span>
+                  <br />
+                  <span className="bg-gradient-to-r from-jibb-indigo via-jibb-orange to-jibb-sakura bg-clip-text text-transparent">
+                    Sparking Innovation.
+                  </span>
+                </h1>
+
+                <div className="mt-6 md:mt-8 flex items-center gap-3">
+                  <div className="h-px w-8 bg-jibb-orange/40" />
+                  <span className="text-sm md:text-base font-semibold tracking-[0.18em] uppercase text-jibb-indigo/50">
+                    A JIBB Story
+                  </span>
+                  <div className="h-px w-8 bg-jibb-orange/40" />
+                </div>
+
+                <p className="mt-6 text-sm text-muted-foreground/60 flex items-center gap-2 select-none">
+                  <span className="inline-block w-4 h-4 border-2 border-muted-foreground/30 rounded-full relative">
+                    <span className="absolute inset-0 flex items-center justify-center">
+                      <span className="block w-1 h-1 bg-muted-foreground/40 rounded-full animate-bounce" />
+                    </span>
+                  </span>
+                  Scroll to begin
+                </p>
+              </div>
+
+              {/* ▸ NARRATION SCENE */}
+              <div className="story-narration-wrap absolute inset-0 flex flex-col items-center justify-center text-center z-15 px-2 md:px-6">
+                <div className="max-w-lg space-y-5 md:space-y-6">
+                  {NARRATION_KEYS.map((key, i) => (
+                    <p
+                      key={key}
+                      className={`sn-${i} text-base md:text-lg lg:text-xl leading-relaxed md:leading-loose text-foreground/75 font-light italic`}
+                    >
+                      {t(key)}
+                    </p>
+                  ))}
+                </div>
+              </div>
+
+              {/* ▸ CONVERSATION SCENE (Paired cross-fades) */}
+              <div className="story-convo-wrap absolute inset-0 z-10 overflow-hidden flex items-center justify-center px-4">
+                <div className="w-full max-w-2xl h-[420px] relative">
+                  {[0, 1, 2, 3].map((pairIndex) => {
+                    const msg1 = MESSAGES[pairIndex * 2];
+                    const msg2 = MESSAGES[pairIndex * 2 + 1];
+                    return (
+                      <div
+                        key={pairIndex}
+                        className={`story-convo-pair-${pairIndex} absolute inset-0 flex flex-col justify-center gap-5 will-change-transform pointer-events-none`}
+                      >
+                        {[msg1, msg2].map((msg, subIndex) => {
+                          const isKenji = msg.speaker === "kenji";
+                          return (
+                            <div
+                              key={msg.key}
+                              className={`sb-${pairIndex * 2 + subIndex} story-convo-bubble will-change-transform pointer-events-auto ${isKenji
+                                ? "self-start mr-auto max-w-[92%] md:max-w-[82%]"
+                                : "self-end ml-auto max-w-[92%] md:max-w-[82%]"
+                                }`}
+                            >
+                              <div
+                                className={`flex items-start gap-2.5 md:gap-3 ${!isKenji ? "flex-row-reverse" : ""
+                                  }`}
+                              >
+                                {/* Avatar */}
+                                <div
+                                  className={`shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center text-white text-[10px] md:text-xs font-bold shadow-md ${isKenji ? "bg-jibb-indigo" : "bg-jibb-orange"
+                                    }`}
+                                >
+                                  {isKenji ? "KJ" : "AR"}
+                                </div>
+
+                                <div className={!isKenji ? "text-right" : ""}>
+                                  {/* Name + Location badge */}
+                                  <div
+                                    className={`flex items-center gap-2 mb-1 ${!isKenji ? "justify-end" : ""
+                                      }`}
+                                  >
+                                    <span className="text-xs font-bold text-foreground/90">
+                                      {t(isKenji ? "kenjiName" : "aaravName")}
+                                    </span>
+                                    <span
+                                      className={`text-[9px] md:text-[10px] px-2 py-0.5 rounded-full font-medium tracking-wider ${isKenji
+                                        ? "bg-jibb-indigo/[0.06] text-jibb-indigo/70 border border-jibb-indigo/[0.08]"
+                                        : "bg-jibb-orange/[0.06] text-jibb-orange/80 border border-jibb-orange/[0.08]"
+                                        }`}
+                                    >
+                                      {isKenji ? "Tokyo" : "Noida"}
+                                    </span>
+                                  </div>
+
+                                  {/* Glassmorphic bubble */}
+                                  <div
+                                    className={`story-glass text-left p-3.5 md:p-5 text-[13px] md:text-[15px] leading-relaxed md:leading-[1.7] text-foreground/80 ${isKenji
+                                      ? "story-glass-kenji rounded-2xl rounded-tl-md"
+                                      : "story-glass-aarav rounded-2xl rounded-tr-md"
+                                      }`}
+                                  >
+                                    &ldquo;{t(msg.key)}&rdquo;
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* ▸ HANDSHAKE SCENE */}
+              <div className="story-hs-wrap absolute inset-0 flex flex-col items-center justify-center z-20">
+                <div
+                  className="story-hs-glow absolute w-56 h-56 md:w-72 md:h-72 rounded-full blur-2xl pointer-events-none"
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(251,191,36,0.35), rgba(233,139,42,0.15) 50%, transparent 75%)",
+                  }}
+                />
+                <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-[440px] md:h-[440px] animate-float will-change-transform flex items-center justify-center">
+                  <Image
+                    src="/mascots/kenji-aarav-handshake.png"
+                    alt="Kenji and Aarav Handshake"
+                    fill
+                    className="object-contain drop-shadow-2xl"
+                    sizes="(max-width: 640px) 256px, (max-width: 768px) 320px, 440px"
+                    priority
+                  />
+                </div>
+              </div>
+
+              {/* ▸ CTA SCENE */}
+              <div className="story-cta-wrap absolute inset-0 flex flex-col items-center justify-end md:justify-center z-20 px-4 pb-12 md:pb-0 md:pt-[28vh]">
+                <div className="story-cta-content text-center max-w-3xl mx-auto space-y-4 md:space-y-5 bg-white/60 dark:bg-black/50 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/20 dark:border-white/10 shadow-2xl w-full">
+
+                  <p className="cta-text-1 text-[15px] md:text-[19px] font-bold text-foreground">
+                    Kenji and Aarav turned a complex cross-border challenge into a massive success story.
+                  </p>
+
+                  <p className="cta-text-2 text-sm md:text-[17px] text-foreground/80 font-medium leading-relaxed">
+                    You can do the same. When you become a member of the Japan India Business Bureau, you gain access to expert market entry support, trusted partnership networks, and world-class innovation labs.
+                  </p>
+
+                  <p className="cta-text-3 text-[15px] md:text-[19px] font-bold text-foreground">
+                    Expand your reach. Innovate without borders. Join JIBB today and start building your own success story.
+                  </p>
+
+                  <div className="cta-buttons flex flex-wrap items-center justify-center gap-3 md:gap-4 pt-2 md:pt-4">
+                    <Link
+                      href="/membership"
+                      className="inline-flex items-center justify-center px-7 py-3.5 md:px-8 md:py-4 bg-jibb-orange text-white font-bold rounded-xl hover:bg-jibb-orange-dark transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-sm md:text-base gap-2"
+                    >
+                      {t("ctaJoin")}
+                      <span className="text-white/80">→</span>
+                    </Link>
+                    <Link
+                      href="/innovation-hub"
+                      className="inline-flex items-center justify-center px-7 py-3.5 md:px-8 md:py-4 bg-white/60 dark:bg-white/10 backdrop-blur-md text-jibb-indigo dark:text-white font-semibold rounded-xl border border-jibb-indigo/10 dark:border-white/20 hover:bg-white dark:hover:bg-white/20 transition-all duration-300 shadow-sm hover:shadow-md text-sm md:text-base"
+                    >
+                      {t("ctaExplore")}
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ──── Aarav Mascot (Desktop) ──── */}
+            <div className="story-mascot-aarav hidden md:flex flex-col items-center gap-3 w-56 lg:w-64 xl:w-72 shrink-0 will-change-transform">
+              <div className="sma-img relative w-56 h-72 lg:w-64 lg:h-80 xl:w-72 xl:h-96 animate-float-delayed will-change-transform">
+                <Image
+                  src="/mascots/aarav.png"
+                  alt="Aarav — Startup Founder from Noida"
+                  fill
+                  className="object-contain drop-shadow-lg"
+                  sizes="(max-width: 1024px) 224px, (max-width: 1280px) 256px, 288px"
+                  priority
+                />
+              </div>
+              <span className="text-[11px] font-bold text-jibb-orange/60 tracking-[0.15em] uppercase select-none">
+                {t("aaravName")}
+              </span>
+            </div>
+          </div>
+
+          {/* ═══════════ BOTTOM CONTROLS ═══════════ */}
+          <div className="relative z-20 px-4 md:px-8 pb-5 md:pb-6 flex items-center justify-between">
+            {/* Skip button */}
+            <button
+              onClick={handleSkip}
+              className="text-[11px] md:text-xs font-medium text-muted-foreground/50 hover:text-foreground/80 transition-colors flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-black/[0.03] select-none"
+              id="story-skip"
+            >
+              <span>Skip Story</span>
+              <span className="text-[10px]">⏭</span>
+            </button>
+
+            {/* Chapter progress indicator */}
+            <div className="flex items-center gap-1.5 md:gap-2">
+              {CHAPTERS.map((label, i) => (
+                <div
+                  key={label}
+                  className="flex items-center gap-1"
+                  title={label}
+                >
+                  <div
+                    className={`h-[3px] rounded-full transition-all duration-500 ease-out ${chapter === i
+                      ? "w-8 md:w-10 bg-jibb-indigo"
+                      : chapter > i
+                        ? "w-4 md:w-5 bg-jibb-indigo/25"
+                        : "w-4 md:w-5 bg-muted-foreground/15"
+                      }`}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Replay button */}
+            <button
+              onClick={handleReplay}
+              className={`text-[11px] md:text-xs font-medium text-muted-foreground/50 hover:text-foreground/80 transition-all flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-black/[0.03] select-none ${canReplay
+                ? "opacity-100"
+                : "opacity-0 pointer-events-none"
+                }`}
+              id="story-replay"
+            >
+              <span>↺</span>
+              <span>Replay</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
