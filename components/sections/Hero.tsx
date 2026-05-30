@@ -49,11 +49,12 @@ export function Hero() {
 
   return (
     <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-jibb-gradient pt-20">
-      {/* Wave pattern overlay with slow sliding action */}
-      <div className="absolute inset-0 wave-pattern opacity-15 pointer-events-none animate-wave-slide" />
+      {/* Wave pattern overlay — used here only, as a single textured band */}
+      <div aria-hidden="true" className="absolute inset-0 wave-pattern opacity-15 pointer-events-none animate-wave-slide" />
 
-      {/* Premium Glassmorphic glowing background bubbles with active floats */}
+      {/* Single premium glow — orange only, sakura removed to avoid blob overload */}
       <motion.div
+        aria-hidden="true"
         className="absolute -top-40 right-[10%] w-[500px] h-[500px] bg-jibb-orange/10 rounded-full blur-[120px] pointer-events-none"
         animate={{
           scale: [1, 1.05, 1],
@@ -65,14 +66,11 @@ export function Hero() {
           ease: "easeInOut",
         }}
       />
-      <motion.div
-        className="absolute -bottom-40 left-[5%] w-[600px] h-[600px] bg-jibb-sakura/10 rounded-full blur-[140px] pointer-events-none"
-        animate={floatTransition(8, 2)}
-      />
 
       {/* Floating geometric tech grids */}
-      <div className="absolute top-[20%] left-[45%] w-24 h-24 border border-white/5 rounded-2xl rotate-12 animate-pulse pointer-events-none hidden lg:block" />
+      <div aria-hidden="true" className="absolute top-[20%] left-[45%] w-24 h-24 border border-white/5 rounded-2xl rotate-12 animate-pulse pointer-events-none hidden lg:block" />
       <motion.div
+        aria-hidden="true"
         className="absolute bottom-[25%] right-[40%] w-36 h-36 border border-white/5 rounded-full pointer-events-none hidden lg:block"
         animate={floatTransition(6)}
       />
@@ -90,9 +88,10 @@ export function Hero() {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md"
             variants={itemVariants}
           >
-            <span className="flex h-2 w-2 rounded-full bg-jibb-orange animate-ping" />
+            {/* animate-soft-pulse replaces animate-ping — much softer */}
+            <span className="flex h-2 w-2 rounded-full bg-jibb-orange animate-soft-pulse" />
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-white/90">
-              Japan–India Cross-Border Portal
+              {t("hero.badgeText")}
             </span>
           </motion.div>
 
@@ -109,23 +108,26 @@ export function Hero() {
             </p>
           </motion.div>
 
-          {/* Quick Metrics Row */}
+          {/* Quick Metrics Row — upgraded with real stats and a source note */}
           <motion.div
-            className="grid grid-cols-3 gap-4 border-y border-white/10 py-6 max-w-lg"
+            className="border-y border-white/10 py-6 max-w-lg space-y-3"
             variants={itemVariants}
           >
-            <div>
-              <span className="block text-2xl font-bold text-white">100+</span>
-              <span className="text-xs text-white/60 font-medium">Bilateral Projects</span>
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <span className="block text-2xl font-bold text-white">{t("hero.stat1Value")}</span>
+                <span className="text-xs text-white/60 font-medium">{t("hero.stat1Label")}</span>
+              </div>
+              <div>
+                <span className="block text-2xl font-bold text-white">{t("hero.stat2Value")}</span>
+                <span className="text-xs text-white/60 font-medium">{t("hero.stat2Label")}</span>
+              </div>
+              <div>
+                <span className="block text-2xl font-bold text-white">{t("hero.stat3Value")}</span>
+                <span className="text-xs text-white/60 font-medium">{t("hero.stat3Label")}</span>
+              </div>
             </div>
-            <div>
-              <span className="block text-2xl font-bold text-white">2</span>
-              <span className="text-xs text-white/60 font-medium">Tech Hubs</span>
-            </div>
-            <div>
-              <span className="block text-2xl font-bold text-white">$10B+</span>
-              <span className="text-xs text-white/60 font-medium">Ecosystem Volume</span>
-            </div>
+            <p className="text-[10px] text-white/35 font-medium tracking-wide uppercase">{t("hero.statNote")}</p>
           </motion.div>
 
           {/* CTAs */}
@@ -160,6 +162,7 @@ export function Hero() {
           transition={{ type: "spring", stiffness: 80, damping: 18, delay: 0.4 }}
         >
           <motion.div
+            aria-hidden="true"
             className="relative w-full max-w-[420px] aspect-[4/5] rounded-[24px] p-2 bg-gradient-to-br from-white/15 to-white/5 border border-white/10 backdrop-blur-md shadow-jibb-xl cursor-default"
             animate={floatTransition(7)}
           >
@@ -183,10 +186,10 @@ export function Hero() {
               <div className="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-between text-left">
                 <div>
                   <span className="text-[10px] uppercase tracking-widest text-jibb-orange font-bold block">
-                    Bilateral Co-Innovation
+                    {t("hero.imageBadge1")}
                   </span>
                   <span className="text-white text-xs font-semibold">
-                    Kenji & Aarav • Tokyo–Noida Corridor
+                    {t("hero.imageBadge2")}
                   </span>
                 </div>
                 <div className="p-1.5 rounded-lg bg-white/15 text-white">
@@ -200,7 +203,7 @@ export function Hero() {
       </div>
 
       {/* Bottom organic curve or border */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+      <div aria-hidden="true" className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent pointer-events-none" />
     </section>
   );
 }

@@ -77,11 +77,21 @@
     "newsletterDesc": "Weekly news directly to your inbox"
   },
   "hero": {
+    "badgeText": "Japan–India Cross-Border Portal",
     "headline1": "Empowering Innovation.",
     "headline2": "Building Lasting Partnerships.",
     "subtext": "Connecting Japan and India through innovation, trade, manufacturing, and cross-border collaboration.",
     "ctaJoin": "Join JIBB",
-    "ctaExplore": "Explore Innovation Hub"
+    "ctaExplore": "Explore Innovation Hub",
+    "stat1Value": "100+",
+    "stat1Label": "Bilateral Projects",
+    "stat2Value": "₹850 Cr+",
+    "stat2Label": "Deal Flow",
+    "stat3Value": "$10B+",
+    "stat3Label": "Ecosystem Volume",
+    "statNote": "As of FY 2024",
+    "imageBadge1": "Bilateral Co-Innovation",
+    "imageBadge2": "Kenji & Aarav • Tokyo–Noida Corridor"
   },
   "story": {
     "sectionTitle": "A Story of Collaboration",
@@ -104,7 +114,11 @@
     "ctaText": "Expand your reach. Innovate without borders. Join JIBB today and start building your own success story.",
     "ctaJoin": "Join JIBB",
     "ctaExplore": "Explore Innovation Hub",
-    "ctaButton": "Become a Member"
+    "ctaButton": "Become a Member",
+    "storyDesc": "Discover how JIBB connects Japanese manufacturing precision with Indian software innovation.",
+    "ctaBody1": "Kenji and Aarav turned a complex cross-border challenge into a massive success story.",
+    "ctaBody2": "You can do the same. When you become a member of the Japan India Business Bureau, you gain access to expert market entry support, trusted partnership networks, and world-class innovation labs.",
+    "ctaBody3": "Expand your reach. Innovate without borders. Join JIBB today and start building your own success story."
   },
   "whatWeDo": {
     "sectionTitle": "What We Do",
@@ -124,6 +138,10 @@
     "diaspora": {
       "title": "Diaspora Networking",
       "description": "Exclusive networking events connecting the Indian diaspora with Japanese business opportunities and cross-cultural partnerships."
+    },
+    "localization": {
+      "title": "Localization Support",
+      "description": "Bicultural working alignments, professional technical translations, and local branding strategies to fit both nations."
     },
     "learnMore": "Learn More"
   },
@@ -206,7 +224,8 @@
     "newsletter": {
       "title": "Stay Updated",
       "placeholder": "Enter your email",
-      "button": "Subscribe"
+      "button": "Subscribe",
+      "desc": "Subscribe to get the latest bilateral market insights and event invitations."
     },
     "offices": {
       "tokyoTitle": "Tokyo Office",
@@ -239,5 +258,291 @@
     "back": "Back",
     "loading": "Loading...",
     "comingSoon": "Coming Soon"
+  },
+  "aboutPage": {
+    "title": "About Us",
+    "subtitle": "Connecting stakeholders, businesses, institutions, and governments to build a strategic industrial bridge between Japan and India.",
+    "introHeadline": "A Strategic Bilateral Bridge",
+    "introPara1": "The Japan India Business Bureau (JIBB) is a non-profit organization dedicated to strengthening economic, industrial, and cultural ties between Japan and India. Positioned as a strategic bridge, we enable collaboration by connecting businesses, institutions, and government stakeholders across both ecosystems.",
+    "introPara2": "With its headquarters in Tokyo, Japan, and an operational presence in Noida, India, JIBB actively facilitates cross-border partnerships, market entry, and long-term industrial cooperation. We support companies in navigating regulatory landscapes, identifying opportunities, and building sustainable business relationships in both countries.",
+    "whoWeAreTitle": "Who We Are",
+    "whoWeAreDesc": "JIBB is a cross-border industry facilitation platform that brings together businesses, institutions, and government stakeholders from Japan and India. We are not just a network, but an enabler of meaningful partnerships built on trust, transparency, and long-term vision.\n\nWith a strong presence in both Tokyo and Noida, we operate at the intersection of two dynamic economies, helping organizations connect, collaborate, and grow beyond geographical and cultural boundaries. Our strength lies in understanding both ecosystems deeply and translating that understanding into actionable opportunities for our stakeholders.",
+    "whatWeDoTitle": "What We Do",
+    "whatWeDoDesc": "JIBB acts as a catalyst for India–Japan collaboration by creating structured pathways for businesses to engage, expand, and succeed.\n\nWe facilitate market entry and expansion by helping companies navigate regulatory frameworks, identify the right partners, and localize their operations effectively. Through curated networking platforms, industry events, and strategic introductions, we enable high-value collaborations and joint ventures.\n\nWe also drive knowledge exchange by bringing together industry leaders, policymakers, and innovators to share insights and explore emerging opportunities. From early-stage ideas to large-scale industrial partnerships, JIBB supports the entire journey—enabling innovation, fostering growth, and accelerating global expansion.",
+    "whatWeBelieveTitle": "What We Believe",
+    "whatWeBelieve1Title": "Trust & Shared Value",
+    "whatWeBelieve1Desc": "We believe that the future of India–Japan collaboration lies in long-term partnerships built on mutual trust and shared value.",
+    "whatWeBelieve2Title": "Bridging Cultures",
+    "whatWeBelieve2Desc": "We believe in bridging not just businesses, but cultures—because true collaboration goes beyond transactions. By fostering deeper understanding and alignment, we help organizations work together more effectively.",
+    "whatWeBelieve3Title": "Budding Innovation",
+    "whatWeBelieve3Desc": "We believe in innovation as a driver of growth, supporting ideas from their inception and enabling them to scale globally.",
+    "whatWeBelieve4Title": "Creating Real Impact",
+    "whatWeBelieve4Desc": "Above all, we believe in creating impact—where collaboration leads to sustainable development, stronger industries, and a shared economic future for both nations."
+  },
+  "visionPage": {
+    "title": "Vision & Mission",
+    "subtitle": "Fostering economic synergy, bridging cultural divides, and industrializing innovations from the ground up.",
+    "visionTitle": "Our Vision",
+    "visionDesc": "To create a collaborative future where Japan and India stand together as global leaders in technology, industry, and sustainable growth.",
+    "missionTitle": "Our Mission",
+    "missionDesc": "To drive meaningful partnerships and industrial progress by providing expert market entry support, fostering cross-border collaboration, and delivering world-class innovation incubation for businesses and governments.",
+    "pillarsTitle": "Bilateral Cooperation Pillars",
+    "pillar1Title": "Bilateral Co-Innovation",
+    "pillar1Desc": "Bud innovations from scratch and then facilitate them in global expansions.",
+    "pillar2Title": "Cultural Exchange & Unity",
+    "pillar2Desc": "Break the cultural differences between two nations to build trust.",
+    "pillar3Title": "Trade Promotion",
+    "pillar3Desc": "Promote trade, joint ventures, and localization opportunities between both ecosystems."
+  },
+  "careersPage": {
+    "title": "Careers at JIBB",
+    "subtitle": "Building the future of the Tokyo–Noida industrial corridor.",
+    "intro": "At the Japan India Business Bureau (JIBB), we are building a team that thrives at the intersection of two of the world’s most dynamic economies. If you are curious, driven, and excited about cross-border collaboration, JIBB offers a platform where your work directly contributes to shaping India–Japan business relationships.",
+    "subtext": "We work closely with global companies, government stakeholders, and industry leaders across sectors like semiconductors, electronics, infrastructure, pharmaceuticals, and emerging technologies. Here, you don’t just take up a role, you become part of building something impactful from the ground up.",
+    "locations": "Locations: Tokyo, Noida (Hybrid)",
+    "whyJoinTitle": "Why Join Us",
+    "whyJoin1": "Work on real cross-border business projects between India and Japan",
+    "whyJoin2": "Exposure to high-growth sectors like semiconductors, EV, and advanced manufacturing",
+    "whyJoin3": "Opportunity to interact with global stakeholders and decision-makers",
+    "whyJoin4": "A fast-paced environment where ideas are encouraged and ownership is valued",
+    "whyJoin5": "Be part of building an organization from the ground up",
+    "openPositionsTitle": "Open Positions",
+    "applyTitle": "How to Apply",
+    "applyDesc": "If you’re interested in any of the above roles, please share your resume along with a short note on why you’d like to work with JIBB at hitesh@npo-jibb.org and fill out the form below.",
+    "form": {
+      "nameLabel": "Name",
+      "emailLabel": "Email",
+      "phoneLabel": "Phone Number",
+      "linkedinLabel": "LinkedIn Profile Link",
+      "messageLabel": "Message",
+      "submitButton": "Submit Application",
+      "submitting": "Submitting...",
+      "successTitle": "Application Submitted!",
+      "successDesc": "Thank you for applying. We have received your details and our team will get in touch with you shortly."
+    },
+    "jobs": {
+      "consultant": {
+        "title": "Consultant",
+        "dept": "Operations",
+        "exp": "1–2 Years",
+        "qual": "BTech (Any Stream), MBA preferred",
+        "loc": "Noida (Hybrid)",
+        "overview": "As a Consultant, you will work closely with member organizations to understand industries, identify opportunities, and support strategic decision-making across India and Japan.",
+        "responsibilities": [
+          "Conduct market research, industry analysis, and assessment of opportunities",
+          "Prepare industry reports, newsletters, and market forecasts",
+          "Support go-to-market strategy development for cross-border expansion",
+          "Identify potential partners, technologies, and business opportunities",
+          "Work closely with stakeholders across private and public sectors"
+        ],
+        "requirements": [
+          "Background in BTech with experience in consulting or KPO environments",
+          "Strong analytical and research capabilities",
+          "Ability to understand both technical and business perspectives"
+        ]
+      },
+      "translator": {
+        "title": "Translator (Japanese Language)",
+        "dept": "Japanese Relations",
+        "exp": "0–1 Year",
+        "qual": "Graduate with proficiency in Japanese, Hindi, and English",
+        "loc": "Noida (Hybrid)",
+        "overview": "You will play a key role in bridging communication between Indian and Japanese stakeholders, ensuring smooth and effective cross-border interactions.",
+        "responsibilities": [
+          "Support verbal communication between Japanese and Indian teams",
+          "Assist in meetings, discussions, and technical coordination",
+          "Help overcome language and cultural barriers in business interactions",
+          "Support internal and external translation/communication requests"
+        ],
+        "requirements": [
+          "Strong verbal proficiency in Japanese (N3/N2 or higher preferred), Hindi, and English",
+          "Excellent interpersonal and communication skills",
+          "Written proficiency in Japanese is an added advantage"
+        ]
+      },
+      "bde": {
+        "title": "Business Development Executive",
+        "dept": "Sales & Corporate Relations",
+        "exp": "0–1 Year",
+        "qual": "BTech (Electrical / Electronics / Instrumentation)",
+        "loc": "Noida (Hybrid)",
+        "overview": "As a Business Development Executive, you will help expand JIBB’s network by engaging with companies, identifying opportunities, and driving memberships and collaborations.",
+        "responsibilities": [
+          "Identify and engage potential members and corporate partners",
+          "Track innovations, challenges, and trends in electronics and semiconductors",
+          "Connect with decision-makers across Indian and Japanese companies",
+          "Present JIBB offerings and propose relevant bilateral solutions",
+          "Support growth of memberships and strategic collaborations"
+        ],
+        "requirements": [
+          "Strong understanding of electronics, electrical engineering, or semiconductor value chains",
+          "Excellent communication, outreach, and presentation skills",
+          "Interest in international business development and cross-border collaboration"
+        ]
+      }
+    }
+  },
+  "servicesPage": {
+    "title": "Our Services",
+    "subtitle": "Providing a comprehensive suite of cross-border solutions to ensure your India-Japan business success.",
+    "marketEntry": {
+      "title": "Market Entry Support",
+      "subtitle": "Navigating regulatory and cultural landscapes with confidence.",
+      "para1": "Expanding your business to a new country is a monumental step. JIBB simplifies this transition for Japanese companies entering India and Indian enterprises expanding to Japan.",
+      "para2": "We provide clear, actionable go-to-market strategies, business registrations, physical office setups, and deep regulatory navigations customized to your specific industry.",
+      "step1Title": "GTM Strategy Development",
+      "step1Desc": "Custom commercial intelligence, feasibility assessments, and step-by-step entry roadmaps.",
+      "step2Title": "Regulatory & Compliance Support",
+      "step2Desc": "Business registrations, environmental clearances, licensing, and local tax structuring support.",
+      "step3Title": "Corporate Setup & Logistics",
+      "step3Desc": "Sourcing physical offices, local banking setup, and key vendor management."
+    },
+    "partnership": {
+      "title": "Partnership Facilitation",
+      "subtitle": "Forging trust-based, high-value industrial relationships.",
+      "para1": "Finding the right local partner is the single most critical factor for long-term bilateral success. JIBB uses its extensive directory to connect you with trusted leaders.",
+      "para2": "Whether you are searching for joint venture candidates, local manufacturing plants, technology co-developers, or trade buyers, we handle the entire match-making process.",
+      "step1Title": "Vetted Matchmaking",
+      "step1Desc": "Direct introductions to verified, high-quality partners aligning with your technical standards.",
+      "step2Title": "Joint Venture Structuring",
+      "step2Desc": "Structuring equitable bilateral collaborations with sound legal and operational frameworks.",
+      "step3Title": "Delegation Meets & Summits",
+      "step3Desc": "Access to exclusive bilateral buyer-seller meets and corporate summits."
+    },
+    "localization": {
+      "title": "Localization Support",
+      "subtitle": "Adapting strategies to fit local business customs and consumer needs.",
+      "para1": "Bilateral trade requires deep alignment. We help companies translate and adapt their products, services, and corporate communications to fit the distinct cultural landscapes of both nations.",
+      "para2": "From language translations to cultural sensitivity workshops and targeted local PR campaigns, we build a seamless bridge for your team.",
+      "step1Title": "Cultural Alignment & Training",
+      "step1Desc": "Bilingual workshops to align corporate expectations and overcome working culture divides.",
+      "step2Title": "Language Translation Services",
+      "step2Desc": "Technical, legal, and conversational translation by native professional translators.",
+      "step3Title": "Local Branding & PR Campaigns",
+      "step3Desc": "Strategic marketing tailored for local consumers and positive media relations."
+    },
+    "investment": {
+      "title": "Investment Support",
+      "subtitle": "Securing capital channels and unlocking bilateral incentives.",
+      "para1": "JIBB assists corporations and startups in navigating funding schemes, identifying tax benefits, and connecting with leading institutional investors.",
+      "para2": "We help you tap into bilateral investment corridors, secure government incentives (such as India's PLI schemes), and pitch effectively to cross-border VCs.",
+      "step1Title": "VC & Angel Network Access",
+      "step1Desc": "Pitching platforms connecting high-potential startups to Japanese VCs and Indian angel syndicates.",
+      "step2Title": "Government Incentives Support",
+      "step2Desc": "Navigating capital subsidies, tax holidays, and production-linked incentives (PLI).",
+      "step3Title": "Transaction Advisory",
+      "step3Desc": "Financial due diligence, bilateral asset valuations, and capital transfer navigation."
+    }
+  },
+  "membershipPage": {
+    "title": "Membership Plans",
+    "subtitle": "Gain premium network access, utilize R&D labs, and unlock bilateral growth opportunities.",
+    "ctaTitle": "Find the Perfect Plan",
+    "plansTitle": "Tiered Plans",
+    "schedulerTitle": "Schedule an Advisory Call",
+    "schedulerSubtitle": "Book a 30-minute introductory meeting with our bilateral trade consultants via Calendly or MS Bookings.",
+    "calendlyTab": "Calendly Scheduler",
+    "bookingsTab": "MS Bookings",
+    "selectTime": "Select a Time Slot",
+    "bookingDetailsTitle": "Enter Booking Details",
+    "bookBtn": "Confirm Appointment",
+    "bookingSuccessTitle": "Meeting Booked Successfully!",
+    "bookingSuccessDesc": "Thank you. Your meeting has been scheduled. You will receive a calendar invite with the join link shortly.",
+    "benefits": {
+      "networking": "Exclusive Diaspora & Executive Networking",
+      "labs": "R&D Lab Sandbox Access (Tokyo/Noida)",
+      "advisory": "Dedicated Trade & Regulatory Advisory",
+      "visibility": "Member Directory & Event Brand Spotlights"
+    },
+    "features": {
+      "startup": {
+        "title": "Startup Tier",
+        "price": "₹15,000 / Yr",
+        "priceSub": "For early-stage scaling tech",
+        "feature1": "General Networking Events",
+        "feature2": "10 Hrs/Mo Sandbox Lab Booking",
+        "feature3": "Quarterly Regulatory Advisory",
+        "feature4": "Standard Directory Listing"
+      },
+      "corporate": {
+        "title": "Corporate Tier",
+        "price": "₹75,000 / Yr",
+        "priceSub": "For mid-to-large manufacturers",
+        "feature1": "All Networking + VIP Lounges",
+        "feature2": "50 Hrs/Mo Sandbox Lab Booking",
+        "feature3": "Monthly Dedicated Advisor Calls",
+        "feature4": "Premium Event Branding spots"
+      },
+      "government": {
+        "title": "Bilateral Partner",
+        "price": "Custom Pricing",
+        "priceSub": "For trade organizations & ministries",
+        "feature1": "Exclusive G2B Summits",
+        "feature2": "Unlimited Labs & Tech Demonstrations",
+        "feature3": "24/7 Priority Policy Advisory",
+        "feature4": "Executive Brand Placement"
+      }
+    }
+  },
+  "hubPage": {
+    "title": "Innovation Hub",
+    "subtitle": "Accelerating R&D, scaling cross-border technologies, and building next-gen solutions.",
+    "labsTitle": "State-of-the-Art Laboratories",
+    "labsSubtitle": "Equipped with advanced technical sandboxes in Tokyo and Noida for premium research and industrial demonstration.",
+    "incubationTitle": "Startup Incubation Sandbox",
+    "incubationDesc": "Giving emerging startups the foundations to scale globally. Our programs offer physical workspaces, strategic mentors, and direct access to vetted institutional funding in both countries.",
+    "expertsTitle": "Expert Advisory Directory",
+    "expertsSubtitle": "A dynamic panel of industry experts, policy researchers, and corporate veterans facilitating bilateral success.",
+    "labs": {
+      "semiconductor": {
+        "title": "Electronics & Semiconductors Lab",
+        "desc": "Testing and validation suites for integrated circuits, sensor arrays, and PCB architectures tailored to global manufacturing standards."
+      },
+      "ev": {
+        "title": "Automotive & Electric Vehicles Lab",
+        "desc": "Battery testing sandboxes, EV charging software integration setups, and drivetrain analytics suites to accelerate clean transport models."
+      },
+      "pharma": {
+        "title": "Pharmaceuticals & Advanced Materials",
+        "desc": "Advanced labs supporting compound characterizations, active ingredient validations, and nanotechnology scaling for global distribution."
+      }
+    }
+  },
+  "contactPage": {
+    "title": "Contact the Bureau",
+    "subtitle": "Get in touch with our bilateral trade specialists. We respond to all inquiries within 24 hours.",
+    "officesTitle": "Our Offices",
+    "formTitle": "Send us a Message",
+    "tokyoOffice": "Tokyo Headquarters",
+    "tokyoAddr": "Level 14, Hibiya Central Building, Tokyo, Japan",
+    "noidaOffice": "Noida Operational Office",
+    "noidaAddr": "Phase 2, Sector 62, Noida, Uttar Pradesh, India",
+    "form": {
+      "inquiryType": "Inquiry Type",
+      "typeSelect": "Select Type",
+      "type1": "Membership Application",
+      "type2": "Trade & Partner Matching Support",
+      "type3": "Innovation Hub & Lab Inquiries",
+      "type4": "General Partnership & Events",
+      "name": "Full Name",
+      "email": "Corporate Email Address",
+      "phone": "Phone Number",
+      "message": "Detailed Message",
+      "submit": "Send Message",
+      "successTitle": "Message Sent Successfully!",
+      "successDesc": "Thank you for contacting JIBB. A trade specialist from our team will reach out to you shortly."
+    }
+  },
+  "notFound": {
+    "title": "404 — Page Not Found",
+    "headline": "Lost in the Corridor?",
+    "description": "The page you are looking for does not exist, has been relocated, or is currently under development in our bilateral corridors.",
+    "goHome": "Return to Portal",
+    "contactAdvisory": "Contact Advisory",
+    "backTrack": "Or Backtrack",
+    "suggestedLinks": "Suggested Destinations",
+    "services": "Bilateral Services",
+    "innovationHub": "Innovation Labs",
+    "membership": "Strategic Membership"
   }
 }

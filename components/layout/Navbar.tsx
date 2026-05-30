@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/src/i18n/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -35,6 +34,8 @@ import {
   Mail,
   TrendingUp,
   Cpu,
+  Briefcase,
+  Library,
 } from "lucide-react";
 
 /* ============================================================
@@ -233,6 +234,7 @@ function MobileDrawer({
     <>
       {/* Backdrop */}
       <div
+        data-lenis-prevent
         className={cn(
           "fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 lg:hidden",
           isOpen ? "opacity-100 animate-in fade-in" : "opacity-0 pointer-events-none"
@@ -242,6 +244,7 @@ function MobileDrawer({
 
       {/* Drawer */}
       <div
+        data-lenis-prevent
         className={cn(
           "fixed top-0 right-0 h-full w-[300px] max-w-[80vw] bg-card z-50 shadow-jibb-xl transition-transform duration-300 ease-out lg:hidden",
           "flex flex-col",
@@ -249,8 +252,7 @@ function MobileDrawer({
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-border">
-          <Image src="/logo.webp" alt="JIBB Logo" width={80} height={32} className="w-auto h-7 object-contain" style={{ width: "auto" }} />
+        <div className="flex items-center justify-end p-4 border-b border-border">
           <button
             onClick={onClose}
             className="p-2 rounded-lg hover:bg-muted text-foreground/75 hover:text-foreground transition-colors"
@@ -313,15 +315,27 @@ function MobileDrawer({
                 {item.megaMenu && isExpanded && (
                   <div className="ml-3 mt-1 pl-3 border-l border-border space-y-1 animate-in slide-in-from-top-2 duration-200">
                     
-                    {/* Add Overview link as first item */}
-                    <Link
-                      href={item.href}
-                      onClick={onClose}
-                      className="flex items-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold text-primary hover:bg-primary/5 transition-colors"
-                    >
-                      <Building2 className="size-3.5" />
-                      <span>{label} Overview</span>
-                    </Link>
+                    {/* Add Overview link as first item — with category-appropriate icon */}
+                    {(() => {
+                      const overviewIconMap: Record<string, React.ElementType> = {
+                        "nav.about": Building2,
+                        "nav.services": Briefcase,
+                        "nav.innovationHub": Lightbulb,
+                        "nav.ecosystem": Globe,
+                        "nav.resources": Library,
+                      };
+                      const OverviewIcon = overviewIconMap[item.labelKey] ?? Building2;
+                      return (
+                        <Link
+                          href={item.href}
+                          onClick={onClose}
+                          className="flex items-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold text-primary hover:bg-primary/5 transition-colors"
+                        >
+                          <OverviewIcon className="size-3.5" />
+                          <span>{label} Overview</span>
+                        </Link>
+                      );
+                    })()}
 
                     {item.megaMenu.map((sub) => {
                       const Icon = sub.icon;
@@ -416,6 +430,7 @@ export function Navbar() {
   return (
     <>
       <header
+        data-lenis-prevent
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent",
           "navbar-solid"
@@ -426,14 +441,10 @@ export function Navbar() {
             
             {/* Brand Logo */}
             <Link href="/" className="flex items-center gap-2 shrink-0 select-none">
-              <Image 
-                src="/logo.webp" 
+              <img 
+                src="/jibb-logo.svg" 
                 alt="JIBB Logo" 
-                width={100} 
-                height={40} 
-                className="w-auto h-8 lg:h-10 object-contain transition-transform duration-200 hover:scale-105" 
-                style={{ width: "auto" }}
-                priority
+                className="w-auto h-8 lg:h-10 object-contain transition-transform duration-200 hover:scale-105 dark:brightness-0 dark:invert" 
               />
             </Link>
 

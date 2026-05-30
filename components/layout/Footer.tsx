@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { Link } from "@/src/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -71,9 +70,8 @@ export function Footer() {
 
   return (
     <footer className="relative bg-primary text-primary-foreground border-t border-white/10 overflow-hidden">
-      {/* Decorative background shapes */}
-      <div className="absolute -top-40 -right-40 w-96 h-96 bg-jibb-orange/5 rounded-full blur-3xl" />
-      <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-jibb-sakura/5 rounded-full blur-3xl" />
+      {/* Single decorative glow — one per section rule */}
+      <div aria-hidden="true" className="absolute -top-40 -right-40 w-96 h-96 bg-jibb-orange/5 rounded-full blur-3xl" />
 
       {/* Main Footer Content */}
       <div className="section-container relative z-10 pt-16 pb-8">
@@ -83,13 +81,10 @@ export function Footer() {
           <div className="lg:col-span-4 space-y-6">
             <div>
               <Link href="/" className="inline-block">
-                <Image 
-                  src="/logo.webp" 
+                <img 
+                  src="/jibb-logo.svg" 
                   alt="JIBB Logo" 
-                  width={120} 
-                  height={48} 
-                  className="w-auto h-10 lg:h-12 object-contain" 
-                  style={{ width: "auto" }}
+                  className="w-auto h-10 lg:h-12 object-contain brightness-0 invert" 
                 />
               </Link>
               <p className="mt-4 text-white/70 text-sm leading-relaxed max-w-sm">
@@ -100,7 +95,7 @@ export function Footer() {
             {/* Social Icons */}
             <div className="flex items-center gap-3">
               <a
-                href="https://linkedin.com"
+                href="https://linkedin.com/company/japan-india-business-bureau"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 hover:text-white transition-colors"
@@ -109,7 +104,7 @@ export function Footer() {
                 <LinkedInIcon className="size-4" />
               </a>
               <a
-                href="https://twitter.com"
+                href="https://twitter.com/jibb_org"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 hover:text-white transition-colors"
@@ -118,7 +113,7 @@ export function Footer() {
                 <TwitterIcon className="size-4" />
               </a>
               <a
-                href="https://youtube.com"
+                href="https://youtube.com/@jibb_org"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 hover:text-white transition-colors"
@@ -287,7 +282,7 @@ export function Footer() {
               {t("footer.newsletter.title")}
             </h4>
             <p className="text-white/60 text-sm leading-relaxed max-w-md mx-auto md:mx-0">
-              Subscribe to get latest bilateral market insights and event invitations.
+              {t("footer.newsletter.desc")}
             </p>
           </div>
           <form
@@ -312,19 +307,30 @@ export function Footer() {
           </form>
         </div>
 
-        {/* Bilateral Partner Strip (Premium grayscale support wall) */}
+        {/* Bilateral Partner Strip — styled badge pills with external links */}
         <div className="border-t border-white/5 py-6 flex flex-wrap items-center justify-between gap-6">
           <span className="text-[10px] uppercase tracking-widest text-white/40 font-semibold">
-            Bilateral Support & Ecosystem Partners
+            Bilateral Support &amp; Ecosystem Partners
           </span>
-          <div className="flex flex-wrap items-center gap-6 lg:gap-8 opacity-40 hover:opacity-60 transition-opacity">
-            {["METI Japan", "DPIIT India", "JETRO", "Invest India", "FICCI", "Keidanren"].map((partner) => (
-              <span
-                key={partner}
-                className="text-xs font-bold text-white tracking-wider cursor-default select-none hover:text-jibb-orange transition-colors"
+          <div className="flex flex-wrap items-center gap-3">
+            {([
+              { name: "METI Japan", href: "https://www.meti.go.jp/english/" },
+              { name: "DPIIT India", href: "https://dpiit.gov.in" },
+              { name: "JETRO", href: "https://www.jetro.go.jp/en/" },
+              { name: "Invest India", href: "https://www.investindia.gov.in" },
+              { name: "FICCI", href: "https://ficci.in" },
+              { name: "Keidanren", href: "https://www.keidanren.or.jp/en/" },
+            ] as { name: string; href: string }[]).map((partner) => (
+              <a
+                key={partner.name}
+                href={partner.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/8 text-white/50 hover:text-white hover:bg-white/10 hover:border-white/15 transition-all duration-200 text-[11px] font-bold tracking-wide select-none"
               >
-                {partner}
-              </span>
+                {partner.name}
+                <ExternalLink className="size-2.5 opacity-60" />
+              </a>
             ))}
           </div>
         </div>

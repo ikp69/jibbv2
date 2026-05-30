@@ -8,7 +8,7 @@ import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 const localeLabels: Record<string, { flag: string; label: string }> = {
-  en: { flag: "🇬🇧", label: "English" },
+  en: { flag: "🇺🇸", label: "English" },
   ja: { flag: "🇯🇵", label: "日本語" },
 };
 
@@ -53,7 +53,8 @@ export function LanguageSwitcher({
         aria-expanded={open}
       >
         <Globe className="size-4" />
-        <span className="hidden sm:inline">{localeLabels[locale]?.label}</span>
+        <span className="text-base leading-none">{localeLabels[locale]?.flag}</span>
+        <span className="hidden sm:inline text-sm">{localeLabels[locale]?.label}</span>
       </button>
 
       {/* Dropdown */}

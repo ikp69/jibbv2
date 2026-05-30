@@ -44,6 +44,8 @@ export function DesktopStoryHero() {
   const t = useTranslations("story");
   const [chapter, setChapter] = useState(0);
   const [canReplay, setCanReplay] = useState(false);
+  const chapterRef = useRef(0);
+  const canReplayRef = useRef(false);
 
   /* ---- Navigation handlers ---- */
   const handleSkip = useCallback(() => {
@@ -92,21 +94,46 @@ export function DesktopStoryHero() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "bottom bottom",
+          end: "+=3000",      // Reduced scroll distance to make animation faster
           pin: panelRef.current,
-          pinSpacing: false, // Prevents GSAP from adding extra height since we manually set 900vh
-          scrub: 0.6,
+          pinSpacing: true,   // let GSAP add the spacer div
+          anticipatePin: 1,   // prevents jitter when pinning starts
+          scrub: 0.5,         // increased for an even smoother, premium floaty feel
+          snap: {
+            snapTo: "labels",
+            duration: { min: 0.3, max: 0.8 },
+            ease: "power1.inOut",
+          },
           onUpdate: (self) => {
             const p = self.progress;
             const ch = Math.min(
               CHAPTERS.length - 1,
               Math.floor(p * CHAPTERS.length)
             );
-            setChapter(ch);
-            setCanReplay(p > 0.1);
+            // Only setState when chapter actually changes
+            if (ch !== chapterRef.current) {
+              chapterRef.current = ch;
+              setChapter(ch);
+            }
+            const shouldReplay = p > 0.1;
+            if (shouldReplay !== canReplayRef.current) {
+              canReplayRef.current = shouldReplay;
+              setCanReplay(shouldReplay);
+            }
           },
         },
       });
+
+      // Define resting points so animations complete when scrolling stops
+      tl.addLabel("intro", 0);
+      tl.addLabel("narration", 12);
+      tl.addLabel("pair1", 22);
+      tl.addLabel("pair2", 33);
+      tl.addLabel("pair3", 43);
+      tl.addLabel("pair4", 53);
+      tl.addLabel("converge", 64.5);
+      tl.addLabel("handshake", 72);
+      tl.addLabel("cta", 84.5);
 
       /* ═══════════════════════════════════════
          PHASE 0 — INTRO  (timeline 0–10)
@@ -115,7 +142,7 @@ export function DesktopStoryHero() {
       tl.to(".story-intro-wrap", {
         autoAlpha: 0,
         y: -40,
-        duration: 3,
+        duration: 1.5,
         ease: "power2.in",
       }, 5);
 
@@ -127,7 +154,7 @@ export function DesktopStoryHero() {
       tl.to([".sn-0", ".sn-1", ".sn-2"], {
         autoAlpha: 1,
         y: 0,
-        duration: 3,
+        duration: 1.5,
         stagger: 0, // Fade all 3 lines in together
         ease: "power2.out"
       }, 10.5);
@@ -137,8 +164,8 @@ export function DesktopStoryHero() {
          PHASE 2 — CONVO PAIR 1  (timeline 20–30)
          ═══════════════════════════════════════ */
       tl.to(".story-convo-wrap", { autoAlpha: 1, duration: 1 }, 20);
-      tl.to(".story-convo-pair-0", { autoAlpha: 1, y: 0, duration: 3, ease: "power2.out" }, 20.5);
-      tl.to([".sb-0", ".sb-1"], { autoAlpha: 1, x: 0, scale: 1, duration: 3, ease: "power2.out" }, 20.5);
+      tl.to(".story-convo-pair-0", { autoAlpha: 1, y: 0, duration: 1.5, ease: "power2.out" }, 20.5);
+      tl.to([".sb-0", ".sb-1"], { autoAlpha: 1, x: 0, scale: 1, duration: 1.5, ease: "power2.out" }, 20.5);
       // Mascot reactions
       tl.to([".smk-img", ".sma-img"], { scale: 1.05, y: -4, duration: 1.5, ease: "power2.out" }, 20.5);
       tl.to([".smk-img", ".sma-img"], { scale: 1, y: 0, duration: 1.5 }, 22);
@@ -147,8 +174,8 @@ export function DesktopStoryHero() {
          PHASE 3 — CONVO PAIR 2  (timeline 30–40)
          ═══════════════════════════════════════ */
       tl.to(".story-convo-pair-0", { autoAlpha: 0, y: -20, duration: 2.5, ease: "power2.in" }, 30);
-      tl.to(".story-convo-pair-1", { autoAlpha: 1, y: 0, duration: 3, ease: "power2.out" }, 31.5);
-      tl.to([".sb-2", ".sb-3"], { autoAlpha: 1, x: 0, scale: 1, duration: 3, ease: "power2.out" }, 31.5);
+      tl.to(".story-convo-pair-1", { autoAlpha: 1, y: 0, duration: 1.5, ease: "power2.out" }, 31.5);
+      tl.to([".sb-2", ".sb-3"], { autoAlpha: 1, x: 0, scale: 1, duration: 1.5, ease: "power2.out" }, 31.5);
       tl.to([".smk-img", ".sma-img"], { scale: 1.05, y: -4, duration: 1.5, ease: "power2.out" }, 31.5);
       tl.to([".smk-img", ".sma-img"], { scale: 1, y: 0, duration: 1.5 }, 33);
 
@@ -156,8 +183,8 @@ export function DesktopStoryHero() {
          PHASE 4 — CONVO PAIR 3  (timeline 40–50)
          ═══════════════════════════════════════ */
       tl.to(".story-convo-pair-1", { autoAlpha: 0, y: -20, duration: 2.5, ease: "power2.in" }, 40);
-      tl.to(".story-convo-pair-2", { autoAlpha: 1, y: 0, duration: 3, ease: "power2.out" }, 41.5);
-      tl.to([".sb-4", ".sb-5"], { autoAlpha: 1, x: 0, scale: 1, duration: 3, ease: "power2.out" }, 41.5);
+      tl.to(".story-convo-pair-2", { autoAlpha: 1, y: 0, duration: 1.5, ease: "power2.out" }, 41.5);
+      tl.to([".sb-4", ".sb-5"], { autoAlpha: 1, x: 0, scale: 1, duration: 1.5, ease: "power2.out" }, 41.5);
       tl.to([".smk-img", ".sma-img"], { scale: 1.05, y: -4, duration: 1.5, ease: "power2.out" }, 41.5);
       tl.to([".smk-img", ".sma-img"], { scale: 1, y: 0, duration: 1.5 }, 43);
 
@@ -165,8 +192,8 @@ export function DesktopStoryHero() {
          PHASE 5 — CONVO PAIR 4  (timeline 50–60)
          ═══════════════════════════════════════ */
       tl.to(".story-convo-pair-2", { autoAlpha: 0, y: -20, duration: 2.5, ease: "power2.in" }, 50);
-      tl.to(".story-convo-pair-3", { autoAlpha: 1, y: 0, duration: 3, ease: "power2.out" }, 51.5);
-      tl.to([".sb-6", ".sb-7"], { autoAlpha: 1, x: 0, scale: 1, duration: 3, ease: "power2.out" }, 51.5);
+      tl.to(".story-convo-pair-3", { autoAlpha: 1, y: 0, duration: 1.5, ease: "power2.out" }, 51.5);
+      tl.to([".sb-6", ".sb-7"], { autoAlpha: 1, x: 0, scale: 1, duration: 1.5, ease: "power2.out" }, 51.5);
       tl.to([".smk-img", ".sma-img"], { scale: 1.05, y: -4, duration: 1.5, ease: "power2.out" }, 51.5);
       tl.to([".smk-img", ".sma-img"], { scale: 1, y: 0, duration: 1.5 }, 53);
 
@@ -184,9 +211,9 @@ export function DesktopStoryHero() {
          ═══════════════════════════════════════ */
       tl.to(".story-mascot-kenji", { autoAlpha: 0, duration: 2.5, ease: "power2.in" }, 70);
       tl.to(".story-mascot-aarav", { autoAlpha: 0, duration: 2.5, ease: "power2.in" }, 70);
-      tl.to(".story-bg-warm", { autoAlpha: 0.35, duration: 3 }, 70);
-      tl.to(".story-hs-glow", { autoAlpha: 0.6, scale: 1.1, duration: 3, ease: "power2.out" }, 70);
-      tl.to(".story-hs-wrap", { autoAlpha: 1, scale: 1, duration: 3, ease: "back.out(1.2)" }, 70.5);
+      tl.to(".story-bg-warm", { autoAlpha: 0.35, duration: 1.5 }, 70);
+      tl.to(".story-hs-glow", { autoAlpha: 0.6, scale: 1.1, duration: 1.5, ease: "power2.out" }, 70);
+      tl.to(".story-hs-wrap", { autoAlpha: 1, scale: 1, duration: 1.5, ease: "back.out(1.2)" }, 70.5);
 
       /* ═══════════════════════════════════════
          PHASE 8 — FINAL CTA  (timeline 80–90)
@@ -195,7 +222,7 @@ export function DesktopStoryHero() {
       tl.to(".story-hs-glow", { y: "-15vh", duration: 4, ease: "power2.inOut" }, 78);
 
       tl.to(".story-cta-wrap", { autoAlpha: 1, duration: 2 }, 78);
-      tl.to(".story-cta-content", { autoAlpha: 1, y: 0, duration: 3, ease: "power2.out" }, 78.5);
+      tl.to(".story-cta-content", { autoAlpha: 1, y: 0, duration: 1.5, ease: "power2.out" }, 78.5);
 
       tl.to(".cta-text-1", { autoAlpha: 1, y: 0, duration: 2, ease: "power2.out" }, 80);
       tl.to(".cta-text-2", { autoAlpha: 1, y: 0, duration: 2, ease: "power2.out" }, 81.5);
@@ -203,6 +230,23 @@ export function DesktopStoryHero() {
       tl.to(".cta-buttons", { autoAlpha: 1, y: 0, duration: 2, ease: "power2.out" }, 84.5);
 
       tl.to([".story-mascot-kenji", ".story-mascot-aarav"], { display: "none", duration: 0.1 }, 80);
+
+      // Smooth custom mascot floating tweens to prevent compositor thrash with CSS animations
+      gsap.to(".smk-img", {
+        y: -8,
+        duration: 1.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+      gsap.to(".sma-img", {
+        y: -8,
+        duration: 1.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 1.5,
+      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -216,7 +260,6 @@ export function DesktopStoryHero() {
       ref={sectionRef}
       id="story-hero"
       className="relative"
-      style={{ height: "900vh" }}
     >
       {/* ━━━ Pinned Panel ━━━ */}
       <div
@@ -225,9 +268,11 @@ export function DesktopStoryHero() {
         style={{ height: "100dvh" }}
       >
         {/* ═══════════ BACKGROUND LAYER ═══════════ */}
+        <div aria-hidden="true" className="story-bg-warm absolute inset-0 bg-jibb-orange/5 pointer-events-none" />
         <div className="absolute inset-0 pointer-events-none">
           {/* Base JIBB V2 background image with optimal opacity */}
           <div
+            aria-hidden="true"
             className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.50]"
             style={{ backgroundImage: "url('/jibb-v2-bg.png')" }}
           />
@@ -258,7 +303,7 @@ export function DesktopStoryHero() {
           <div className="flex-1 flex items-center justify-center px-4 md:px-8 lg:px-16 pt-20 md:pt-24 pb-4">
             {/* ──── Kenji Mascot (Desktop) ──── */}
             <div className="story-mascot-kenji hidden md:flex flex-col items-center gap-3 w-56 lg:w-64 xl:w-72 shrink-0 will-change-transform">
-              <div className="smk-img relative w-56 h-72 lg:w-64 lg:h-80 xl:w-72 xl:h-96 animate-float will-change-transform">
+              <div className="smk-img relative w-56 h-72 lg:w-64 lg:h-80 xl:w-72 xl:h-96 will-change-transform">
                 <Image
                   src="/mascots/kenji.png"
                   alt="Kenji — Tech Executive from Tokyo"
@@ -358,8 +403,8 @@ export function DesktopStoryHero() {
                             <div
                               key={msg.key}
                               className={`sb-${pairIndex * 2 + subIndex} story-convo-bubble will-change-transform pointer-events-auto ${isKenji
-                                ? "self-start mr-auto max-w-[92%] md:max-w-[82%]"
-                                : "self-end ml-auto max-w-[92%] md:max-w-[82%]"
+                                ? "story-bubble-kenji self-start mr-auto max-w-[92%] md:max-w-[82%]"
+                                : "story-bubble-aarav self-end ml-auto max-w-[92%] md:max-w-[82%]"
                                 }`}
                             >
                               <div
@@ -368,10 +413,16 @@ export function DesktopStoryHero() {
                               >
                                 {/* Avatar */}
                                 <div
-                                  className={`shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center text-white text-[10px] md:text-xs font-bold shadow-md ${isKenji ? "bg-jibb-indigo" : "bg-jibb-orange"
+                                  className={`shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full shadow-md relative overflow-hidden ${isKenji ? "bg-jibb-indigo" : "bg-jibb-orange"
                                     }`}
                                 >
-                                  {isKenji ? "KJ" : "AR"}
+                                  <Image
+                                    src={isKenji ? "/mascots/kenji.png" : "/mascots/aarav.png"}
+                                    alt={isKenji ? "Kenji" : "Aarav"}
+                                    fill
+                                    className="object-cover object-top scale-[1.6] translate-y-[15%]"
+                                    sizes="40px"
+                                  />
                                 </div>
 
                                 <div className={!isKenji ? "text-right" : ""}>
@@ -416,6 +467,7 @@ export function DesktopStoryHero() {
               {/* ▸ HANDSHAKE SCENE */}
               <div className="story-hs-wrap absolute inset-0 flex flex-col items-center justify-center z-20">
                 <div
+                  aria-hidden="true"
                   className="story-hs-glow absolute w-56 h-56 md:w-72 md:h-72 rounded-full blur-2xl pointer-events-none"
                   style={{
                     background:
@@ -471,7 +523,7 @@ export function DesktopStoryHero() {
 
             {/* ──── Aarav Mascot (Desktop) ──── */}
             <div className="story-mascot-aarav hidden md:flex flex-col items-center gap-3 w-56 lg:w-64 xl:w-72 shrink-0 will-change-transform">
-              <div className="sma-img relative w-56 h-72 lg:w-64 lg:h-80 xl:w-72 xl:h-96 animate-float-delayed will-change-transform">
+              <div className="sma-img relative w-56 h-72 lg:w-64 lg:h-80 xl:w-72 xl:h-96 will-change-transform">
                 <Image
                   src="/mascots/aarav.png"
                   alt="Aarav — Startup Founder from Noida"

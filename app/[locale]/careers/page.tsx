@@ -1,0 +1,451 @@
+"use client";
+
+import { useState, useRef } from "react";
+import { useTranslations } from "next-intl";
+import { Input, Textarea } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { 
+  Building2, Briefcase, Globe, Award, Sparkles, ChevronDown, CheckCircle, 
+  Send, Phone, Mail, Link as LinkIcon, User, SendHorizontal 
+} from "lucide-react";
+
+export default function CareersPage() {
+  const t = useTranslations("careersPage");
+  
+  // Job Board Accordion State
+  const [activeJob, setActiveJob] = useState<string | null>(null);
+
+  // Form States
+  const [formState, setFormState] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    linkedin: "",
+    message: ""
+  });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Job Opening Array
+  const jobs = [
+    { id: "consultant", translationKey: "consultant" },
+    { id: "translator", translationKey: "translator" },
+    { id: "bde", translationKey: "bde" }
+  ];
+
+  function toggleJob(jobId: string) {
+    setActiveJob(activeJob === jobId ? null : jobId);
+  }
+
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    const { name, value } = e.target;
+    setFormState(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => {
+        const copy = { ...prev };
+        delete copy[name];
+        return copy;
+      });
+    }
+  }
+
+  function validateForm() {
+    const tempErrors: Record<string, string> = {};
+    if (!formState.name.trim()) tempErrors.name = "Name is required";
+    if (!formState.email.trim()) {
+      tempErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email)) {
+      tempErrors.email = "Invalid email format";
+    }
+    if (!formState.phone.trim()) tempErrors.phone = "Phone number is required";
+    if (!formState.linkedin.trim()) {
+      tempErrors.linkedin = "LinkedIn profile is required";
+    } else if (!/linkedin\.com/.test(formState.linkedin)) {
+      tempErrors.linkedin = "Must be a valid LinkedIn link";
+    }
+
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+
+    // Simulate API Submission
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSuccess(true);
+      setFormState({
+        name: "",
+        email: "",
+        phone: "",
+        linkedin: "",
+        message: ""
+      });
+      
+      // Auto-reset success state after 7 seconds
+      setTimeout(() => {
+        setIsSuccess(false);
+      }, 7000);
+    }, 1500);
+  }
+
+  return (
+    <main className="flex-1 bg-background text-foreground animate-in fade-in duration-300">
+      {/* ============================================================
+          HERO BANNER
+          ============================================================ */}
+      <section className="relative py-20 lg:py-28 overflow-hidden bg-jibb-gradient">
+        {/* Wave pattern overlay */}
+        <div aria-hidden="true" className="absolute inset-0 wave-pattern opacity-10 pointer-events-none animate-wave-slide" />
+        
+        {/* Ambient Glow Accent */}
+        <div 
+          aria-hidden="true" 
+          className="absolute -top-40 right-[15%] w-[450px] h-[450px] bg-jibb-orange/10 rounded-full blur-[110px] pointer-events-none"
+        />
+
+        <div className="section-container relative z-10 text-center max-w-4xl space-y-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+            <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
+            <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-white/90">
+              Careers &amp; Talents
+            </span>
+          </div>
+
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
+            {t("title")}
+          </h1>
+          
+          <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
+            {t("subtitle")}
+          </p>
+
+          <div className="flex justify-center gap-3 pt-4">
+            <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-jibb-orange">
+              Join JIBB Team
+            </span>
+            <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
+          INTRO DIVISION
+          ============================================================ */}
+      <section className="py-16 md:py-24 bg-jibb-gradient-subtle border-b border-border/30">
+        <div className="section-container max-w-5xl">
+          <div className="grid md:grid-cols-12 gap-8 items-center">
+            <div className="md:col-span-8 space-y-5 text-left">
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
+                Shaping the Tokyo-Noida Corridor
+              </h2>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                {t("intro")}
+              </p>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                {t("subtext")}
+              </p>
+              <span className="inline-block text-xs font-bold px-3 py-1.5 rounded-full bg-primary/5 text-primary border border-primary/10 tracking-wide">
+                {t("locations")}
+              </span>
+            </div>
+            
+            <div className="md:col-span-4 flex justify-center">
+              <div className="relative w-full max-w-xs rounded-2xl p-6 bg-card border border-border shadow-jibb flex flex-col gap-4 text-left overflow-hidden">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
+                <h3 className="text-sm font-bold text-foreground tracking-tight uppercase">Quick Info</h3>
+                <ul className="space-y-3.5 text-xs text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <span className="text-jibb-orange font-bold">✓</span> Hybrid Work Options
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-jibb-orange font-bold">✓</span> Global Bilateral Exposure
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-jibb-orange font-bold">✓</span> Industry-leading mentorship
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
+          WHY JOIN US
+          ============================================================ */}
+      <section className="py-16 bg-background">
+        <div className="section-container max-w-5xl text-center space-y-12">
+          <div className="space-y-4">
+            <h2 className="text-3xl font-extrabold text-foreground tracking-tight">
+              {t("whyJoinTitle")}
+            </h2>
+            <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5].map((num) => (
+              <div 
+                key={num} 
+                className="flex items-start gap-4 p-6 bg-card rounded-2xl border border-border/50 hover:border-primary/20 hover:shadow-md transition-all duration-300 text-left"
+              >
+                <div className="p-2 rounded-xl bg-primary/5 text-primary shrink-0 h-fit">
+                  <Award className="size-5" />
+                </div>
+                <p className="text-sm font-medium text-foreground/80 leading-relaxed">
+                  {t(`whyJoin${num}`)}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
+          INTERACTIVE JOB BOARD (ACCORDION)
+          ============================================================ */}
+      <section className="py-16 md:py-24 bg-jibb-gradient-subtle border-y border-border/30">
+        <div className="section-container max-w-4xl text-left space-y-12">
+          <div className="text-center space-y-4">
+            <h2 className="text-3xl font-extrabold text-foreground tracking-tight">
+              {t("openPositionsTitle")}
+            </h2>
+            <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
+          </div>
+
+          <div className="space-y-4">
+            {jobs.map((job) => {
+              const isExpanded = activeJob === job.id;
+              
+              // Get job responsibilities and requirements arrays dynamically
+              const responsibilities = t.raw(`jobs.${job.translationKey}.responsibilities`) as string[];
+              const requirements = t.raw(`jobs.${job.translationKey}.requirements`) as string[];
+
+              return (
+                <div 
+                  key={job.id} 
+                  className={`bg-card rounded-2xl border transition-all duration-300 ${
+                    isExpanded ? "border-primary/30 shadow-jibb-md" : "border-border/50 hover:border-border"
+                  }`}
+                >
+                  {/* Job Accordion Header Toggle */}
+                  <button 
+                    onClick={() => toggleJob(job.id)}
+                    className="w-full p-6 flex justify-between items-center text-left focus:outline-none"
+                    aria-expanded={isExpanded}
+                  >
+                    <div className="space-y-1.5 pr-4">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-accent/5 text-accent border border-accent/15 uppercase tracking-wide">
+                        {t(`jobs.${job.translationKey}.dept`)}
+                      </span>
+                      <h3 className="text-xl font-bold text-foreground tracking-tight">
+                        {t(`jobs.${job.translationKey}.title`)}
+                      </h3>
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1">💼 {t(`jobs.${job.translationKey}.exp`)}</span>
+                        <span className="flex items-center gap-1">📍 {t(`jobs.${job.translationKey}.loc`)}</span>
+                      </div>
+                    </div>
+
+                    <ChevronDown className={`size-5 text-muted-foreground transition-transform duration-300 ${
+                      isExpanded ? "rotate-180 text-primary" : ""
+                    }`} />
+                  </button>
+
+                  {/* Expanded Content Panel */}
+                  <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                    isExpanded ? "max-h-[1000px] border-t border-border/50" : "max-h-0"
+                  }`}>
+                    <div className="p-6 space-y-6 text-sm leading-relaxed">
+                      {/* Overview */}
+                      <div className="space-y-2">
+                        <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">Role Overview</h4>
+                        <p className="text-muted-foreground">{t(`jobs.${job.translationKey}.overview`)}</p>
+                      </div>
+
+                      {/* Responsibilities */}
+                      <div className="space-y-2.5">
+                        <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">Key Responsibilities</h4>
+                        <ul className="space-y-2 text-muted-foreground pl-4 list-disc">
+                          {responsibilities.map((resp, idx) => (
+                            <li key={idx}>{resp}</li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Requirements */}
+                      <div className="space-y-2.5">
+                        <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">What We're Looking For</h4>
+                        <ul className="space-y-2 text-muted-foreground pl-4 list-disc">
+                          {requirements.map((req, idx) => (
+                            <li key={idx}>{req}</li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Details Badge Block */}
+                      <div className="bg-primary/5 p-4 rounded-xl border border-primary/10 flex flex-wrap justify-between items-center gap-3">
+                        <div>
+                          <span className="text-xs text-muted-foreground block">Qualifications Required</span>
+                          <span className="text-xs font-bold text-foreground">{t(`jobs.${job.translationKey}.qual`)}</span>
+                        </div>
+                        <a href="#apply-form" className="shrink-0">
+                          <Button size="sm" className="font-semibold gap-1.5" onClick={() => toggleJob(job.id)}>
+                            Apply Now <SendHorizontal className="size-3.5" />
+                          </Button>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
+          STUNNING APPLICATION FORM
+          ============================================================ */}
+      <section id="apply-form" className="py-16 md:py-24 bg-background relative scroll-mt-20">
+        <div className="section-container max-w-2xl text-left space-y-8 relative z-10">
+          <div className="text-center space-y-4">
+            <h2 className="text-3xl font-extrabold text-foreground tracking-tight">
+              {t("applyTitle")}
+            </h2>
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-md mx-auto">
+              {t("applyDesc")}
+            </p>
+            <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
+          </div>
+
+          <div className="relative rounded-3xl p-6 sm:p-8 bg-card border border-border shadow-jibb-lg overflow-hidden">
+            {/* Form Success Overlay */}
+            {isSuccess && (
+              <div className="absolute inset-0 bg-card/95 backdrop-blur-md z-20 flex flex-col items-center justify-center p-6 text-center animate-in fade-in zoom-in-95 duration-300">
+                <CheckCircle className="size-16 text-emerald-500 mb-4 animate-bounce" />
+                <h3 className="text-2xl font-bold text-foreground mb-2">
+                  {t("form.successTitle")}
+                </h3>
+                <p className="text-sm text-muted-foreground max-w-sm">
+                  {t("form.successDesc")}
+                </p>
+                <Button variant="outline" className="mt-6" onClick={() => setIsSuccess(false)}>
+                  Submit Another Application
+                </Button>
+              </div>
+            )}
+
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
+              {/* Name */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
+                  <User className="size-3.5 text-muted-foreground" /> {t("form.nameLabel")} <span className="text-red-500">*</span>
+                </label>
+                <Input 
+                  type="text" 
+                  name="name" 
+                  value={formState.name}
+                  onChange={handleInputChange}
+                  className={`bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                    errors.name ? "border-red-500 focus-visible:ring-red-500" : ""
+                  }`}
+                  placeholder="John Doe" 
+                />
+                {errors.name && <span className="text-[10px] text-red-500 font-semibold">{errors.name}</span>}
+              </div>
+
+              {/* Email */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
+                  <Mail className="size-3.5 text-muted-foreground" /> {t("form.emailLabel")} <span className="text-red-500">*</span>
+                </label>
+                <Input 
+                  type="email" 
+                  name="email" 
+                  value={formState.email}
+                  onChange={handleInputChange}
+                  className={`bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                    errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
+                  }`}
+                  placeholder="john@example.com" 
+                />
+                {errors.email && <span className="text-[10px] text-red-500 font-semibold">{errors.email}</span>}
+              </div>
+
+              {/* Phone */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
+                  <Phone className="size-3.5 text-muted-foreground" /> {t("form.phoneLabel")} <span className="text-red-500">*</span>
+                </label>
+                <Input 
+                  type="tel" 
+                  name="phone" 
+                  value={formState.phone}
+                  onChange={handleInputChange}
+                  className={`bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                    errors.phone ? "border-red-500 focus-visible:ring-red-500" : ""
+                  }`}
+                  placeholder="+91 98765 43210 / +81 90 1234 5678" 
+                />
+                {errors.phone && <span className="text-[10px] text-red-500 font-semibold">{errors.phone}</span>}
+              </div>
+
+              {/* LinkedIn */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
+                  <LinkIcon className="size-3.5 text-muted-foreground" /> {t("form.linkedinLabel")} <span className="text-red-500">*</span>
+                </label>
+                <Input 
+                  type="text" 
+                  name="linkedin" 
+                  value={formState.linkedin}
+                  onChange={handleInputChange}
+                  className={`bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                    errors.linkedin ? "border-red-500 focus-visible:ring-red-500" : ""
+                  }`}
+                  placeholder="https://linkedin.com/in/username" 
+                />
+                {errors.linkedin && <span className="text-[10px] text-red-500 font-semibold">{errors.linkedin}</span>}
+              </div>
+
+              {/* Message */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
+                  <Send className="size-3.5 text-muted-foreground" /> {t("form.messageLabel")}
+                </label>
+                <Textarea 
+                  name="message" 
+                  value={formState.message}
+                  onChange={handleInputChange}
+                  className="bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl min-h-[100px] text-sm"
+                  placeholder="Tell us about yourself and why you'd like to join JIBB..."
+                />
+              </div>
+
+              {/* Submit */}
+              <div className="pt-3">
+                <Button 
+                  type="submit" 
+                  className="w-full h-11 font-bold rounded-xl shadow-lg hover:opacity-90 active:scale-[0.98] transition-all bg-jibb-orange text-white text-sm"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? t("form.submitting") : t("form.submitButton")}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}

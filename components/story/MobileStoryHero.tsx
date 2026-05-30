@@ -6,6 +6,9 @@ import { Link } from "@/src/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ChatBubble } from "@/components/story/ChatBubble";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 const MESSAGES: { speaker: "kenji" | "aarav"; key: string }[] = [
   { speaker: "kenji", key: "kenji1" },
@@ -27,12 +30,19 @@ export function MobileStoryHero() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
+    // Respect prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReducedMotion) return;
+
     const ctx = gsap.context(() => {
       // Fade up elements as they scroll into view
       const revealElements = gsap.utils.toArray(".mobile-reveal");
-      revealElements.forEach((el: any) => {
+      revealElements.forEach((el: unknown) => {
         gsap.fromTo(
-          el,
+          el as Element,
           { autoAlpha: 0, y: 30 },
           {
             autoAlpha: 1,
@@ -40,7 +50,7 @@ export function MobileStoryHero() {
             duration: 0.8,
             ease: "power2.out",
             scrollTrigger: {
-              trigger: el,
+              trigger: el as Element,
               start: "top 85%",
               toggleActions: "play none none reverse",
             },
@@ -54,10 +64,10 @@ export function MobileStoryHero() {
 
   return (
     <section ref={containerRef} className="relative w-full pt-20 pb-16 overflow-hidden">
-      {/* Background (Fixed) */}
-      <div className="absolute inset-0 pointer-events-none -z-10 h-full w-full">
+      {/* Background — absolute (not fixed) to avoid iOS Safari glitch */}
+      <div aria-hidden="true" className="absolute inset-0 pointer-events-none -z-10">
         <div
-          className="fixed inset-0 bg-cover bg-center bg-no-repeat opacity-[0.3]"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.3]"
           style={{ backgroundImage: "url('/jibb-v2-bg.png')" }}
         />
         <div
@@ -66,15 +76,15 @@ export function MobileStoryHero() {
       </div>
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col gap-16">
-        
+
         {/* Intro */}
         <div className="text-center mobile-reveal pt-8">
           <div className="flex items-center justify-center gap-6 mb-8">
             <div className="relative w-24 h-32 sm:w-32 sm:h-40">
-              <Image src="/mascots/kenji.png" alt="Kenji" fill className="object-contain" priority />
+              <Image src="/mascots/kenji.png" alt="Kenji" fill className="object-contain" sizes="(max-width: 640px) 96px, 128px" priority />
             </div>
             <div className="relative w-24 h-32 sm:w-32 sm:h-40">
-              <Image src="/mascots/aarav.png" alt="Aarav" fill className="object-contain" priority />
+              <Image src="/mascots/aarav.png" alt="Aarav" fill className="object-contain" sizes="(max-width: 640px) 96px, 128px" priority />
             </div>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
@@ -102,70 +112,54 @@ export function MobileStoryHero() {
           ))}
         </div>
 
-        {/* Conversation (WhatsApp Style) */}
+        {/* Conversation — shared ChatBubble primitive */}
         <div className="flex flex-col gap-6 w-full max-w-xl mx-auto">
-          {MESSAGES.map((msg, i) => {
-            const isKenji = msg.speaker === "kenji";
-            return (
-              <div
-                key={i}
-                className={`mobile-reveal flex w-full ${isKenji ? "justify-start" : "justify-end"}`}
+          {MESSAGES.map((msg, i) => (
+            <div key={i} className="mobile-reveal">
+              <ChatBubble
+                speaker={msg.speaker}
+                name={t(msg.speaker === "kenji" ? "kenjiName" : "aaravName")}
+                location={msg.speaker === "kenji" ? "Tokyo" : "Noida"}
+                size="sm"
               >
-                <div className={`flex items-end gap-2.5 max-w-[88%] sm:max-w-[80%] ${!isKenji ? "flex-row-reverse" : ""}`}>
-                  {/* Small Avatar */}
-                  <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-md ${isKenji ? "bg-jibb-indigo" : "bg-jibb-orange"}`}>
-                    {isKenji ? "KJ" : "AR"}
-                  </div>
-                  
-                  <div>
-                    <div className={`text-[10px] font-bold mb-1 opacity-60 ${!isKenji ? "text-right" : ""}`}>
-                      {t(isKenji ? "kenjiName" : "aaravName")} • {isKenji ? "Tokyo" : "Noida"}
-                    </div>
-                    <div className={`p-4 text-[14px] leading-relaxed backdrop-blur-md border shadow-sm ${
-                      isKenji 
-                        ? "bg-white/80 dark:bg-black/40 border-jibb-indigo/20 text-foreground/90 rounded-2xl rounded-bl-sm"
-                        : "bg-jibb-orange/10 dark:bg-jibb-orange/5 border-jibb-orange/20 text-foreground/90 rounded-2xl rounded-br-sm"
-                    }`}>
-                      &ldquo;{t(msg.key)}&rdquo;
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+                {t(msg.key)}
+              </ChatBubble>
+            </div>
+          ))}
         </div>
 
         {/* Handshake & CTA */}
         <div className="pt-8 flex flex-col items-center">
           <div className="mobile-reveal relative w-56 h-56 sm:w-72 sm:h-72 mb-10">
-            <div className="absolute inset-0 bg-jibb-orange/20 blur-3xl rounded-full" />
+            <div aria-hidden="true" className="absolute inset-0 bg-jibb-orange/20 blur-3xl rounded-full" />
             <Image
               src="/mascots/kenji-aarav-handshake.png"
               alt="Handshake"
               fill
               className="object-contain drop-shadow-xl relative z-10"
+              sizes="(max-width: 640px) 224px, 288px"
             />
           </div>
 
           <div className="mobile-reveal bg-card/80 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-border shadow-xl text-center w-full">
-            <p className="text-base sm:text-lg font-bold text-foreground mb-4">
-              Kenji and Aarav turned a complex cross-border challenge into a massive success story.
+            {/* CTA body — fully i18n'd, no hardcoded English copy */}
+            <p className="text-base sm:text-lg font-bold text-foreground mb-3">
+              {t("ctaBody1")}
             </p>
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6">
-              You can do the same. Expand your reach, innovate without borders, and join our world-class ecosystem.
+              {t("ctaBody2")}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link
-                href="/membership"
-                className="w-full sm:w-auto px-6 py-3.5 bg-jibb-orange text-white font-bold rounded-xl shadow-lg"
-              >
-                {t("ctaJoin")} →
+              <Link href="/membership" className="w-full sm:w-auto">
+                <Button variant="accent" size="lg" className="w-full gap-2 font-bold">
+                  {t("ctaJoin")}
+                  <ArrowRight className="size-4" />
+                </Button>
               </Link>
-              <Link
-                href="/innovation-hub"
-                className="w-full sm:w-auto px-6 py-3.5 bg-background text-foreground font-semibold rounded-xl border border-border shadow-sm"
-              >
-                {t("ctaExplore")}
+              <Link href="/innovation-hub" className="w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="w-full gap-2 font-semibold">
+                  {t("ctaExplore")}
+                </Button>
               </Link>
             </div>
           </div>

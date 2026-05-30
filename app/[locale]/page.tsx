@@ -1,6 +1,11 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/src/i18n/navigation";
 import { StoryHero } from "@/components/story/StoryHero";
+import { Button } from "@/components/ui/button";
+import { 
+  Compass, Handshake, Lightbulb, Globe, Cpu, Car, Factory, Pill, Sun, Building2, 
+  FlaskConical, Microscope, BookOpen, Users, Rocket 
+} from "lucide-react";
 
 export default async function HomePage({
   params,
@@ -18,7 +23,7 @@ export default async function HomePage({
       {/* ============================================================
           WHAT WE DO SECTION — Four pillars
           ============================================================ */}
-      <section className="py-24 bg-jibb-gradient-subtle wave-pattern">
+      <section className="py-24 bg-jibb-gradient-subtle">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground">
@@ -32,22 +37,22 @@ export default async function HomePage({
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                icon: "🚀",
+                icon: <Compass className="size-8 text-jibb-orange" />,
                 title: t("whatWeDo.marketEntry.title"),
                 desc: t("whatWeDo.marketEntry.description"),
               },
               {
-                icon: "🤝",
+                icon: <Handshake className="size-8 text-jibb-orange" />,
                 title: t("whatWeDo.partnership.title"),
                 desc: t("whatWeDo.partnership.description"),
               },
               {
-                icon: "💡",
+                icon: <Lightbulb className="size-8 text-jibb-orange" />,
                 title: t("whatWeDo.innovation.title"),
                 desc: t("whatWeDo.innovation.description"),
               },
               {
-                icon: "🌏",
+                icon: <Globe className="size-8 text-jibb-orange" />,
                 title: t("whatWeDo.diaspora.title"),
                 desc: t("whatWeDo.diaspora.description"),
               },
@@ -56,7 +61,7 @@ export default async function HomePage({
                 key={pillar.title}
                 className="group bg-card rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 border border-border/50 cursor-pointer"
               >
-                <div className="text-4xl mb-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">{pillar.icon}</div>
+                <div className="mb-5 transition-transform duration-300 group-hover:scale-110 p-3 rounded-xl bg-primary/5 inline-flex">{pillar.icon}</div>
                 <h3 className="text-xl font-semibold text-foreground mb-3">
                   {pillar.title}
                 </h3>
@@ -91,20 +96,20 @@ export default async function HomePage({
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { icon: "⚡", label: t("sectors.semiconductor") },
-              { icon: "🚗", label: t("sectors.ev") },
-              { icon: "🏭", label: t("sectors.electronics") },
-              { icon: "💊", label: t("sectors.pharma") },
-              { icon: "☀️", label: t("sectors.renewable") },
-              { icon: "🏗️", label: t("sectors.infrastructure") },
-              { icon: "🧪", label: t("sectors.chemicals") },
-              { icon: "🔬", label: t("sectors.emerging") },
+              { icon: <Cpu className="size-7 text-primary" />, label: t("sectors.semiconductor") },
+              { icon: <Car className="size-7 text-primary" />, label: t("sectors.ev") },
+              { icon: <Factory className="size-7 text-primary" />, label: t("sectors.electronics") },
+              { icon: <Pill className="size-7 text-primary" />, label: t("sectors.pharma") },
+              { icon: <Sun className="size-7 text-primary" />, label: t("sectors.renewable") },
+              { icon: <Building2 className="size-7 text-primary" />, label: t("sectors.infrastructure") },
+              { icon: <FlaskConical className="size-7 text-primary" />, label: t("sectors.chemicals") },
+              { icon: <Microscope className="size-7 text-primary" />, label: t("sectors.emerging") },
             ].map((sector) => (
               <div
                 key={sector.label}
                 className="group bg-card rounded-xl p-6 text-center border border-border/50 hover:border-primary/30 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
               >
-                <div className="text-3xl mb-3 transition-transform duration-300 group-hover:scale-115 group-hover:rotate-3">{sector.icon}</div>
+                <div className="mb-3 transition-transform duration-300 group-hover:scale-110 flex justify-center p-3 rounded-xl bg-primary/5 w-fit mx-auto">{sector.icon}</div>
                 <div className="font-medium text-foreground text-sm group-hover:text-primary transition-colors duration-200">
                   {sector.label}
                 </div>
@@ -131,8 +136,10 @@ export default async function HomePage({
           {/* Bento Grid */}
           <div className="grid md:grid-cols-3 gap-4">
             {/* Large card */}
-            <div className="md:col-span-2 bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/10 transition-all duration-300 hover:bg-white/15 hover:border-white/20 hover:-translate-y-1 hover:shadow-jibb-md group cursor-pointer">
-              <div className="text-4xl mb-4 transition-transform duration-300 group-hover:scale-110">🔬</div>
+            <div className="md:col-span-2 bento-card p-8">
+              <div className="mb-4 transition-transform duration-300 group-hover:scale-110 p-3 rounded-xl bg-white/10 inline-flex">
+                <Microscope className="size-8 text-white" />
+              </div>
               <h3 className="text-2xl font-bold mb-3 group-hover:text-jibb-orange transition-colors">
                 {t("innovationHub.labs.title")}
               </h3>
@@ -141,8 +148,10 @@ export default async function HomePage({
               </p>
             </div>
             {/* Small card */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/10 transition-all duration-300 hover:bg-white/15 hover:border-white/20 hover:-translate-y-1 hover:shadow-jibb-md group cursor-pointer">
-              <div className="text-4xl mb-4 transition-transform duration-300 group-hover:scale-110">🚀</div>
+            <div className="bento-card p-8">
+              <div className="mb-4 transition-transform duration-300 group-hover:scale-110 p-3 rounded-xl bg-white/10 inline-flex">
+                <Rocket className="size-8 text-white" />
+              </div>
               <h3 className="text-xl font-bold mb-3 group-hover:text-jibb-orange transition-colors">
                 {t("innovationHub.incubation.title")}
               </h3>
@@ -151,8 +160,10 @@ export default async function HomePage({
               </p>
             </div>
             {/* Row of 3 */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10 transition-all duration-300 hover:bg-white/15 hover:border-white/20 hover:-translate-y-1 hover:shadow-jibb-md group cursor-pointer">
-              <div className="text-3xl mb-3 transition-transform duration-300 group-hover:scale-110">📚</div>
+            <div className="bento-card p-6">
+              <div className="mb-3 transition-transform duration-300 group-hover:scale-110 p-2.5 rounded-xl bg-white/10 inline-flex">
+                <BookOpen className="size-6 text-white" />
+              </div>
               <h3 className="text-lg font-bold mb-2 group-hover:text-jibb-orange transition-colors">
                 {t("innovationHub.research.title")}
               </h3>
@@ -160,8 +171,10 @@ export default async function HomePage({
                 {t("innovationHub.research.description")}
               </p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10 transition-all duration-300 hover:bg-white/15 hover:border-white/20 hover:-translate-y-1 hover:shadow-jibb-md group cursor-pointer">
-              <div className="text-3xl mb-3 transition-transform duration-300 group-hover:scale-110">🌐</div>
+            <div className="bento-card p-6">
+              <div className="mb-3 transition-transform duration-300 group-hover:scale-110 p-2.5 rounded-xl bg-white/10 inline-flex">
+                <Globe className="size-6 text-white" />
+              </div>
               <h3 className="text-lg font-bold mb-2 group-hover:text-jibb-orange transition-colors">
                 {t("innovationHub.collaboration.title")}
               </h3>
@@ -169,8 +182,10 @@ export default async function HomePage({
                 {t("innovationHub.collaboration.description")}
               </p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10 transition-all duration-300 hover:bg-white/15 hover:border-white/20 hover:-translate-y-1 hover:shadow-jibb-md group cursor-pointer">
-              <div className="text-3xl mb-3 transition-transform duration-300 group-hover:scale-110">👥</div>
+            <div className="bento-card p-6">
+              <div className="mb-3 transition-transform duration-300 group-hover:scale-110 p-2.5 rounded-xl bg-white/10 inline-flex">
+                <Users className="size-6 text-white" />
+              </div>
               <h3 className="text-lg font-bold mb-2 group-hover:text-jibb-orange transition-colors">
                 {t("innovationHub.ecosystem.title")}
               </h3>
@@ -181,11 +196,10 @@ export default async function HomePage({
           </div>
 
           <div className="text-center mt-12">
-            <Link
-              href="/innovation-hub"
-              className="inline-flex items-center justify-center px-8 py-4 bg-jibb-orange text-white font-semibold rounded-xl hover:bg-jibb-orange-dark transition-all duration-300 shadow-lg"
-            >
-              {t("innovationHub.cta")}
+            <Link href="/innovation-hub">
+              <Button variant="accent" size="lg" className="px-8 py-6 text-base font-semibold rounded-xl shadow-lg">
+                {t("innovationHub.cta")}
+              </Button>
             </Link>
           </div>
         </div>
@@ -232,11 +246,10 @@ export default async function HomePage({
           </div>
 
           <div className="text-center mt-12">
-            <Link
-              href="/membership"
-              className="inline-flex items-center justify-center px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg"
-            >
-              {t("membership.cta")}
+            <Link href="/membership">
+              <Button size="lg" className="px-8 py-6 text-base font-semibold rounded-xl shadow-lg hover:opacity-90 transition-all">
+                {t("membership.cta")}
+              </Button>
             </Link>
           </div>
         </div>
