@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Mail,
-  MapPin,
   ExternalLink,
 } from "lucide-react";
 
@@ -64,27 +63,86 @@ function YouTubeIcon({ className }: { className?: string }) {
   );
 }
 
+/* ============================================================
+   BILINGUAL OFFICE GEOMETRY ICONS (Tokyo & Delhi NCR)
+   ============================================================ */
+function JapanIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="32" r="30" fill="url(#japanGlow)" stroke="#D96C6C" strokeWidth="1.5" />
+      {/* Red rising sun */}
+      <circle cx="32" cy="24" r="10" fill="#D96C6C" fillOpacity="0.8" />
+      {/* Detailed Mount Fuji silhouette */}
+      <path d="M12 48C20 44 26 28 32 28C38 28 44 44 52 48" stroke="#D96C6C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      {/* Snow cap filled white */}
+      <path d="M28.5 35C29.5 34 32 33.5 32 33.5C32 33.5 34.5 34 35.5 35L32 28L28.5 35Z" fill="#FFFFFF" stroke="#D96C6C" strokeWidth="1" strokeLinejoin="round" />
+      {/* Detailed Traditional Pagoda silhouette in foreground */}
+      <path d="M16 48H24" stroke="#D96C6C" strokeWidth="2" strokeLinecap="round" />
+      <path d="M18 48V44H22V48" fill="rgba(217, 108, 108, 0.2)" stroke="#D96C6C" strokeWidth="1.2" />
+      <path d="M16 44C18 42.5 22 42.5 24 44" stroke="#D96C6C" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M19 42.5V39H21V42.5" fill="rgba(217, 108, 108, 0.2)" stroke="#D96C6C" strokeWidth="1.2" />
+      <path d="M17 39C18.5 37.5 21.5 37.5 23 39" stroke="#D96C6C" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M19.5 37.5V35.5H20.5V37.5" stroke="#D96C6C" strokeWidth="1.2" />
+      <path d="M20 35.5V33.5" stroke="#D96C6C" strokeWidth="1" strokeLinecap="round" />
+      <defs>
+        <radialGradient id="japanGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="rgba(217, 108, 108, 0.2)" />
+          <stop offset="100%" stopColor="rgba(217, 108, 108, 0.02)" />
+        </radialGradient>
+      </defs>
+    </svg>
+  );
+}
+
+function DelhiNcrIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="32" r="30" fill="url(#delhiGlow)" stroke="#E98B2A" strokeWidth="1.5" />
+      {/* Sunburst background flare */}
+      <path d="M32 6V10M32 54V58M6 32H10M54 32H58" stroke="#E98B2A" strokeWidth="1" strokeLinecap="round" opacity="0.3" />
+      <path d="M13.5 13.5L16.5 16.5M47.5 47.5L50.5 50.5M13.5 50.5L16.5 47.5M47.5 16.5L50.5 13.5" stroke="#E98B2A" strokeWidth="1" strokeLinecap="round" opacity="0.3" />
+      
+      {/* Accurate India Gate Silhouette from SVG Repo scaled to fit */}
+      <g transform="translate(12, 10) scale(0.078)">
+        <path 
+          fill="#E98B2A" 
+          d="M256 49.5c-20 0-48 3.5-64 10.5v18h-64v55h256V78h-64V60c-16-7-44-10.5-64-10.5zM208 90c8.8 0 16 7.16 16 16 0 8.8-7.2 16-16 16s-16-7.2-16-16c0-8.84 7.2-16 16-16zm96 0c8.8 0 16 7.16 16 16 0 8.8-7.2 16-16 16s-16-7.2-16-16c0-8.84 7.2-16 16-16zm-192 61v18H96v18h320v-18h-16v-18zm-32 52v18h352v-18zm16 36v72h112.7c8.1-52 86.5-52 94.6 0H416v-72zm0 90v30h96v18H96v119h112V329zm208 0v167h112V377h-96v-18h96v-30z" 
+        />
+      </g>
+      
+      <defs>
+        <radialGradient id="delhiGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="rgba(233, 139, 42, 0.2)" />
+          <stop offset="100%" stopColor="rgba(233, 139, 42, 0.02)" />
+        </radialGradient>
+      </defs>
+    </svg>
+  );
+}
+
 export function Footer() {
   const t = useTranslations();
   const currentYear = new Date().getFullYear();
 
   return (
     <footer className="relative bg-primary text-primary-foreground border-t border-white/10 overflow-hidden">
-      {/* Single decorative glow — one per section rule */}
+      {/* Single decorative glow */}
       <div aria-hidden="true" className="absolute -top-40 -right-40 w-96 h-96 bg-jibb-orange/5 rounded-full blur-3xl" />
 
       {/* Main Footer Content */}
       <div className="section-container relative z-10 pt-16 pb-8">
+
+        {/* ROW 1: BRAND IDENTITY & NAVIGATION GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 mb-12">
-          
-          {/* Column 1: Brand & Addresses (Col span 4) */}
+
+          {/* Column 1: Brand & Socials (Span 4) */}
           <div className="lg:col-span-4 space-y-6">
             <div>
               <Link href="/" className="inline-block">
-                <img 
-                  src="/jibb-logo.svg" 
-                  alt="JIBB Logo" 
-                  className="w-auto h-10 lg:h-12 object-contain brightness-0 invert" 
+                <img
+                  src="/jibb-logo.svg"
+                  alt="JIBB Logo"
+                  className="w-auto h-10 lg:h-12 object-contain brightness-0 invert"
                 />
               </Link>
               <p className="mt-4 text-white/70 text-sm leading-relaxed max-w-sm">
@@ -92,7 +150,7 @@ export function Footer() {
               </p>
             </div>
 
-            {/* Social Icons */}
+            {/* Social Links */}
             <div className="flex items-center gap-3">
               <a
                 href="https://linkedin.com/company/japan-india-business-bureau"
@@ -122,38 +180,12 @@ export function Footer() {
                 <YouTubeIcon className="size-4" />
               </a>
             </div>
-
-            {/* Office Locations */}
-            <div className="space-y-4 pt-2">
-              <div className="flex items-start gap-3">
-                <MapPin className="size-4 text-jibb-orange shrink-0 mt-1" />
-                <div className="text-sm">
-                  <span className="font-semibold block text-white/90">
-                    {t("footer.offices.tokyoTitle")}
-                  </span>
-                  <span className="text-white/60 text-xs">
-                    {t("footer.offices.tokyoAddress")}
-                  </span>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <MapPin className="size-4 text-jibb-orange shrink-0 mt-1" />
-                <div className="text-sm">
-                  <span className="font-semibold block text-white/90">
-                    {t("footer.offices.noidaTitle")}
-                  </span>
-                  <span className="text-white/60 text-xs">
-                    {t("footer.offices.noidaAddress")}
-                  </span>
-                </div>
-              </div>
-            </div>
           </div>
 
-          {/* Column 2: Quick Links (Col span 2) */}
+          {/* Column 2: About & Network (Span 2) */}
           <div className="lg:col-span-2 space-y-4">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
-              {t("footer.quickLinks")}
+              {t("footer.aboutNetwork")}
             </h4>
             <ul className="space-y-2 text-sm">
               <li>
@@ -161,7 +193,7 @@ export function Footer() {
                   href="/about"
                   className="text-white/60 hover:text-white transition-colors block py-0.5"
                 >
-                  {t("nav.about")}
+                  About
                 </Link>
               </li>
               <li>
@@ -169,7 +201,23 @@ export function Footer() {
                   href="/sectors"
                   className="text-white/60 hover:text-white transition-colors block py-0.5"
                 >
-                  {t("nav.sectors")}
+                  Sectors
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/membership"
+                  className="text-white/60 hover:text-white transition-colors block py-0.5"
+                >
+                  Membership
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/events"
+                  className="text-white/60 hover:text-white transition-colors block py-0.5"
+                >
+                  Events
                 </Link>
               </li>
               <li>
@@ -177,7 +225,97 @@ export function Footer() {
                   href="/careers"
                   className="text-white/60 hover:text-white transition-colors block py-0.5"
                 >
-                  {t("nav.careers")}
+                  Careers
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Services (Span 3) */}
+          <div className="lg:col-span-3 space-y-4">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
+              {t("footer.services")}
+            </h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link
+                  href="/services/market-entry"
+                  className="text-white/60 hover:text-white transition-colors block py-0.5"
+                >
+                  Market Entry Support
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/services/partnership-facilitation"
+                  className="text-white/60 hover:text-white transition-colors block py-0.5"
+                >
+                  Partnership Facilitation
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/services/localization-support"
+                  className="text-white/60 hover:text-white transition-colors block py-0.5"
+                >
+                  Localization Support
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/services/investment-support"
+                  className="text-white/60 hover:text-white transition-colors block py-0.5"
+                >
+                  Investment Support
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Resources (Span 3) */}
+          <div className="lg:col-span-3 space-y-4">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
+              {t("footer.resources")}
+            </h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link
+                  href="/innovation-hub"
+                  className="text-white/60 hover:text-white transition-colors block py-0.5"
+                >
+                  {t("nav.innovationHub")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/resources/blog"
+                  className="text-white/60 hover:text-white transition-colors block py-0.5"
+                >
+                  {t("resourcesMenu.blog")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/resources/case-studies"
+                  className="text-white/60 hover:text-white transition-colors block py-0.5"
+                >
+                  {t("resourcesMenu.caseStudies")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/resources/insights"
+                  className="text-white/60 hover:text-white transition-colors block py-0.5"
+                >
+                  {t("resourcesMenu.insights")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/resources/leadership-thoughts"
+                  className="text-white/60 hover:text-white transition-colors block py-0.5"
+                >
+                  {t("resourcesMenu.leadership")}
                 </Link>
               </li>
               <li>
@@ -190,124 +328,83 @@ export function Footer() {
               </li>
             </ul>
           </div>
-
-          {/* Column 3: Services (Col span 3) */}
-          <div className="lg:col-span-3 space-y-4">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
-              {t("footer.services")}
-            </h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  href="/services/market-entry"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  Market Entry
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/services/partnership-facilitation"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  Partnerships
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/services/localization-support"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  Localization
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/services/investment-support"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  Investment
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 4: Innovation Hub (Col span 3) */}
-          <div className="lg:col-span-3 space-y-4">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
-              {t("footer.innovation")}
-            </h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  href="/innovation-hub"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  Overview
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/innovation-hub/center-of-excellence"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  CoE Labs
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/membership"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  {t("nav.membership")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/events"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  {t("nav.events")}
-                </Link>
-              </li>
-            </ul>
-          </div>
-
         </div>
 
-        {/* Newsletter Strip */}
-        <div className="border-t border-white/10 py-10 flex flex-col md:flex-row items-center justify-between gap-8 mb-6">
-          <div className="md:w-1/2 space-y-2 text-center md:text-left">
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-jibb-orange">
-              {t("footer.newsletter.title")}
-            </h4>
-            <p className="text-white/60 text-sm leading-relaxed max-w-md mx-auto md:mx-0">
-              {t("footer.newsletter.desc")}
-            </p>
-          </div>
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="md:w-1/2 flex flex-col sm:flex-row gap-3 justify-end w-full"
-          >
-            <div className="relative w-full sm:max-w-sm lg:max-w-md">
-              <Input
-                type="email"
-                placeholder={t("footer.newsletter.placeholder")}
-                className="w-full bg-white/5 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-jibb-orange pl-10 h-11 text-sm rounded-xl"
-              />
-              <Mail className="absolute left-3.5 top-3.5 size-4 text-white/40" />
-            </div>
-            <Button
-              type="submit"
-              variant="accent"
-              className="h-11 px-8 font-semibold shadow-lg rounded-xl shrink-0"
+        {/* ROW 2: DETAILED ADDRESS CARDS & NEWSLETTER FORM */}
+        <div className="border-t border-white/10 pt-10 pb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 items-stretch">
+          
+          {/* Japan Office Address Column (col span 4) */}
+          <div className="lg:col-span-4 md:col-span-1">
+            <Link 
+              href="/contact" 
+              className="group flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 h-full"
             >
-              {t("footer.newsletter.button")}
-            </Button>
-          </form>
+              <JapanIcon className="size-14 text-jibb-sakura shrink-0" />
+              <div className="space-y-1.5 text-left">
+                <span className="text-xs font-bold text-white uppercase tracking-wider block">
+                  {t("footer.offices.tokyoTitle")}
+                </span>
+                <span className="text-white/60 text-xs leading-relaxed block group-hover:text-white/90 transition-colors">
+                  {t("footer.offices.tokyoAddress")}
+                </span>
+              </div>
+            </Link>
+          </div>
+          
+          {/* Delhi NCR Office Address Column (col span 4) */}
+          <div className="lg:col-span-4 md:col-span-1">
+            <Link 
+              href="/contact" 
+              className="group flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 h-full"
+            >
+              <DelhiNcrIcon className="size-14 text-jibb-orange shrink-0" />
+              <div className="space-y-1.5 text-left">
+                <span className="text-xs font-bold text-white uppercase tracking-wider block">
+                  {t("footer.offices.noidaTitle")}
+                </span>
+                <span className="text-white/60 text-xs leading-relaxed block group-hover:text-white/90 transition-colors">
+                  {t("footer.offices.noidaAddress")}
+                </span>
+              </div>
+            </Link>
+          </div>
+
+          {/* Newsletter Form Column (col span 4) */}
+          <div className="lg:col-span-4 md:col-span-2 text-left space-y-4">
+            <div className="space-y-1.5">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
+                {t("footer.newsletter.title")}
+              </h4>
+              <p className="text-white/60 text-xs leading-relaxed">
+                {t("footer.newsletter.desc")}
+              </p>
+            </div>
+            
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="flex flex-col sm:flex-row gap-3 w-full"
+            >
+              <div className="relative flex-1">
+                <Input
+                  type="email"
+                  placeholder={t("footer.newsletter.placeholder")}
+                  className="w-full bg-white/5 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-jibb-orange pl-10 h-11 text-xs rounded-xl"
+                />
+                <Mail className="absolute left-3.5 top-3.5 size-4 text-white/40" />
+              </div>
+              <Button
+                type="submit"
+                variant="accent"
+                className="h-11 px-6 font-bold shadow-lg rounded-xl shrink-0 text-xs"
+              >
+                {t("footer.newsletter.button")}
+              </Button>
+            </form>
+          </div>
+
         </div>
 
-        {/* Bilateral Partner Strip — styled badge pills with external links */}
+        {/* ROW 3: BILATERAL PARTNER BADGE LIST */}
         <div className="border-t border-white/5 py-6 flex flex-wrap items-center justify-between gap-6">
           <span className="text-[10px] uppercase tracking-widest text-white/40 font-semibold">
             Bilateral Support &amp; Ecosystem Partners
@@ -335,7 +432,7 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright & Legal */}
+        {/* ROW 4: COPYRIGHT & LEGAL SUB-BAR */}
         <div className="border-t border-white/10 pt-8 mt-4 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
           <p className="text-white/50 text-center md:text-left">
             {t("footer.copyright", { year: currentYear })}

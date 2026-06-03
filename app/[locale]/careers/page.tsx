@@ -356,7 +356,7 @@ export default function CareersPage() {
                   name="name" 
                   value={formState.name}
                   onChange={handleInputChange}
-                  className={`bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                  className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
                     errors.name ? "border-red-500 focus-visible:ring-red-500" : ""
                   }`}
                   placeholder="John Doe" 
@@ -374,7 +374,7 @@ export default function CareersPage() {
                   name="email" 
                   value={formState.email}
                   onChange={handleInputChange}
-                  className={`bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                  className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
                     errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
                   }`}
                   placeholder="john@example.com" 
@@ -392,7 +392,7 @@ export default function CareersPage() {
                   name="phone" 
                   value={formState.phone}
                   onChange={handleInputChange}
-                  className={`bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                  className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
                     errors.phone ? "border-red-500 focus-visible:ring-red-500" : ""
                   }`}
                   placeholder="+91 98765 43210 / +81 90 1234 5678" 
@@ -410,7 +410,7 @@ export default function CareersPage() {
                   name="linkedin" 
                   value={formState.linkedin}
                   onChange={handleInputChange}
-                  className={`bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                  className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
                     errors.linkedin ? "border-red-500 focus-visible:ring-red-500" : ""
                   }`}
                   placeholder="https://linkedin.com/in/username" 
@@ -427,7 +427,7 @@ export default function CareersPage() {
                   name="message" 
                   value={formState.message}
                   onChange={handleInputChange}
-                  className="bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl min-h-[100px] text-sm"
+                  className="focus-visible:ring-jibb-orange rounded-xl min-h-[100px] text-sm"
                   placeholder="Tell us about yourself and why you'd like to join JIBB..."
                 />
               </div>

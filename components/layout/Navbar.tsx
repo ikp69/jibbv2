@@ -36,6 +36,7 @@ import {
   Cpu,
   Briefcase,
   Library,
+  Quote,
 } from "lucide-react";
 
 /* ============================================================
@@ -114,6 +115,7 @@ const navItems: NavItem[] = [
       { labelKey: "resourcesMenu.blog", href: "/resources/blog", descKey: "resourcesMenu.blogDesc", icon: Newspaper },
       { labelKey: "nav.careers", href: "/careers", descKey: "careersMenu.desc", icon: Users },
       { labelKey: "resourcesMenu.caseStudies", href: "/resources/case-studies", descKey: "resourcesMenu.caseStudiesDesc", icon: BookMarked },
+      { labelKey: "resourcesMenu.leadership", href: "/resources/leadership-thoughts", descKey: "resourcesMenu.leadershipDesc", icon: Quote },
       { labelKey: "resourcesMenu.newsletter", href: "/resources/newsletter", descKey: "resourcesMenu.newsletterDesc", icon: Mail },
     ],
   },
@@ -142,9 +144,8 @@ function MegaMenu({
         align === "center" && "left-1/2 -translate-x-1/2",
         align === "right" && "right-0"
       )}
-      onMouseLeave={onClose}
     >
-      <div className="bg-card rounded-2xl border border-border shadow-jibb-lg p-2.5 min-w-[480px] grid grid-cols-2 gap-1 backdrop-blur-md">
+      <div className="bg-card/95 rounded-2xl border border-border/80 shadow-jibb-lg p-2 min-w-[280px] flex flex-col gap-0.5 backdrop-blur-md">
         {items.map((item) => {
           const Icon = item.icon;
           let label: string;
@@ -153,35 +154,20 @@ function MegaMenu({
           } catch {
             label = item.labelKey.split(".").pop() || item.labelKey;
           }
-          let desc: string | undefined;
-          if (item.descKey) {
-            try {
-              desc = t(item.descKey);
-            } catch {
-              desc = undefined;
-            }
-          }
 
           return (
             <Link
               key={item.href}
               href={item.href}
               onClick={onClose}
-              className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-muted transition-colors group"
+              className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-muted/80 transition-all group duration-200 select-none"
             >
-              <div className="mt-0.5 p-2 rounded-lg bg-primary/5 text-primary group-hover:bg-primary/10 transition-colors">
+              <div className="p-1.5 rounded-lg bg-primary/5 text-primary group-hover:bg-primary/10 group-hover:scale-105 transition-all">
                 <Icon className="size-4" />
               </div>
-              <div className="flex-1 min-w-0 text-left">
-                <div className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
-                  {label}
-                </div>
-                {desc && (
-                  <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
-                    {desc}
-                  </div>
-                )}
-              </div>
+              <span className="text-sm font-semibold text-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200">
+                {label}
+              </span>
             </Link>
           );
         })}
@@ -315,8 +301,11 @@ function MobileDrawer({
                 {item.megaMenu && isExpanded && (
                   <div className="ml-3 mt-1 pl-3 border-l border-border space-y-1 animate-in slide-in-from-top-2 duration-200">
                     
-                    {/* Add Overview link as first item — with category-appropriate icon */}
+                    {/* Add Overview link as first item if it is not a duplicate sublink */}
                     {(() => {
+                      const isDuplicate = item.megaMenu.some(sub => sub.href === item.href);
+                      if (isDuplicate) return null;
+
                       const overviewIconMap: Record<string, React.ElementType> = {
                         "nav.about": Building2,
                         "nav.services": Briefcase,
@@ -395,6 +384,23 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const menuTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const navRef = useRef<HTMLElement | null>(null);
+
+  // Close menus on click outside
+  useEffect(() => {
+    function handleOutsideClick(e: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setActiveMenu(null);
+      }
+    }
+    document.addEventListener("click", handleOutsideClick);
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, []);
+
+  // Close active dropdown menu when changing pages
+  useEffect(() => {
+    setActiveMenu(null);
+  }, [pathname]);
 
   // Scroll listener for sticky solid background transitions
   useEffect(() => {
@@ -419,17 +425,23 @@ export function Navbar() {
     }, 150);
   }
 
-  // Handle touch events on hybrid devices
+  // Handle touch and mouse click events.
+  // - If the menu is closed (first tap on touch screens), open it and prevent navigation.
+  // - If the menu is already open (hovered on desktop or tapped twice on touch), allow link navigation.
   function handleMenuClick(e: React.MouseEvent, item: NavItem) {
     if (item.megaMenu) {
-      e.preventDefault();
-      setActiveMenu(activeMenu === item.labelKey ? null : item.labelKey);
+      if (activeMenu !== item.labelKey) {
+        e.stopPropagation();
+        e.preventDefault();
+        setActiveMenu(item.labelKey);
+      }
     }
   }
 
   return (
     <>
       <header
+        ref={navRef}
         data-lenis-prevent
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent",

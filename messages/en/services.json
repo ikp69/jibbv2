@@ -1,0 +1,54 @@
+{
+  "servicesPage": {
+    "title": "Our Services",
+    "subtitle": "Providing a comprehensive suite of cross-border solutions to ensure your India-Japan business success.",
+    "marketEntry": {
+      "title": "Market Entry Support",
+      "subtitle": "Navigating regulatory and cultural landscapes with confidence.",
+      "para1": "Expanding your business to a new country is a monumental step. JIBB simplifies this transition for Japanese companies entering India and Indian enterprises expanding to Japan.",
+      "para2": "We provide clear, actionable go-to-market strategies, business registrations, physical office setups, and deep regulatory navigations customized to your specific industry.",
+      "step1Title": "GTM Strategy Development",
+      "step1Desc": "Custom commercial intelligence, feasibility assessments, and step-by-step entry roadmaps.",
+      "step2Title": "Regulatory & Compliance Support",
+      "step2Desc": "Business registrations, environmental clearances, licensing, and local tax structuring support.",
+      "step3Title": "Corporate Setup & Logistics",
+      "step3Desc": "Sourcing physical offices, local banking setup, and key vendor management."
+    },
+    "partnership": {
+      "title": "Partnership Facilitation",
+      "subtitle": "Forging trust-based, high-value industrial relationships.",
+      "para1": "Finding the right local partner is the single most critical factor for long-term bilateral success. JIBB uses its extensive directory to connect you with trusted leaders.",
+      "para2": "Whether you are searching for joint venture candidates, local manufacturing plants, technology co-developers, or trade buyers, we handle the entire match-making process.",
+      "step1Title": "Vetted Matchmaking",
+      "step1Desc": "Direct introductions to verified, high-quality partners aligning with your technical standards.",
+      "step2Title": "Joint Venture Structuring",
+      "step2Desc": "Structuring equitable bilateral collaborations with sound legal and operational frameworks.",
+      "step3Title": "Delegation Meets & Summits",
+      "step3Desc": "Access to exclusive bilateral buyer-seller meets and corporate summits."
+    },
+    "localization": {
+      "title": "Localization Support",
+      "subtitle": "Adapting strategies to fit local business customs and consumer needs.",
+      "para1": "Bilateral trade requires deep alignment. We help companies translate and adapt their products, services, and corporate communications to fit the distinct cultural landscapes of both nations.",
+      "para2": "From language translations to cultural sensitivity workshops and targeted local PR campaigns, we build a seamless bridge for your team.",
+      "step1Title": "Cultural Alignment & Training",
+      "step1Desc": "Bilingual workshops to align corporate expectations and overcome working culture divides.",
+      "step2Title": "Language Translation Services",
+      "step2Desc": "Technical, legal, and conversational translation by native professional translators.",
+      "step3Title": "Local Branding & PR Campaigns",
+      "step3Desc": "Strategic marketing tailored for local consumers and positive media relations."
+    },
+    "investment": {
+      "title": "Investment Support",
+      "subtitle": "Securing capital channels and unlocking bilateral incentives.",
+      "para1": "JIBB assists corporations and startups in navigating funding schemes, identifying tax benefits, and connecting with leading institutional investors.",
+      "para2": "We help you tap into bilateral investment corridors, secure government incentives (such as India's PLI schemes), and pitch effectively to cross-border VCs.",
+      "step1Title": "VC & Angel Network Access",
+      "step1Desc": "Pitching platforms connecting high-potential startups to Japanese VCs and Indian angel syndicates.",
+      "step2Title": "Government Incentives Support",
+      "step2Desc": "Navigating capital subsidies, tax holidays, and production-linked incentives (PLI).",
+      "step3Title": "Transaction Advisory",
+      "step3Desc": "Financial due diligence, bilateral asset valuations, and capital transfer navigation."
+    }
+  }
+}

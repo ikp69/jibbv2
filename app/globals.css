@@ -123,8 +123,8 @@
 
   --destructive: #D96C6C;
 
-  --border: #E5E2DC;
-  --input: #E5E2DC;
+  --border: #D1CEC6;
+  --input: #B5B2AB;
   --ring: #243B6B;
 
   --chart-1: #243B6B;
@@ -172,8 +172,8 @@
 
   --destructive: #E28E8E;
 
-  --border: rgba(255, 255, 255, 0.1);
-  --input: rgba(255, 255, 255, 0.15);
+  --border: rgba(255, 255, 255, 0.18);
+  --input: rgba(255, 255, 255, 0.3);
   --ring: #7B9FE0;
 
   --chart-1: #7B9FE0;
@@ -211,6 +211,29 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+
+  /* Force pointer cursor on all interactive and clickable elements */
+  a,
+  button,
+  select,
+  summary,
+  [role="button"],
+  input[type="submit"],
+  input[type="button"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer;
+  }
+
+  /* Reset cursor on disabled elements */
+  button:disabled,
+  [role="button"]:disabled,
+  input:disabled,
+  select:disabled,
+  [aria-disabled="true"],
+  .disabled {
+    cursor: not-allowed !important;
   }
 
   html {
@@ -600,3 +623,187 @@ html.lenis body {
     max-width: 90vw !important;
   }
 }
+
+/* ============================================================
+   JIBB Premium Typography — Markdown / Prose Styles (.jibb-prose)
+   ============================================================ */
+.jibb-prose {
+  @apply text-foreground/90 max-w-none;
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.jibb-prose h1 {
+  @apply text-3xl md:text-4xl font-extrabold text-foreground mt-8 mb-4 tracking-tight border-b border-border/40 pb-2;
+}
+
+.jibb-prose h2 {
+  @apply text-2xl md:text-3xl font-bold text-foreground mt-8 mb-4 tracking-tight;
+}
+
+.jibb-prose h3 {
+  @apply text-xl md:text-2xl font-semibold text-foreground mt-6 mb-3 tracking-tight;
+}
+
+.jibb-prose h4 {
+  @apply text-lg md:text-xl font-semibold text-foreground mt-4 mb-2;
+}
+
+.jibb-prose p {
+  @apply mb-4 leading-relaxed;
+}
+
+.jibb-prose a {
+  @apply text-jibb-orange dark:text-jibb-orange-light font-medium underline underline-offset-4 decoration-jibb-orange/30 hover:decoration-jibb-orange transition-colors;
+}
+
+.jibb-prose ul {
+  @apply list-disc pl-5 mb-4 space-y-2;
+}
+
+.jibb-prose ol {
+  @apply list-decimal pl-5 mb-4 space-y-2;
+}
+
+.jibb-prose li > ul,
+.jibb-prose li > ol {
+  @apply pl-6 mt-2 mb-0;
+}
+
+.jibb-prose blockquote {
+  @apply border-l-4 border-jibb-orange/70 pl-4 py-1 my-6 italic text-muted-foreground bg-muted/20 rounded-r-lg;
+}
+
+.jibb-prose hr {
+  @apply border-t border-border/60 my-8;
+}
+
+.jibb-prose pre {
+  @apply bg-card/80 border border-border/60 rounded-xl p-4 my-6 overflow-x-auto shadow-jibb-sm text-sm font-mono leading-relaxed;
+}
+
+.jibb-prose code {
+  @apply bg-muted/40 text-foreground px-1.5 py-0.5 rounded text-sm font-mono border border-border/20;
+}
+
+.jibb-prose pre code {
+  @apply p-0 bg-transparent border-none text-foreground;
+}
+
+.jibb-prose table {
+  @apply w-full border-collapse my-6 text-sm overflow-x-auto block md:table;
+}
+
+.jibb-prose th {
+  @apply border-b border-border/80 text-foreground font-semibold px-4 py-2.5 text-left bg-muted/40;
+}
+
+.jibb-prose td {
+  @apply border-b border-border/40 px-4 py-3 text-muted-foreground;
+}
+
+.jibb-prose tr:hover td {
+  @apply text-foreground transition-colors;
+}
+
+.jibb-prose img {
+  @apply rounded-2xl border border-border/30 shadow-jibb my-8 mx-auto max-w-full;
+  max-height: 75vh;
+  object-fit: contain;
+}
+
+/* Magazine / Newspaper Floating & Grid Layouts */
+@media (min-width: 768px) {
+  .jibb-prose .img-left {
+    float: left;
+    width: 42%;
+    margin-right: 1.5rem;
+    margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
+    clear: left;
+  }
+  .jibb-prose .img-right {
+    float: right;
+    width: 42%;
+    margin-left: 1.5rem;
+    margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
+    clear: right;
+  }
+  .jibb-prose .img-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    clear: both;
+    align-items: center;
+  }
+}
+
+/* Mobile defaults */
+@media (max-width: 767px) {
+  .jibb-prose .img-left,
+  .jibb-prose .img-right {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    clear: both;
+  }
+  .jibb-prose .img-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    clear: both;
+  }
+}
+
+.jibb-prose .img-left img,
+.jibb-prose .img-right img,
+.jibb-prose .img-grid-2 img {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  width: 100%;
+  display: block;
+}
+
+.jibb-prose .caption {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin-top: 0.5rem;
+  text-align: center;
+  font-style: italic;
+  display: block;
+  font-family: var(--font-sans);
+}
+
+/* Blend white-background images seamlessly with the page background */
+.jibb-prose .img-blend {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.jibb-prose .img-blend img {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  mix-blend-mode: multiply;
+  
+  /* 4-sided linear gradient mask to fade the borders of the image on all sides */
+  mask-image: 
+    linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent),
+    linear-gradient(to bottom, transparent, black 16px, black calc(100% - 16px), transparent);
+  mask-composite: intersect;
+  
+  -webkit-mask-image: 
+    linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent),
+    linear-gradient(to bottom, transparent, black 16px, black calc(100% - 16px), transparent);
+  -webkit-mask-composite: source-in;
+}
+
+.dark .jibb-prose .img-blend img {
+  filter: invert(0.9) hue-rotate(180deg);
+  mix-blend-mode: screen;
+}

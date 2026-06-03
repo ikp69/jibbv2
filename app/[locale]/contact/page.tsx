@@ -188,7 +188,7 @@ export default function ContactPage() {
                       name="name"
                       value={form.name}
                       onChange={handleInputChange}
-                      className={`bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
                         errors.name ? "border-red-500 focus-visible:ring-red-500" : ""
                       }`}
                       placeholder="Jane Doe / Acme Corp"
@@ -206,7 +206,7 @@ export default function ContactPage() {
                       name="email"
                       value={form.email}
                       onChange={handleInputChange}
-                      className={`bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
                         errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
                       }`}
                       placeholder="corporate@example.com"
@@ -224,7 +224,7 @@ export default function ContactPage() {
                       name="phone"
                       value={form.phone}
                       onChange={handleInputChange}
-                      className={`bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
                         errors.phone ? "border-red-500 focus-visible:ring-red-500" : ""
                       }`}
                       placeholder="+91 98765 43210"
@@ -241,7 +241,7 @@ export default function ContactPage() {
                       name="message"
                       value={form.message}
                       onChange={handleInputChange}
-                      className={`bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl min-h-[120px] text-sm ${
+                      className={`focus-visible:ring-jibb-orange rounded-xl min-h-[120px] text-sm ${
                         errors.message ? "border-red-500 focus-visible:ring-red-500" : ""
                       }`}
                       placeholder="Please details your inquiry..."

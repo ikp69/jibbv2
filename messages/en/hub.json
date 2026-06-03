@@ -1,0 +1,26 @@
+{
+  "hubPage": {
+    "title": "Innovation Hub",
+    "subtitle": "Accelerating R&D, scaling cross-border technologies, and building next-gen solutions.",
+    "labsTitle": "State-of-the-Art Laboratories",
+    "labsSubtitle": "Equipped with advanced technical sandboxes in Tokyo and Noida for premium research and industrial demonstration.",
+    "incubationTitle": "Startup Incubation Sandbox",
+    "incubationDesc": "Giving emerging startups the foundations to scale globally. Our programs offer physical workspaces, strategic mentors, and direct access to vetted institutional funding in both countries.",
+    "expertsTitle": "Expert Advisory Directory",
+    "expertsSubtitle": "A dynamic panel of industry experts, policy researchers, and corporate veterans facilitating bilateral success.",
+    "labs": {
+      "semiconductor": {
+        "title": "Electronics & Semiconductors Lab",
+        "desc": "Testing and validation suites for integrated circuits, sensor arrays, and PCB architectures tailored to global manufacturing standards."
+      },
+      "ev": {
+        "title": "Automotive & Electric Vehicles Lab",
+        "desc": "Battery testing sandboxes, EV charging software integration setups, and drivetrain analytics suites to accelerate clean transport models."
+      },
+      "pharma": {
+        "title": "Pharmaceuticals & Advanced Materials",
+        "desc": "Advanced labs supporting compound characterizations, active ingredient validations, and nanotechnology scaling for global distribution."
+      }
+    }
+  }
+}

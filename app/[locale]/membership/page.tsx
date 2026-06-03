@@ -367,7 +367,7 @@ export default function MembershipPage() {
                         setForm(prev => ({ ...prev, name: e.target.value }));
                         if (errors.name) setErrors(prev => { const c = { ...prev }; delete c.name; return c; });
                       }}
-                      className={`bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
                         errors.name ? "border-red-500 focus-visible:ring-red-500" : ""
                       }`}
                     />
@@ -384,7 +384,7 @@ export default function MembershipPage() {
                         setForm(prev => ({ ...prev, email: e.target.value }));
                         if (errors.email) setErrors(prev => { const c = { ...prev }; delete c.email; return c; });
                       }}
-                      className={`bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
                         errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
                       }`}
                     />
@@ -398,7 +398,7 @@ export default function MembershipPage() {
                       placeholder="Meeting Purpose (e.g., Market Entry consultation)"
                       value={form.purpose}
                       onChange={(e) => setForm(prev => ({ ...prev, purpose: e.target.value }))}
-                      className="bg-white/5 border-white/10 focus-visible:ring-jibb-orange rounded-xl h-11 text-sm"
+                      className="focus-visible:ring-jibb-orange rounded-xl h-11 text-sm"
                     />
                   </div>
                 </div>

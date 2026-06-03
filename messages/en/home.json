@@ -1,0 +1,140 @@
+{
+  "hero": {
+    "badgeText": "Japan–India Cross-Border Portal",
+    "headline1": "Empowering Innovation.",
+    "headline2": "Building Lasting Partnerships.",
+    "subtext": "Connecting Japan and India through innovation, trade, manufacturing, and cross-border collaboration.",
+    "ctaJoin": "Join JIBB",
+    "ctaExplore": "Explore Innovation Hub",
+    "stat1Value": "100+",
+    "stat1Label": "Bilateral Projects",
+    "stat2Value": "₹850 Cr+",
+    "stat2Label": "Deal Flow",
+    "stat3Value": "$10B+",
+    "stat3Label": "Ecosystem Volume",
+    "statNote": "As of FY 2024",
+    "imageBadge1": "Bilateral Co-Innovation",
+    "imageBadge2": "Kenji & Aarav • Tokyo–Noida Corridor"
+  },
+  "story": {
+    "sectionTitle": "A Story of Collaboration",
+    "kenjiName": "Kenji",
+    "kenjiRole": "Tech Executive, Tokyo",
+    "aaravName": "Aarav",
+    "aaravRole": "Startup Founder, Noida",
+    "narration1": "The morning sun fills the modern, glass-walled lounge of the JIBB Innovation Hub.",
+    "narration2": "Engineers and entrepreneurs from two nations sketch ideas on smart boards.",
+    "narration3": "Kenji, a tech executive from Tokyo, sits across from Aarav, a startup founder from Noida developing next-generation battery software.",
+    "kenji1": "When my board first suggested expanding into the Indian market, I hesitated. The regulatory landscape seemed incredibly complex. I did not know how we would find reliable manufacturing partners.",
+    "aarav1": "I understand exactly how you felt. We had the opposite problem. My team built the software, but we needed advanced Japanese hardware to make it work. Reaching out cold to companies in Tokyo went nowhere. We needed a bridge.",
+    "kenji2": "That is exactly what the Japan India Business Bureau provides. The moment we became members, everything shifted. JIBB did not just give us a market report. They gave us a step-by-step entry strategy and handled the localization.",
+    "aarav2": "For us, it was the partnership facilitation that changed the game. JIBB introduced us directly to you. Plus, working out of this Innovation Hub means we can actually test our integrated products. Having access to state-of-the-art laboratories right here speeds up our development by months.",
+    "kenji3": "The facilities are world-class. Being able to co-innovate in the same room breaks down so many barriers. We share resources, reduce our costs, and build a better product together. Have you attended any of the diaspora networking events yet?",
+    "aarav3": "I went to my first club meeting last week. I connected with three different investors and a government representative who walked me through new cross-border incentives. You cannot find that kind of access anywhere else.",
+    "kenji4": "Exactly. You do not just join JIBB to get advice. You become a member to plug into a living, breathing ecosystem. They empower innovation and build lasting partnerships.",
+    "aarav4": "We are proof of that. We brought the software, you brought the hardware, and JIBB brought us together.",
+    "ctaHeadline": "Your Journey Starts Here",
+    "ctaText": "Expand your reach. Innovate without borders. Join JIBB today and start building your own success story.",
+    "ctaJoin": "Join JIBB",
+    "ctaExplore": "Explore Innovation Hub",
+    "ctaButton": "Become a Member",
+    "storyDesc": "Discover how JIBB connects Japanese manufacturing precision with Indian software innovation.",
+    "ctaBody1": "Kenji and Aarav turned a complex cross-border challenge into a massive success story.",
+    "ctaBody2": "You can do the same. When you become a member of the Japan India Business Bureau, you gain access to expert market entry support, trusted partnership networks, and world-class innovation labs.",
+    "ctaBody3": "Expand your reach. Innovate without borders. Join JIBB today and start building your own success story."
+  },
+  "whatWeDo": {
+    "sectionTitle": "What We Do",
+    "sectionSubtitle": "We create pathways for businesses to collaborate, expand, and succeed across borders.",
+    "marketEntry": {
+      "title": "Market Entry Support",
+      "description": "Step-by-step entry strategies, localization support, and deep regulatory insights for seamless cross-border expansion."
+    },
+    "partnership": {
+      "title": "Partnership Facilitation",
+      "description": "Connecting you with reliable customers, joint venture candidates, and manufacturing partners across both nations."
+    },
+    "innovation": {
+      "title": "Innovation Support",
+      "description": "Facilitating joint projects, shared resources, and co-development to create groundbreaking products for the global market."
+    },
+    "diaspora": {
+      "title": "Diaspora Networking",
+      "description": "Exclusive networking events connecting the Indian diaspora with Japanese business opportunities and cross-cultural partnerships."
+    },
+    "localization": {
+      "title": "Localization Support",
+      "description": "Bicultural working alignments, professional technical translations, and local branding strategies to fit both nations."
+    },
+    "learnMore": "Learn More"
+  },
+  "sectors": {
+    "sectionTitle": "Key Sectors",
+    "sectionSubtitle": "Driving collaboration across industries shaping the future of India–Japan partnership.",
+    "semiconductor": "Electronics & Semiconductors",
+    "ev": "Automotive & Electric Vehicles",
+    "electronics": "Advanced Manufacturing",
+    "pharma": "Pharmaceuticals",
+    "renewable": "Renewable Energy",
+    "infrastructure": "Infrastructure",
+    "chemicals": "Chemicals & Advanced Materials",
+    "emerging": "Emerging Technologies"
+  },
+  "innovationHub": {
+    "sectionTitle": "Innovation Hub",
+    "sectionSubtitle": "Where raw ideas become market-ready solutions. Located in Tokyo and Noida.",
+    "labs": {
+      "title": "Laboratories",
+      "description": "Advanced R&D facilities for electronics, EV, and pharma."
+    },
+    "incubation": {
+      "title": "Startup Incubation",
+      "description": "Workspace, mentorship, and direct access to investors."
+    },
+    "research": {
+      "title": "Research Programs",
+      "description": "Collaborative research across key technology domains."
+    },
+    "collaboration": {
+      "title": "Collaboration",
+      "description": "Cross-border co-development and technology sharing."
+    },
+    "ecosystem": {
+      "title": "Expert Ecosystem",
+      "description": "Industry experts, government officials, and entrepreneurs."
+    },
+    "cta": "Explore Innovation Hub"
+  },
+  "membership": {
+    "sectionTitle": "Membership",
+    "sectionSubtitle": "Join a powerful cross-border ecosystem of innovators, businesses, and institutions.",
+    "corporate": "Corporate",
+    "startup": "Startup",
+    "institutional": "Institutional",
+    "government": "Government Partner",
+    "individual": "Individual",
+    "cta": "Become a Member",
+    "recommended": "Recommended"
+  },
+  "events": {
+    "sectionTitle": "Upcoming Events",
+    "sectionSubtitle": "Conferences, networking sessions, delegations, and webinars.",
+    "viewAll": "View All Events",
+    "register": "Register"
+  },
+  "partners": {
+    "sectionTitle": "Partners & Supporters",
+    "sectionSubtitle": "Collaborating with governments, institutions, universities, and industry leaders."
+  },
+  "insights": {
+    "sectionTitle": "Insights & Announcements",
+    "sectionSubtitle": "Reports, policy updates, and industry news from the Japan–India corridor.",
+    "viewAll": "View All Insights"
+  },
+  "stats": {
+    "partnerships": "Partnerships",
+    "countries": "Countries",
+    "leaders": "Industry Leaders",
+    "programs": "Innovation Programs"
+  }
+}

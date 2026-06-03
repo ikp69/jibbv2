@@ -1,0 +1,27 @@
+{
+  "contactPage": {
+    "title": "お問い合わせ",
+    "subtitle": "JIBBの日印戦略ビジネススペシャリストが対応いたします。お問い合わせから原則24時間以内にご返答いたします。",
+    "officesTitle": "所在地情報",
+    "formTitle": "フォームからメッセージを送信",
+    "tokyoOffice": "日本オフィス（グローバルヘッドクオーター）",
+    "tokyoAddr": "東京都港区赤坂1-2-13 溜池鈴木ビル 3F",
+    "noidaOffice": "デリーNCRオフィス（オペレーションオフィス）",
+    "noidaAddr": "JIBB, 6th Floor, 162, Sector 136, Arihant Business Centre, Noida, Uttar Pradesh",
+    "form": {
+      "inquiryType": "お問い合わせ内容",
+      "typeSelect": "項目を選択してください",
+      "type1": "入会・メンバーシップへの申し込み",
+      "type2": "貿易促進・企業マッチングのご相談",
+      "type3": "イノベーションハブ・ラボ利用に関する質問",
+      "type4": "協賛・イベント・プレスその他のお問い合わせ",
+      "name": "お名前（企業名/氏名）",
+      "email": "法人メールアドレス",
+      "phone": "電話番号",
+      "message": "メッセージ詳細（ご相談内容）",
+      "submit": "メッセージを送信する",
+      "successTitle": "送信が完了しました！",
+      "successDesc": "お問い合わせありがとうございます。内容を確認の上、担当の専門アドバイザーより折り返しご連絡申し上げます。"
+    }
+  }
+}

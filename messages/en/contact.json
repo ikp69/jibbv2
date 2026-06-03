@@ -1,0 +1,27 @@
+{
+  "contactPage": {
+    "title": "Contact the Bureau",
+    "subtitle": "Get in touch with our bilateral trade specialists. We respond to all inquiries within 24 hours.",
+    "officesTitle": "Our Offices",
+    "formTitle": "Send us a Message",
+    "tokyoOffice": "Japan Office (Global Headquarters)",
+    "tokyoAddr": "Tameike Suzuki Building 3F, 1-2-13 Akasaka, Minato-ku, Tokyo",
+    "noidaOffice": "Delhi NCR Office (Operational Office)",
+    "noidaAddr": "JIBB, 6th Floor, 162, Sector 136, Arihant Business Centre, Noida, Uttar Pradesh",
+    "form": {
+      "inquiryType": "Inquiry Type",
+      "typeSelect": "Select Type",
+      "type1": "Membership Application",
+      "type2": "Trade & Partner Matching Support",
+      "type3": "Innovation Hub & Lab Inquiries",
+      "type4": "General Partnership & Events",
+      "name": "Full Name",
+      "email": "Corporate Email Address",
+      "phone": "Phone Number",
+      "message": "Detailed Message",
+      "submit": "Send Message",
+      "successTitle": "Message Sent Successfully!",
+      "successDesc": "Thank you for contacting JIBB. A trade specialist from our team will reach out to you shortly."
+    }
+  }
+}

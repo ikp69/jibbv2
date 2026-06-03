@@ -1,0 +1,52 @@
+{
+  "membershipPage": {
+    "title": "Membership Plans",
+    "subtitle": "Gain premium network access, utilize R&D labs, and unlock bilateral growth opportunities.",
+    "ctaTitle": "Find the Perfect Plan",
+    "plansTitle": "Tiered Plans",
+    "schedulerTitle": "Schedule an Advisory Call",
+    "schedulerSubtitle": "Book a 30-minute introductory meeting with our bilateral trade consultants via Calendly or MS Bookings.",
+    "calendlyTab": "Calendly Scheduler",
+    "bookingsTab": "MS Bookings",
+    "selectTime": "Select a Time Slot",
+    "bookingDetailsTitle": "Enter Booking Details",
+    "bookBtn": "Confirm Appointment",
+    "bookingSuccessTitle": "Meeting Booked Successfully!",
+    "bookingSuccessDesc": "Thank you. Your meeting has been scheduled. You will receive a calendar invite with the join link shortly.",
+    "benefits": {
+      "networking": "Exclusive Diaspora & Executive Networking",
+      "labs": "R&D Lab Sandbox Access (Tokyo/Noida)",
+      "advisory": "Dedicated Trade & Regulatory Advisory",
+      "visibility": "Member Directory & Event Brand Spotlights"
+    },
+    "features": {
+      "startup": {
+        "title": "Startup Tier",
+        "price": "₹15,000 / Yr",
+        "priceSub": "For early-stage scaling tech",
+        "feature1": "General Networking Events",
+        "feature2": "10 Hrs/Mo Sandbox Lab Booking",
+        "feature3": "Quarterly Regulatory Advisory",
+        "feature4": "Standard Directory Listing"
+      },
+      "corporate": {
+        "title": "Corporate Tier",
+        "price": "₹75,000 / Yr",
+        "priceSub": "For mid-to-large manufacturers",
+        "feature1": "All Networking + VIP Lounges",
+        "feature2": "50 Hrs/Mo Sandbox Lab Booking",
+        "feature3": "Monthly Dedicated Advisor Calls",
+        "feature4": "Premium Event Branding spots"
+      },
+      "government": {
+        "title": "Bilateral Partner",
+        "price": "Custom Pricing",
+        "priceSub": "For trade organizations & ministries",
+        "feature1": "Exclusive G2B Summits",
+        "feature2": "Unlimited Labs & Tech Demonstrations",
+        "feature3": "24/7 Priority Policy Advisory",
+        "feature4": "Executive Brand Placement"
+      }
+    }
+  }
+}

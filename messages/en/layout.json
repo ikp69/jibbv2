@@ -1,0 +1,127 @@
+{
+  "metadata": {
+    "title": "JIBB — Japan India Business Bureau",
+    "description": "A cross-border innovation and industrial collaboration ecosystem connecting Japan and India through partnerships, trade, manufacturing, and technology."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "innovationHub": "Innovation Hub",
+    "sectors": "Sectors",
+    "membership": "Membership",
+    "events": "Events",
+    "resources": "Resources",
+    "careers": "Careers",
+    "contact": "Contact",
+    "ecosystem": "Ecosystem",
+    "memberLogin": "Member Login",
+    "joinJibb": "Join JIBB",
+    "switchLanguage": "日本語"
+  },
+  "aboutMenu": {
+    "whoWeAre": "Discover JIBB's mission, impact, and core team",
+    "vision": "Vision & Mission",
+    "visionDesc": "Our long-term goals and foundational purpose",
+    "leadership": "Leadership",
+    "leadershipDesc": "The board and executives steering our mission",
+    "approach": "Our Approach",
+    "approachDesc": "Methodology of facilitating cross-border trade",
+    "ecosystem": "Innovation Ecosystem",
+    "ecosystemDesc": "A dynamic network of startups and enterprises",
+    "partnerships": "Global Partnerships",
+    "partnershipsDesc": "Collaborations with institutional partners"
+  },
+  "servicesMenu": {
+    "marketEntry": "Market Entry Support",
+    "marketEntryDesc": "Smooth navigational support for foreign markets",
+    "partnership": "Partnership Facilitation",
+    "partnershipDesc": "Strategic matching with reliable local partners",
+    "localization": "Localization Support",
+    "localizationDesc": "Adapting business strategies to local culture",
+    "investment": "Investment Support",
+    "investmentDesc": "Capital deployment and investment advisory",
+    "jointVentures": "Joint Ventures",
+    "jointVenturesDesc": "Structuring high-value bilateral corporations",
+    "consulting": "Innovation Consulting",
+    "consultingDesc": "Advanced support for corporate innovation",
+    "research": "Research & Insights",
+    "researchDesc": "Custom commercial intelligence and analytics"
+  },
+  "hubMenu": {
+    "coe": "Center of Excellence",
+    "coeDesc": "Dedicated hubs for tech demonstration and labs",
+    "labs": "Laboratories",
+    "labsDesc": "Advanced sandbox environments for research",
+    "incubation": "Startup Incubation",
+    "incubationDesc": "Incubating cross-border startup ecosystems",
+    "research": "Research Programs",
+    "researchDesc": "Joint academic and industrial programs",
+    "partners": "Partner Institutions",
+    "partnersDesc": "Eminent institutional and university partners",
+    "challenges": "Innovation Challenges",
+    "challengesDesc": "Tackling critical bilateral tech challenges"
+  },
+  "resourcesMenu": {
+    "insights": "Market Insights",
+    "insightsDesc": "Deep-dive analyses of cross-border trends",
+    "reports": "Industry Reports",
+    "reportsDesc": "Annual and quarterly sector insights",
+    "blog": "News & Blog",
+    "blogDesc": "Stories of collaboration and announcements",
+    "media": "Media & Press",
+    "mediaDesc": "Press releases and media resources",
+    "caseStudies": "Case Studies",
+    "caseStudiesDesc": "Real success stories from JIBB members",
+    "newsletter": "Newsletter",
+    "newsletterDesc": "Weekly news directly to your inbox",
+    "leadership": "Leadership Thoughts",
+    "leadershipDesc": "Articles and perspectives from JIBB's co-founders and leadership"
+  },
+  "sectorsMenu": {
+    "desc": "Explore JIBB's 8 focus industries for cross-border collaboration"
+  },
+  "membershipMenu": {
+    "desc": "Join our ecosystem of corporations, startups, and institutions"
+  },
+  "eventsMenu": {
+    "desc": "Conferences, networking meets, and delegations"
+  },
+  "careersMenu": {
+    "desc": "Join JIBB and shape the future of India-Japan relations"
+  },
+  "footer": {
+    "tagline": "A Cross-Border Innovation & Industrial Collaboration Ecosystem",
+    "quickLinks": "Quick Links",
+    "aboutNetwork": "About & Network",
+    "services": "Services",
+    "innovation": "Innovation",
+    "resources": "Resources",
+    "connect": "Connect With Us",
+    "newsletter": {
+      "title": "Stay Updated",
+      "placeholder": "Enter your email",
+      "button": "Subscribe",
+      "desc": "Subscribe to get the latest bilateral market insights and event invitations."
+    },
+    "offices": {
+      "tokyoTitle": "Tokyo, Japan",
+      "tokyoAddress": "Tameike Suzuki Building 3F, 1-2-13 Akasaka, Minato-ku, Tokyo",
+      "noidaTitle": "Noida, India",
+      "noidaAddress": "JIBB, 6th Floor, 162, Sector 136, Arihant Business Centre, Noida, Uttar Pradesh"
+    },
+    "copyright": "© {year} Japan India Business Bureau. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "common": {
+    "learnMore": "Learn More",
+    "getStarted": "Get Started",
+    "contactUs": "Contact Us",
+    "readMore": "Read More",
+    "viewAll": "View All",
+    "back": "Back",
+    "loading": "Loading...",
+    "comingSoon": "Coming Soon"
+  }
+}
