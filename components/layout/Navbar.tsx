@@ -402,17 +402,28 @@ export function Navbar() {
     setActiveMenu(null);
   }, [pathname]);
 
+  const isHomePage = pathname === "/";
+
   // Scroll listener for sticky solid background transitions
   useEffect(() => {
     function onScroll() {
-      setScrolled(window.scrollY > 20);
+      if (isHomePage) {
+        const isMobile = window.innerWidth < 768;
+        const threshold = isMobile ? 50 : 3000;
+        setScrolled(window.scrollY > threshold);
+      } else {
+        setScrolled(true);
+      }
     }
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("resize", onScroll, { passive: true });
 
-  const isHomePage = pathname === "/";
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [isHomePage]);
 
   function handleMenuEnter(key: string) {
     if (menuTimeoutRef.current) clearTimeout(menuTimeoutRef.current);
@@ -445,7 +456,7 @@ export function Navbar() {
         data-lenis-prevent
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent",
-          "navbar-solid"
+          scrolled ? "navbar-solid" : "navbar-transparent"
         )}
       >
         <div className="section-container">

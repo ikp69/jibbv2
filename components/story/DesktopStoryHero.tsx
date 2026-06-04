@@ -269,13 +269,22 @@ export function DesktopStoryHero() {
       >
         {/* ═══════════ BACKGROUND LAYER ═══════════ */}
         <div aria-hidden="true" className="story-bg-warm absolute inset-0 bg-jibb-orange/5 pointer-events-none" />
-        <div className="absolute inset-0 pointer-events-none">
+
+        {/* hero-bg wrapper class for desktop */}
+        <div className="hero-bg-desktop absolute inset-0 pointer-events-none z-0">
           {/* Base JIBB V2 background image with optimal opacity */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.50]"
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.99]"
             style={{ backgroundImage: "url('/jibb-v2-bg.png')" }}
           />
+
+          {/* Desktop Overlay Layers */}
+          <div className="hero-overlay-desktop-1 absolute inset-0" />
+          <div className="hero-overlay-desktop-2 absolute inset-0" />
+          <div className="hero-overlay-desktop-3 absolute bottom-0 left-0 right-0" />
+          <div className="hero-overlay-desktop-4 absolute inset-0" />
+          <div className="hero-overlay-desktop-5 absolute inset-0" />
 
           {/* Warm glow overlay — revealed during handshake */}
           <div

@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [],
   },
+  allowedDevOrigins: ['*']
 };
 
 export default withNextIntl(nextConfig);

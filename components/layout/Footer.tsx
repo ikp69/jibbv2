@@ -101,15 +101,15 @@ function DelhiNcrIcon({ className }: { className?: string }) {
       {/* Sunburst background flare */}
       <path d="M32 6V10M32 54V58M6 32H10M54 32H58" stroke="#E98B2A" strokeWidth="1" strokeLinecap="round" opacity="0.3" />
       <path d="M13.5 13.5L16.5 16.5M47.5 47.5L50.5 50.5M13.5 50.5L16.5 47.5M47.5 16.5L50.5 13.5" stroke="#E98B2A" strokeWidth="1" strokeLinecap="round" opacity="0.3" />
-      
+
       {/* Accurate India Gate Silhouette from SVG Repo scaled to fit */}
       <g transform="translate(12, 10) scale(0.078)">
-        <path 
-          fill="#E98B2A" 
-          d="M256 49.5c-20 0-48 3.5-64 10.5v18h-64v55h256V78h-64V60c-16-7-44-10.5-64-10.5zM208 90c8.8 0 16 7.16 16 16 0 8.8-7.2 16-16 16s-16-7.2-16-16c0-8.84 7.2-16 16-16zm96 0c8.8 0 16 7.16 16 16 0 8.8-7.2 16-16 16s-16-7.2-16-16c0-8.84 7.2-16 16-16zm-192 61v18H96v18h320v-18h-16v-18zm-32 52v18h352v-18zm16 36v72h112.7c8.1-52 86.5-52 94.6 0H416v-72zm0 90v30h96v18H96v119h112V329zm208 0v167h112V377h-96v-18h96v-30z" 
+        <path
+          fill="#E98B2A"
+          d="M256 49.5c-20 0-48 3.5-64 10.5v18h-64v55h256V78h-64V60c-16-7-44-10.5-64-10.5zM208 90c8.8 0 16 7.16 16 16 0 8.8-7.2 16-16 16s-16-7.2-16-16c0-8.84 7.2-16 16-16zm96 0c8.8 0 16 7.16 16 16 0 8.8-7.2 16-16 16s-16-7.2-16-16c0-8.84 7.2-16 16-16zm-192 61v18H96v18h320v-18h-16v-18zm-32 52v18h352v-18zm16 36v72h112.7c8.1-52 86.5-52 94.6 0H416v-72zm0 90v30h96v18H96v119h112V329zm208 0v167h112V377h-96v-18h96v-30z"
         />
       </g>
-      
+
       <defs>
         <radialGradient id="delhiGlow" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="rgba(233, 139, 42, 0.2)" />
@@ -332,11 +332,11 @@ export function Footer() {
 
         {/* ROW 2: DETAILED ADDRESS CARDS & NEWSLETTER FORM */}
         <div className="border-t border-white/10 pt-10 pb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 items-stretch">
-          
+
           {/* Japan Office Address Column (col span 4) */}
           <div className="lg:col-span-4 md:col-span-1">
-            <Link 
-              href="/contact" 
+            <Link
+              href="/contact"
               className="group flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 h-full"
             >
               <JapanIcon className="size-14 text-jibb-sakura shrink-0" />
@@ -350,11 +350,11 @@ export function Footer() {
               </div>
             </Link>
           </div>
-          
+
           {/* Delhi NCR Office Address Column (col span 4) */}
           <div className="lg:col-span-4 md:col-span-1">
-            <Link 
-              href="/contact" 
+            <Link
+              href="/contact"
               className="group flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 h-full"
             >
               <DelhiNcrIcon className="size-14 text-jibb-orange shrink-0" />
@@ -379,7 +379,7 @@ export function Footer() {
                 {t("footer.newsletter.desc")}
               </p>
             </div>
-            
+
             <form
               onSubmit={(e) => e.preventDefault()}
               className="flex flex-col sm:flex-row gap-3 w-full"
@@ -405,7 +405,7 @@ export function Footer() {
         </div>
 
         {/* ROW 3: BILATERAL PARTNER BADGE LIST */}
-        <div className="border-t border-white/5 py-6 flex flex-wrap items-center justify-between gap-6">
+        {/* <div className="border-t border-white/5 py-6 flex flex-wrap items-center justify-between gap-6">
           <span className="text-[10px] uppercase tracking-widest text-white/40 font-semibold">
             Bilateral Support &amp; Ecosystem Partners
           </span>
@@ -430,7 +430,7 @@ export function Footer() {
               </a>
             ))}
           </div>
-        </div>
+        </div> */}
 
         {/* ROW 4: COPYRIGHT & LEGAL SUB-BAR */}
         <div className="border-t border-white/10 pt-8 mt-4 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">

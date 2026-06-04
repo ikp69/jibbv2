@@ -64,70 +64,104 @@ export function MobileStoryHero() {
 
   return (
     <section ref={containerRef} className="relative w-full pt-20 pb-16 overflow-hidden">
-      {/* Background — absolute (not fixed) to avoid iOS Safari glitch */}
-      <div aria-hidden="true" className="absolute inset-0 pointer-events-none -z-10">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.3]"
-          style={{ backgroundImage: "url('/jibb-v2-bg.png')" }}
+      {/* Hero Artwork Block at the top */}
+      <div className="relative w-full h-[260px] xs:h-[320px] sm:h-[420px] overflow-hidden -mt-20">
+        <Image
+          src="/JIBB_LandingPage_Illustration_Final.webp"
+          alt="JIBB Background Illustration"
+          fill
+          priority
+          className="object-cover object-top scale-[1.25] opacity-[0.99]"
         />
-        <div
-          className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background/90"
-        />
+
+        {/* Mascot images overlaying the bottom part of the artwork */}
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center justify-center gap-[100px] z-10">
+          <div className="relative w-20 h-24 sm:w-28 sm:h-32 animate-float">
+            <Image src="/mascots/kenji.png" alt="Kenji" fill className="object-contain" sizes="(max-width: 640px) 80px, 112px" priority />
+          </div>
+          <div className="relative w-20 h-24 sm:w-28 sm:h-32 animate-float-delayed">
+            <Image src="/mascots/aarav.png" alt="Aarav" fill className="object-contain" sizes="(max-width: 640px) 80px, 112px" priority />
+          </div>
+        </div>
+
+        {/* Gradients to fade out the top and bottom of the image */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background" />
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col gap-16">
+      {/* Blue to Orange Gradient Area for Intro, Narration, and Chat bubbles */}
+      <div className="relative w-full pb-12">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 pointer-events-none"
+          style={{
+            background: "linear-gradient(90deg, var(--mobile-hero-grad-left) 0%, var(--mobile-hero-grad-right) 100%)"
+          }}
+        />
+        {/* Top vertical fade to blend with artwork bottom border */}
+        <div
+          aria-hidden="true"
+          className="absolute top-0 left-0 right-0 h-16 -z-10 pointer-events-none"
+          style={{
+            background: "linear-gradient(to top, transparent, var(--bg-primary))"
+          }}
+        />
+        {/* Bottom vertical fade to blend with handshake section background */}
+        <div
+          aria-hidden="true"
+          className="absolute bottom-0 left-0 right-0 h-24 -z-10 pointer-events-none"
+          style={{
+            background: "linear-gradient(to bottom, transparent, var(--bg-primary))"
+          }}
+        />
 
-        {/* Intro */}
-        <div className="text-center mobile-reveal pt-8">
-          <div className="flex items-center justify-center gap-6 mb-8">
-            <div className="relative w-24 h-32 sm:w-32 sm:h-40">
-              <Image src="/mascots/kenji.png" alt="Kenji" fill className="object-contain" sizes="(max-width: 640px) 96px, 128px" priority />
-            </div>
-            <div className="relative w-24 h-32 sm:w-32 sm:h-40">
-              <Image src="/mascots/aarav.png" alt="Aarav" fill className="object-contain" sizes="(max-width: 640px) 96px, 128px" priority />
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col gap-12">
+          {/* Intro */}
+          <div className="text-center mobile-reveal pt-2">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+              <span className="text-foreground">Building Bridges,</span>
+              <br />
+              <span className="bg-gradient-to-r from-jibb-indigo via-jibb-orange to-jibb-sakura bg-clip-text text-transparent">
+                Sparking Innovation.
+              </span>
+            </h1>
+            <div className="mt-4 flex items-center justify-center gap-3">
+              <div className="h-px w-8 bg-jibb-orange/40" />
+              <span className="text-sm font-semibold tracking-[0.15em] uppercase text-jibb-indigo/60">
+                A JIBB Story
+              </span>
+              <div className="h-px w-8 bg-jibb-orange/40" />
             </div>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
-            <span className="text-foreground">Building Bridges,</span>
-            <br />
-            <span className="bg-gradient-to-r from-jibb-indigo via-jibb-orange to-jibb-sakura bg-clip-text text-transparent">
-              Sparking Innovation.
-            </span>
-          </h1>
-          <div className="mt-4 flex items-center justify-center gap-3">
-            <div className="h-px w-8 bg-jibb-orange/40" />
-            <span className="text-sm font-semibold tracking-[0.15em] uppercase text-jibb-indigo/60">
-              A JIBB Story
-            </span>
-            <div className="h-px w-8 bg-jibb-orange/40" />
+
+          {/* Narration */}
+          <div className="space-y-4 text-center">
+            {NARRATION_KEYS.map((key) => (
+              <p key={key} className="mobile-reveal text-base sm:text-lg text-foreground/80 font-light italic leading-relaxed">
+                {t(key)}
+              </p>
+            ))}
+          </div>
+
+          {/* Conversation — shared ChatBubble primitive */}
+          <div className="flex flex-col gap-6 w-full max-w-xl mx-auto">
+            {MESSAGES.map((msg, i) => (
+              <div key={i} className="mobile-reveal">
+                <ChatBubble
+                  speaker={msg.speaker}
+                  name={t(msg.speaker === "kenji" ? "kenjiName" : "aaravName")}
+                  location={msg.speaker === "kenji" ? "Tokyo" : "Noida"}
+                  size="sm"
+                >
+                  {t(msg.key)}
+                </ChatBubble>
+              </div>
+            ))}
           </div>
         </div>
+      </div>
 
-        {/* Narration */}
-        <div className="space-y-4 text-center">
-          {NARRATION_KEYS.map((key) => (
-            <p key={key} className="mobile-reveal text-base sm:text-lg text-foreground/80 font-light italic leading-relaxed">
-              {t(key)}
-            </p>
-          ))}
-        </div>
-
-        {/* Conversation — shared ChatBubble primitive */}
-        <div className="flex flex-col gap-6 w-full max-w-xl mx-auto">
-          {MESSAGES.map((msg, i) => (
-            <div key={i} className="mobile-reveal">
-              <ChatBubble
-                speaker={msg.speaker}
-                name={t(msg.speaker === "kenji" ? "kenjiName" : "aaravName")}
-                location={msg.speaker === "kenji" ? "Tokyo" : "Noida"}
-                size="sm"
-              >
-                {t(msg.key)}
-              </ChatBubble>
-            </div>
-          ))}
-        </div>
-
+      {/* Handshake & CTA section (rests on solid cream page background) */}
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 relative z-10 mt-4">
         {/* Handshake & CTA */}
         <div className="pt-8 flex flex-col items-center">
           <div className="mobile-reveal relative w-56 h-56 sm:w-72 sm:h-72 mb-10">
@@ -164,7 +198,6 @@ export function MobileStoryHero() {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );
