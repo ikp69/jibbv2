@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowLeft, MapPin, Building2, Trophy, Sparkles } from "lucide-react";
 import type { Metadata } from "next";
+import { TableOfContents } from "@/components/ui/TableOfContents";
 
 const SITE_URL = "https://npo-jibb.org";
 const PUBLISHER = {
@@ -179,7 +180,9 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
             </div>
 
             {/* Metrics Sidebar */}
-            <div className="space-y-6">
+            <div className="space-y-6 lg:sticky lg:top-24 self-start">
+              <TableOfContents />
+
               <div className="rounded-3xl p-6 bg-card border border-border/80 shadow-jibb relative overflow-hidden space-y-6">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
                 

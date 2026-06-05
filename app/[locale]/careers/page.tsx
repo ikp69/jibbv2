@@ -3,11 +3,17 @@
 import { useState, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Input, Textarea } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { AnimatedHeading } from "@/components/ui/AnimatedHeading";
+import { AnimatedButton } from "@/components/ui/AnimatedButton";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { CultureGallery } from "@/components/sections/CultureGallery";
+import { HiringProcess } from "@/components/sections/HiringProcess";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Building2, Briefcase, Globe, Award, Sparkles, ChevronDown, CheckCircle, 
   Send, Phone, Mail, Link as LinkIcon, User, SendHorizontal 
 } from "lucide-react";
+import { PageHero } from "@/components/sections/PageHero";
 
 export default function CareersPage() {
   const t = useTranslations("careersPage");
@@ -27,6 +33,7 @@ export default function CareersPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [shouldShake, setShouldShake] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -74,7 +81,11 @@ export default function CareersPage() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      setShouldShake(true);
+      setTimeout(() => setShouldShake(false), 500);
+      return;
+    }
 
     setIsSubmitting(true);
 
@@ -102,16 +113,7 @@ export default function CareersPage() {
       {/* ============================================================
           HERO BANNER
           ============================================================ */}
-      <section className="relative py-20 lg:py-28 overflow-hidden bg-jibb-gradient">
-        {/* Wave pattern overlay */}
-        <div aria-hidden="true" className="absolute inset-0 wave-pattern opacity-10 pointer-events-none animate-wave-slide" />
-        
-        {/* Ambient Glow Accent */}
-        <div 
-          aria-hidden="true" 
-          className="absolute -top-40 right-[15%] w-[450px] h-[450px] bg-jibb-orange/10 rounded-full blur-[110px] pointer-events-none"
-        />
-
+      <PageHero className="py-20 lg:py-28">
         <div className="section-container relative z-10 text-center max-w-4xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
@@ -120,9 +122,11 @@ export default function CareersPage() {
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-            {t("title")}
-          </h1>
+          <AnimatedHeading
+            text={t("title")}
+            className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight"
+            immediate
+          />
           
           <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
             {t("subtitle")}
@@ -136,7 +140,7 @@ export default function CareersPage() {
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
           </div>
         </div>
-      </section>
+      </PageHero>
 
       {/* ============================================================
           INTRO DIVISION
@@ -210,6 +214,10 @@ export default function CareersPage() {
         </div>
       </section>
 
+      <CultureGallery />
+
+      <HiringProcess />
+
       {/* ============================================================
           INTERACTIVE JOB BOARD (ACCORDION)
           ============================================================ */}
@@ -262,50 +270,102 @@ export default function CareersPage() {
                   </button>
 
                   {/* Expanded Content Panel */}
-                  <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                    isExpanded ? "max-h-[1000px] border-t border-border/50" : "max-h-0"
-                  }`}>
-                    <div className="p-6 space-y-6 text-sm leading-relaxed">
-                      {/* Overview */}
-                      <div className="space-y-2">
-                        <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">Role Overview</h4>
-                        <p className="text-muted-foreground">{t(`jobs.${job.translationKey}.overview`)}</p>
-                      </div>
+                  <AnimatePresence initial={false}>
+                    {isExpanded && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+                        className="overflow-hidden border-t border-border/50"
+                      >
+                        <div className="p-6 space-y-6 text-sm leading-relaxed">
+                          {/* Overview */}
+                          <div className="space-y-2">
+                            <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">Role Overview</h4>
+                            <p className="text-muted-foreground">{t(`jobs.${job.translationKey}.overview`)}</p>
+                          </div>
 
-                      {/* Responsibilities */}
-                      <div className="space-y-2.5">
-                        <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">Key Responsibilities</h4>
-                        <ul className="space-y-2 text-muted-foreground pl-4 list-disc">
-                          {responsibilities.map((resp, idx) => (
-                            <li key={idx}>{resp}</li>
-                          ))}
-                        </ul>
-                      </div>
+                          {/* Responsibilities */}
+                          <div className="space-y-2.5">
+                            <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">Key Responsibilities</h4>
+                            <motion.ul
+                              variants={{
+                                hidden: { opacity: 0 },
+                                show: {
+                                  opacity: 1,
+                                  transition: {
+                                    staggerChildren: 0.05,
+                                    delayChildren: 0.05,
+                                  },
+                                },
+                              }}
+                              initial="hidden"
+                              animate="show"
+                              className="space-y-2 text-muted-foreground pl-4 list-disc"
+                            >
+                              {responsibilities.map((resp, idx) => (
+                                <motion.li
+                                  variants={{
+                                    hidden: { opacity: 0, y: 5 },
+                                    show: { opacity: 1, y: 0 },
+                                  }}
+                                  key={idx}
+                                >
+                                  {resp}
+                                </motion.li>
+                              ))}
+                            </motion.ul>
+                          </div>
 
-                      {/* Requirements */}
-                      <div className="space-y-2.5">
-                        <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">What We're Looking For</h4>
-                        <ul className="space-y-2 text-muted-foreground pl-4 list-disc">
-                          {requirements.map((req, idx) => (
-                            <li key={idx}>{req}</li>
-                          ))}
-                        </ul>
-                      </div>
+                          {/* Requirements */}
+                          <div className="space-y-2.5">
+                            <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">What We're Looking For</h4>
+                            <motion.ul
+                              variants={{
+                                hidden: { opacity: 0 },
+                                show: {
+                                  opacity: 1,
+                                  transition: {
+                                    staggerChildren: 0.05,
+                                    delayChildren: 0.1,
+                                  },
+                                },
+                              }}
+                              initial="hidden"
+                              animate="show"
+                              className="space-y-2 text-muted-foreground pl-4 list-disc"
+                            >
+                              {requirements.map((req, idx) => (
+                                <motion.li
+                                  variants={{
+                                    hidden: { opacity: 0, y: 5 },
+                                    show: { opacity: 1, y: 0 },
+                                  }}
+                                  key={idx}
+                                >
+                                  {req}
+                                </motion.li>
+                              ))}
+                            </motion.ul>
+                          </div>
 
-                      {/* Details Badge Block */}
-                      <div className="bg-primary/5 p-4 rounded-xl border border-primary/10 flex flex-wrap justify-between items-center gap-3">
-                        <div>
-                          <span className="text-xs text-muted-foreground block">Qualifications Required</span>
-                          <span className="text-xs font-bold text-foreground">{t(`jobs.${job.translationKey}.qual`)}</span>
+                          {/* Details Badge Block */}
+                          <div className="bg-primary/5 p-4 rounded-xl border border-primary/10 flex flex-wrap justify-between items-center gap-3">
+                            <div>
+                              <span className="text-xs text-muted-foreground block">Qualifications Required</span>
+                              <span className="text-xs font-bold text-foreground">{t(`jobs.${job.translationKey}.qual`)}</span>
+                            </div>
+                            <a href="#apply-form" className="shrink-0">
+                              <AnimatedButton size="sm" className="font-semibold gap-1.5" onClick={() => toggleJob(job.id)}>
+                                Apply Now <SendHorizontal className="size-3.5" />
+                              </AnimatedButton>
+                            </a>
+                          </div>
                         </div>
-                        <a href="#apply-form" className="shrink-0">
-                          <Button size="sm" className="font-semibold gap-1.5" onClick={() => toggleJob(job.id)}>
-                            Apply Now <SendHorizontal className="size-3.5" />
-                          </Button>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               );
             })}
@@ -339,13 +399,13 @@ export default function CareersPage() {
                 <p className="text-sm text-muted-foreground max-w-sm">
                   {t("form.successDesc")}
                 </p>
-                <Button variant="outline" className="mt-6" onClick={() => setIsSuccess(false)}>
+                <AnimatedButton variant="outline" className="mt-6" onClick={() => setIsSuccess(false)}>
                   Submit Another Application
-                </Button>
+                </AnimatedButton>
               </div>
             )}
 
-            <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
+            <form ref={formRef} onSubmit={handleSubmit} className={`space-y-5 ${shouldShake ? "animate-shake" : ""}`}>
               {/* Name */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
@@ -434,13 +494,13 @@ export default function CareersPage() {
 
               {/* Submit */}
               <div className="pt-3">
-                <Button 
+                <AnimatedButton 
                   type="submit" 
-                  className="w-full h-11 font-bold rounded-xl shadow-lg hover:opacity-90 active:scale-[0.98] transition-all bg-jibb-orange text-white text-sm"
+                  className="w-full h-11 font-bold rounded-xl shadow-lg bg-jibb-orange text-white text-sm"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? t("form.submitting") : t("form.submitButton")}
-                </Button>
+                </AnimatedButton>
               </div>
             </form>
           </div>

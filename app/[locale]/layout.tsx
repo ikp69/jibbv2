@@ -7,6 +7,7 @@ import { routing } from "@/src/i18n/routing";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
+import { PageTransitionProvider } from "@/components/providers/PageTransitionProvider";
 
 // ============================================================
 // FONTS — Inter (Latin) + Noto Sans JP (Japanese) + Geist Mono
@@ -103,11 +104,19 @@ export default async function LocaleLayout({
       className={`${inter.variable} ${plusJakartaSans.variable} ${notoSansJP.variable} ${geistMono.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen flex flex-col bg-background text-foreground">
+      <body className="min-h-screen flex flex-col bg-background text-foreground bg-grid-mesh relative overflow-x-hidden">
+        {/* Global background column layout grid lines aligning with the page container */}
+        <div className="pointer-events-none fixed inset-0 z-0 flex justify-between max-w-7xl mx-auto px-6 lg:px-8" aria-hidden="true">
+          <div className="w-[1px] bg-border/20 dark:bg-white/5 h-full" />
+          <div className="w-[1px] bg-border/20 dark:bg-white/5 h-full" />
+        </div>
+
         <NextIntlClientProvider messages={messages}>
           <SmoothScrollProvider>
             <Navbar />
-            {children}
+            <PageTransitionProvider>
+              {children}
+            </PageTransitionProvider>
             <Footer />
           </SmoothScrollProvider>
         </NextIntlClientProvider>

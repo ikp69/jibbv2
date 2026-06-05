@@ -14,6 +14,12 @@ export default async function GlobalPartnershipsPage({
       titleKey="aboutMenu.partnerships"
       subtitleKey="aboutMenu.partnershipsDesc"
       sectionName="About JIBB"
+      colorTheme="indigo"
+      relatedLinks={[
+        { label: "Our Core Team", href: "/about" },
+        { label: "Bilateral Partners List", href: "/about/global-partnerships" },
+        { label: "Startup Labs", href: "/innovation-hub" }
+      ]}
     />
   );
 }

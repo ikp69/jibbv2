@@ -1,10 +1,16 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/src/i18n/navigation";
+import { AnimatedHeading } from "@/components/ui/AnimatedHeading";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { Parallax } from "@/components/ui/Parallax";
+import { AnimatedButton } from "@/components/ui/AnimatedButton";
+import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
+import { TechStack } from "@/components/sections/TechStack";
 import { 
   FlaskConical, Microscope, Cpu, ArrowRight, Lightbulb, GraduationCap, 
   Users, Award, Sparkles, Building2, BatteryCharging 
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { PageHero } from "@/components/sections/PageHero";
 
 export async function generateMetadata({
   params,
@@ -35,7 +41,7 @@ export default async function InnovationHubPage({
       title: t("hubPage.labs.semiconductor.title"),
       desc: t("hubPage.labs.semiconductor.desc"),
       spanClass: "md:col-span-2",
-      bgClass: "bg-jibb-indigo",
+      bgClass: "bg-jibb-indigo hover:shadow-jibb-glow hover:-translate-y-1",
     },
     {
       id: "ev",
@@ -43,7 +49,7 @@ export default async function InnovationHubPage({
       title: t("hubPage.labs.ev.title"),
       desc: t("hubPage.labs.ev.desc"),
       spanClass: "md:col-span-1",
-      bgClass: "bg-jibb-orange",
+      bgClass: "bg-jibb-orange hover:shadow-jibb-orange-glow hover:-translate-y-1",
     },
     {
       id: "pharma",
@@ -51,7 +57,7 @@ export default async function InnovationHubPage({
       title: t("hubPage.labs.pharma.title"),
       desc: t("hubPage.labs.pharma.desc"),
       spanClass: "md:col-span-3",
-      bgClass: "bg-jibb-sakura",
+      bgClass: "bg-jibb-sakura hover:shadow-jibb-sakura-glow hover:-translate-y-1",
     },
   ];
 
@@ -67,13 +73,7 @@ export default async function InnovationHubPage({
       {/* ============================================================
           CINEMATIC BANNER
           ============================================================ */}
-      <section className="relative py-20 lg:py-28 overflow-hidden bg-jibb-gradient">
-        {/* Wave pattern overlay */}
-        <div aria-hidden="true" className="absolute inset-0 wave-pattern opacity-10 pointer-events-none animate-wave-slide" />
-        
-        {/* Ambient Glow */}
-        <div aria-hidden="true" className="absolute -top-40 right-[15%] w-[450px] h-[450px] bg-jibb-orange/10 rounded-full blur-[110px] pointer-events-none" />
-
+      <PageHero className="py-20 lg:py-28">
         <div className="section-container relative z-10 text-center max-w-4xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
@@ -82,9 +82,11 @@ export default async function InnovationHubPage({
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-            {t("hubPage.title")}
-          </h1>
+          <AnimatedHeading
+            text={t("hubPage.title")}
+            className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight"
+            immediate
+          />
           
           <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
             {t("hubPage.subtitle")}
@@ -98,7 +100,7 @@ export default async function InnovationHubPage({
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
           </div>
         </div>
-      </section>
+      </PageHero>
 
       {/* ============================================================
           LABORATORIES BENTO GRID
@@ -119,7 +121,7 @@ export default async function InnovationHubPage({
             <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4">
+          <ScrollReveal staggerChildren={0.12} scale={0.96} className="grid md:grid-cols-3 gap-4">
             {labs.map((lb) => (
               <div 
                 key={lb.id} 
@@ -143,9 +145,11 @@ export default async function InnovationHubPage({
                 </div>
               </div>
             ))}
-          </div>
+          </ScrollReveal>
         </div>
       </section>
+
+      <TechStack />
 
       {/* ============================================================
           STARTUP INCUBATION SECTION
@@ -166,34 +170,36 @@ export default async function InnovationHubPage({
               </p>
               <div className="flex gap-4 pt-2">
                 <div className="text-left">
-                  <span className="text-2xl font-bold text-jibb-orange block">100+</span>
+                  <AnimatedCounter value={100} suffix="+" className="text-2xl font-bold text-jibb-orange block" />
                   <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Startups Incubated</span>
                 </div>
                 <div className="border-l border-border pl-4 text-left">
-                  <span className="text-2xl font-bold text-jibb-indigo block">₹850 Cr+</span>
+                  <AnimatedCounter value={850} prefix="₹" suffix=" Cr+" className="text-2xl font-bold text-jibb-indigo block" />
                   <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">VC Dealflow</span>
                 </div>
               </div>
             </div>
 
             <div className="md:col-span-5 flex justify-center">
-              <div className="relative w-full max-w-sm rounded-2xl p-6 bg-card border border-border shadow-jibb flex flex-col gap-4 text-left overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
-                <div className="flex items-center gap-2 text-sm font-bold text-foreground">
-                  <GraduationCap className="size-5 text-jibb-indigo shrink-0" />
-                  Mentorship Access
+              <Parallax speed={-0.08} className="w-full flex justify-center">
+                <div className="relative w-full max-w-sm rounded-2xl p-6 bg-card border border-border shadow-jibb flex flex-col gap-4 text-left overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
+                  <div className="flex items-center gap-2 text-sm font-bold text-foreground">
+                    <GraduationCap className="size-5 text-jibb-indigo shrink-0" />
+                    Mentorship Access
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Incubated founders are paired directly with industry experts and corporate leaders across Tokyo, Delhi, and Noida ecosystems.
+                  </p>
+                  <div className="border-t border-border pt-4">
+                    <Link href="/membership">
+                      <AnimatedButton variant="outline" size="sm" className="w-full font-semibold gap-1">
+                        Join Incubation <ArrowRight className="size-3.5" />
+                      </AnimatedButton>
+                    </Link>
+                  </div>
                 </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Incubated founders are paired directly with industry experts and corporate leaders across Tokyo, Delhi, and Noida ecosystems.
-                </p>
-                <div className="border-t border-border pt-4">
-                  <Link href="/membership">
-                    <Button variant="outline" size="sm" className="w-full font-semibold gap-1">
-                      Join Incubation <ArrowRight className="size-3.5" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
+              </Parallax>
             </div>
           </div>
         </div>

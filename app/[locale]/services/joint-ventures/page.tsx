@@ -14,6 +14,12 @@ export default async function JointVenturesPage({
       titleKey="servicesMenu.jointVentures"
       subtitleKey="servicesMenu.jointVenturesDesc"
       sectionName="JIBB Services"
+      colorTheme="orange"
+      relatedLinks={[
+        { label: "Our Core Services", href: "/services" },
+        { label: "Co-Innovation Sandbox", href: "/services/innovation-consulting" },
+        { label: "Market Entry Advisory", href: "/services/market-entry" }
+      ]}
     />
   );
 }

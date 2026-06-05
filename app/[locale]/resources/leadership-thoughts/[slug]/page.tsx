@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, ArrowLeft, Clock, Sparkles } from "lucide-react";
 import type { Metadata } from "next";
+import { TableOfContents } from "@/components/ui/TableOfContents";
 
 const SITE_URL = "https://npo-jibb.org";
 const PUBLISHER = {
@@ -234,7 +235,7 @@ export default async function LeadershipThoughtPostPage({ params }: PageProps) {
           ARTICLE HERO IMAGE & CONTENT
           ============================================================ */}
       <section className="py-12 bg-card">
-        <div className="section-container max-w-4xl space-y-12">
+        <div className="section-container max-w-6xl space-y-12">
           {/* Featured Image */}
           <div className="relative rounded-3xl overflow-hidden max-h-[70vh] flex justify-center bg-transparent">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -245,11 +246,20 @@ export default async function LeadershipThoughtPostPage({ params }: PageProps) {
             />
           </div>
 
-          {/* Rendered HTML Markdown Body */}
-          <article
-            className="jibb-prose mx-auto"
-            dangerouslySetInnerHTML={{ __html: post.contentHtml }}
-          />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+            {/* Table of Contents Sidebar */}
+            <aside className="lg:col-span-3 lg:sticky lg:top-24 hidden lg:block self-start">
+              <TableOfContents />
+            </aside>
+
+            {/* Article content */}
+            <div className="lg:col-span-9">
+              <article
+                className="jibb-prose mx-auto"
+                dangerouslySetInnerHTML={{ __html: post.contentHtml }}
+              />
+            </div>
+          </div>
 
           {/* Footer Navigation */}
           <div className="border-t border-border/80 pt-8 flex items-center justify-between">

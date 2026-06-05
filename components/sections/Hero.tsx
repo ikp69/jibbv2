@@ -163,14 +163,14 @@ export function Hero() {
         >
           <motion.div
             aria-hidden="true"
-            className="relative w-full max-w-[420px] aspect-[4/5] rounded-[24px] p-2 bg-gradient-to-br from-white/15 to-white/5 border border-white/10 backdrop-blur-md shadow-jibb-xl cursor-default"
+            className="relative w-full max-w-[420px] aspect-[4/5] rounded-2xl p-2 bg-gradient-to-br from-white/15 to-white/5 border border-white/10 backdrop-blur-md shadow-jibb-xl cursor-default"
             animate={floatTransition(7)}
           >
             {/* Absolute accent glows */}
             <div className="absolute -top-3 -left-3 size-12 bg-jibb-orange/20 rounded-full blur-md" />
             <div className="absolute -bottom-3 -right-3 size-12 bg-jibb-sakura/20 rounded-full blur-md" />
 
-            <div className="relative w-full h-full overflow-hidden rounded-[18px] bg-primary/20">
+            <div className="relative w-full h-full overflow-hidden rounded-xl bg-primary/20">
               <Image
                 src="/mascots.jpeg"
                 alt="JIBB Bilateral Mascots & Innovation Ecosystem"

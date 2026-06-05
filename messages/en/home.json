@@ -68,6 +68,136 @@
     },
     "learnMore": "Learn More"
   },
+  "howWeHelp": {
+    "sectionTitle": "How We Help",
+    "sectionSubtitle": "Providing tailored support to bridge businesses, innovators, and researchers across the Japan-India corridor.",
+    "tagline": "Tailored Solutions",
+    "japaneseCompanies": {
+      "title": "For Japanese Companies",
+      "subtitle": "Tap into India's tech ecosystem & scale operations.",
+      "bullet1": "Find Indian partners",
+      "bullet2": "Market entry guidance",
+      "bullet3": "Local network"
+    },
+    "indianCompanies": {
+      "title": "For Indian Companies",
+      "subtitle": "Access advanced manufacturing & scale in Japan.",
+      "bullet1": "Access Japanese market",
+      "bullet2": "Strategic partnerships",
+      "bullet3": "Business matchmaking"
+    },
+    "researchersStartups": {
+      "title": "For Researchers & Startups",
+      "subtitle": "Collaborate on R&D, labs & funding opportunities.",
+      "bullet1": "Innovation programs",
+      "bullet2": "Labs",
+      "bullet3": "Funding opportunities"
+    },
+    "learnMore": "Learn More"
+  },
+  "featOpportunities": {
+    "sectionTitle": "Featured Opportunities",
+    "sectionSubtitle": "Discover active collaboration opportunities between India and Japan.",
+    "tagline": "Opportunity Marketplace",
+    "viewAll": "View All Opportunities",
+    "tabs": {
+      "partnerships": "Partnerships",
+      "delegations": "Delegations",
+      "tradeMissions": "Trade Missions",
+      "investment": "Investment"
+    },
+    "labels": {
+      "posted": "Posted {time}",
+      "lookingFor": "Looking for:",
+      "focus": "Focus:",
+      "date": "Date:",
+      "cities": "Cities:",
+      "participants": "Participants:",
+      "benefits": "Benefits:",
+      "purpose": "Purpose:",
+      "seeking": "Seeking:",
+      "range": "Investment Range:",
+      "type": "Type:",
+      "details": "View Details",
+      "apply": "Apply Now",
+      "learnMore": "Learn More"
+    },
+    "data": {
+      "partnerships": {
+        "p1": {
+          "company": "Tokyo Semiconductor Solutions",
+          "lookingFor": "Indian Manufacturing Partner",
+          "details": "PCB supplier & assembly · R&D collaboration on custom silicon architecture.",
+          "industry": "Semiconductors",
+          "location": "Tokyo, Japan",
+          "direction": "JAPAN → INDIA",
+          "time": "3 days ago"
+        },
+        "p2": {
+          "company": "Bharat Robotics",
+          "lookingFor": "Japanese Distributor",
+          "details": "Strategic technology partner for autonomous assembly & global robotics sales.",
+          "industry": "Industrial Automation",
+          "location": "Noida, India",
+          "direction": "INDIA → JAPAN",
+          "time": "5 days ago"
+        }
+      },
+      "delegations": {
+        "d1": {
+          "title": "Japan → India Business Delegation 2026",
+          "date": "15–20 March 2026",
+          "cities": "Delhi, Bengaluru, Hyderabad",
+          "focus": "Semiconductor, Electronics, AI",
+          "participants": "40 Japanese Companies",
+          "direction": "JAPAN → INDIA",
+          "benefits": "B2B Meetings, Factory Visits, Government Networking Events"
+        }
+      },
+      "tradeMissions": {
+        "m1": {
+          "title": "Clean Energy Mission",
+          "purpose": "Connecting Indian manufacturers with Japanese green hydrogen buyers.",
+          "focus": "Renewable Energy & Hydrogen",
+          "scale": "25 Companies",
+          "direction": "India ↔ Japan"
+        },
+        "m2": {
+          "title": "Smart Cities Mission",
+          "purpose": "Exploring municipal collaboration in smart grid tech and EV public charging.",
+          "focus": "Infrastructure & Mobility",
+          "scale": "15 Companies",
+          "direction": "Japan → India"
+        }
+      },
+      "investment": {
+        "i1": {
+          "title": "AI Manufacturing Platform",
+          "seeking": "$1.5M Seed Funding",
+          "industry": "AI / Manufacturing",
+          "location": "India",
+          "direction": "INDIA → JAPAN",
+          "type": "Startup Equity"
+        },
+        "i2": {
+          "title": "Tokyo Venture Group",
+          "seeking": "Seeking Startups",
+          "industry": "AI, Robotics, Deep Tech",
+          "location": "Japan",
+          "direction": "JAPAN → INDIA",
+          "type": "VC Fund ($500K–$5M)"
+        },
+        "i3": {
+          "title": "Japanese Electronics Firm",
+          "seeking": "Joint Venture Partner",
+          "industry": "Consumer Electronics",
+          "location": "India / Japan",
+          "direction": "Bilateral JV",
+          "type": "$10M+ Joint Investment"
+        }
+      }
+    }
+  },
   "sectors": {
     "sectionTitle": "Key Sectors",
     "sectionSubtitle": "Driving collaboration across industries shaping the future of India–Japan partnership.",

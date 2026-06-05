@@ -14,6 +14,12 @@ export default async function LaboratoriesPage({
       titleKey="hubMenu.labs"
       subtitleKey="hubMenu.labsDesc"
       sectionName="Innovation Hub"
+      colorTheme="sakura"
+      relatedLinks={[
+        { label: "Innovation Hub Overview", href: "/innovation-hub" },
+        { label: "Co-Innovation Timeline", href: "/about" },
+        { label: "Startup Incubation", href: "/innovation-hub/startup-incubation" }
+      ]}
     />
   );
 }

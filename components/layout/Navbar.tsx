@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/src/i18n/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { Button } from "@/components/ui/button";
+import { AnimatedButton } from "@/components/ui/AnimatedButton";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
   Menu,
@@ -50,7 +51,7 @@ type NavItem = {
     labelKey: string;
     href: string;
     descKey?: string;
-    icon: React.ElementType;
+    icon: React.ComponentType<any>;
   }[];
 };
 
@@ -111,7 +112,6 @@ const navItems: NavItem[] = [
     align: "right",
     megaMenu: [
       { labelKey: "resourcesMenu.insights", href: "/resources/insights", descKey: "resourcesMenu.insightsDesc", icon: TrendingUp },
-      { labelKey: "resourcesMenu.reports", href: "/resources/reports", descKey: "resourcesMenu.reportsDesc", icon: FileText },
       { labelKey: "resourcesMenu.blog", href: "/resources/blog", descKey: "resourcesMenu.blogDesc", icon: Newspaper },
       { labelKey: "nav.careers", href: "/careers", descKey: "careersMenu.desc", icon: Users },
       { labelKey: "resourcesMenu.caseStudies", href: "/resources/case-studies", descKey: "resourcesMenu.caseStudiesDesc", icon: BookMarked },
@@ -137,17 +137,21 @@ function MegaMenu({
   const t = useTranslations();
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 8, scale: 0.95 }}
+      transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
       className={cn(
-        "absolute top-full pt-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200",
+        "absolute top-full pt-2 z-50",
         align === "left" && "left-0",
         align === "center" && "left-1/2 -translate-x-1/2",
         align === "right" && "right-0"
       )}
     >
       <div className="bg-card/95 rounded-2xl border border-border/80 shadow-jibb-lg p-2 min-w-[280px] flex flex-col gap-0.5 backdrop-blur-md">
-        {items.map((item) => {
-          const Icon = item.icon;
+        {items.map((item, index) => {
+          const Icon = item.icon as any;
           let label: string;
           try {
             label = t(item.labelKey);
@@ -156,23 +160,29 @@ function MegaMenu({
           }
 
           return (
-            <Link
+            <motion.div
               key={item.href}
-              href={item.href}
-              onClick={onClose}
-              className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-muted/80 transition-all group duration-200 select-none"
+              initial={{ opacity: 0, x: -5 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.03, duration: 0.15 }}
             >
-              <div className="p-1.5 rounded-lg bg-primary/5 text-primary group-hover:bg-primary/10 group-hover:scale-105 transition-all">
-                <Icon className="size-4" />
-              </div>
-              <span className="text-sm font-semibold text-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200">
-                {label}
-              </span>
-            </Link>
+              <Link
+                href={item.href}
+                onClick={onClose}
+                className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-muted/80 transition-all group duration-200 select-none"
+              >
+                <div className="p-1.5 rounded-lg bg-primary/5 text-primary group-hover:bg-primary/10 group-hover:scale-105 transition-all">
+                  <Icon className="size-4" />
+                </div>
+                <span className="text-sm font-semibold text-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200">
+                  {label}
+                </span>
+              </Link>
+            </motion.div>
           );
         })}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -209,168 +219,178 @@ function MobileDrawer({
   }, [isOpen]);
 
   function handleHeaderClick(item: NavItem) {
-    if (item.megaMenu) {
-      setExpandedItem(expandedItem === item.labelKey ? null : item.labelKey);
-    } else {
-      onClose();
-    }
+    setExpandedItem(expandedItem === item.labelKey ? null : item.labelKey);
   }
 
   return (
-    <>
-      {/* Backdrop */}
-      <div
-        data-lenis-prevent
-        className={cn(
-          "fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 lg:hidden",
-          isOpen ? "opacity-100 animate-in fade-in" : "opacity-0 pointer-events-none"
-        )}
-        onClick={onClose}
-      />
-
-      {/* Drawer */}
-      <div
-        data-lenis-prevent
-        className={cn(
-          "fixed top-0 right-0 h-full w-[300px] max-w-[80vw] bg-card z-50 shadow-jibb-xl transition-transform duration-300 ease-out lg:hidden",
-          "flex flex-col",
-          isOpen ? "translate-x-0" : "translate-x-full pointer-events-none invisible"
-        )}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-end p-4 border-b border-border">
-          <button
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            key="drawer-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            data-lenis-prevent
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-muted text-foreground/75 hover:text-foreground transition-colors"
-            aria-label="Close menu"
+          />
+
+          {/* Drawer */}
+          <motion.div
+            key="drawer-body"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 350, damping: 32 }}
+            data-lenis-prevent
+            className="fixed top-0 right-0 h-full w-[300px] max-w-[80vw] bg-card z-50 shadow-jibb-xl flex flex-col lg:hidden"
           >
-            <X className="size-5" />
-          </button>
-        </div>
+            {/* Header */}
+            <div className="flex items-center justify-end p-4 border-b border-border">
+              <button
+                onClick={onClose}
+                className="p-2 rounded-lg hover:bg-muted text-foreground/75 hover:text-foreground transition-colors"
+                aria-label="Close menu"
+              >
+                <X className="size-5" />
+              </button>
+            </div>
 
-        {/* Nav Links Container */}
-        <nav className="flex-1 overflow-y-auto p-4 space-y-1 select-none">
-          {navItems.map((item) => {
-            let label: string;
-            try {
-              label = t(item.labelKey);
-            } catch {
-              label = item.labelKey.split(".").pop() || item.labelKey;
-            }
-            const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
-            const isExpanded = expandedItem === item.labelKey;
+            {/* Nav Links Container */}
+            <nav className="flex-1 overflow-y-auto p-4 space-y-1 select-none">
+              {navItems.map((item) => {
+                let label: string;
+                try {
+                  label = t(item.labelKey);
+                } catch {
+                  label = item.labelKey.split(".").pop() || item.labelKey;
+                }
+                const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+                const isExpanded = expandedItem === item.labelKey;
 
-            return (
-              <div key={item.labelKey} className="border-b border-border/40 last:border-b-0 pb-1 pt-1">
-                {item.megaMenu ? (
-                  /* Accordion Header */
-                  <button
-                    onClick={() => handleHeaderClick(item)}
-                    className={cn(
-                      "w-full flex items-center justify-between py-3 px-3 rounded-lg text-sm font-semibold text-left transition-colors",
-                      isExpanded
-                        ? "bg-primary/5 text-primary"
-                        : "text-foreground hover:bg-muted"
+                return (
+                  <div key={item.labelKey} className="border-b border-border/40 last:border-b-0 pb-1 pt-1">
+                    {item.megaMenu ? (
+                      /* Accordion Header */
+                      <button
+                        onClick={() => handleHeaderClick(item)}
+                        className={cn(
+                          "w-full flex items-center justify-between py-3 px-3 rounded-lg text-sm font-semibold text-left transition-colors",
+                          isExpanded
+                            ? "bg-primary/5 text-primary"
+                            : "text-foreground hover:bg-muted"
+                        )}
+                      >
+                        <span>{label}</span>
+                        <ChevronDown
+                          className={cn(
+                            "size-4 transition-transform duration-200 text-muted-foreground",
+                            isExpanded && "rotate-180 text-primary"
+                          )}
+                        />
+                      </button>
+                    ) : (
+                      /* Standard Link */
+                      <Link
+                        href={item.href}
+                        onClick={onClose}
+                        className={cn(
+                          "flex items-center py-3 px-3 rounded-lg text-sm font-semibold transition-colors",
+                          isActive
+                            ? "bg-primary/10 text-primary"
+                            : "text-foreground hover:bg-muted"
+                        )}
+                      >
+                        {label}
+                      </Link>
                     )}
-                  >
-                    <span>{label}</span>
-                    <ChevronDown
-                      className={cn(
-                        "size-4 transition-transform duration-200 text-muted-foreground",
-                        isExpanded && "rotate-180 text-primary"
+
+                    {/* Submenu Accordion Items */}
+                    <AnimatePresence initial={false}>
+                      {item.megaMenu && isExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.25, ease: "easeInOut" }}
+                          className="ml-3 mt-1 pl-3 border-l border-border space-y-1 overflow-hidden"
+                        >
+                          {/* Add Overview link as first item if it is not a duplicate sublink */}
+                          {(() => {
+                            const isDuplicate = item.megaMenu.some(sub => sub.href === item.href);
+                            if (isDuplicate) return null;
+
+                            const overviewIconMap: Record<string, React.ComponentType<any>> = {
+                              "nav.about": Building2,
+                              "nav.services": Briefcase,
+                              "nav.innovationHub": Lightbulb,
+                              "nav.ecosystem": Globe,
+                              "nav.resources": Library,
+                            };
+                            const OverviewIcon = (overviewIconMap[item.labelKey] ?? Building2) as any;
+                            return (
+                              <Link
+                                href={item.href}
+                                onClick={onClose}
+                                className="flex items-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold text-primary hover:bg-primary/5 transition-colors"
+                              >
+                                <OverviewIcon className="size-3.5" />
+                                <span>{label} Overview</span>
+                              </Link>
+                            );
+                          })()}
+
+                          {item.megaMenu.map((sub) => {
+                            const Icon = sub.icon as any;
+                            let subLabel: string;
+                            try {
+                              subLabel = t(sub.labelKey);
+                            } catch {
+                              subLabel = sub.labelKey.split(".").pop() || sub.labelKey;
+                            }
+                            return (
+                              <Link
+                                key={sub.href}
+                                href={sub.href}
+                                onClick={onClose}
+                                className="flex items-center gap-2.5 py-2 px-3 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                              >
+                                <Icon className="size-3.5 shrink-0" />
+                                <span>{subLabel}</span>
+                              </Link>
+                            );
+                          })}
+                        </motion.div>
                       )}
-                    />
-                  </button>
-                ) : (
-                  /* Standard Link */
-                  <Link
-                    href={item.href}
-                    onClick={onClose}
-                    className={cn(
-                      "flex items-center py-3 px-3 rounded-lg text-sm font-semibold transition-colors",
-                      isActive
-                        ? "bg-primary/10 text-primary"
-                        : "text-foreground hover:bg-muted"
-                    )}
-                  >
-                    {label}
-                  </Link>
-                )}
-
-                {/* Submenu Accordion Items */}
-                {item.megaMenu && isExpanded && (
-                  <div className="ml-3 mt-1 pl-3 border-l border-border space-y-1 animate-in slide-in-from-top-2 duration-200">
-                    
-                    {/* Add Overview link as first item if it is not a duplicate sublink */}
-                    {(() => {
-                      const isDuplicate = item.megaMenu.some(sub => sub.href === item.href);
-                      if (isDuplicate) return null;
-
-                      const overviewIconMap: Record<string, React.ElementType> = {
-                        "nav.about": Building2,
-                        "nav.services": Briefcase,
-                        "nav.innovationHub": Lightbulb,
-                        "nav.ecosystem": Globe,
-                        "nav.resources": Library,
-                      };
-                      const OverviewIcon = overviewIconMap[item.labelKey] ?? Building2;
-                      return (
-                        <Link
-                          href={item.href}
-                          onClick={onClose}
-                          className="flex items-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold text-primary hover:bg-primary/5 transition-colors"
-                        >
-                          <OverviewIcon className="size-3.5" />
-                          <span>{label} Overview</span>
-                        </Link>
-                      );
-                    })()}
-
-                    {item.megaMenu.map((sub) => {
-                      const Icon = sub.icon;
-                      let subLabel: string;
-                      try {
-                        subLabel = t(sub.labelKey);
-                      } catch {
-                        subLabel = sub.labelKey.split(".").pop() || sub.labelKey;
-                      }
-                      return (
-                        <Link
-                          key={sub.href}
-                          href={sub.href}
-                          onClick={onClose}
-                          className="flex items-center gap-2.5 py-2 px-3 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                        >
-                          <Icon className="size-3.5 shrink-0" />
-                          <span>{subLabel}</span>
-                        </Link>
-                      );
-                    })}
+                    </AnimatePresence>
                   </div>
-                )}
-              </div>
-            );
-          })}
-        </nav>
+                );
+              })}
+            </nav>
 
-        {/* Bottom Actions */}
-        <div className="p-4 border-t border-border space-y-3 bg-muted/30">
-          <LanguageSwitcher className="w-full" triggerClassName="w-full justify-center bg-card border border-border" />
-          <Link href="/auth/login" onClick={onClose} className="block">
-            <Button variant="outline" className="w-full justify-center gap-2 font-semibold">
-              <LogIn className="size-4" />
-              {t("nav.memberLogin")}
-            </Button>
-          </Link>
-          <Link href="/membership" onClick={onClose} className="block">
-            <Button variant="accent" className="w-full justify-center gap-2 font-semibold">
-              {t("nav.joinJibb")}
-              <ArrowRight className="size-4" />
-            </Button>
-          </Link>
-        </div>
-      </div>
-    </>
+            {/* Bottom Actions */}
+            <div className="p-4 border-t border-border space-y-3 bg-muted/30">
+              <LanguageSwitcher className="w-full" triggerClassName="w-full justify-center bg-card border border-border" />
+              <Link href="/auth/login" onClick={onClose} className="block">
+                <AnimatedButton variant="outline" className="w-full justify-center gap-2 font-semibold">
+                  <LogIn className="size-4" />
+                  {t("nav.memberLogin")}
+                </AnimatedButton>
+              </Link>
+              <Link href="/membership" onClick={onClose} className="block">
+                <AnimatedButton variant="accent" className="w-full justify-center gap-2 font-semibold">
+                  {t("nav.joinJibb")}
+                  <ArrowRight className="size-4" />
+                </AnimatedButton>
+              </Link>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -511,13 +531,15 @@ export function Navbar() {
                     </Link>
 
                     {/* Mega Menu container with responsive alignments */}
-                    {item.megaMenu && activeMenu === item.labelKey && (
-                      <MegaMenu
-                        items={item.megaMenu}
-                        align={item.align}
-                        onClose={() => setActiveMenu(null)}
-                      />
-                    )}
+                    <AnimatePresence>
+                      {item.megaMenu && activeMenu === item.labelKey && (
+                        <MegaMenu
+                          items={item.megaMenu}
+                          align={item.align}
+                          onClose={() => setActiveMenu(null)}
+                        />
+                      )}
+                    </AnimatePresence>
                   </div>
                 );
               })}
@@ -537,22 +559,22 @@ export function Navbar() {
 
               {/* Login Button (Desktop) */}
               <Link href="/auth/login" className="hidden lg:block">
-                <Button
+                <AnimatedButton
                   variant="ghost"
                   size="sm"
                   className="gap-1.5 font-semibold"
                 >
                   <LogIn className="size-3.5" />
                   {t("nav.memberLogin")}
-                </Button>
+                </AnimatedButton>
               </Link>
 
               {/* Join CTA (Desktop) */}
               <Link href="/membership" className="hidden lg:block">
-                <Button variant="accent" size="sm" className="gap-1.5 font-bold shadow-sm">
+                <AnimatedButton variant="accent" size="sm" className="gap-1.5 font-bold shadow-sm">
                   {t("nav.joinJibb")}
                   <ArrowRight className="size-3.5" />
-                </Button>
+                </AnimatedButton>
               </Link>
 
               {/* Mobile Menu Open Toggle */}

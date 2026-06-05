@@ -14,6 +14,12 @@ export default async function LeadershipPage({
       titleKey="aboutMenu.leadership"
       subtitleKey="aboutMenu.leadershipDesc"
       sectionName="About JIBB"
+      colorTheme="indigo"
+      relatedLinks={[
+        { label: "Our Core Team", href: "/about" },
+        { label: "Bilateral Partners", href: "/about/global-partnerships" },
+        { label: "Bilateral Membership", href: "/membership" }
+      ]}
     />
   );
 }

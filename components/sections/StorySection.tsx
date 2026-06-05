@@ -141,7 +141,7 @@ export function StorySection() {
           viewport={{ once: true }}
           transition={{ type: "spring", stiffness: 80, damping: 16 }}
         >
-          <Card className="relative overflow-hidden p-8 md:p-10 border border-primary/10 shadow-jibb-xl bg-jibb-gradient text-white rounded-[24px]">
+          <Card className="relative overflow-hidden p-8 md:p-10 border border-primary/10 shadow-jibb-xl bg-jibb-gradient text-white rounded-2xl">
             {/* Background vector */}
             <div aria-hidden="true" className="absolute inset-0 wave-pattern opacity-10 pointer-events-none animate-wave-slide" />
             <div aria-hidden="true" className="absolute -bottom-20 -right-20 w-60 h-60 bg-jibb-orange/20 rounded-full blur-2xl" />

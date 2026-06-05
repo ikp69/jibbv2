@@ -1,4 +1,4 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 /* ============================================================
@@ -31,14 +31,14 @@ const SPEAKER_META: Record<Speaker, {
   kenji: {
     avatarSrc: "/mascots/kenji.png",
     avatarAlt: "Kenji — Tech Executive from Tokyo",
-    glassClass: "story-glass story-glass-kenji",
+    glassClass: "bg-white/60 dark:bg-black/50 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl",
     badgeClass: "bg-jibb-indigo/[0.06] text-jibb-indigo/70 border border-jibb-indigo/[0.08]",
     avatarBg: "bg-jibb-indigo",
   },
   aarav: {
     avatarSrc: "/mascots/aarav.png",
     avatarAlt: "Aarav — Startup Founder from Noida",
-    glassClass: "story-glass story-glass-aarav",
+    glassClass: "bg-white/60 dark:bg-black/50 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl",
     badgeClass: "bg-jibb-orange/[0.06] text-jibb-orange/80 border border-jibb-orange/[0.08]",
     avatarBg: "bg-jibb-orange",
   },

@@ -7,6 +7,9 @@ import { useTranslations } from "next-intl";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+
+
+
 /* ============================================================
    CONVERSATION DATA STRUCTURE
    Maps to i18n keys in messages/{locale}.json → story.*
@@ -279,6 +282,19 @@ export function DesktopStoryHero() {
             style={{ backgroundImage: "url('/jibb-v2-bg.png')" }}
           />
 
+          {/* Subtle Grid Vector Background (Precision/Tech) */}
+          <div 
+            className="absolute inset-0 opacity-[0.04] dark:opacity-[0.07]" 
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23243B6B' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            }}
+          />
+          
+          {/* Japanese Wave Pattern Vector (Tradition) */}
+          <div className="absolute inset-0 wave-pattern opacity-[0.35] dark:opacity-[0.15]" />
+
+
+
           {/* Desktop Overlay Layers */}
           <div className="hero-overlay-desktop-1 absolute inset-0" />
           <div className="hero-overlay-desktop-2 absolute inset-0" />
@@ -455,9 +471,9 @@ export function DesktopStoryHero() {
 
                                   {/* Glassmorphic bubble */}
                                   <div
-                                    className={`story-glass text-left p-3.5 md:p-5 text-[13px] md:text-[15px] leading-relaxed md:leading-[1.7] text-foreground/80 ${isKenji
-                                      ? "story-glass-kenji rounded-2xl rounded-tl-md"
-                                      : "story-glass-aarav rounded-2xl rounded-tr-md"
+                                    className={`bg-white/60 dark:bg-black/50 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl text-left p-3.5 md:p-5 text-[13px] md:text-[15px] leading-relaxed md:leading-[1.7] text-foreground/80 ${isKenji
+                                      ? "rounded-2xl rounded-tl-md"
+                                      : "rounded-2xl rounded-tr-md"
                                       }`}
                                   >
                                     &ldquo;{t(msg.key)}&rdquo;

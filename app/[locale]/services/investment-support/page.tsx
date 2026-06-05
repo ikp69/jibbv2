@@ -1,6 +1,7 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/src/i18n/navigation";
 import { DollarSign, ArrowLeft, ArrowRight, ShieldCheck, Compass, Lightbulb, Trophy } from "lucide-react";
+import { PageHero } from "@/components/sections/PageHero";
 import { Button } from "@/components/ui/button";
 
 export async function generateMetadata({
@@ -48,13 +49,7 @@ export default async function InvestmentSupportPage({
       {/* ============================================================
           CINEMATIC BANNER
           ============================================================ */}
-      <section className="relative py-20 lg:py-28 overflow-hidden bg-jibb-gradient">
-        {/* Wave pattern overlay */}
-        <div aria-hidden="true" className="absolute inset-0 wave-pattern opacity-10 pointer-events-none animate-wave-slide" />
-        
-        {/* Ambient Glow */}
-        <div aria-hidden="true" className="absolute -top-40 left-[15%] w-[450px] h-[450px] bg-jibb-orange/10 rounded-full blur-[110px] pointer-events-none" />
-
+      <PageHero className="py-20 lg:py-28">
         <div className="section-container relative z-10 text-left max-w-4xl space-y-6">
           <Link href="/services" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase text-jibb-orange hover:text-white transition-colors select-none">
             <ArrowLeft className="size-3.5" /> {t("common.back")} {t("nav.services")}
@@ -68,7 +63,7 @@ export default async function InvestmentSupportPage({
             {t("servicesPage.investment.subtitle")}
           </p>
         </div>
-      </section>
+      </PageHero>
 
       {/* ============================================================
           DETAILED COPY SECTION

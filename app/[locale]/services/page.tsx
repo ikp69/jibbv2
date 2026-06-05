@@ -1,7 +1,12 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/src/i18n/navigation";
+import { AnimatedHeading } from "@/components/ui/AnimatedHeading";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { Parallax } from "@/components/ui/Parallax";
+import { AnimatedButton } from "@/components/ui/AnimatedButton";
+import { HorizontalScroll } from "@/components/sections/HorizontalScroll";
+import { PageHero } from "@/components/sections/PageHero";
 import { MapPin, Handshake, Globe, DollarSign, Sparkles, ArrowRight, ShieldCheck, Cpu, Lightbulb } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export async function generateMetadata({
   params,
@@ -69,16 +74,7 @@ export default async function ServicesPage({
       {/* ============================================================
           HERO BANNER
           ============================================================ */}
-      <section className="relative py-20 lg:py-28 overflow-hidden bg-jibb-gradient">
-        {/* Wave pattern overlay */}
-        <div aria-hidden="true" className="absolute inset-0 wave-pattern opacity-10 pointer-events-none animate-wave-slide" />
-        
-        {/* Ambient Glow Accent */}
-        <div 
-          aria-hidden="true" 
-          className="absolute -top-40 right-[15%] w-[450px] h-[450px] bg-jibb-orange/10 rounded-full blur-[110px] pointer-events-none"
-        />
-
+      <PageHero className="py-20 lg:py-28">
         <div className="section-container relative z-10 text-center max-w-4xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
@@ -87,10 +83,12 @@ export default async function ServicesPage({
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-            {t("servicesPage.title")}
-          </h1>
-          
+          <AnimatedHeading
+            text={t("servicesPage.title")}
+            className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight"
+            immediate
+          />
+
           <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
             {t("servicesPage.subtitle")}
           </p>
@@ -103,22 +101,22 @@ export default async function ServicesPage({
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
           </div>
         </div>
-      </section>
+      </PageHero>
 
       {/* ============================================================
           SERVICES MAIN GRID
           ============================================================ */}
       <section className="py-20 md:py-28 bg-jibb-gradient-subtle">
         <div className="section-container max-w-5xl">
-          <div className="grid md:grid-cols-2 gap-8">
+          <ScrollReveal staggerChildren={0.12} className="grid md:grid-cols-2 gap-8">
             {services.map((svc) => (
-              <Link 
-                key={svc.id} 
+              <Link
+                key={svc.id}
                 href={svc.href}
                 className={`group relative rounded-3xl p-8 bg-card border border-border/60 transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 flex flex-col justify-between min-h-[300px] text-left overflow-hidden ${svc.colorClass}`}
               >
                 {/* Background decorative glow */}
-                <div aria-hidden="true" className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none transition-all group-hover:bg-jibb-orange/10" />
+                <div aria-hidden="true" className="absolute -top-6 -right-6 w-28 h-28 bg-jibb-orange/5 rounded-full blur-xl pointer-events-none transition-all duration-500 group-hover:bg-jibb-orange/15 group-hover:scale-125" />
 
                 <div className="space-y-5">
                   <div className="p-3 rounded-2xl bg-primary/5 inline-flex transition-transform duration-300 group-hover:scale-110">
@@ -143,7 +141,13 @@ export default async function ServicesPage({
                 </div>
               </Link>
             ))}
-          </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      <section className="py-16 md:py-24 bg-background border-t border-border/30">
+        <div className="section-container max-w-5xl">
+          <HorizontalScroll />
         </div>
       </section>
 
@@ -153,7 +157,7 @@ export default async function ServicesPage({
       <section className="py-16 md:py-24 bg-background border-t border-border/30">
         <div className="section-container max-w-5xl">
           <div className="grid md:grid-cols-12 gap-8 items-center">
-            <div className="md:col-span-7 space-y-5 text-left">
+            <ScrollReveal direction="left" className="md:col-span-7 space-y-5 text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10">
                 <Cpu className="size-3.5 text-primary" />
                 <span className="text-[10px] font-bold tracking-wider uppercase text-primary">Synergy</span>
@@ -171,26 +175,28 @@ export default async function ServicesPage({
                   </span>
                 ))}
               </div>
-            </div>
+            </ScrollReveal>
 
             <div className="md:col-span-5 flex justify-center">
-              <div className="relative w-full max-w-sm rounded-2xl p-6 bg-card border border-border shadow-jibb flex flex-col gap-4 text-left overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
-                <div className="flex items-center gap-2.5 text-sm font-bold text-foreground">
-                  <ShieldCheck className="size-5 text-jibb-indigo shrink-0" />
-                  Bilateral Trusted Advisory
+              <Parallax speed={-0.1} className="w-full flex justify-center">
+                <div className="relative w-full max-w-sm rounded-2xl p-6 bg-card border border-border shadow-jibb flex flex-col gap-4 text-left overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
+                  <div className="flex items-center gap-2.5 text-sm font-bold text-foreground">
+                    <ShieldCheck className="size-5 text-jibb-indigo shrink-0" />
+                    Bilateral Trusted Advisory
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    We maintain strong strategic ties with METI, JETRO, DPIIT, and Invest India, allowing us to guide companies through complex regulatory systems smoothly.
+                  </p>
+                  <div className="border-t border-border pt-4">
+                    <Link href="/membership">
+                      <AnimatedButton variant="accent" size="sm" className="w-full font-semibold gap-1">
+                        Become a Member <ArrowRight className="size-3.5" />
+                      </AnimatedButton>
+                    </Link>
+                  </div>
                 </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  We maintain strong strategic ties with METI, JETRO, DPIIT, and Invest India, allowing us to guide companies through complex regulatory systems smoothly.
-                </p>
-                <div className="border-t border-border pt-4">
-                  <Link href="/membership">
-                    <Button variant="accent" size="sm" className="w-full font-semibold gap-1">
-                      Become a Member <ArrowRight className="size-3.5" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
+              </Parallax>
             </div>
           </div>
         </div>

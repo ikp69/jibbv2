@@ -4,11 +4,17 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/navigation";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { AnimatedHeading } from "@/components/ui/AnimatedHeading";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { AnimatedButton } from "@/components/ui/AnimatedButton";
+import { TestimonialCarousel } from "@/components/sections/TestimonialCarousel";
+import { FeatureComparison } from "@/components/sections/FeatureComparison";
+import { motion } from "framer-motion";
 import { 
   Users, Award, ShieldCheck, Calendar, Clock, Globe, ArrowRight, CheckCircle, 
   MapPin, ClipboardList, Lightbulb, Sparkles, Server, Laptop 
 } from "lucide-react";
+import { PageHero } from "@/components/sections/PageHero";
 
 export default function MembershipPage() {
   const t = useTranslations("membershipPage");
@@ -29,6 +35,7 @@ export default function MembershipPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [shouldShake, setShouldShake] = useState(false);
 
   const dates = [
     { label: "Mon, Jun 1", value: "2026-06-01" },
@@ -65,7 +72,11 @@ export default function MembershipPage() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validate()) {
+      setShouldShake(true);
+      setTimeout(() => setShouldShake(false), 500);
+      return;
+    }
 
     setIsSubmitting(true);
     setTimeout(() => {
@@ -82,13 +93,7 @@ export default function MembershipPage() {
       {/* ============================================================
           CINEMATIC HERO
           ============================================================ */}
-      <section className="relative py-20 lg:py-28 overflow-hidden bg-jibb-gradient">
-        {/* Wave pattern overlay */}
-        <div aria-hidden="true" className="absolute inset-0 wave-pattern opacity-10 pointer-events-none animate-wave-slide" />
-        
-        {/* Ambient Glow */}
-        <div aria-hidden="true" className="absolute -top-40 right-[15%] w-[450px] h-[450px] bg-jibb-orange/10 rounded-full blur-[110px] pointer-events-none" />
-
+      <PageHero className="py-20 lg:py-28">
         <div className="section-container relative z-10 text-center max-w-4xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
@@ -97,9 +102,11 @@ export default function MembershipPage() {
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-            {t("title")}
-          </h1>
+          <AnimatedHeading
+            text={t("title")}
+            className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight"
+            immediate
+          />
           
           <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
             {t("subtitle")}
@@ -113,126 +120,184 @@ export default function MembershipPage() {
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
           </div>
         </div>
-      </section>
+      </PageHero>
 
       {/* ============================================================
           MEMBERSHIP PLANS TIERS
           ============================================================ */}
       <section className="py-20 md:py-28 bg-jibb-gradient-subtle border-b border-border/30">
-        <div className="section-container max-w-5xl text-center space-y-16">
+        <div className="section-container max-w-7xl mx-auto px-4 text-center space-y-16">
           <div className="space-y-4">
-            <h2 className="text-3xl font-extrabold tracking-tight text-foreground">
-              {t("ctaTitle")}
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
+              Select Your Membership Plan
             </h2>
             <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* Startup Tier */}
-            <div className="group relative rounded-3xl p-8 bg-card border border-border/60 hover:border-primary/20 hover:shadow-xl transition-all duration-300 text-left flex flex-col justify-between min-h-[480px]">
+          <ScrollReveal staggerChildren={0.12} className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Associate Member */}
+            <div className="group relative rounded-3xl p-6 md:p-8 bg-card border border-border/60 hover:border-blue-500/30 hover:shadow-xl transition-all duration-300 text-left flex flex-col justify-between min-h-[380px]">
               <div className="space-y-6">
                 <div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-primary/5 text-primary border border-primary/10 uppercase tracking-wide">
-                    Technology &amp; Scaling
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-600 dark:text-blue-400 uppercase tracking-wide">
+                    Associate Member
                   </span>
-                  <h3 className="text-2xl font-bold text-foreground mt-2 tracking-tight">
-                    {t("features.startup.title")}
+                  <h3 className="text-2xl font-bold text-foreground mt-3 tracking-tight">
+                    Entry Level
                   </h3>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {t("features.startup.priceSub")}
+                  <p className="text-xs text-muted-foreground mt-1.5">
+                    For early-stage teams and networking
                   </p>
                 </div>
 
-                <div className="border-t border-border pt-4">
-                  <span className="text-3xl font-extrabold text-foreground">{t("features.startup.price")}</span>
-                </div>
+
 
                 <ul className="space-y-3.5 text-xs text-muted-foreground">
-                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold">✓</span> {t("features.startup.feature1")}</li>
-                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold">✓</span> {t("features.startup.feature2")}</li>
-                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold">✓</span> {t("features.startup.feature3")}</li>
-                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold">✓</span> {t("benefits.visibility")}</li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-blue-500 font-bold">✓</span> 5% Business Matching Discount
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-blue-500 font-bold">✓</span> 5% Training Program Discount
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-blue-500 font-bold">✓</span> Standard Portal Directory Access
+                  </li>
                 </ul>
               </div>
               <div className="pt-6">
                 <a href="#scheduler" className="block">
-                  <Button variant="outline" className="w-full font-semibold">Inquire Plan</Button>
+                  <AnimatedButton variant="outline" className="w-full font-semibold border-blue-500/20 hover:bg-blue-500/5 hover:text-blue-500">Inquire Plan</AnimatedButton>
                 </a>
               </div>
             </div>
 
-            {/* Corporate Tier - Recommended */}
-            <div className="group relative rounded-3xl p-8 bg-primary text-primary-foreground border border-primary shadow-xl scale-105 transition-all duration-300 text-left flex flex-col justify-between min-h-[480px]">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                Recommended
-              </div>
-
+            {/* Silver Member */}
+            <div className="group relative rounded-3xl p-6 md:p-8 bg-card border border-border/60 hover:border-orange-500/30 hover:shadow-xl transition-all duration-300 text-left flex flex-col justify-between min-h-[380px]">
               <div className="space-y-6">
                 <div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-white/10 text-white uppercase tracking-wide">
-                    Industrial &amp; Manufacturing
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-md bg-orange-500/10 text-orange-600 dark:text-orange-400 uppercase tracking-wide">
+                    Silver Member
                   </span>
-                  <h3 className="text-2xl font-bold text-white mt-2 tracking-tight">
-                    {t("features.corporate.title")}
+                  <h3 className="text-2xl font-bold text-foreground mt-3 tracking-tight">
+                    Standard Growth
                   </h3>
-                  <p className="text-xs text-white/70 mt-1">
-                    {t("features.corporate.priceSub")}
+                  <p className="text-xs text-muted-foreground mt-1.5">
+                    For active research and matching support
                   </p>
                 </div>
 
-                <div className="border-t border-white/10 pt-4">
-                  <span className="text-3xl font-extrabold text-white">{t("features.corporate.price")}</span>
-                </div>
 
-                <ul className="space-y-3.5 text-xs text-white/80">
-                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold">✓</span> {t("features.corporate.feature1")}</li>
-                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold">✓</span> {t("features.corporate.feature2")}</li>
-                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold">✓</span> {t("features.corporate.feature3")}</li>
-                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold">✓</span> {t("features.corporate.feature4")}</li>
-                </ul>
-              </div>
-              <div className="pt-6">
-                <a href="#scheduler" className="block">
-                  <Button variant="accent" className="w-full font-bold shadow-md">Apply Corporate</Button>
-                </a>
-              </div>
-            </div>
-
-            {/* Bilateral Partner */}
-            <div className="group relative rounded-3xl p-8 bg-card border border-border/60 hover:border-primary/20 hover:shadow-xl transition-all duration-300 text-left flex flex-col justify-between min-h-[480px]">
-              <div className="space-y-6">
-                <div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-primary/5 text-primary border border-primary/10 uppercase tracking-wide">
-                    Government &amp; Alliances
-                  </span>
-                  <h3 className="text-2xl font-bold text-foreground mt-2 tracking-tight">
-                    {t("features.government.title")}
-                  </h3>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {t("features.government.priceSub")}
-                  </p>
-                </div>
-
-                <div className="border-t border-border pt-4">
-                  <span className="text-3xl font-extrabold text-foreground">{t("features.government.price")}</span>
-                </div>
 
                 <ul className="space-y-3.5 text-xs text-muted-foreground">
-                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold">✓</span> {t("features.government.feature1")}</li>
-                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold">✓</span> {t("features.government.feature2")}</li>
-                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold">✓</span> {t("features.government.feature3")}</li>
-                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold">✓</span> {t("features.government.feature4")}</li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-orange-500 font-bold">✓</span> Intelligence Newsletter Only
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-orange-500 font-bold">✓</span> 10% Business Matching Discount
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-orange-500 font-bold">✓</span> 2.5% Exhibition/Event Support
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-orange-500 font-bold">✓</span> Japan Meeting Delegations
+                  </li>
                 </ul>
               </div>
               <div className="pt-6">
                 <a href="#scheduler" className="block">
-                  <Button variant="outline" className="w-full font-semibold">Partner Inquiry</Button>
+                  <AnimatedButton variant="outline" className="w-full font-semibold border-orange-500/20 hover:bg-orange-500/5 hover:text-orange-500">Inquire Plan</AnimatedButton>
                 </a>
               </div>
             </div>
-          </div>
+
+            {/* Gold Member - Recommended */}
+            <div className="group relative rounded-3xl p-6 md:p-8 bg-emerald-500/10 text-foreground border-2 border-emerald-500 shadow-lg scale-105 transition-all duration-300 text-left flex flex-col justify-between min-h-[380px]">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                Popular Choice
+              </div>
+
+              <div className="space-y-6">
+                <div>
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-md bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 uppercase tracking-wide">
+                    Gold Member
+                  </span>
+                  <h3 className="text-2xl font-bold text-foreground mt-3 tracking-tight flex items-center gap-1.5">
+                    Professional <Sparkles className="size-4 text-emerald-500 fill-emerald-500 stroke-none animate-pulse" />
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-1.5">
+                    For scaling and full co-innovation access
+                  </p>
+                </div>
+
+
+
+                <ul className="space-y-3.5 text-xs text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-500 font-bold">✓</span> Limited Intelligence Access
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-500 font-bold">✓</span> 20% Business Matching Discount
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-500 font-bold">✓</span> 3 Free Training Programs
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-500 font-bold">✓</span> Active Japan Delegations
+                  </li>
+                </ul>
+              </div>
+              <div className="pt-6">
+                <a href="#scheduler" className="block">
+                  <AnimatedButton variant="accent" className="w-full font-bold shadow-md bg-emerald-500 hover:bg-emerald-600 border-none text-white">Apply Gold</AnimatedButton>
+                </a>
+              </div>
+            </div>
+
+            {/* Platinum Member */}
+            <div className="group relative rounded-3xl p-6 md:p-8 bg-card border border-border/60 hover:border-slate-500/30 hover:shadow-xl transition-all duration-300 text-left flex flex-col justify-between min-h-[380px]">
+              <div className="space-y-6">
+                <div>
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-md bg-slate-500/10 text-slate-600 dark:text-slate-400 uppercase tracking-wide">
+                    Platinum Member
+                  </span>
+                  <h3 className="text-2xl font-bold text-foreground mt-3 tracking-tight">
+                    Ultimate Access
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-1.5">
+                    For institutional and leadership scale
+                  </p>
+                </div>
+
+
+
+                <ul className="space-y-3.5 text-xs text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <span className="text-slate-500 font-bold">✓</span> Full intelligence access
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-slate-500 font-bold">✓</span> 30% Business Matching Discount
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-slate-500 font-bold">✓</span> 7 Free Training Programs
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-slate-500 font-bold">✓</span> Selected Collaboration & Advocacy
+                  </li>
+                </ul>
+              </div>
+              <div className="pt-6">
+                <a href="#scheduler" className="block">
+                  <AnimatedButton variant="outline" className="w-full font-semibold border-slate-500/20 hover:bg-slate-500/5 hover:text-slate-500">Partner Inquiry</AnimatedButton>
+                </a>
+              </div>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
+
+      <FeatureComparison />
+
+      <TestimonialCarousel />
 
       {/* ============================================================
           INTERACTIVE MEETING SCHEDULER WIDGET
@@ -264,40 +329,56 @@ export default function MembershipPage() {
                 <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
                   {t("bookingSuccessDesc")}
                 </p>
-                <Button variant="outline" className="mt-6" onClick={() => setIsSuccess(false)}>
+                <AnimatedButton variant="outline" className="mt-6" onClick={() => setIsSuccess(false)}>
                   Schedule Another Meeting
-                </Button>
+                </AnimatedButton>
               </div>
             )}
 
             {/* Scheduler Tabs Header */}
-            <div className="flex border-b border-border bg-muted/40 select-none">
+            <div className="flex border-b border-border bg-muted/40 select-none relative">
               <button
+                type="button"
                 onClick={() => { setActiveTab("calendly"); setSelectedDate(null); setSelectedTime(null); }}
-                className={`flex-1 py-4 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 border-b-2 transition-all ${
+                className={`relative flex-1 py-4 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
                   activeTab === "calendly" 
-                    ? "border-jibb-orange bg-card text-jibb-orange" 
-                    : "border-transparent text-muted-foreground hover:bg-muted/65 hover:text-foreground"
+                    ? "bg-card text-jibb-orange" 
+                    : "text-muted-foreground hover:bg-muted/65 hover:text-foreground"
                 }`}
               >
                 <Laptop className="size-4" />
                 {t("calendlyTab")}
+                {activeTab === "calendly" && (
+                  <motion.div
+                    layoutId="activeTabIndicator"
+                    className="absolute bottom-0 inset-x-0 h-[2px] bg-jibb-orange"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
               </button>
               <button
+                type="button"
                 onClick={() => { setActiveTab("bookings"); setSelectedDate(null); setSelectedTime(null); }}
-                className={`flex-1 py-4 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 border-b-2 transition-all ${
+                className={`relative flex-1 py-4 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
                   activeTab === "bookings" 
-                    ? "border-jibb-orange bg-card text-jibb-orange" 
-                    : "border-transparent text-muted-foreground hover:bg-muted/65 hover:text-foreground"
+                    ? "bg-card text-jibb-orange" 
+                    : "text-muted-foreground hover:bg-muted/65 hover:text-foreground"
                 }`}
               >
                 <Server className="size-4" />
                 {t("bookingsTab")}
+                {activeTab === "bookings" && (
+                  <motion.div
+                    layoutId="activeTabIndicator"
+                    className="absolute bottom-0 inset-x-0 h-[2px] bg-jibb-orange"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
               </button>
             </div>
 
             {/* Scheduler Workspace Grid */}
-            <form onSubmit={handleSubmit} className="p-6 sm:p-8 flex-1 flex flex-col justify-between gap-8">
+            <form onSubmit={handleSubmit} className={`p-6 sm:p-8 flex-1 flex flex-col justify-between gap-8 ${shouldShake ? "animate-shake" : ""}`}>
               <div className="grid md:grid-cols-2 gap-8 items-start">
                 
                 {/* Column 1: Date & Time Picker */}
@@ -308,18 +389,20 @@ export default function MembershipPage() {
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {dates.map((dt) => (
-                        <button
+                        <motion.button
+                          whileHover={{ scale: 1.03, y: -1 }}
+                          whileTap={{ scale: 0.97 }}
                           key={dt.value}
                           type="button"
                           onClick={() => handleDateSelect(dt.value)}
                           className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all ${
                             selectedDate === dt.value
-                              ? "bg-primary text-primary-foreground border-primary shadow-md"
+                              ? "bg-primary text-primary-foreground border-primary shadow-md font-bold"
                               : "bg-card border-border/60 text-foreground/80 hover:bg-muted"
                           }`}
                         >
                           {dt.label}
-                        </button>
+                        </motion.button>
                       ))}
                     </div>
                     {errors.date && <span className="text-[10px] text-red-500 font-semibold">{errors.date}</span>}
@@ -332,18 +415,20 @@ export default function MembershipPage() {
                       </label>
                       <div className="flex flex-wrap gap-2">
                         {times.map((tm) => (
-                          <button
+                          <motion.button
+                            whileHover={{ scale: 1.04, y: -1 }}
+                            whileTap={{ scale: 0.96 }}
                             key={tm}
                             type="button"
                             onClick={() => handleTimeSelect(tm)}
                             className={`px-4 py-2.5 rounded-xl border text-xs font-semibold transition-all ${
                               selectedTime === tm
-                                ? "bg-jibb-orange text-white border-jibb-orange shadow-md"
+                                ? "bg-jibb-orange text-white border-jibb-orange shadow-md font-bold"
                                 : "bg-card border-border/60 text-foreground/80 hover:bg-muted"
                             }`}
                           >
                             {tm}
-                          </button>
+                          </motion.button>
                         ))}
                       </div>
                       {errors.time && <span className="text-[10px] text-red-500 font-semibold">{errors.time}</span>}
@@ -411,13 +496,13 @@ export default function MembershipPage() {
                   <Clock className="size-4 text-jibb-orange" />
                   <span>30 Minutes Advisory call • Zoom Meeting link provided after confirmation</span>
                 </div>
-                <Button
+                <AnimatedButton
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full sm:w-auto px-8 h-11 bg-jibb-orange text-white font-bold rounded-xl shadow-md hover:opacity-90 active:scale-[0.98] transition-all text-sm shrink-0"
+                  className="w-full sm:w-auto px-8 h-11 bg-jibb-orange text-white font-bold rounded-xl shadow-md text-sm shrink-0"
                 >
                   {isSubmitting ? "Processing..." : t("bookBtn")}
-                </Button>
+                </AnimatedButton>
               </div>
             </form>
           </div>

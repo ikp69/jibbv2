@@ -68,6 +68,136 @@
     },
     "learnMore": "詳しく見る"
   },
+  "howWeHelp": {
+    "sectionTitle": "支援内容",
+    "sectionSubtitle": "日印ビジネスの成長を支援するため、企業、研究者、スタートアップのニーズに合わせたサポートを提供します。",
+    "tagline": "テーラード・ソリューション",
+    "japaneseCompanies": {
+      "title": "日本企業向け",
+      "subtitle": "インドの広大な技術エコシステムを活用し、ビジネスを拡大。",
+      "bullet1": "インドのパートナー開拓",
+      "bullet2": "市場参入ガイダンス",
+      "bullet3": "現地ネットワークの提供"
+    },
+    "indianCompanies": {
+      "title": "インド企業向け",
+      "subtitle": "日本の高度なものづくり技術へのアクセスと、日本市場への進出。",
+      "bullet1": "日本市場へのアクセス",
+      "bullet2": "戦略的パートナーシップの構築",
+      "bullet3": "ビジネスマッチング"
+    },
+    "researchersStartups": {
+      "title": "研究者・スタートアップ向け",
+      "subtitle": "共同研究開発、最先端ラボ、資金調達機会へのアクセス。",
+      "bullet1": "イノベーションプログラム",
+      "bullet2": "共同ラボ・研究開発施設",
+      "bullet3": "資金調達機会の創出"
+    },
+    "learnMore": "詳しく見る"
+  },
+  "featOpportunities": {
+    "sectionTitle": "注目のビジネス機会",
+    "sectionSubtitle": "日印間におけるビジネス、共同プロジェクト、投資およびデレゲーション案件",
+    "tagline": "ビジネスマッチング",
+    "viewAll": "すべての案件を見る",
+    "tabs": {
+      "partnerships": "パートナーシップ募集",
+      "delegations": "ビジネスデレゲーション",
+      "tradeMissions": "貿易ミッション",
+      "investment": "投資・出資案件"
+    },
+    "labels": {
+      "posted": "{time}前に投稿",
+      "lookingFor": "募集内容：",
+      "focus": "重点分野：",
+      "date": "日程：",
+      "cities": "訪問都市：",
+      "participants": "参加予定：",
+      "benefits": "プログラム：",
+      "purpose": "目的：",
+      "seeking": "希望額/要件：",
+      "range": "投資規模：",
+      "type": "投資形態：",
+      "details": "詳細を見る",
+      "apply": "申し込む",
+      "learnMore": "詳細を見る"
+    },
+    "data": {
+      "partnerships": {
+        "p1": {
+          "company": "東京セミコンダクター・ソリューションズ",
+          "lookingFor": "インドの製造パートナー",
+          "details": "PCBの供給・組み立て・カスタムシリコン設計における共同研究開発。",
+          "industry": "半導体",
+          "location": "日本、東京",
+          "direction": "日本 → インド",
+          "time": "3日"
+        },
+        "p2": {
+          "company": "バーラト・ロボティクス",
+          "lookingFor": "日本国内のディストリビューター",
+          "details": "自律組立技術の連携およびグローバルなロボティクス販売の戦略的技術パートナー。",
+          "industry": "産業用自動化",
+          "location": "インド、ノイダ",
+          "direction": "インド → 日本",
+          "time": "5日"
+        }
+      },
+      "delegations": {
+        "d1": {
+          "title": "日本 → インド ビジネスデレゲーション 2026",
+          "date": "2026年3月15日〜20日",
+          "cities": "デリー、ベンガルール、ハイデラバード",
+          "focus": "半導体、エレクトロニクス、AI",
+          "participants": "日本企業 40社",
+          "direction": "日本 → インド",
+          "benefits": "B2Bマッチング、工場視察、政府関係者とのネットワーキング"
+        }
+      },
+      "tradeMissions": {
+        "m1": {
+          "title": "クリーンエネルギー・ミッション",
+          "purpose": "インドのメーカーと日本のグリーン水素バイヤーを結びつける。",
+          "focus": "再生可能エネルギー、水素",
+          "scale": "企業25社",
+          "direction": "インド ↔ 日本"
+        },
+        "m2": {
+          "title": "スマートシティ・ミッション",
+          "purpose": "スマートグリッド技術やEV充電網整備に向けた地方自治体との連携模索。",
+          "focus": "インフラス、モビリティ",
+          "scale": "企業15社",
+          "direction": "日本 → インド"
+        }
+      },
+      "investment": {
+        "i1": {
+          "title": "AI製造プラットフォーム",
+          "seeking": "シード資金 150万ドル",
+          "industry": "AI / 製造業",
+          "location": "インド",
+          "direction": "インド → 日本",
+          "type": "スタートアップ出資"
+        },
+        "i2": {
+          "title": "東京ベンチャーグループ",
+          "seeking": "投資先スタートアップ募集",
+          "industry": "AI、ロボティクス、ディープテック",
+          "location": "日本",
+          "direction": "日本 → インド",
+          "type": "VCファンド (50万〜500万ドル)"
+        },
+        "i3": {
+          "title": "日本大手電機メーカー",
+          "seeking": "合弁事業パートナー",
+          "industry": "家電・民生用機器",
+          "location": "インド / 日本",
+          "direction": "日印共同JV",
+          "type": "1000万ドル以上の共同出資"
+        }
+      }
+    }
+  },
   "sectors": {
     "sectionTitle": "主要セクター",
     "sectionSubtitle": "日印パートナーシップの未来を形作る産業全体での協力を推進。",

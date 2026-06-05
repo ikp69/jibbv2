@@ -3,11 +3,16 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Input, Textarea } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { AnimatedHeading } from "@/components/ui/AnimatedHeading";
+import { AnimatedButton } from "@/components/ui/AnimatedButton";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { Parallax } from "@/components/ui/Parallax";
+import { OfficeMap } from "@/components/sections/OfficeMap";
 import { 
   Mail, Phone, MapPin, CheckCircle, Sparkles, Send, ArrowRight, 
   Building2, Landmark, HelpCircle, Briefcase, FileText 
 } from "lucide-react";
+import { PageHero } from "@/components/sections/PageHero";
 
 export default function ContactPage() {
   const t = useTranslations("contactPage");
@@ -24,6 +29,7 @@ export default function ContactPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [shouldShake, setShouldShake] = useState(false);
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target;
@@ -67,7 +73,11 @@ export default function ContactPage() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validate()) {
+      setShouldShake(true);
+      setTimeout(() => setShouldShake(false), 500);
+      return;
+    }
 
     setIsSubmitting(true);
     setTimeout(() => {
@@ -92,13 +102,7 @@ export default function ContactPage() {
       {/* ============================================================
           CINEMATIC HERO
           ============================================================ */}
-      <section className="relative py-20 lg:py-28 overflow-hidden bg-jibb-gradient">
-        {/* Wave pattern overlay */}
-        <div aria-hidden="true" className="absolute inset-0 wave-pattern opacity-10 pointer-events-none animate-wave-slide" />
-        
-        {/* Ambient Glow */}
-        <div aria-hidden="true" className="absolute -top-40 right-[15%] w-[450px] h-[450px] bg-jibb-orange/10 rounded-full blur-[110px] pointer-events-none" />
-
+      <PageHero className="py-20 lg:py-28">
         <div className="section-container relative z-10 text-center max-w-4xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
@@ -107,9 +111,11 @@ export default function ContactPage() {
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-            {t("title")}
-          </h1>
+          <AnimatedHeading
+            text={t("title")}
+            className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight"
+            immediate
+          />
           
           <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
             {t("subtitle")}
@@ -123,7 +129,7 @@ export default function ContactPage() {
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
           </div>
         </div>
-      </section>
+      </PageHero>
 
       {/* ============================================================
           CONTACT GRID (FORM + MAPS)
@@ -133,7 +139,7 @@ export default function ContactPage() {
           <div className="grid lg:grid-cols-12 gap-12 items-start">
             
             {/* Left Column: Form Details (Col span 7) */}
-            <div className="lg:col-span-7 relative">
+            <ScrollReveal direction="left" className="lg:col-span-7 relative">
               <div className="relative rounded-3xl p-6 sm:p-8 bg-card border border-border/80 shadow-jibb-lg overflow-hidden text-left">
                 {/* Success Screen Overlay */}
                 {isSuccess && (
@@ -145,9 +151,9 @@ export default function ContactPage() {
                     <p className="text-sm text-muted-foreground max-w-sm">
                       {t("form.successDesc")}
                     </p>
-                    <Button variant="outline" className="mt-6" onClick={() => setIsSuccess(false)}>
+                    <AnimatedButton variant="outline" className="mt-6" onClick={() => setIsSuccess(false)}>
                       Send Another Message
-                    </Button>
+                    </AnimatedButton>
                   </div>
                 )}
 
@@ -155,7 +161,7 @@ export default function ContactPage() {
                   {t("formTitle")}
                 </h3>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} className={`space-y-5 ${shouldShake ? "animate-shake" : ""}`}>
                   {/* Inquiry Type */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
@@ -250,28 +256,28 @@ export default function ContactPage() {
                   </div>
 
                   <div className="pt-3">
-                    <Button
+                    <AnimatedButton
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full h-11 bg-jibb-orange text-white font-bold rounded-xl shadow-lg hover:opacity-90 active:scale-[0.98] transition-all text-sm flex items-center justify-center gap-2"
+                      className="w-full h-11 bg-jibb-orange text-white font-bold rounded-xl shadow-lg text-sm flex items-center justify-center gap-2"
                     >
                       {isSubmitting ? "Sending..." : t("form.submit")}
                       <Send className="size-4" />
-                    </Button>
+                    </AnimatedButton>
                   </div>
                 </form>
               </div>
-            </div>
+            </ScrollReveal>
 
             {/* Right Column: Offices Maps (Col span 5) */}
-            <div className="lg:col-span-5 space-y-6 text-left">
+            <ScrollReveal staggerChildren={0.15} className="lg:col-span-5 space-y-6 text-left">
               <h3 className="text-2xl font-bold text-foreground tracking-tight">
                 {t("officesTitle")}
               </h3>
 
               {/* Tokyo Headquarters */}
               <div className="relative rounded-2xl p-6 bg-card border border-border shadow-jibb overflow-hidden flex flex-col gap-4">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
+                <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none animate-glow-pulse" />
                 <div className="flex items-start gap-3">
                   <div className="p-2.5 rounded-xl bg-primary/5 text-primary shrink-0">
                     <Landmark className="size-5" />
@@ -286,14 +292,14 @@ export default function ContactPage() {
                   </div>
                 </div>
                 <div className="border-t border-border pt-4 text-xs flex items-center gap-3 text-muted-foreground">
-                  <Phone className="size-3.5 text-jibb-orange" />
+                  <Phone className="size-3.5 text-jibb-orange animate-soft-pulse" />
                   <span>+81 3 1234 5678</span>
                 </div>
               </div>
 
               {/* Noida Operational Office */}
               <div className="relative rounded-2xl p-6 bg-card border border-border shadow-jibb overflow-hidden flex flex-col gap-4">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
+                <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none animate-glow-pulse" />
                 <div className="flex items-start gap-3">
                   <div className="p-2.5 rounded-xl bg-primary/5 text-primary shrink-0">
                     <Building2 className="size-5" />
@@ -308,11 +314,14 @@ export default function ContactPage() {
                   </div>
                 </div>
                 <div className="border-t border-border pt-4 text-xs flex items-center gap-3 text-muted-foreground">
-                  <Phone className="size-3.5 text-jibb-orange" />
+                  <Phone className="size-3.5 text-jibb-orange animate-soft-pulse" />
                   <span>+91 120 123 4567</span>
                 </div>
               </div>
-            </div>
+
+              {/* Office Map Component */}
+              <OfficeMap />
+            </ScrollReveal>
 
           </div>
         </div>

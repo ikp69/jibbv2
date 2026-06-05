@@ -2,8 +2,10 @@
 
 import { useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/navigation";
-import { Button } from "@/components/ui/button";
+import { AnimatedButton } from "@/components/ui/AnimatedButton";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { Input } from "@/components/ui/input";
+import { motion } from "framer-motion";
 import {
   Mail,
   ExternalLink,
@@ -133,7 +135,7 @@ export function Footer() {
       <div className="section-container relative z-10 pt-16 pb-8">
 
         {/* ROW 1: BRAND IDENTITY & NAVIGATION GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 mb-12">
+        <ScrollReveal staggerChildren={0.1} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 mb-12">
 
           {/* Column 1: Brand & Socials (Span 4) */}
           <div className="lg:col-span-4 space-y-6">
@@ -152,33 +154,25 @@ export function Footer() {
 
             {/* Social Links */}
             <div className="flex items-center gap-3">
-              <a
-                href="https://linkedin.com/company/japan-india-business-bureau"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 hover:text-white transition-colors"
-                aria-label="LinkedIn"
-              >
-                <LinkedInIcon className="size-4" />
-              </a>
-              <a
-                href="https://twitter.com/jibb_org"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 hover:text-white transition-colors"
-                aria-label="Twitter / X"
-              >
-                <TwitterIcon className="size-4" />
-              </a>
-              <a
-                href="https://youtube.com/@jibb_org"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 hover:text-white transition-colors"
-                aria-label="YouTube"
-              >
-                <YouTubeIcon className="size-4" />
-              </a>
+              {([
+                { icon: <LinkedInIcon className="size-4" />, href: "https://linkedin.com/company/japan-india-business-bureau", label: "LinkedIn" },
+                { icon: <TwitterIcon className="size-4" />, href: "https://twitter.com/jibb_org", label: "Twitter / X" },
+                { icon: <YouTubeIcon className="size-4" />, href: "https://youtube.com/@jibb_org", label: "YouTube" }
+              ]).map((soc, idx) => (
+                <motion.a
+                  key={idx}
+                  href={soc.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.15, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 450, damping: 12 }}
+                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 hover:text-white transition-colors"
+                  aria-label={soc.label}
+                >
+                  {soc.icon}
+                </motion.a>
+              ))}
             </div>
           </div>
 
@@ -328,13 +322,13 @@ export function Footer() {
               </li>
             </ul>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* ROW 2: DETAILED ADDRESS CARDS & NEWSLETTER FORM */}
         <div className="border-t border-white/10 pt-10 pb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 items-stretch">
 
           {/* Japan Office Address Column (col span 4) */}
-          <div className="lg:col-span-4 md:col-span-1">
+          <ScrollReveal direction="left" className="lg:col-span-4 md:col-span-1">
             <Link
               href="/contact"
               className="group flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 h-full"
@@ -349,10 +343,10 @@ export function Footer() {
                 </span>
               </div>
             </Link>
-          </div>
+          </ScrollReveal>
 
           {/* Delhi NCR Office Address Column (col span 4) */}
-          <div className="lg:col-span-4 md:col-span-1">
+          <ScrollReveal direction="right" className="lg:col-span-4 md:col-span-1">
             <Link
               href="/contact"
               className="group flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 h-full"
@@ -367,10 +361,10 @@ export function Footer() {
                 </span>
               </div>
             </Link>
-          </div>
+          </ScrollReveal>
 
           {/* Newsletter Form Column (col span 4) */}
-          <div className="lg:col-span-4 md:col-span-2 text-left space-y-4">
+          <ScrollReveal direction="up" className="lg:col-span-4 md:col-span-2 text-left space-y-4">
             <div className="space-y-1.5">
               <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
                 {t("footer.newsletter.title")}
@@ -392,15 +386,15 @@ export function Footer() {
                 />
                 <Mail className="absolute left-3.5 top-3.5 size-4 text-white/40" />
               </div>
-              <Button
+              <AnimatedButton
                 type="submit"
                 variant="accent"
                 className="h-11 px-6 font-bold shadow-lg rounded-xl shrink-0 text-xs"
               >
                 {t("footer.newsletter.button")}
-              </Button>
+              </AnimatedButton>
             </form>
-          </div>
+          </ScrollReveal>
 
         </div>
 

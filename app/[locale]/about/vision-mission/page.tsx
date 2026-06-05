@@ -1,6 +1,7 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/src/i18n/navigation";
 import { Eye, Rocket, ShieldAlert, Award, Landmark, Sparkles, ArrowRight } from "lucide-react";
+import { PageHero } from "@/components/sections/PageHero";
 
 export async function generateMetadata({
   params,
@@ -29,16 +30,7 @@ export default async function VisionMissionPage({
       {/* ============================================================
           CINEMATIC BANNER
           ============================================================ */}
-      <section className="relative py-20 lg:py-28 overflow-hidden bg-jibb-gradient">
-        {/* Wave pattern overlay */}
-        <div aria-hidden="true" className="absolute inset-0 wave-pattern opacity-10 pointer-events-none animate-wave-slide" />
-        
-        {/* Ambient Glow Accent */}
-        <div 
-          aria-hidden="true" 
-          className="absolute -top-40 left-[15%] w-[450px] h-[450px] bg-jibb-orange/10 rounded-full blur-[110px] pointer-events-none"
-        />
-
+      <PageHero className="py-20 lg:py-28">
         <div className="section-container relative z-10 text-center max-w-4xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
@@ -63,7 +55,7 @@ export default async function VisionMissionPage({
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
           </div>
         </div>
-      </section>
+      </PageHero>
 
       {/* ============================================================
           VISION & MISSION SPLIT CARDS

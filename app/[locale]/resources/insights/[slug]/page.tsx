@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, ArrowLeft, Mail, Sparkles } from "lucide-react";
 import type { Metadata } from "next";
+import { TableOfContents } from "@/components/ui/TableOfContents";
 
 const SITE_URL = "https://npo-jibb.org";
 const PUBLISHER = {
@@ -165,14 +166,24 @@ export default async function InsightDetailPage({ params }: PageProps) {
 
       {/* CONTENT */}
       <section className="py-12 bg-card">
-        <div className="section-container max-w-4xl space-y-12">
+        <div className="section-container max-w-6xl space-y-12">
           {/* Featured Image */}
           <div className="relative rounded-3xl overflow-hidden max-h-[70vh] flex justify-center bg-transparent">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={post.image} alt={post.title} className="w-full h-auto object-contain max-h-[70vh] rounded-3xl" />
           </div>
 
-          <article className="jibb-prose mx-auto" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+            {/* Table of Contents Sidebar */}
+            <aside className="lg:col-span-3 lg:sticky lg:top-24 hidden lg:block self-start">
+              <TableOfContents />
+            </aside>
+
+            {/* Article content */}
+            <div className="lg:col-span-9">
+              <article className="jibb-prose mx-auto" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+            </div>
+          </div>
 
           {/* Contact Research Box */}
           <div className="rounded-3xl p-8 bg-jibb-gradient-subtle border border-border/80 shadow-jibb text-center max-w-2xl mx-auto space-y-6">
