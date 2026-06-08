@@ -2,27 +2,76 @@
 
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
-import { MapPin, ExternalLink, Users, Award } from "lucide-react";
+import { MapPin, Users } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import Image from "next/image";
+
+function LinkedinIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  );
+}
 
 export function LeadershipGrid() {
   const t = useTranslations("leadershipPage");
   const [filter, setFilter] = useState<"all" | "india" | "japan">("all");
+  const [activeKey, setActiveKey] = useState<string | null>(null);
 
+  // Render only the 11 leaders who have local portrait files in public/leaders
   const allKeys = [
-    "hitesh", "takeshi", "varun", "shigemaro", "priya", "nobuchika", 
-    "ujjawal", "pratiksha", "gyanendra", "akash", "vardaan", "mai", "aya", "kenji"
+    "hitesh", "varun", "shigemaro", "nobuchika", "ujjawal", "pratiksha", 
+    "gyanendra", "akash", "vardaan", "mai", "aya"
   ];
 
-  // Map each member profile
-  const members = allKeys.map(key => ({
-    key,
-    name: t(`members.${key}.name`),
-    role: t(`members.${key}.role`),
-    location: t(`members.${key}.location`),
-    bio: t(`members.${key}.bio`),
-    country: t(`members.${key}.location`).toLowerCase().includes("tokyo") || t(`members.${key}.location`).toLowerCase().includes("japan") ? "japan" : "india"
-  }));
+  const imageMap: Record<string, string> = {
+    hitesh: "/leaders/hitesh-gupttaa.png",
+    varun: "/leaders/varun-tyagi.png",
+    shigemaro: "/leaders/shigemaro-yasui.png",
+    nobuchika: "/leaders/nobichuka-akiya.png",
+    ujjawal: "/leaders/ujjawal-dahiya.png",
+    pratiksha: "/leaders/pratiksha-pandey.png",
+    gyanendra: "/leaders/gyanendra-yadav.png",
+    akash: "/leaders/akash-pandey.png",
+    vardaan: "/leaders/vardaan-chaudhary.png",
+    mai: "/leaders/mai-hashikura.png",
+    aya: "/leaders/aya-saito.png"
+  };
+
+  const cardThemes = [
+    { bg: "from-[#FFF9F6] to-[#FFF0E6]", border: "border-[#FFE0CC]", shadow: "hover:shadow-[#FFE0CC]/30" }, // soft orange/amber
+    { bg: "from-[#F4F8FF] to-[#E8F0FE]", border: "border-[#D2E3FC]", shadow: "hover:shadow-[#D2E3FC]/30" }, // soft blue
+    { bg: "from-[#FFF5F6] to-[#FFEBEF]", border: "border-[#FFD2DC]", shadow: "hover:shadow-[#FFD2DC]/30" }, // soft pink/rose
+    { bg: "from-[#F8F5FF] to-[#EFEBFF]", border: "border-[#E1D5FF]", shadow: "hover:shadow-[#E1D5FF]/30" }, // soft purple/lavender
+    { bg: "from-[#F3FCFA] to-[#E5F7F3]", border: "border-[#C7EFE5]", shadow: "hover:shadow-[#C7EFE5]/30" }, // soft teal/mint
+    { bg: "from-[#FFFDF5] to-[#FFF9E0]", border: "border-[#FFF1B8]", shadow: "hover:shadow-[#FFF1B8]/30" }, // soft yellow
+  ];
+
+  const members = allKeys.map((key, index) => {
+    const isJapan = t(`members.${key}.location`).toLowerCase().includes("tokyo") || t(`members.${key}.location`).toLowerCase().includes("japan");
+    return {
+      key,
+      name: t(`members.${key}.name`),
+      role: t(`members.${key}.role`),
+      location: t(`members.${key}.location`),
+      bio: t(`members.${key}.bio`),
+      country: isJapan ? "japan" : "india",
+      image: imageMap[key],
+      theme: cardThemes[index % cardThemes.length]
+    };
+  });
 
   const filteredMembers = members.filter(m => {
     if (filter === "india") return m.country === "india";
@@ -31,26 +80,29 @@ export function LeadershipGrid() {
   });
 
   return (
-    <section className="py-24 bg-background relative overflow-hidden">
+    <section className="py-24 bg-[#FAFAFA] relative overflow-hidden">
       {/* Decorative gradient effects */}
-      <div className="absolute top-1/4 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-[radial-gradient(circle_at_center,rgba(36,59,107,0.05)_0%,transparent_75%)] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-[radial-gradient(circle_at_center,rgba(242,101,34,0.05)_0%,transparent_75%)] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-[radial-gradient(circle_at_center,rgba(36,59,107,0.03)_0%,transparent_75%)] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-[radial-gradient(circle_at_center,rgba(242,101,34,0.03)_0%,transparent_75%)] pointer-events-none" />
 
-      <div className="section-container relative z-10 max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Filter Toolbar */}
-        <div className="flex justify-center gap-2 mb-12 border-b border-border/40 pb-6">
+        <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-16 border-b border-gray-100 pb-8">
           {[
-            { id: "all", label: "All Members (14)" },
-            { id: "india", label: "India Operations Team" },
-            { id: "japan", label: "Japan Executive Team" }
+            { id: "all", label: "View all" },
+            { id: "japan", label: "Japan Executive Team" },
+            { id: "india", label: "India Operations Team" }
           ].map(btn => (
             <button
               key={btn.id}
-              onClick={() => setFilter(btn.id as any)}
-              className={`px-5 py-2 rounded-xl text-xs md:text-sm font-bold transition-all ${
+              onClick={() => {
+                setFilter(btn.id as any);
+                setActiveKey(null); // Clear mobile detail view when switching filters
+              }}
+              className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
                 filter === btn.id
-                  ? "bg-primary text-primary-foreground shadow-md"
-                  : "bg-muted/60 hover:bg-muted text-muted-foreground border border-border/40"
+                  ? "bg-white text-gray-900 border border-gray-200/80 shadow-sm"
+                  : "text-gray-500 hover:text-gray-900"
               }`}
             >
               {btn.label}
@@ -59,56 +111,76 @@ export function LeadershipGrid() {
         </div>
 
         {/* Responsive Grid */}
-        <ScrollReveal staggerChildren={0.08} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <ScrollReveal staggerChildren={0.05} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {filteredMembers.map((person) => {
-            const isJapan = person.country === "japan";
+            const isSelected = activeKey === person.key;
             return (
               <div
                 key={person.key}
-                className={`group relative rounded-2xl bg-card border transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl flex flex-col justify-between overflow-hidden ${
-                  isJapan 
-                    ? "border-border/50 hover:border-jibb-indigo/30" 
-                    : "border-border/50 hover:border-jibb-orange/30"
-                }`}
+                onClick={() => setActiveKey(isSelected ? null : person.key)}
+                className={`group relative rounded-2xl bg-gradient-to-b ${person.theme.bg} border ${person.theme.border} transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl ${person.theme.shadow} flex flex-col justify-between overflow-hidden aspect-[4/5] cursor-pointer`}
               >
-                {/* Visual Accent top ribbon */}
-                <div className={`h-1.5 w-full ${isJapan ? "bg-jibb-indigo" : "bg-jibb-orange"}`} />
+                {/* Profile Portrait Image */}
+                <div className="relative w-full h-full overflow-hidden flex items-end justify-center">
+                  <Image
+                    src={person.image}
+                    alt={person.name}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                    priority={person.key === "hitesh" || person.key === "varun"}
+                  />
 
-                <div className="p-6 flex-grow flex flex-col justify-between space-y-4 text-left">
-                  <div className="space-y-4">
-                    {/* Placeholder Avatar */}
-                    <div className="size-14 rounded-xl bg-primary/5 flex items-center justify-center border border-border/30 shrink-0">
-                      <Users className="size-6 text-primary/35" />
-                    </div>
-
-                    <div className="space-y-1">
-                      <h3 className="text-base md:text-lg font-black text-foreground tracking-tight leading-snug">
+                  {/* Floating glassmorphic info tag at the bottom (Static View) */}
+                  <div className={`absolute inset-x-0 bottom-0 p-4 transition-all duration-500 ease-out ${isSelected ? "opacity-0 translate-y-4" : "group-hover:opacity-0 group-hover:translate-y-4"}`}>
+                    <div className="bg-white/80 backdrop-blur-md border border-white/40 shadow-lg px-4 py-4 rounded-xl text-center">
+                      <h3 className="text-base font-extrabold text-gray-900 tracking-tight leading-tight">
                         {person.name}
                       </h3>
-                      <p className="text-xs font-bold text-primary uppercase tracking-wider leading-relaxed">
+                      <p className="text-xs font-semibold text-gray-500 mt-1 leading-snug">
                         {person.role}
                       </p>
                     </div>
-
-                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-semibold">
-                      <MapPin className="size-3.5 shrink-0" />
-                      <span>{person.location}</span>
-                    </div>
-
-                    <p className="text-xs md:text-sm text-muted-foreground leading-relaxed font-semibold">
-                      {person.bio}
-                    </p>
                   </div>
 
-                  <div className="pt-4 border-t border-border/30">
-                    <a
-                      href="#"
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-secondary/50 hover:bg-secondary text-[11px] font-extrabold text-foreground transition-colors duration-200"
-                    >
-                      <ExternalLink className="size-3 text-primary" />
-                      <span>LinkedIn Profile</span>
-                      <ExternalLink className="size-2.5 text-muted-foreground" />
-                    </a>
+                  {/* Interactive detail overlay (shows on hover for desktop, toggles on click for mobile) */}
+                  <div className={`absolute inset-0 bg-gradient-to-t from-gray-950/95 via-gray-900/80 to-gray-950/20 transition-all duration-500 flex flex-col justify-end p-6 text-white text-left ${
+                    isSelected ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto"
+                  }`}>
+                    <div className={`transition-transform duration-500 ease-out space-y-3 ${
+                      isSelected ? "translate-y-0" : "translate-y-6 group-hover:translate-y-0"
+                    }`}>
+                      <div>
+                        <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-[#F26522] bg-[#F26522]/10 px-2.5 py-1 rounded-full border border-[#F26522]/20">
+                          <MapPin className="size-3" />
+                          {person.location}
+                        </span>
+                      </div>
+                      
+                      <div className="space-y-1">
+                        <h4 className="text-lg font-black text-white leading-tight tracking-tight">
+                          {person.name}
+                        </h4>
+                        <p className="text-xs font-bold text-gray-300">
+                          {person.role}
+                        </p>
+                      </div>
+
+                      <p className="text-xs md:text-sm text-gray-200/90 leading-relaxed font-medium line-clamp-4">
+                        {person.bio}
+                      </p>
+
+                      <div className="pt-2 border-t border-white/10 flex items-center justify-between">
+                        <a
+                          href="#"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1.5 text-xs font-extrabold text-white bg-white/10 hover:bg-white/20 px-3.5 py-2 rounded-xl transition-all duration-300 border border-white/10"
+                        >
+                          <LinkedinIcon className="size-3.5 text-sky-400" />
+                          <span>LinkedIn</span>
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -119,3 +191,4 @@ export function LeadershipGrid() {
     </section>
   );
 }
+

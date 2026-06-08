@@ -1,7 +1,34 @@
 "use client";
 
-import { ReactLenis } from "lenis/react";
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { ReactLenis, useLenis } from "lenis/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "lenis/dist/lenis.css";
+
+gsap.registerPlugin(ScrollTrigger);
+
+function ScrollToTop() {
+  const pathname = usePathname();
+  const lenis = useLenis();
+
+  useEffect(() => {
+    if (lenis) {
+      // 1. Reset scroll to top instantly
+      lenis.scrollTo(0, { immediate: true });
+
+      // 2. Wait for Next.js DOM render to settle, then refresh GSAP trigger positions
+      const timer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [pathname, lenis]);
+
+  return null;
+}
 
 export function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
   return (
@@ -13,6 +40,7 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
         smoothWheel: true,
       }}
     >
+      <ScrollToTop />
       {children}
     </ReactLenis>
   );
