@@ -47,6 +47,75 @@
         "feature3": "24/7 Priority Policy Advisory",
         "feature4": "Executive Brand Placement"
       }
+    },
+    "comparison": {
+      "title": "Moving Beyond Passive Networking",
+      "subtitle": "How the Japan India Business Bureau compares against traditional trade bodies in delivering tangible economic value.",
+      "col1": "Traditional Trade Bodies",
+      "col2": "Japan India Business Bureau",
+      "rows": [
+        {
+          "label": "Focus Sectors",
+          "trad": "Generalist sectors, generic advocacy",
+          "jibb": "Hyper-focused sectors – advanced manufacturing, semiconductors, and automotive components"
+        },
+        {
+          "label": "Business Matchmaking",
+          "trad": "Passive directory services and generic mixers",
+          "jibb": "Curated, pre-qualified B2B meetings and reverse buyer-seller meetings"
+        },
+        {
+          "label": "Execution Depth",
+          "trad": "High level advisory reports",
+          "jibb": "End-to-end execution: site selection, entity formation, and operational setup"
+        },
+        {
+          "label": "Training & Mentorship",
+          "trad": "Limited training scope",
+          "jibb": "Deep implementation of Japanese and Indian standards with expert on-site mentorship"
+        },
+        {
+          "label": "Success Metrics",
+          "trad": "Event attendance volume",
+          "jibb": "Results-oriented: MoUs signed, Joint Ventures formed, and factories established"
+        }
+      ]
+    },
+    "whyBecomeMember": {
+      "title": "Why Become Our Member?",
+      "subtitle": "Unlocking dual-corridor resources, on-ground networks, and trade acceleration programs.",
+      "japaneseEntities": {
+        "title": "For Japanese Entities",
+        "items": [
+          "Market research reports for India Entry",
+          "Comprehensive market entry support",
+          "Business matchmaking and partner search",
+          "Partner evaluation and deal structuring",
+          "Policy and regulatory compliance guidance",
+          "Government and stakeholder liaison",
+          "Trade and investment facilitation",
+          "Localization and bicultural support",
+          "Sector-specific consulting & intelligence",
+          "Event and delegation management",
+          "After-entry continuous support",
+          "Delegation tours to India hubs"
+        ]
+      },
+      "indianEntities": {
+        "title": "For Indian Entities",
+        "items": [
+          "Business matchmaking and partner search",
+          "Partner evaluation and deal structuring",
+          "Policy and regulatory compliance",
+          "Government and stakeholder liaison",
+          "Trade and investment facilitation",
+          "Localization and culture alignment",
+          "Sector-specific consulting",
+          "Event and delegation management",
+          "After-deal operational support",
+          "Delegation visits to Tokyo/Japan"
+        ]
+      }
     }
   }
 }

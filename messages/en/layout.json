@@ -33,10 +33,12 @@
     "partnershipsDesc": "Collaborations with institutional partners"
   },
   "servicesMenu": {
-    "marketEntry": "Market Entry Support",
-    "marketEntryDesc": "Smooth navigational support for foreign markets",
+    "marketEntry": "Market Entry & Localization",
+    "marketEntryDesc": "Smooth navigational support and strategy adaptation for foreign markets",
     "partnership": "Partnership Facilitation",
     "partnershipDesc": "Strategic matching with reliable local partners",
+    "coInnovation": "Co-Innovation Collaboration",
+    "coInnovationDesc": "Facilitating joint projects between Indian and Japanese firms",
     "localization": "Localization Support",
     "localizationDesc": "Adapting business strategies to local culture",
     "investment": "Investment Support",
@@ -45,6 +47,8 @@
     "jointVenturesDesc": "Structuring high-value bilateral corporations",
     "consulting": "Innovation Consulting",
     "consultingDesc": "Advanced support for corporate innovation",
+    "diaspora": "Diaspora Networking",
+    "diasporaDesc": "Exclusive networking events bridging Indian diaspora with Japanese opportunities",
     "research": "Research & Insights",
     "researchDesc": "Custom commercial intelligence and analytics"
   },
@@ -63,8 +67,8 @@
     "challengesDesc": "Tackling critical bilateral tech challenges"
   },
   "resourcesMenu": {
-    "insights": "Market Insights",
-    "insightsDesc": "Deep-dive analyses of cross-border trends",
+    "insights": "Media & Insights",
+    "insightsDesc": "Deep-dive analyses, news, and leadership perspectives",
     "blog": "News & Blog",
     "blogDesc": "Stories of collaboration and announcements",
     "media": "Media & Press",

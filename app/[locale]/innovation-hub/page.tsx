@@ -6,9 +6,9 @@ import { Parallax } from "@/components/ui/Parallax";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { TechStack } from "@/components/sections/TechStack";
-import { 
-  FlaskConical, Microscope, Cpu, ArrowRight, Lightbulb, GraduationCap, 
-  Users, Award, Sparkles, Building2, BatteryCharging 
+import {
+  FlaskConical, Microscope, Cpu, ArrowRight, Lightbulb, GraduationCap,
+  Users, Award, Sparkles, Building2, BatteryCharging
 } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 
@@ -73,7 +73,7 @@ export default async function InnovationHubPage({
       {/* ============================================================
           CINEMATIC BANNER
           ============================================================ */}
-      <PageHero className="py-20 lg:py-28">
+      <PageHero className="py-20 lg:py-28" bgText="HUB">
         <div className="section-container relative z-10 text-center max-w-4xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
@@ -87,7 +87,7 @@ export default async function InnovationHubPage({
             className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight"
             immediate
           />
-          
+
           <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
             {t("hubPage.subtitle")}
           </p>
@@ -123,8 +123,8 @@ export default async function InnovationHubPage({
 
           <ScrollReveal staggerChildren={0.12} scale={0.96} className="grid md:grid-cols-3 gap-4">
             {labs.map((lb) => (
-              <div 
-                key={lb.id} 
+              <div
+                key={lb.id}
                 className={`group flex flex-col justify-between p-8 rounded-2xl border border-white/10 hover:shadow-xl transition-all duration-300 min-h-[260px] text-left relative overflow-hidden text-white ${lb.spanClass} ${lb.bgClass}`}
               >
                 {/* Visual Glass highlights */}
@@ -208,7 +208,7 @@ export default async function InnovationHubPage({
       {/* ============================================================
           EXPERT ADVISORY BOARD PANEL
           ============================================================ */}
-      <section className="py-20 md:py-28 bg-jibb-gradient-subtle">
+      {/* <section className="py-20 md:py-28 bg-jibb-gradient-subtle">
         <div className="section-container max-w-5xl text-center space-y-16">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10">
@@ -248,7 +248,7 @@ export default async function InnovationHubPage({
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
     </main>
   );
 }

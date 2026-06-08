@@ -93,7 +93,7 @@ export default async function InsightsPage({ params, searchParams }: PageProps) 
       {/* ============================================================
           CINEMATIC BANNER
           ============================================================ */}
-      <PageHero className="py-20">
+      <PageHero className="py-20" bgText="INSIGHTS">
         <div className="section-container relative z-10 text-center max-w-4xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />

@@ -121,5 +121,113 @@
         ]
       }
     }
+  },
+  "leadershipPage": {
+    "title": "JIBB Leadership & Core Team",
+    "subtitle": "Experienced leaders from India and Japan driving bilateral synergy, policy alignment, and corporate growth.",
+    "intro": "Meet the directors, advisors, and ground experts who steer the Tokyo-Noida corridor.",
+    "members": {
+      "varun": {
+        "name": "Varun Tyagi",
+        "role": "Director - Bilateral Investments",
+        "bio": "Experienced leader driving cross-border venture capital, strategic JVs, and high-value industrial deals.",
+        "location": "Noida, India"
+      },
+      "ujjawal": {
+        "name": "Ujjawal Dahiya",
+        "role": "Head of Operations & Strategy",
+        "bio": "Specializes in market entry strategy, localization blueprints, and multi-sector corporate alliances.",
+        "location": "Noida, India"
+      },
+      "pratiksha": {
+        "name": "Pratiksha Pandey",
+        "role": "Director of Partner Relations",
+        "bio": "Facilitates trust-based matches, stakeholder alignment, and bicultural communications for enterprises.",
+        "location": "Noida, India"
+      },
+      "gyanendra": {
+        "name": "Gyanendra Yadav",
+        "role": "Lead Advisor - Advanced Manufacturing",
+        "bio": "Expert in precision engineering, CNC automation, and supply chain localization.",
+        "location": "Noida, India"
+      },
+      "akash": {
+        "name": "Akash Pandey",
+        "role": "Strategic Investment Specialist",
+        "bio": "Navigates cross-border taxation, M&As, financial due diligence, and capital transfer routes.",
+        "location": "Noida, India"
+      },
+      "vardaan": {
+        "name": "Vardaan Chaudhary",
+        "role": "Corporate Growth Manager",
+        "bio": "Focuses on semiconductor value chain alliances, electronics, and global tech programs.",
+        "location": "Noida, India"
+      },
+      "shigemaro": {
+        "name": "Shigemaro Yasui",
+        "role": "Senior Advisor (Japan)",
+        "bio": "Guarantees policy alignment, government coordination, and SME entry support in Tokyo.",
+        "location": "Tokyo, Japan"
+      },
+      "nobuchika": {
+        "name": "Nobuchika Akiya",
+        "role": "Automotive Value Chain Expert",
+        "bio": "Guides manufacturers on EV adaptation, ADAS integration, and Japanese partner sourcing.",
+        "location": "Tokyo, Japan"
+      },
+      "mai": {
+        "name": "Mai Hashikura",
+        "role": "Bilingual Relations Manager",
+        "bio": "Manages bicultural working alignment, translation services, and executive business summits.",
+        "location": "Tokyo, Japan"
+      },
+      "aya": {
+        "name": "Aya Saito",
+        "role": "Public Relations & Events Coordinator",
+        "bio": "Coordinates trade delegations, G2B meetings, and bilateral marketing campaigns.",
+        "location": "Tokyo, Japan"
+      },
+      "hitesh": {
+        "name": "Hitesh Gupta",
+        "role": "Founder & Director",
+        "bio": "Visionary leader with deep expertise in Japan-India bilateral trade and industrial policy.",
+        "location": "Tokyo, Japan"
+      },
+      "takeshi": {
+        "name": "Takeshi Nakamura",
+        "role": "Co-Director - Japan Operations",
+        "bio": "Seasoned industry strategist specializing in Japanese manufacturing ecosystems.",
+        "location": "Tokyo, Japan"
+      },
+      "priya": {
+        "name": "Priya Deshmukh",
+        "role": "Head of Innovation Hub",
+        "bio": "Technology entrepreneur driving startup incubation and co-innovation labs.",
+        "location": "Noida, India"
+      },
+      "kenji": {
+        "name": "Kenji Watanabe",
+        "role": "Head of Corporate Relations",
+        "bio": "Expert in corporate relations between Japanese companies and Indian enterprises.",
+        "location": "Tokyo, Japan"
+      }
+    }
+  },
+  "approachPage": {
+    "title": "Our Approach",
+    "subtitle": "Bridging India and Japan through structured methodologies, deep trust, and local execution.",
+    "introHeadline": "A Methodology Built on Trust & Execution",
+    "introPara1": "Successful cross-border collaboration requires more than just formal connections. It demands a deep understanding of cultural nuances, local regulatory environments, and target market conditions.",
+    "introPara2": "At JIBB, we have developed a proven, three-step methodology that guides businesses and startups from their first introduction through physical office establishment and sustained scaling in both Japan and India.",
+    "roadmapTitle": "The JIBB Success Roadmap",
+    "connectTitle": "1. Connect",
+    "connectDesc": "We identify and bring together the right stakeholders, from leading technology firms in Tokyo to high-growth startups and manufacturing networks in Noida.",
+    "facilitateTitle": "2. Facilitate",
+    "facilitateDesc": "We simplify the complexities of market entry, handling regulatory compliance, company registration, translation services, and joint-venture negotiations.",
+    "enableTitle": "3. Enable Growth",
+    "enableDesc": "We support long-term development through our physical Innovation Hubs, dedicated corporate mentoring, investor access, and ongoing policy advocacy.",
+    "ctaTitle": "Ready to Start Your Bilateral Journey?",
+    "ctaDesc": "Partner with JIBB to access exclusive insights, sandbox laboratories, and a pre-screened business network across the Tokyo–Noida corridor.",
+    "ctaButton": "Join the Bureau"
   }
 }

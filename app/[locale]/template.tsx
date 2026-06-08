@@ -47,7 +47,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
 
       // 2. Build 2 vertical layout alignment lines matching the left and right boundaries
       const verticals = document.createElement("div");
-      verticals.className = "section-grid-verticals max-w-7xl mx-auto px-6 lg:px-8";
+      verticals.className = "section-grid-verticals max-w-[96rem] mx-auto px-5 md:px-12 lg:px-16";
 
       for (let i = 0; i < 2; i++) {
         const line = document.createElement("div");

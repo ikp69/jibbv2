@@ -249,10 +249,10 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/services/localization-support"
+                  href="/services/co-innovation-collaboration"
                   className="text-white/60 hover:text-white transition-colors block py-0.5"
                 >
-                  Localization Support
+                  Co-Innovation Collaboration
                 </Link>
               </li>
               <li>
@@ -260,7 +260,15 @@ export function Footer() {
                   href="/services/investment-support"
                   className="text-white/60 hover:text-white transition-colors block py-0.5"
                 >
-                  Investment Support
+                  Investment Support & JVs
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/services/diaspora-networking"
+                  className="text-white/60 hover:text-white transition-colors block py-0.5"
+                >
+                  Diaspora Networking
                 </Link>
               </li>
             </ul>
@@ -282,14 +290,6 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/resources/blog"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  {t("resourcesMenu.blog")}
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/resources/case-studies"
                   className="text-white/60 hover:text-white transition-colors block py-0.5"
                 >
@@ -302,14 +302,6 @@ export function Footer() {
                   className="text-white/60 hover:text-white transition-colors block py-0.5"
                 >
                   {t("resourcesMenu.insights")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources/leadership-thoughts"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  {t("resourcesMenu.leadership")}
                 </Link>
               </li>
               <li>

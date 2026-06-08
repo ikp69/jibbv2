@@ -6,6 +6,7 @@ import { Parallax } from "@/components/ui/Parallax";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { HorizontalScroll } from "@/components/sections/HorizontalScroll";
 import { PageHero } from "@/components/sections/PageHero";
+import { WorkProcess } from "@/components/sections/WorkProcess";
 import { MapPin, Handshake, Globe, DollarSign, Sparkles, ArrowRight, ShieldCheck, Cpu, Lightbulb } from "lucide-react";
 
 export async function generateMetadata({
@@ -50,12 +51,12 @@ export default async function ServicesPage({
       colorClass: "hover:border-jibb-indigo/30 group-hover:bg-primary/5",
     },
     {
-      id: "localization-support",
-      href: "/services/localization-support",
-      icon: <Globe className="size-8 text-jibb-orange" />,
-      title: t("servicesPage.localization.title"),
-      subtitle: t("servicesPage.localization.subtitle"),
-      desc: t("whatWeDo.localization.description"),
+      id: "co-innovation-collaboration",
+      href: "/services/co-innovation-collaboration",
+      icon: <Lightbulb className="size-8 text-jibb-orange" />,
+      title: t("servicesPage.coInnovation.title"),
+      subtitle: t("servicesPage.coInnovation.subtitle"),
+      desc: t("servicesPage.coInnovation.step1Desc"),
       colorClass: "hover:border-jibb-sakura/30 group-hover:bg-jibb-sakura/5",
     },
     {
@@ -67,6 +68,15 @@ export default async function ServicesPage({
       desc: t("servicesPage.investment.step1Desc"),
       colorClass: "hover:border-amber-500/30 group-hover:bg-amber-500/5",
     },
+    {
+      id: "diaspora-networking",
+      href: "/services/diaspora-networking",
+      icon: <Globe className="size-8 text-jibb-orange" />,
+      title: t("servicesPage.diaspora.title"),
+      subtitle: t("servicesPage.diaspora.subtitle"),
+      desc: t("servicesPage.diaspora.step1Desc"),
+      colorClass: "hover:border-emerald-500/30 group-hover:bg-emerald-500/5",
+    },
   ];
 
   return (
@@ -74,7 +84,7 @@ export default async function ServicesPage({
       {/* ============================================================
           HERO BANNER
           ============================================================ */}
-      <PageHero className="py-20 lg:py-28">
+      <PageHero className="py-20 lg:py-28" bgText="SERVICES">
         <div className="section-container relative z-10 text-center max-w-4xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
@@ -150,6 +160,8 @@ export default async function ServicesPage({
           <HorizontalScroll />
         </div>
       </section>
+
+      <WorkProcess />
 
       {/* ============================================================
           CO-INNOVATION & ECOSYSTEM STRATEGY BANNER

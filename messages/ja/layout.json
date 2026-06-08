@@ -33,20 +33,16 @@
     "partnershipsDesc": "主要な機関とのパートナーシップ"
   },
   "servicesMenu": {
-    "marketEntry": "市場参入支援",
-    "marketEntryDesc": "海外市場へのスムーズな進出・立ち上げを支援",
+    "marketEntry": "市場参入＆ローカライズ",
+    "marketEntryDesc": "海外市場へのスムーズな進出・立ち上げとローカライズ支援",
     "partnership": "パートナーシップ促進",
     "partnershipDesc": "信頼できる現地パートナーとの戦略的マッチング",
-    "localization": "ローカリゼーション支援",
-    "localizationDesc": "現地の文化や市場に合わせたビジネス戦略の適応",
-    "investment": "投資支援",
-    "investmentDesc": "資本展開および投資アドバイザリー",
-    "jointVentures": "合弁事業（JV）",
-    "jointVenturesDesc": "付加価値の高い二国間共同事業の組成支援",
-    "consulting": "イノベーションコンサルティング",
-    "consultingDesc": "企業の先進的なイノベーション活動への支援",
-    "research": "リサーチ＆インサイト",
-    "researchDesc": "オーダーメイドの市場・商業インテリジェンス分析"
+    "coInnovation": "共同イノベーション提携",
+    "coInnovationDesc": "日印企業間の共同研究開発プロジェクトおよびR&Dの促進",
+    "investment": "投資支援＆合弁事業（JV）",
+    "investmentDesc": "資本展開、投資インセンティブ、および高価値な合弁事業の組成",
+    "diaspora": "ディアスポラ・ネットワーキング",
+    "diasporaDesc": "インド系ディアスポラと日本の新たなビジネス機会を結ぶネットワーキング"
   },
   "hubMenu": {
     "coe": "共同開発センター（CoE）",
@@ -55,26 +51,20 @@
     "labsDesc": "共同研究のための高度なサンドボックス環境",
     "incubation": "スタートアップ育成",
     "incubationDesc": "二国間スタートアップのインキュベーション",
-    "research": "共同研究プログラム",
-    "researchDesc": "産学官が連携する先端技術共同プロジェクト",
     "partners": "パートナー機関",
     "partnersDesc": "日印の主要な大学・研究機関との連携",
     "challenges": "イノベーション挑戦",
     "challengesDesc": "重要課題を解決する技術コンテストの開催"
   },
   "resourcesMenu": {
-    "insights": "市場インサイト",
-    "insightsDesc": "国境を越えたビジネス動向の深掘り分析",
-    "blog": "ニュース＆ブログ",
-    "blogDesc": "コラボレーションのストーリーと発表情報",
-    "media": "メディア＆プレス",
-    "mediaDesc": "プレスリリースと報道機関向けリソース",
+    "insights": "メディア＆インサイト",
+    "insightsDesc": "深掘り分析、最新ニュース、リーダーシップ・ソーツ",
     "caseStudies": "ケーススタディ",
     "caseStudiesDesc": "JIBB会員のリアルな成功事例のご紹介",
     "newsletter": "メールマガジン",
     "newsletterDesc": "最新の市場動向を毎週あなたの受信トレイにお届け",
     "leadership": "リーダーシップ・ソーツ",
-    "leadershipDesc": "JIBBの共同創設者や経営陣によるコラム、ビジョン、および提言"
+    "leadershipDesc": "JIBBの共同創設者やリーダーによる記事と展望"
   },
   "sectorsMenu": {
     "desc": "日印協力を牽引する主要8大セクターをご紹介"

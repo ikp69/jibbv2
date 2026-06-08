@@ -418,7 +418,8 @@
 
   /* ---- Section container ---- */
   .section-container {
-    @apply max-w-7xl mx-auto px-12 lg:px-16;
+    max-width: 92rem;
+    @apply mx-auto px-5 md:px-12 lg:px-16;
   }
 
   /* ---- Section spacing (8px grid: py = 12 * 8 = 96px) ---- */
@@ -601,13 +602,35 @@
 
 /* Form validation shake animation */
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  15% { transform: translateX(-6px); }
-  30% { transform: translateX(5px); }
-  45% { transform: translateX(-4px); }
-  60% { transform: translateX(3px); }
-  75% { transform: translateX(-2px); }
-  90% { transform: translateX(1px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  15% {
+    transform: translateX(-6px);
+  }
+
+  30% {
+    transform: translateX(5px);
+  }
+
+  45% {
+    transform: translateX(-4px);
+  }
+
+  60% {
+    transform: translateX(3px);
+  }
+
+  75% {
+    transform: translateX(-2px);
+  }
+
+  90% {
+    transform: translateX(1px);
+  }
 }
 
 @layer utilities {
@@ -1057,9 +1080,21 @@ html.lenis body {
 
 /* 1. Shake animation (for invalid form states) */
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
 }
 
 .animate-shake {
@@ -1068,8 +1103,13 @@ html.lenis body {
 
 /* 2. Wave pattern sliding background animation */
 @keyframes wave-slide {
-  0% { background-position: 0 0; }
-  100% { background-position: 100px 0; }
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 100px 0;
+  }
 }
 
 .animate-wave-slide {
@@ -1078,15 +1118,33 @@ html.lenis body {
 
 /* 3. Scan line animation (for security shield/auth) */
 @keyframes scan {
-  0% { transform: translateY(0); opacity: 0.2; }
-  50% { transform: translateY(45px); opacity: 0.8; }
-  100% { transform: translateY(0); opacity: 0.2; }
+  0% {
+    transform: translateY(0);
+    opacity: 0.2;
+  }
+
+  50% {
+    transform: translateY(45px);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 0.2;
+  }
 }
 
 /* 4. Floating bounce animation */
 @keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-8px) rotate(3deg); }
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(3deg);
+  }
 }
 
 .animate-float {
@@ -1105,23 +1163,23 @@ html.lenis body {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
 }
 
 .text-masked-moving-bg {
-  background-image: linear-gradient(
-    120deg, 
-    #E98B2A 0%, 
-    #D96C6C 25%, 
-    #243B6B 50%, 
-    #D96C6C 75%, 
-    #E98B2A 100%
-  );
+  background-image: linear-gradient(120deg,
+      #E98B2A 0%,
+      #D96C6C 25%,
+      #243B6B 50%,
+      #D96C6C 75%,
+      #E98B2A 100%);
   background-size: 200% auto;
   background-clip: text;
   -webkit-background-clip: text;
@@ -1133,10 +1191,8 @@ html.lenis body {
 
 /* Force Recompile comment */
 .text-masked-moving-bg-image {
-  background-image: linear-gradient(
-    rgba(36, 59, 107, 0.4), 
-    rgba(233, 139, 42, 0.4)
-  ), url('/jibb-v2-bg.png');
+  background-image: linear-gradient(rgba(36, 59, 107, 0.4),
+      rgba(233, 139, 42, 0.4)), url('/jibb-v2-bg.png');
   background-blend-mode: overlay;
   background-size: 200% auto;
   background-clip: text;
@@ -1165,13 +1221,13 @@ html.lenis body {
 /* 7. Grid lines & Mesh Background utilities */
 .bg-grid-mesh {
   background-size: 44px 44px;
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(36, 59, 107, 0.025) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(36, 59, 107, 0.025) 1px, transparent 1px);
 }
 
 .dark .bg-grid-mesh {
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
 }
@@ -1195,6 +1251,12 @@ html.lenis body {
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .section-grid-lines {
+    display: none !important;
+  }
+}
+
 .section-grid-lines::before {
   content: "";
   position: absolute;
@@ -1202,16 +1264,12 @@ html.lenis body {
   left: 0;
   right: 0;
   height: 1.5px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    color-mix(
-      in srgb, 
-      var(--grid-line-active) calc(var(--section-grid-glow, 0) * 100%), 
-      var(--grid-line-inactive)
-    ) 50%,
-    transparent 100%
-  ) !important;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      color-mix(in srgb,
+        var(--grid-line-active) calc(var(--section-grid-glow, 0) * 100%),
+        var(--grid-line-inactive)) 50%,
+      transparent 100%) !important;
 }
 
 .section-grid-lines::after {
@@ -1221,16 +1279,12 @@ html.lenis body {
   left: 0;
   right: 0;
   height: 1.5px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    color-mix(
-      in srgb, 
-      var(--grid-line-active) calc(var(--section-grid-glow, 0) * 100%), 
-      var(--grid-line-inactive)
-    ) 50%,
-    transparent 100%
-  ) !important;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      color-mix(in srgb,
+        var(--grid-line-active) calc(var(--section-grid-glow, 0) * 100%),
+        var(--grid-line-inactive)) 50%,
+      transparent 100%) !important;
 }
 
 .section-grid-verticals {
@@ -1242,11 +1296,9 @@ html.lenis body {
 .section-grid-vertical-line {
   width: 1px;
   height: 100%;
-  background: color-mix(
-    in srgb, 
-    var(--grid-line-active) calc(var(--section-grid-glow, 0) * 100%), 
-    var(--grid-line-inactive)
-  ) !important;
+  background: color-mix(in srgb,
+      var(--grid-line-active) calc(var(--section-grid-glow, 0) * 100%),
+      var(--grid-line-inactive)) !important;
 }
 
 /* 9. Site-wide SVG Icon Wrapper hover color fill effects */
@@ -1308,9 +1360,9 @@ div[class*="bg-primary"]:not(.no-hover-fill):has(svg) svg {
 .group {
   position: relative;
   transition: transform var(--motion-normal) var(--ease-spring),
-              box-shadow var(--motion-normal) var(--ease-spring),
-              border-color var(--motion-normal) var(--ease-spring),
-              background-color var(--motion-normal) var(--ease-spring) !important;
+    box-shadow var(--motion-normal) var(--ease-spring),
+    border-color var(--motion-normal) var(--ease-spring),
+    background-color var(--motion-normal) var(--ease-spring) !important;
 }
 
 /* Base style for the partial reflective gradient border mask */
@@ -1320,13 +1372,11 @@ div[class*="bg-primary"]:not(.no-hover-fill):has(svg) svg {
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.4) 0%,
-    rgba(255, 255, 255, 0.05) 40%,
-    rgba(255, 255, 255, 0) 60%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0.05) 40%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0.05) 100%);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: exclude;
@@ -1338,18 +1388,16 @@ div[class*="bg-primary"]:not(.no-hover-fill):has(svg) svg {
 }
 
 .dark .group::before {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.02) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.02) 50%,
+      rgba(255, 255, 255, 0) 100%);
 }
 
 /* Active reflective glow state on hover */
 .group:hover {
   border-color: transparent !important;
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.8) inset,
     0 1px 2px rgba(0, 0, 0, 0.02),
     0 12px 30px -10px rgba(36, 59, 107, 0.08),
@@ -1359,18 +1407,16 @@ div[class*="bg-primary"]:not(.no-hover-fill):has(svg) svg {
 }
 
 .group:hover::before {
-  background: radial-gradient(
-    140px circle at var(--mouse-x, 50%) var(--mouse-y, 0%),
-    rgba(36, 59, 107, 0.45) 0%,
-    rgba(36, 59, 107, 0.15) 50%,
-    transparent 100%
-  );
+  background: radial-gradient(140px circle at var(--mouse-x, 50%) var(--mouse-y, 0%),
+      rgba(36, 59, 107, 0.45) 0%,
+      rgba(36, 59, 107, 0.15) 50%,
+      transparent 100%);
   opacity: 1;
 }
 
 .dark .group:hover {
   border-color: transparent !important;
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.1) inset,
     0 1px 2px rgba(0, 0, 0, 0.2),
     0 16px 40px -12px rgba(0, 0, 0, 0.5),
@@ -1380,29 +1426,33 @@ div[class*="bg-primary"]:not(.no-hover-fill):has(svg) svg {
 }
 
 .dark .group:hover::before {
-  background: radial-gradient(
-    140px circle at var(--mouse-x, 50%) var(--mouse-y, 0%),
-    rgba(123, 159, 224, 0.45) 0%,
-    rgba(46, 77, 138, 0.25) 50%,
-    transparent 100%
-  );
+  background: radial-gradient(140px circle at var(--mouse-x, 50%) var(--mouse-y, 0%),
+      rgba(123, 159, 224, 0.45) 0%,
+      rgba(46, 77, 138, 0.25) 50%,
+      transparent 100%);
   opacity: 1;
 }
 
 /* Wiggle & Squiggle keyframes */
 @keyframes wiggle-squiggle {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: rotate(0deg) scale(1);
   }
+
   20% {
     transform: rotate(8deg) scale(1.12) skewX(-2deg);
   }
+
   40% {
     transform: rotate(-6deg) scale(1.08) skewX(2deg);
   }
+
   60% {
     transform: rotate(5deg) scale(1.12) skewX(-1deg);
   }
+
   80% {
     transform: rotate(-3deg) scale(1.05) skewX(1deg);
   }
@@ -1416,7 +1466,30 @@ div[class*="bg-primary"]:not(.no-hover-fill):has(svg) svg {
   animation: wiggle-squiggle 0.6s ease-in-out infinite;
 }
 
+/* Event Gallery Marquee Animations */
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
 
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
 
-
-
+@layer utilities {
+  .animate-marquee-left {
+    animation: marquee-left 50s linear infinite;
+  }
+  .animate-marquee-right {
+    animation: marquee-right 50s linear infinite;
+  }
+}

@@ -42,6 +42,7 @@ const geistMono = Geist_Mono({
 // METADATA
 // ============================================================
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org"),
   title: {
     default: "JIBB — Japan India Business Bureau",
     template: "%s | JIBB",

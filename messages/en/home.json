@@ -266,5 +266,162 @@
     "countries": "Countries",
     "leaders": "Industry Leaders",
     "programs": "Innovation Programs"
+  },
+  "whoWeAre": {
+    "sectionTitle": "Who We Are",
+    "tagline": "About JIBB",
+    "aboutUs": "About Us",
+    "aboutUsDesc": "JIBB serve as a strategic bridge connecting businesses, governments, and startups across Japan and India. Our goal is to empower innovation and facilitate cross-border collaborations that drive mutual growth.",
+    "consultingTitle": "Consulting Services",
+    "consultingItems": [
+      "Landscaping",
+      "Market Sizing",
+      "Opportunity Sizing",
+      "Partner Identification",
+      "Due Diligence",
+      "Deal Structuring"
+    ],
+    "marketEntryTitle": "Market Entry & Expansion",
+    "marketEntryItems": [
+      "Go-to-Market",
+      "Virtual/On-site Office",
+      "Indian Representative",
+      "Marketing Enablement",
+      "Exhibition Support",
+      "Personalized Events/Conferences"
+    ],
+    "backOfficeTitle": "Back Office Support",
+    "backOfficeItems": [
+      "Accounting & Tax",
+      "Corporate Secretarial",
+      "Entity Setup",
+      "HR & Payroll",
+      "Compliances",
+      "M&A Support",
+      "Indian/Japanese Director Support"
+    ],
+    "ctaButton": "Become a Member",
+    "expValue": "20+",
+    "expLabel": "Years of Indo-Japanese Experience",
+    "dealsValue": "100+",
+    "dealsLabel": "Deals Facilitated",
+    "teamValue": "50+",
+    "teamLabel": "On Ground Team Members",
+    "partnershipsValue": "30+",
+    "partnershipsLabel": "Strategic Government Partnerships"
+  },
+  "sectorsPage": {
+    "title": "Bilateral Focus Sectors",
+    "subtitle": "Discover the high-growth industries driving economic synergy and joint ventures between Japan and India.",
+    "ctaTitle": "Looking to Collaborate in a Focus Sector?",
+    "ctaDesc": "Partner with JIBB to connect with pre-vetted corporate partners, academic institutions, and investment opportunities in your industry.",
+    "ctaButton": "Join the Bureau",
+    "details": {
+      "semiconductor": {
+        "title": "Electronics & Semiconductors",
+        "desc": "Supporting India's chip manufacturing push and connecting Japanese equipment makers with local FAB initiatives.",
+        "stat": "$100B Market by 2030"
+      },
+      "ev": {
+        "title": "Automotive & Electric Vehicles",
+        "desc": "Facilitating partnerships in EV battery systems, power electronics, and autonomous driving technologies.",
+        "stat": "49% CAGR in EV Adoption"
+      },
+      "renewable": {
+        "title": "Renewable Energy",
+        "desc": "Promoting collaborations in green hydrogen, solar photovoltaic cell manufacturing, and battery storage solutions.",
+        "stat": "500GW Clean Energy Goal"
+      },
+      "pharma": {
+        "title": "Pharmaceuticals",
+        "desc": "Enabling JVs in active pharmaceutical ingredients (APIs), oncology formulations, and clinical trials.",
+        "stat": "$130B Bilateral Market"
+      },
+      "infrastructure": {
+        "title": "Infrastructure & Logistics",
+        "desc": "Assisting Japanese consortiums in high-speed rail, smart city development, and industrial corridors.",
+        "stat": "100+ Smart Cities Projects"
+      },
+      "chemicals": {
+        "title": "Chemicals & Advanced Materials",
+        "desc": "Structuring joint R&D for specialty plastics, electronic chemicals, and carbon fiber composites.",
+        "stat": "12% Growth in Chemicals"
+      },
+      "electronics": {
+        "title": "Advanced Manufacturing",
+        "desc": "Connecting Japanese CNC manufacturers, robotics firms, and precision tool makers with Indian assembly lines.",
+        "stat": "Make in India Synergy"
+      },
+      "emerging": {
+        "title": "Emerging Technologies",
+        "desc": "Fostering partnerships in Artificial Intelligence, edge computing, quantum cryptography, and space-tech.",
+        "stat": "AI Innovation Hubs"
+      }
+    }
+  },
+  "eventsPage": {
+    "title": "Bilateral Events & Delegations",
+    "subtitle": "Discover conferences, networking meets, trade missions, and G2B/B2B matchmaking forums.",
+    "upcomingTitle": "Upcoming Events",
+    "pastTitle": "Past Delegations & Summits",
+    "registerTitle": "Register for an Event",
+    "registerSubtitle": "Submit your details to secure a seat or join a trade delegation.",
+    "fields": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "company": "Company Name",
+      "event": "Select Event",
+      "message": "Message / Special Requests",
+      "submit": "Register Now",
+      "submitting": "Submitting...",
+      "success": "Registration submitted successfully! We will get in touch with you."
+    },
+    "list": {
+      "semiconductor": {
+        "title": "Japan-India Semiconductor Summit 2026",
+        "date": "July 15, 2026",
+        "loc": "Tokyo, Japan",
+        "desc": "Bilateral meet on semiconductor supply chain, featuring key government officials and semiconductor executives from India and Japan."
+      },
+      "cleanEnergy": {
+        "title": "Bilateral Clean Energy & EV Delegation",
+        "date": "September 8, 2026",
+        "loc": "Noida & Delhi NCR, India",
+        "desc": "Trade delegation focusing on electric vehicles, smart charging grid software, and hydrogen energy solutions."
+      },
+      "startupPitch": {
+        "title": "Tokyo Startup Pitch Day & Mixer",
+        "date": "November 12, 2026",
+        "loc": "Tokyo, Japan",
+        "desc": "Connecting early-stage Noida hardware/software startups with Japanese venture capital and corporate buyers."
+      },
+      "evTech2025": {
+        "title": "Noida EV Tech Meet 2025",
+        "date": "December 5, 2025",
+        "loc": "Noida, India",
+        "desc": "Brought together 25 Japanese automotive suppliers with Indian EV software startups."
+      }
+    },
+    "gallery": {
+      "title": "Memories of Bilateral Collaboration",
+      "subtitle": "A glimpse into our past business matchmaking sessions, delegation visits, and tech summits.",
+      "img1": { "title": "Joint Tech Summit", "desc": "Leading tech giants discussing cross-border SaaS opportunities." },
+      "img2": { "title": "MoU Signing Ceremony", "desc": "Formalizing bilateral research partnerships in deep-tech." },
+      "img3": { "title": "Executive Roundtable", "desc": "Exploring next-generation clean energy distribution networks." },
+      "img4": { "title": "Semiconductor Forum", "desc": "Delegates align on supply chain resiliency and local fab partnerships." },
+      "img5": { "title": "AI & Innovation Pitch", "desc": "Startups showcasing generative AI tools to Japanese corporate VC." },
+      "img6": { "title": "EV Battery Alliance Meeting", "desc": "Collaborative research on lithium-ion and solid-state alternatives." },
+      "img7": { "title": "Industrial Corridor Tour", "desc": "Delegates visiting smart manufacturing facilities in Noida." },
+      "img8": { "title": "Bilateral Trade Dialogue", "desc": "High-level policy discussion on easing capital flow and talent exchange." },
+      "img9": { "title": "Startup Incubation Launch", "desc": "Inaugurating the joint incubation facility in Tokyo." },
+      "img10": { "title": "B2B Matchmaking Mixer", "desc": "Nurturing relationships between suppliers and buyers." },
+      "img11": { "title": "Global Trade Pavilion", "desc": "Showcasing local craft and tech integrations to global buyers." },
+      "img12": { "title": "Smart Manufacturing Workshop", "desc": "Hands-on learning session on automated assembly line software." },
+      "img13": { "title": "Renewable Energy Panel", "desc": "Pioneering hydrogen energy systems and solar grids." },
+      "img14": { "title": "Academic Exchange Signing", "desc": "Fostering university-level joint-degrees and internships." },
+      "img15": { "title": "Hardware Showcase", "desc": "Displaying edge-computing prototypes designed in India." },
+      "img16": { "title": "Ministerial Welcome", "desc": "Warm reception for the visiting trade delegation." },
+      "img17": { "title": "JIBB Annual Reception", "desc": "Celebrating successful years of partnership." }
+    }
   }
 }

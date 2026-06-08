@@ -65,8 +65,7 @@ const navItems: NavItem[] = [
       { labelKey: "aboutMenu.vision", href: "/about/vision-mission", descKey: "aboutMenu.visionDesc", icon: Eye },
       { labelKey: "aboutMenu.leadership", href: "/about/leadership", descKey: "aboutMenu.leadershipDesc", icon: Users },
       { labelKey: "aboutMenu.approach", href: "/about/our-approach", descKey: "aboutMenu.approachDesc", icon: Compass },
-      { labelKey: "aboutMenu.ecosystem", href: "/about/ecosystem", descKey: "aboutMenu.ecosystemDesc", icon: Globe },
-      { labelKey: "aboutMenu.partnerships", href: "/about/global-partnerships", descKey: "aboutMenu.partnershipsDesc", icon: Handshake },
+      { labelKey: "nav.careers", href: "/careers", descKey: "careersMenu.desc", icon: Briefcase },
     ],
   },
   {
@@ -76,11 +75,9 @@ const navItems: NavItem[] = [
     megaMenu: [
       { labelKey: "servicesMenu.marketEntry", href: "/services/market-entry", descKey: "servicesMenu.marketEntryDesc", icon: MapPin },
       { labelKey: "servicesMenu.partnership", href: "/services/partnership-facilitation", descKey: "servicesMenu.partnershipDesc", icon: Handshake },
-      { labelKey: "servicesMenu.localization", href: "/services/localization-support", descKey: "servicesMenu.localizationDesc", icon: Globe },
+      { labelKey: "servicesMenu.coInnovation", href: "/services/co-innovation-collaboration", descKey: "servicesMenu.coInnovationDesc", icon: Lightbulb },
       { labelKey: "servicesMenu.investment", href: "/services/investment-support", descKey: "servicesMenu.investmentDesc", icon: DollarSign },
-      { labelKey: "servicesMenu.jointVentures", href: "/services/joint-ventures", descKey: "servicesMenu.jointVenturesDesc", icon: Landmark },
-      { labelKey: "servicesMenu.consulting", href: "/services/innovation-consulting", descKey: "servicesMenu.consultingDesc", icon: Lightbulb },
-      { labelKey: "servicesMenu.research", href: "/services/research-insights", descKey: "servicesMenu.researchDesc", icon: TrendingUp },
+      { labelKey: "servicesMenu.diaspora", href: "/services/diaspora-networking", descKey: "servicesMenu.diasporaDesc", icon: Globe },
     ],
   },
   {
@@ -91,7 +88,6 @@ const navItems: NavItem[] = [
       { labelKey: "hubMenu.coe", href: "/innovation-hub/center-of-excellence", descKey: "hubMenu.coeDesc", icon: Trophy },
       { labelKey: "hubMenu.labs", href: "/innovation-hub/laboratories", descKey: "hubMenu.labsDesc", icon: FlaskConical },
       { labelKey: "hubMenu.incubation", href: "/innovation-hub/startup-incubation", descKey: "hubMenu.incubationDesc", icon: Lightbulb },
-      { labelKey: "hubMenu.research", href: "/innovation-hub/research-programs", descKey: "hubMenu.researchDesc", icon: Microscope },
       { labelKey: "hubMenu.partners", href: "/innovation-hub/partner-institutions", descKey: "hubMenu.partnersDesc", icon: GraduationCap },
       { labelKey: "hubMenu.challenges", href: "/innovation-hub/innovation-challenges", descKey: "hubMenu.challengesDesc", icon: BookOpen },
     ],
@@ -112,8 +108,6 @@ const navItems: NavItem[] = [
     align: "right",
     megaMenu: [
       { labelKey: "resourcesMenu.insights", href: "/resources/insights", descKey: "resourcesMenu.insightsDesc", icon: TrendingUp },
-      { labelKey: "resourcesMenu.blog", href: "/resources/blog", descKey: "resourcesMenu.blogDesc", icon: Newspaper },
-      { labelKey: "nav.careers", href: "/careers", descKey: "careersMenu.desc", icon: Users },
       { labelKey: "resourcesMenu.caseStudies", href: "/resources/case-studies", descKey: "resourcesMenu.caseStudiesDesc", icon: BookMarked },
       { labelKey: "resourcesMenu.leadership", href: "/resources/leadership-thoughts", descKey: "resourcesMenu.leadershipDesc", icon: Quote },
       { labelKey: "resourcesMenu.newsletter", href: "/resources/newsletter", descKey: "resourcesMenu.newsletterDesc", icon: Mail },
@@ -203,7 +197,7 @@ function MobileDrawer({
   // Close drawer on route change
   useEffect(() => {
     onClose();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   // Prevent body scroll when open
@@ -481,13 +475,13 @@ export function Navbar() {
       >
         <div className="section-container">
           <div className="flex items-center justify-between h-16 lg:h-18">
-            
+
             {/* Brand Logo */}
             <Link href="/" className="flex items-center gap-2 shrink-0 select-none">
-              <img 
-                src="/jibb-logo.svg" 
-                alt="JIBB Logo" 
-                className="w-auto h-8 lg:h-10 object-contain transition-transform duration-200 hover:scale-105 dark:brightness-0 dark:invert" 
+              <img
+                src="/jibb-logo.svg"
+                alt="JIBB Logo"
+                className="w-auto h-8 lg:h-10 object-contain transition-transform duration-200 hover:scale-105 dark:brightness-0 dark:invert"
               />
             </Link>
 
@@ -547,7 +541,7 @@ export function Navbar() {
 
             {/* Right Side Actions */}
             <div className="flex items-center gap-2 shrink-0">
-              
+
               {/* Language Selector (Desktop) */}
               <div className="hidden lg:block">
                 <LanguageSwitcher
@@ -589,7 +583,7 @@ export function Navbar() {
                 <Menu className="size-5" />
               </button>
             </div>
-            
+
           </div>
         </div>
       </header>

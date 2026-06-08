@@ -26,29 +26,77 @@
       "step3Title": "Delegation Meets & Summits",
       "step3Desc": "Access to exclusive bilateral buyer-seller meets and corporate summits."
     },
-    "localization": {
-      "title": "Localization Support",
-      "subtitle": "Adapting strategies to fit local business customs and consumer needs.",
-      "para1": "Bilateral trade requires deep alignment. We help companies translate and adapt their products, services, and corporate communications to fit the distinct cultural landscapes of both nations.",
-      "para2": "From language translations to cultural sensitivity workshops and targeted local PR campaigns, we build a seamless bridge for your team.",
-      "step1Title": "Cultural Alignment & Training",
-      "step1Desc": "Bilingual workshops to align corporate expectations and overcome working culture divides.",
-      "step2Title": "Language Translation Services",
-      "step2Desc": "Technical, legal, and conversational translation by native professional translators.",
-      "step3Title": "Local Branding & PR Campaigns",
-      "step3Desc": "Strategic marketing tailored for local consumers and positive media relations."
+    "coInnovation": {
+      "title": "Co-Innovation Collaboration",
+      "subtitle": "Facilitating joint R&D and technological breakthroughs.",
+      "para1": "We actively facilitate joint projects between Indian and Japanese firms. By bringing diverse minds together, we help you share resources, reduce development costs, and create groundbreaking products for the global market.",
+      "para2": "Our co-innovation framework covers everything from initial technology scouting and intellectual property agreements to shared lab facilities in our Innovation Hub.",
+      "step1Title": "Technology Scouting",
+      "step1Desc": "Identifying complementary technological capabilities across borders.",
+      "step2Title": "Joint R&D Agreements",
+      "step2Desc": "Structuring IP sharing, research funding, and technical milestones.",
+      "step3Title": "Product Commercialization",
+      "step3Desc": "Taking joint innovations from the lab directly to global markets."
     },
     "investment": {
-      "title": "Investment Support",
+      "title": "Investment Support & Joint Ventures",
       "subtitle": "Securing capital channels and unlocking bilateral incentives.",
       "para1": "JIBB assists corporations and startups in navigating funding schemes, identifying tax benefits, and connecting with leading institutional investors.",
-      "para2": "We help you tap into bilateral investment corridors, secure government incentives (such as India's PLI schemes), and pitch effectively to cross-border VCs.",
+      "para2": "We help you tap into bilateral investment corridors, secure government incentives (such as India's PLI schemes), and structure high-value joint ventures.",
       "step1Title": "VC & Angel Network Access",
       "step1Desc": "Pitching platforms connecting high-potential startups to Japanese VCs and Indian angel syndicates.",
       "step2Title": "Government Incentives Support",
       "step2Desc": "Navigating capital subsidies, tax holidays, and production-linked incentives (PLI).",
-      "step3Title": "Transaction Advisory",
-      "step3Desc": "Financial due diligence, bilateral asset valuations, and capital transfer navigation."
+      "step3Title": "Joint Venture Structuring",
+      "step3Desc": "Financial due diligence, structuring equitable bilateral collaborations, and capital transfer navigation."
+    },
+    "diaspora": {
+      "title": "Diaspora Networking",
+      "subtitle": "Connecting the Indian diaspora with vibrant Japanese business opportunities.",
+      "para1": "We organize exclusive networking events to connect the Indian diaspora with vibrant Japanese business opportunities. These clubs foster mutual understanding and create strong, personal bonds that translate into professional success.",
+      "para2": "By leveraging the deep cultural and professional roots of the diaspora, we create a supportive ecosystem that accelerates cross-border integration.",
+      "step1Title": "Exclusive Diaspora Events",
+      "step1Desc": "Curated networking dinners, cultural mixers, and business panels.",
+      "step2Title": "Mentorship Programs",
+      "step2Desc": "Connecting established diaspora leaders with newcomers and startups.",
+      "step3Title": "Business Integration",
+      "step3Desc": "Providing resources and connections to help the diaspora thrive in the local business ecosystem."
+    },
+    "howWeWork": {
+      "title": "How We Work",
+      "subtitle": "A structured, three-phase operational methodology that transforms bilateral concepts into thriving corporate realities.",
+      "phase1": {
+        "title": "Phase 1: Planning",
+        "subtitle": "Market entry, feasibility, and custom blueprints",
+        "items": [
+          "Market Analysis: Addressable market, growth potential, and competitive dynamics.",
+          "Validation Visit: On-the-ground validation meets and operational site visits.",
+          "Entry Strategy: Formulating optimal organization and distribution structures.",
+          "Location Analysis: Regulatory, logistics, and resource benchmarking.",
+          "Outline Business Plan: Projecting sales, operational expenses, and profitability."
+        ]
+      },
+      "phase2": {
+        "title": "Phase 2: Project Execution",
+        "subtitle": "Incorporation, setups, and recruitment",
+        "items": [
+          "Regulatory & Statutory Approvals: Approvals and local clearance navigation.",
+          "Company Incorporation: Legal entity setup and registration.",
+          "Site & Land Selection: Sourcing, evaluating, and securing land.",
+          "Central & State Incentives: Tapping into PLI, subsidies, and tax holidays.",
+          "Project Management & Support: Sourcing vendors, warehouses, factories, and lab logistics.",
+          "Executive Search & HR: Recruitment of local engineers and directors."
+        ]
+      },
+      "phase3": {
+        "title": "Phase 3: Advisory",
+        "subtitle": "Regulatory, sales, and HR expansion consulting",
+        "items": [
+          "Compliance Updates: Policy tracking and representations to government ministries.",
+          "Sales Ramp-Up: Lead generation, marketing setup, and distributor matching.",
+          "HR & Retention: Benchmarking compensation, HR manuals, and retention policies."
+        ]
+      }
     }
   }
 }

@@ -2,6 +2,7 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/src/i18n/navigation";
 import { StoryHero } from "@/components/story/StoryHero";
 import { HowWeHelp } from "@/components/sections/HowWeHelp";
+import { WhoWeAre } from "@/components/sections/WhoWeAre";
 import { FeatOpportunities } from "@/components/sections/FeatOpportunities";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -27,6 +28,8 @@ export default async function HomePage({
       <StoryHero />
 
       {/* <LogoMarquee /> */}
+
+      <WhoWeAre />
 
       <HowWeHelp />
 
@@ -90,7 +93,7 @@ export default async function HomePage({
               >
                 {/* Hover glow */}
                 <div aria-hidden="true" className={`absolute inset-0 rounded-3xl blur-3xl pointer-events-none transition-colors duration-300 opacity-0 group-hover:opacity-100 ${pillar.glowClass}`} />
-                
+
                 <div>
                   <div className={`mb-6 p-4 rounded-2xl ${pillar.iconBg} inline-flex transition-transform duration-300 group-hover:scale-110`}>
                     {pillar.icon}
@@ -102,7 +105,7 @@ export default async function HomePage({
                     {pillar.desc}
                   </p>
                 </div>
-                
+
                 <div className="pt-2">
                   <span className="text-primary font-medium text-sm group-hover:text-accent transition-colors flex items-center gap-1.5 w-fit">
                     <span>{t("whatWeDo.learnMore")}</span>
@@ -128,7 +131,7 @@ export default async function HomePage({
 
         <div className="section-container relative z-10 max-w-7xl">
           <div className="text-center space-y-4 mb-16">
-             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10 backdrop-blur-md">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10 backdrop-blur-md">
               <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary dark:text-primary-foreground">
                 Target Industries
               </span>
@@ -139,6 +142,31 @@ export default async function HomePage({
             <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               {t("sectors.sectionSubtitle")}
             </p>
+
+            {/* Bilateral Policy & CAGR Market Context Banner */}
+            <div className="mt-8 max-w-4xl mx-auto p-6 rounded-2xl bg-gradient-to-r from-jibb-orange/10 via-jibb-indigo/5 to-jibb-sakura/10 border border-border/40 backdrop-blur-sm text-left shadow-sm flex flex-col md:flex-row items-center gap-6">
+              <div className="space-y-2 flex-grow">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-jibb-orange/15 text-jibb-orange text-[10px] font-extrabold uppercase tracking-wider">
+                  Strategic Frameworks
+                </span>
+                <h4 className="text-sm md:text-base font-extrabold text-foreground">
+                  China+1 Strategy, Atmanirbhar India, &amp; Make in India
+                </h4>
+                <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+                  India's semiconductor market is projected to reach <strong className="text-foreground font-bold">$100+ Billion by 2030</strong> with a <strong className="text-foreground font-bold">16% CAGR</strong>, while the automotive component industry has crossed <strong className="text-foreground font-bold">$51.5 Billion</strong>.
+                </p>
+              </div>
+              <div className="flex md:flex-col gap-4 shrink-0 justify-center w-full md:w-auto text-center border-t md:border-t-0 md:border-l border-border/40 pt-4 md:pt-0 md:pl-6">
+                <div>
+                  <div className="text-2xl font-black text-jibb-orange">$100B+</div>
+                  <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">Semiconductors (2030)</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-black text-jibb-indigo">16%</div>
+                  <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">Projected CAGR</div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <ScrollReveal staggerChildren={0.08} className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -195,7 +223,7 @@ export default async function HomePage({
 
           {/* Bento Grid containing the 4 pillars with detailed descriptions */}
           <ScrollReveal staggerChildren={0.12} scale={0.96} className="grid md:grid-cols-3 gap-6">
-            
+
             {/* Card 1: Industry (col-span-2) */}
             <div className="md:col-span-2 group relative rounded-3xl p-8 bg-card dark:bg-card/45 border border-border/50 hover:border-blue-500/20 shadow-sm hover:shadow-md transition-all duration-300">
               <div className="mb-6 transition-transform duration-300 group-hover:scale-110 p-4 rounded-2xl bg-blue-500/10 dark:bg-blue-500/20 inline-flex">
@@ -222,7 +250,7 @@ export default async function HomePage({
                 </li>
               </ul>
             </div>
-            
+
             {/* Card 2: Experts (col-span-1) */}
             <div className="group relative rounded-3xl p-8 bg-card dark:bg-card/45 border border-border/50 hover:border-orange-500/20 shadow-sm hover:shadow-md transition-all duration-300">
               <div className="mb-6 transition-transform duration-300 group-hover:scale-110 p-4 rounded-2xl bg-orange-500/10 dark:bg-orange-500/20 inline-flex">
@@ -297,7 +325,7 @@ export default async function HomePage({
                 </li>
               </ul>
             </div>
-            
+
           </ScrollReveal>
 
           <div className="text-center mt-12">
@@ -386,28 +414,27 @@ export default async function HomePage({
             ].map((plan) => (
               <div
                 key={plan.tier}
-                className={`relative rounded-3xl p-6 text-left border transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between min-h-[220px] ${
-                  plan.recommended
-                    ? "bg-card text-foreground border-emerald-500 dark:border-emerald-400 shadow-lg scale-105 z-10"
-                    : "bg-card text-foreground border-border/50 hover:shadow-lg backdrop-blur-sm"
-                } ${plan.colorClass}`}
+                className={`relative rounded-3xl p-6 text-left border transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between min-h-[220px] ${plan.recommended
+                  ? "bg-card text-foreground border-emerald-500 dark:border-emerald-400 shadow-lg scale-105 z-10"
+                  : "bg-card text-foreground border-border/50 hover:shadow-lg backdrop-blur-sm"
+                  } ${plan.colorClass}`}
               >
                 {plan.recommended && (
-                  <div className="absolute -top-3 left-6 bg-emerald-500 text-white text-[9px] uppercase font-bold tracking-wider px-3.5 py-1 rounded-full shadow-sm whitespace-nowrap">
+                  <div className="absolute -top-3 left-6 bg-emerald-500 text-white text-[11px] uppercase font-bold tracking-wider px-3.5 py-1 rounded-full shadow-sm whitespace-nowrap">
                     Popular Choice
                   </div>
                 )}
-                <div className="space-y-2 flex-grow">
-                  <span className={`inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${plan.badge}`}>
+                <div className="space-y-3 flex-grow">
+                  <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${plan.badge}`}>
                     {plan.tier}
                   </span>
-                  <p className="text-xs text-muted-foreground mt-2 font-medium">
+                  <p className="text-sm text-muted-foreground mt-2 font-semibold">
                     {plan.desc}
                   </p>
-                  
-                  <ul className="mt-4 space-y-2 text-[11px] text-muted-foreground border-t border-border/30 pt-3">
+
+                  <ul className="mt-4 space-y-2 text-xs text-muted-foreground border-t border-border/30 pt-3">
                     {plan.features.map((feat) => (
-                      <li key={feat} className="flex items-center gap-1.5">
+                      <li key={feat} className="flex items-center gap-1.5 font-medium">
                         <span className="text-emerald-500 font-bold">✓</span> {feat}
                       </li>
                     ))}

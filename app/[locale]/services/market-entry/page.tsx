@@ -49,7 +49,7 @@ export default async function MarketEntryPage({
       {/* ============================================================
           CINEMATIC BANNER
           ============================================================ */}
-      <PageHero className="py-20 lg:py-28">
+      <PageHero className="py-20 lg:py-28" bgText="ENTRY">
         <div className="section-container relative z-10 text-left max-w-4xl space-y-6">
           <Link href="/services" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase text-jibb-orange hover:text-white transition-colors select-none">
             <ArrowLeft className="size-3.5" /> {t("common.back")} {t("nav.services")}

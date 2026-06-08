@@ -1,6 +1,6 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/src/i18n/navigation";
-import { Globe, ArrowLeft, ArrowRight, ShieldCheck, Compass, Lightbulb, GraduationCap } from "lucide-react";
+import { Lightbulb, ArrowLeft, ArrowRight } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 import { Button } from "@/components/ui/button";
 
@@ -12,12 +12,12 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
   return {
-    title: "Localization Support",
+    title: "Co-Innovation Collaboration",
     description: t("description"),
   };
 }
 
-export default async function LocalizationSupportPage({
+export default async function CoInnovationPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
@@ -29,69 +29,63 @@ export default async function LocalizationSupportPage({
   const steps = [
     {
       num: "01",
-      title: t("servicesPage.localization.step1Title"),
-      desc: t("servicesPage.localization.step1Desc"),
+      title: t("servicesPage.coInnovation.step1Title"),
+      desc: t("servicesPage.coInnovation.step1Desc"),
     },
     {
       num: "02",
-      title: t("servicesPage.localization.step2Title"),
-      desc: t("servicesPage.localization.step2Desc"),
+      title: t("servicesPage.coInnovation.step2Title"),
+      desc: t("servicesPage.coInnovation.step2Desc"),
     },
     {
       num: "03",
-      title: t("servicesPage.localization.step3Title"),
-      desc: t("servicesPage.localization.step3Desc"),
+      title: t("servicesPage.coInnovation.step3Title"),
+      desc: t("servicesPage.coInnovation.step3Desc"),
     },
   ];
 
   return (
     <main className="flex-1 bg-background text-foreground animate-in fade-in duration-300">
-      {/* ============================================================
-          CINEMATIC BANNER
-          ============================================================ */}
-      <PageHero className="py-20 lg:py-28">
+      <PageHero className="py-20 lg:py-28" bgText="INNOVATE">
         <div className="section-container relative z-10 text-left max-w-4xl space-y-6">
           <Link href="/services" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase text-jibb-orange hover:text-white transition-colors select-none">
             <ArrowLeft className="size-3.5" /> {t("common.back")} {t("nav.services")}
           </Link>
 
           <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight">
-            {t("servicesPage.localization.title")}
+            {t("servicesPage.coInnovation.title")}
           </h1>
           
           <p className="text-sm md:text-base text-white/80 max-w-2xl leading-relaxed">
-            {t("servicesPage.localization.subtitle")}
+            {t("servicesPage.coInnovation.subtitle")}
           </p>
         </div>
       </PageHero>
 
-      {/* ============================================================
-          DETAILED COPY SECTION
-          ============================================================ */}
       <section className="py-16 md:py-24 bg-jibb-gradient-subtle border-b border-border/30">
         <div className="section-container max-w-5xl">
           <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-start">
             <div className="md:col-span-8 space-y-6 text-left">
               <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-                Bridging Cultural Working Divides
+                Groundbreaking Joint Products
               </h2>
               <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-                {t("servicesPage.localization.para1")}
+                {t("servicesPage.coInnovation.para1")}
               </p>
               <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-                {t("servicesPage.localization.para2")}
+                {t("servicesPage.coInnovation.para2")}
               </p>
             </div>
 
             <div className="md:col-span-4 flex justify-center">
               <div className="relative w-full max-w-xs rounded-2xl p-6 bg-card border border-border shadow-jibb flex flex-col gap-4 text-left overflow-hidden">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
-                <h3 className="text-xs font-bold text-foreground tracking-tight uppercase">Support Capabilities</h3>
+                <h3 className="text-xs font-bold text-foreground tracking-tight uppercase">Innovation Areas</h3>
                 <ul className="space-y-2 text-xs text-muted-foreground">
-                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> Technical Spec Translations</li>
-                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> Bilateral Cultural Workshops</li>
-                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> Local Marketing and Brand Assets</li>
-                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> Localized Media and PR relations</li>
+                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> AI & Robotics</li>
+                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> EV Powertrains</li>
+                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> Sustainable Tech</li>
+                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> Advanced Materials</li>
                 </ul>
               </div>
             </div>
@@ -99,14 +93,11 @@ export default async function LocalizationSupportPage({
         </div>
       </section>
 
-      {/* ============================================================
-          STEP-BY-STEP SERVICE PATHWAY
-          ============================================================ */}
       <section className="py-20 md:py-28 bg-background">
         <div className="section-container max-w-5xl text-center space-y-16">
           <div className="space-y-4">
             <h2 className="text-3xl font-extrabold text-foreground tracking-tight">
-              Localization Deliverables
+              Our Collaboration Process
             </h2>
             <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
           </div>
@@ -131,22 +122,19 @@ export default async function LocalizationSupportPage({
         </div>
       </section>
 
-      {/* ============================================================
-          CTA BANNER
-          ============================================================ */}
       <section className="py-16 bg-jibb-gradient text-white relative overflow-hidden">
         <div aria-hidden="true" className="absolute -bottom-40 -left-40 w-96 h-96 bg-jibb-orange/10 rounded-full blur-3xl" />
         <div className="section-container relative z-10 text-center max-w-3xl space-y-6">
           <h2 className="text-3xl md:text-4xl font-bold">
-            Align Your Teams and Products
+            Accelerate Your Tech Transfer
           </h2>
           <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-xl mx-auto">
-            Become a corporate member today to unlock expert language alignments, professional technical translations, and local branding resources.
+            Become a corporate member to access our Innovation Hub, co-develop IP, and source new technologies.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
             <Link href="/membership">
               <Button variant="accent" size="lg" className="w-full sm:w-auto font-bold gap-1.5 shadow-lg">
-                {t("membership.cta")} <ArrowRight className="size-4" />
+                Become a Member <ArrowRight className="size-4" />
               </Button>
             </Link>
             <Link href="/contact">

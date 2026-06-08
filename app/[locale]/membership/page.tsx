@@ -9,10 +9,12 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { TestimonialCarousel } from "@/components/sections/TestimonialCarousel";
 import { FeatureComparison } from "@/components/sections/FeatureComparison";
+import { ComparisonTable } from "@/components/sections/ComparisonTable";
+import { MemberBenefits } from "@/components/sections/MemberBenefits";
 import { motion } from "framer-motion";
-import { 
-  Users, Award, ShieldCheck, Calendar, Clock, Globe, ArrowRight, CheckCircle, 
-  MapPin, ClipboardList, Lightbulb, Sparkles, Server, Laptop 
+import {
+  Users, Award, ShieldCheck, Calendar, Clock, Globe, ArrowRight, CheckCircle,
+  MapPin, ClipboardList, Lightbulb, Sparkles, Server, Laptop
 } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 
@@ -93,7 +95,7 @@ export default function MembershipPage() {
       {/* ============================================================
           CINEMATIC HERO
           ============================================================ */}
-      <PageHero className="py-20 lg:py-28">
+      <PageHero className="py-20 lg:py-28" bgText="MEMBERS">
         <div className="section-container relative z-10 text-center max-w-4xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
@@ -107,7 +109,7 @@ export default function MembershipPage() {
             className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight"
             immediate
           />
-          
+
           <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
             {t("subtitle")}
           </p>
@@ -126,7 +128,7 @@ export default function MembershipPage() {
           MEMBERSHIP PLANS TIERS
           ============================================================ */}
       <section className="py-20 md:py-28 bg-jibb-gradient-subtle border-b border-border/30">
-        <div className="section-container max-w-7xl mx-auto px-4 text-center space-y-16">
+        <div className="section-container max-w-[96rem] mx-auto px-4 text-center space-y-16">
           <div className="space-y-4">
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
               Select Your Membership Plan
@@ -295,6 +297,10 @@ export default function MembershipPage() {
         </div>
       </section>
 
+      <MemberBenefits />
+
+      <ComparisonTable />
+
       <FeatureComparison />
 
       <TestimonialCarousel />
@@ -340,11 +346,10 @@ export default function MembershipPage() {
               <button
                 type="button"
                 onClick={() => { setActiveTab("calendly"); setSelectedDate(null); setSelectedTime(null); }}
-                className={`relative flex-1 py-4 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
-                  activeTab === "calendly" 
-                    ? "bg-card text-jibb-orange" 
+                className={`relative flex-1 py-4 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${activeTab === "calendly"
+                    ? "bg-card text-jibb-orange"
                     : "text-muted-foreground hover:bg-muted/65 hover:text-foreground"
-                }`}
+                  }`}
               >
                 <Laptop className="size-4" />
                 {t("calendlyTab")}
@@ -359,11 +364,10 @@ export default function MembershipPage() {
               <button
                 type="button"
                 onClick={() => { setActiveTab("bookings"); setSelectedDate(null); setSelectedTime(null); }}
-                className={`relative flex-1 py-4 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
-                  activeTab === "bookings" 
-                    ? "bg-card text-jibb-orange" 
+                className={`relative flex-1 py-4 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${activeTab === "bookings"
+                    ? "bg-card text-jibb-orange"
                     : "text-muted-foreground hover:bg-muted/65 hover:text-foreground"
-                }`}
+                  }`}
               >
                 <Server className="size-4" />
                 {t("bookingsTab")}
@@ -380,7 +384,7 @@ export default function MembershipPage() {
             {/* Scheduler Workspace Grid */}
             <form onSubmit={handleSubmit} className={`p-6 sm:p-8 flex-1 flex flex-col justify-between gap-8 ${shouldShake ? "animate-shake" : ""}`}>
               <div className="grid md:grid-cols-2 gap-8 items-start">
-                
+
                 {/* Column 1: Date & Time Picker */}
                 <div className="space-y-6 text-left">
                   <div className="space-y-3">
@@ -395,11 +399,10 @@ export default function MembershipPage() {
                           key={dt.value}
                           type="button"
                           onClick={() => handleDateSelect(dt.value)}
-                          className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all ${
-                            selectedDate === dt.value
+                          className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all ${selectedDate === dt.value
                               ? "bg-primary text-primary-foreground border-primary shadow-md font-bold"
                               : "bg-card border-border/60 text-foreground/80 hover:bg-muted"
-                          }`}
+                            }`}
                         >
                           {dt.label}
                         </motion.button>
@@ -421,11 +424,10 @@ export default function MembershipPage() {
                             key={tm}
                             type="button"
                             onClick={() => handleTimeSelect(tm)}
-                            className={`px-4 py-2.5 rounded-xl border text-xs font-semibold transition-all ${
-                              selectedTime === tm
+                            className={`px-4 py-2.5 rounded-xl border text-xs font-semibold transition-all ${selectedTime === tm
                                 ? "bg-jibb-orange text-white border-jibb-orange shadow-md font-bold"
                                 : "bg-card border-border/60 text-foreground/80 hover:bg-muted"
-                            }`}
+                              }`}
                           >
                             {tm}
                           </motion.button>
@@ -441,7 +443,7 @@ export default function MembershipPage() {
                   <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">
                     3. {t("bookingDetailsTitle")}
                   </label>
-                  
+
                   {/* Name */}
                   <div className="space-y-1.5">
                     <Input
@@ -452,9 +454,8 @@ export default function MembershipPage() {
                         setForm(prev => ({ ...prev, name: e.target.value }));
                         if (errors.name) setErrors(prev => { const c = { ...prev }; delete c.name; return c; });
                       }}
-                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
-                        errors.name ? "border-red-500 focus-visible:ring-red-500" : ""
-                      }`}
+                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${errors.name ? "border-red-500 focus-visible:ring-red-500" : ""
+                        }`}
                     />
                     {errors.name && <span className="text-[10px] text-red-500 font-semibold">{errors.name}</span>}
                   </div>
@@ -469,9 +470,8 @@ export default function MembershipPage() {
                         setForm(prev => ({ ...prev, email: e.target.value }));
                         if (errors.email) setErrors(prev => { const c = { ...prev }; delete c.email; return c; });
                       }}
-                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
-                        errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
-                      }`}
+                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
+                        }`}
                     />
                     {errors.email && <span className="text-[10px] text-red-500 font-semibold">{errors.email}</span>}
                   </div>

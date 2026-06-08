@@ -166,7 +166,7 @@ export default async function InsightDetailPage({ params }: PageProps) {
 
       {/* CONTENT */}
       <section className="py-12 bg-card">
-        <div className="section-container max-w-6xl space-y-12">
+        <div className="section-container space-y-12">
           {/* Featured Image */}
           <div className="relative rounded-3xl overflow-hidden max-h-[70vh] flex justify-center bg-transparent">
             {/* eslint-disable-next-line @next/next/no-img-element */}

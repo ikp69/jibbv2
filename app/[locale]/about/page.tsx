@@ -8,6 +8,7 @@ import { Timeline } from "@/components/sections/Timeline";
 import { LogoMarquee } from "@/components/sections/LogoMarquee";
 import { AboutFAQ } from "@/components/sections/AboutFAQ";
 import { PageHero } from "@/components/sections/PageHero";
+import { LeadershipCarousel } from "@/components/sections/LeadershipCarousel";
 import {
   Building2,
   Globe,
@@ -25,43 +26,6 @@ import {
   Briefcase,
 } from "lucide-react";
 
-/* ============================================================
-   LEADERSHIP DATA
-   ============================================================ */
-const LEADERSHIP = [
-  {
-    name: "Hitesh Kumar Sharma",
-    role: "Founder & Director",
-    location: "Tokyo, Japan",
-    bio: "Visionary leader with deep expertise in Japan-India bilateral trade, industrial policy, and cross-border business development.",
-    linkedin: "#",
-    colorAccent: "jibb-indigo",
-  },
-  {
-    name: "Takeshi Nakamura",
-    role: "Co-Director, Japan Operations",
-    location: "Tokyo, Japan",
-    bio: "Seasoned industry strategist specializing in Japanese manufacturing ecosystems and international partnership facilitation.",
-    linkedin: "#",
-    colorAccent: "jibb-orange",
-  },
-  {
-    name: "Priya Deshmukh",
-    role: "Head of Innovation Hub",
-    location: "Noida, India",
-    bio: "Technology entrepreneur driving the Innovation Hub's R&D programs, startup incubation, and co-innovation projects across sectors.",
-    linkedin: "#",
-    colorAccent: "jibb-sakura",
-  },
-  {
-    name: "Kenji Watanabe",
-    role: "Head of Corporate Relations",
-    location: "Tokyo, Japan",
-    bio: "Expert in building sustainable business relationships between Japanese corporations and Indian enterprises across key sectors.",
-    linkedin: "#",
-    colorAccent: "jibb-indigo",
-  },
-];
 
 const ADVISORS = [
   {
@@ -117,7 +81,7 @@ export default async function AboutPage({
       {/* ============================================================
           HERO — "Who We Are"
           ============================================================ */}
-      <PageHero className="py-24 lg:py-32">
+      <PageHero className="py-24 lg:py-32" bgText="ABOUT">
         <div className="section-container relative z-10 text-center max-w-4xl space-y-7">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <span className="flex h-2 w-2 rounded-full bg-jibb-orange animate-soft-pulse" />
@@ -152,7 +116,7 @@ export default async function AboutPage({
           OUR STORY — Intro narrative
           ============================================================ */}
       <section className="py-20 md:py-28 bg-jibb-gradient-subtle border-b border-border/30">
-        <div className="section-container max-w-6xl">
+        <div className="section-container">
           <div className="grid md:grid-cols-12 gap-10 lg:gap-16 items-center">
             <ScrollReveal
               direction="left"
@@ -256,7 +220,7 @@ export default async function AboutPage({
           VISION & MISSION — Split layout
           ============================================================ */}
       <section className="py-20 md:py-28 bg-background border-t border-border/20">
-        <div className="section-container max-w-6xl">
+        <div className="section-container">
           <div className="text-center space-y-4 mb-16">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 backdrop-blur-md mx-auto">
               <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary">
@@ -365,83 +329,32 @@ export default async function AboutPage({
       </section>
 
       {/* ============================================================
-          LEADERSHIP TEAM — Cards
+          LEADERSHIP TEAM — Carousel
           ============================================================ */}
       <section className="py-20 md:py-28 bg-jibb-gradient-subtle border-t border-border/20">
-        <div className="section-container max-w-6xl">
+        <div className="section-container">
           <div className="text-center space-y-4 mb-16">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 backdrop-blur-md mx-auto">
               <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary">
-                The Team
+                Featured Leadership
               </span>
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight">
-              Leadership Team
+              Featured Core Team
             </h2>
             <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Driving bilateral excellence with deep cross-border expertise and an
-              unwavering commitment to partnership.
+              Meet our bilateral directors driving operations across the Tokyo-Noida axis.
             </p>
           </div>
 
-          <ScrollReveal
-            staggerChildren={0.12}
-            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            {LEADERSHIP.map((person, i) => (
-              <div
-                key={i}
-                className="group relative rounded-2xl bg-card border border-border/50 hover:border-primary/20 hover:shadow-xl transition-all duration-300 overflow-hidden"
-              >
-                {/* Color accent bar */}
-                <div
-                  className={`h-1.5 bg-${person.colorAccent} w-full`}
-                />
-
-                <div className="p-6 space-y-4">
-                  {/* Avatar placeholder */}
-                  <div className="size-16 rounded-2xl bg-primary/5 flex items-center justify-center">
-                    <Users className="size-7 text-primary/40" />
-                  </div>
-
-                  <div className="space-y-1">
-                    <h3 className="text-lg font-bold text-foreground tracking-tight">
-                      {person.name}
-                    </h3>
-                    <p className="text-xs font-semibold text-primary uppercase tracking-wider">
-                      {person.role}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <MapPin className="size-3.5" />
-                    <span>{person.location}</span>
-                  </div>
-
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {person.bio}
-                  </p>
-
-                  <a
-                    href={person.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-jibb-orange transition-colors duration-200"
-                  >
-                    <ExternalLink className="size-3.5" />
-                    <span>LinkedIn</span>
-                  </a>
-                </div>
-              </div>
-            ))}
-          </ScrollReveal>
+          <LeadershipCarousel />
         </div>
       </section>
 
       {/* ============================================================
           ADVISORY BOARD — Cards
           ============================================================ */}
-      <section className="py-20 md:py-28 bg-background border-t border-border/20">
+      {/* <section className="py-20 md:py-28 bg-background border-t border-border/20">
         <div className="section-container max-w-5xl">
           <div className="text-center space-y-4 mb-16">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 backdrop-blur-md mx-auto">
@@ -486,7 +399,7 @@ export default async function AboutPage({
             })}
           </ScrollReveal>
         </div>
-      </section>
+      </section> */}
 
       {/* ============================================================
           PARTNERS & SPONSORS — Logo Marquee

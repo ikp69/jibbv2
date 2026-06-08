@@ -22,5 +22,65 @@
         "desc": "Advanced labs supporting compound characterizations, active ingredient validations, and nanotechnology scaling for global distribution."
       }
     }
+  },
+  "coePage": {
+    "headline": "Bilateral Collaborative Hubs",
+    "para1": "The JIBB Center of Excellence (CoE) acts as the physical and intellectual anchor of the Tokyo–Noida industrial corridor. We bring together researchers, developers, and industry experts to design, test, and demonstrate next-generation technologies in realistic environments.",
+    "para2": "By coordinating with leading universities, government departments, and multinational corporations, JIBB's CoE ensures that emerging intellectual property is quickly industrialized and compliant with both Indian and Japanese engineering standards.",
+    "focusTitle": "Strategic CoE Focus Areas",
+    "f1Title": "Advanced Semiconductor Testing",
+    "f1Desc": "Characterizing substrate wafers and validating package designs under high thermal and electric stress profiles.",
+    "f2Title": "EV Battery Pack Integration",
+    "f2Desc": "Designing and testing custom software BMS integrations on advanced lithium-ion and solid-state chemistry layouts.",
+    "f3Title": "Industrial IoT & Automation",
+    "f3Desc": "Deploying sensor-based monitoring networks and robot-joint calibration cells for smart assembly lines."
+  },
+  "laboratoriesPage": {
+    "headline": "Physical Sandboxes & Clean Rooms",
+    "para1": "Access world-class equipment and sandbox environments without geographical boundaries. JIBB's state-of-the-art laboratories are located in Minato-ku (Tokyo) and Sector 136 (Noida), allowing dual-shore teams to run simulations, tests, and stress characterizations.",
+    "para2": "All laboratories are certified to international quality standards, providing direct support for material sciences, precision mechanics, and software-to-hardware integrations.",
+    "labsTitle": "Equipped Sandboxes",
+    "l1Title": "Noida Battery Performance Suite",
+    "l1Desc": "Testing charging efficiency, cycle degradation, and temperature responses of battery modules under tropical environments.",
+    "l2Title": "Tokyo Semiconductor Packaging Suite",
+    "l2Desc": "Access to high-frequency oscilloscope arrays, wafer cutters, and microscopic structural validation instruments.",
+    "l3Title": "Shared Materials Clean Room",
+    "l3Desc": "Class 1000 clean environments designed for chemical characterizations and precision optical testing."
+  },
+  "incubationPage": {
+    "headline": "Bilateral Incubation Sandbox",
+    "para1": "We provide cross-border startups with a foundation of trust, infrastructure, and capital. The JIBB Incubation program supports early-stage hardware and software startups looking to establish footprints in the Tokyo–Noida axis.",
+    "para2": "Incubated teams gain access to dedicated workstations, prototyping labs, seed funds, and bicultural mentorship from corporate leaders in both nations.",
+    "programTitle": "Program Benefits",
+    "b1Title": "Dedicated Workspace",
+    "b1Desc": "Access physical co-working desks, private meeting rooms, and presentation halls in Noida and Tokyo.",
+    "b2Title": "Bicultural Mentorship",
+    "b2Desc": "Weekly advisory sessions with Japanese manufacturing directors and Indian software architects.",
+    "b3Title": "Direct VC Access",
+    "b3Desc": "Exclusive pitch days to NIIF, JBIC, and active corporate venture capital funds looking for bilateral synergy."
+  },
+  "partnerPage": {
+    "headline": "Ecosystem Partners & Affiliations",
+    "para1": "Our mission is enabled by a robust network of academic institutions, government bodies, and private enterprises across both Japan and India.",
+    "para2": "Through joint research programs, technology transfers, and policy coordination, our partners help us build a sustainable industrial bridge between the two largest democracies in the Indo-Pacific.",
+    "partnersTitle": "Affiliated Organizations",
+    "p1Name": "IIT Delhi (Research & Incubation)",
+    "p1Desc": "Joint research partner for electric vehicle battery algorithms and grid management systems.",
+    "p2Name": "University of Tokyo (Graduate School of Engineering)",
+    "p2Desc": "Academic exchange partner in semiconductor materials and quantum cryptography.",
+    "p3Name": "JBIC & NIIF (Funding & Incentives)",
+    "p3Desc": "Institutional backers facilitating trade corridors, credit lines, and joint digital funds.",
+    "p4Name": "METI Japan & DPIIT India",
+    "p4Desc": "Bilateral ministry oversight ensuring policy alignment and regulatory fast-tracking."
+  },
+  "challengesPage": {
+    "headline": "Bilateral Tech Challenges & Hackathons",
+    "para1": "Tackle critical industry problems sponsored by leading Japanese and Indian corporations. JIBB organizes regular innovation challenges to source cutting-edge software and hardware solutions from startups and academic teams.",
+    "para2": "Winners receive cash prizes, laboratory credits, direct proof-of-concept (PoC) opportunities with sponsor companies, and fast-tracked incubation support.",
+    "activeTitle": "Active Challenges",
+    "c1Title": "The Solid-State Battery Efficiency Challenge 2026",
+    "c1Desc": "Submit proposals for software algorithms to optimize battery management systems for next-generation solid-state batteries. Sponsored by Tokyo Auto Consortium.",
+    "c2Title": "Industrial IoT Predictive Maintenance Challenge",
+    "c2Desc": "Build sensor-fusion machine learning models to predict mechanical wear in precision CNC routers. Sponsored by Noida Robotics."
   }
 }
