@@ -32,7 +32,7 @@ export function LeadershipGrid() {
 
   // Render only the 11 leaders who have local portrait files in public/leaders
   const allKeys = [
-    "hitesh", "varun", "shigemaro", "nobuchika", "ujjawal", "pratiksha", 
+    "hitesh", "varun", "shigemaro", "nobuchika", "ujjawal", "pratiksha",
     "gyanendra", "akash", "vardaan", "mai", "aya"
   ];
 
@@ -99,11 +99,10 @@ export function LeadershipGrid() {
                 setFilter(btn.id as any);
                 setActiveKey(null); // Clear mobile detail view when switching filters
               }}
-              className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
-                filter === btn.id
-                  ? "bg-white text-gray-900 border border-gray-200/80 shadow-sm"
-                  : "text-gray-500 hover:text-gray-900"
-              }`}
+              className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${filter === btn.id
+                ? "bg-white text-gray-900 border border-gray-200/80 shadow-sm"
+                : "text-gray-500 hover:text-gray-900"
+                }`}
             >
               {btn.label}
             </button>
@@ -111,7 +110,7 @@ export function LeadershipGrid() {
         </div>
 
         {/* Responsive Grid */}
-        <ScrollReveal staggerChildren={0.05} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <ScrollReveal staggerChildren={0.05} className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {filteredMembers.map((person) => {
             const isSelected = activeKey === person.key;
             return (
@@ -132,51 +131,49 @@ export function LeadershipGrid() {
                   />
 
                   {/* Floating glassmorphic info tag at the bottom (Static View) */}
-                  <div className={`absolute inset-x-0 bottom-0 p-4 transition-all duration-500 ease-out ${isSelected ? "opacity-0 translate-y-4" : "group-hover:opacity-0 group-hover:translate-y-4"}`}>
-                    <div className="bg-white/80 backdrop-blur-md border border-white/40 shadow-lg px-4 py-4 rounded-xl text-center">
-                      <h3 className="text-base font-extrabold text-gray-900 tracking-tight leading-tight">
+                  <div className={`absolute inset-x-0 bottom-0 p-2.5 sm:p-4 transition-all duration-500 ease-out ${isSelected ? "opacity-0 translate-y-4" : "group-hover:opacity-0 group-hover:translate-y-4"}`}>
+                    <div className="bg-white/80 backdrop-blur-md border border-white/40 shadow-lg px-2.5 py-3 sm:px-4 sm:py-4 rounded-xl text-center">
+                      <h3 className="text-sm sm:text-base font-extrabold text-gray-900 tracking-tight leading-tight">
                         {person.name}
                       </h3>
-                      <p className="text-xs font-semibold text-gray-500 mt-1 leading-snug">
+                      <p className="text-[10px] sm:text-xs font-semibold text-gray-500 mt-0.5 sm:mt-1 leading-snug line-clamp-2">
                         {person.role}
                       </p>
                     </div>
                   </div>
 
                   {/* Interactive detail overlay (shows on hover for desktop, toggles on click for mobile) */}
-                  <div className={`absolute inset-0 bg-gradient-to-t from-gray-950/95 via-gray-900/80 to-gray-950/20 transition-all duration-500 flex flex-col justify-end p-6 text-white text-left ${
-                    isSelected ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto"
-                  }`}>
-                    <div className={`transition-transform duration-500 ease-out space-y-3 ${
-                      isSelected ? "translate-y-0" : "translate-y-6 group-hover:translate-y-0"
+                  <div className={`absolute inset-0 bg-gradient-to-t from-gray-950/95 via-gray-900/80 to-gray-950/20 transition-all duration-500 flex flex-col justify-end p-4 sm:p-6 text-white text-left ${isSelected ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto"
                     }`}>
+                    <div className={`transition-transform duration-500 ease-out space-y-2 sm:space-y-3 ${isSelected ? "translate-y-0" : "translate-y-6 group-hover:translate-y-0"
+                      }`}>
                       <div>
-                        <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-[#F26522] bg-[#F26522]/10 px-2.5 py-1 rounded-full border border-[#F26522]/20">
-                          <MapPin className="size-3" />
+                        <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-[#F26522] bg-[#F26522]/10 px-2.5 py-1 rounded-full border border-[#F26522]/20">
+                          <MapPin className="size-2.5 sm:size-3" />
                           {person.location}
                         </span>
                       </div>
-                      
-                      <div className="space-y-1">
-                        <h4 className="text-lg font-black text-white leading-tight tracking-tight">
+
+                      <div className="space-y-0.5 sm:space-y-1">
+                        <h4 className="text-sm sm:text-lg font-black text-white leading-tight tracking-tight">
                           {person.name}
                         </h4>
-                        <p className="text-xs font-bold text-gray-300">
+                        <p className="text-[10px] sm:text-xs font-bold text-gray-300 leading-snug">
                           {person.role}
                         </p>
                       </div>
 
-                      <p className="text-xs md:text-sm text-gray-200/90 leading-relaxed font-medium line-clamp-4">
+                      <p className="text-[10px] sm:text-xs md:text-sm text-gray-200/90 leading-relaxed font-medium line-clamp-3 sm:line-clamp-4">
                         {person.bio}
                       </p>
 
-                      <div className="pt-2 border-t border-white/10 flex items-center justify-between">
+                      <div className="pt-1.5 sm:pt-2 border-t border-white/10 flex items-center justify-between">
                         <a
                           href="#"
                           onClick={(e) => e.stopPropagation()}
-                          className="inline-flex items-center gap-1.5 text-xs font-extrabold text-white bg-white/10 hover:bg-white/20 px-3.5 py-2 rounded-xl transition-all duration-300 border border-white/10"
+                          className="inline-flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-xs font-extrabold text-white bg-white/10 hover:bg-white/20 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg sm:rounded-xl transition-all duration-300 border border-white/10"
                         >
-                          <LinkedinIcon className="size-3.5 text-sky-400" />
+                          <LinkedinIcon className="size-3 sm:size-3.5 text-sky-400" />
                           <span>LinkedIn</span>
                         </a>
                       </div>
