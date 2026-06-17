@@ -7,7 +7,6 @@ import { routing } from "@/src/i18n/routing";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
-import { PageTransitionProvider } from "@/components/providers/PageTransitionProvider";
 
 // ============================================================
 // FONTS — all loaded via next/font (no external CDN requests)
@@ -136,9 +135,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           <SmoothScrollProvider>
             <Navbar />
-            <PageTransitionProvider>
-              {children}
-            </PageTransitionProvider>
+            {children}
             <Footer />
           </SmoothScrollProvider>
         </NextIntlClientProvider>

@@ -9,109 +9,111 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
  * Page Transition Template
  *
  * Next.js `template.tsx` re-mounts on every navigation, triggering
- * the Framer Motion enter animation automatically. This provides a
- * smooth fade-in + slide-up on every page transition without needing
- * AnimatePresence exit animations (which are complex in App Router).
+ * the Framer Motion enter animation automatically. GSAP ScrollTrigger
+ * setup is deferred by 500ms so it runs after the fade-in animation
+ * finishes and the full DOM is painted — prevents blank-screen issues
+ * when navigating back to the homepage.
  */
 export default function Template({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    // Register ScrollTrigger plugin
     gsap.registerPlugin(ScrollTrigger);
 
-    // Dynamic grid overlay builder for sections
-    const sections = document.querySelectorAll("main section, main header, footer");
-    const activeScrollTriggers: any[] = [];
+    const activeScrollTriggers: gsap.core.Tween[] = [];
 
-    sections.forEach((section: any) => {
-      // Avoid modifying overlays or structures that shouldn't have layout grids (like absolute background panels)
-      if (
-        section.classList.contains("pointer-events-none") ||
-        section.id === "logo-marquee-section" ||
-        section.classList.contains("events-venue") ||
-        section.tagName === "FOOTER" && section.classList.contains("bg-grid-mesh")
-      ) {
-        return;
-      }
-
-      // Ensure position is relative/absolute/fixed so overlay positions relative to this section boundary
-      const computedStyle = window.getComputedStyle(section);
-      if (computedStyle.position === "static") {
-        section.style.position = "relative";
-      }
-
-      // Skip if already has custom section grids
-      if (section.querySelector(".section-grid-lines")) return;
-
-      // 1. Build Section Grid Lines component
-      const gridContainer = document.createElement("div");
-      gridContainer.className = "section-grid-lines";
-
-      // 2. Build 2 vertical layout alignment lines matching the left and right boundaries
-      const verticals = document.createElement("div");
-      verticals.className = "section-grid-verticals max-w-[96rem] mx-auto px-5 md:px-12 lg:px-16";
-
-      for (let i = 0; i < 2; i++) {
-        const line = document.createElement("div");
-        line.className = "section-grid-vertical-line";
-        verticals.appendChild(line);
-      }
-
-      gridContainer.appendChild(verticals);
-      
-      // Prepend to section before other child elements
-      section.insertBefore(gridContainer, section.firstChild);
-
-      // 3. Animate the glow effect when scroll enters / moves near the section
-      const enterTween = gsap.fromTo(
-        section,
-        {
-          "--section-grid-glow": 0,
-        },
-        {
-          "--section-grid-glow": 1,
-          scrollTrigger: {
-            trigger: section,
-            start: "top 85%",
-            end: "top 45%",
-            scrub: true,
-            invalidateOnRefresh: true,
-          },
-        }
-      );
-      activeScrollTriggers.push(enterTween);
-
-      const exitTween = gsap.to(section, {
-        "--section-grid-glow": 0,
-        scrollTrigger: {
-          trigger: section,
-          start: "bottom 55%",
-          end: "bottom 15%",
-          scrub: true,
-          invalidateOnRefresh: true,
-        },
-      });
-      activeScrollTriggers.push(exitTween);
-    });
-
-    // Mouse move tracker for card glow effects
+    // Mouse move tracker for card glow effects — registered immediately
     const handleMouseMove = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const group = target.closest(".group") as HTMLElement;
       if (group) {
         const rect = group.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        group.style.setProperty("--mouse-x", `${x}px`);
-        group.style.setProperty("--mouse-y", `${y}px`);
+        group.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+        group.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
       }
     };
     document.addEventListener("mousemove", handleMouseMove);
 
-    // Cleanup triggers and state on navigation
+    // Defer GSAP DOM queries until after Framer Motion's enter animation (0.45s)
+    // and any layout shifts from Lenis/ScrollTrigger.refresh() settle
+    const initTimer = setTimeout(() => {
+      const sections = document.querySelectorAll("main section, main header, footer");
+
+      sections.forEach((section: Element) => {
+        const el = section as HTMLElement;
+
+        // Skip decorative/non-content sections
+        if (
+          el.classList.contains("pointer-events-none") ||
+          el.id === "logo-marquee-section" ||
+          el.classList.contains("events-venue") ||
+          (el.tagName === "FOOTER" && el.classList.contains("bg-grid-mesh"))
+        ) {
+          return;
+        }
+
+        // Ensure position is relative so the overlay positions correctly
+        const computedStyle = window.getComputedStyle(el);
+        if (computedStyle.position === "static") {
+          el.style.position = "relative";
+        }
+
+        // Skip if grid lines already injected (prevents duplicates on hot-reload)
+        if (el.querySelector(".section-grid-lines")) return;
+
+        // Inject grid line overlay
+        const gridContainer = document.createElement("div");
+        gridContainer.className = "section-grid-lines";
+
+        const verticals = document.createElement("div");
+        verticals.className = "section-grid-verticals max-w-[96rem] mx-auto px-5 md:px-12 lg:px-16";
+
+        for (let i = 0; i < 2; i++) {
+          const line = document.createElement("div");
+          line.className = "section-grid-vertical-line";
+          verticals.appendChild(line);
+        }
+
+        gridContainer.appendChild(verticals);
+        el.insertBefore(gridContainer, el.firstChild);
+
+        // Animate glow on scroll enter
+        const enterTween = gsap.fromTo(
+          el,
+          { "--section-grid-glow": 0 },
+          {
+            "--section-grid-glow": 1,
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              end: "top 45%",
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+        activeScrollTriggers.push(enterTween);
+
+        // Animate glow on scroll exit
+        const exitTween = gsap.to(el, {
+          "--section-grid-glow": 0,
+          scrollTrigger: {
+            trigger: el,
+            start: "bottom 55%",
+            end: "bottom 15%",
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        });
+        activeScrollTriggers.push(exitTween);
+      });
+
+      ScrollTrigger.refresh();
+    }, 500);
+
     return () => {
+      clearTimeout(initTimer);
       document.removeEventListener("mousemove", handleMouseMove);
       activeScrollTriggers.forEach((t) => {
-        if (t.scrollTrigger) t.scrollTrigger.kill();
+        t.scrollTrigger?.kill();
         t.kill();
       });
     };
@@ -123,11 +125,10 @@ export default function Template({ children }: { children: React.ReactNode }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{
         duration: 0.45,
-        ease: [0.25, 0.1, 0.25, 1], // --ease-smooth
+        ease: [0.25, 0.1, 0.25, 1],
       }}
     >
       {children}
     </motion.div>
   );
 }
-
