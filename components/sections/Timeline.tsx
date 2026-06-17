@@ -26,7 +26,7 @@ const MILESTONES: Milestone[] = [
   {
     year: "2022",
     title: "Tokyo Office Founded",
-    description: "Established our primary Tokyo headquarters in Chiyoda-ku. Enrolled our first 50 corporate members representing robotics and precision hardware fields.",
+    description: "Established our primary Tokyo Office in Chiyoda-ku. Enrolled our first 50 corporate members representing robotics and precision hardware fields.",
     icon: Building,
     color: "text-blue-400",
     align: "right",
@@ -108,7 +108,7 @@ export function Timeline() {
         const dot = entry.querySelector(".timeline-dot");
         const card = entry.querySelector(".timeline-card");
         const year = entry.querySelector(".timeline-year");
-        
+
         const isLeft = entry.getAttribute("data-is-left") === "true";
         const isMobile = window.innerWidth < 768;
 
@@ -127,25 +127,25 @@ export function Timeline() {
             { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" }
           );
         }
-        
+
         if (year) {
           tl.fromTo(
             year,
-            { 
-              x: isMobile ? -20 : (isLeft ? 30 : -30), 
-              opacity: 0 
+            {
+              x: isMobile ? -20 : (isLeft ? 30 : -30),
+              opacity: 0
             },
             { x: 0, opacity: 1, duration: 0.4, ease: "power2.out" },
             "-=0.25"
           );
         }
-        
+
         if (card) {
           tl.fromTo(
             card,
-            { 
-              x: isMobile ? 20 : (isLeft ? -40 : 40), 
-              opacity: 0 
+            {
+              x: isMobile ? 20 : (isLeft ? -40 : 40),
+              opacity: 0
             },
             { x: 0, opacity: 1, duration: 0.5, ease: "power2.out" },
             "-=0.3"

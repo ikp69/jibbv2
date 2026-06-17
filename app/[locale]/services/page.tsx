@@ -7,7 +7,9 @@ import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { HorizontalScroll } from "@/components/sections/HorizontalScroll";
 import { PageHero } from "@/components/sections/PageHero";
 import { WorkProcess } from "@/components/sections/WorkProcess";
-import { MapPin, Handshake, Globe, DollarSign, Sparkles, ArrowRight, ShieldCheck, Cpu, Lightbulb } from "lucide-react";
+import {
+  MapPin, Handshake, Globe, DollarSign, Sparkles, ArrowRight, ShieldCheck, Cpu, Lightbulb,
+} from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -34,48 +36,103 @@ export default async function ServicesPage({
   const services = [
     {
       id: "market-entry",
-      href: "/services/market-entry",
       icon: <MapPin className="size-8 text-jibb-orange" />,
       title: t("servicesPage.marketEntry.title"),
       subtitle: t("servicesPage.marketEntry.subtitle"),
-      desc: t("whatWeDo.marketEntry.description"),
-      colorClass: "hover:border-jibb-orange/30 group-hover:bg-jibb-orange/5",
+      desc: t("servicesPage.marketEntry.para1"),
+      colorClass: "hover:border-jibb-orange/30",
+      bgText: "ENTRY",
+      headline: "Navigating Cross-Border Complexities",
+      para1: t("servicesPage.marketEntry.para1"),
+      para2: t("servicesPage.marketEntry.para2"),
+      sidebarTitle: "Key Focus Sectors",
+      sidebarItems: ["Semiconductors", "Advanced Manufacturing", "EV Systems & Batteries", "Clean Energy Incentives"],
+      stepsTitle: "Our Entry Roadmap",
+      steps: [
+        { num: "01", title: t("servicesPage.marketEntry.step1Title"), desc: t("servicesPage.marketEntry.step1Desc") },
+        { num: "02", title: t("servicesPage.marketEntry.step2Title"), desc: t("servicesPage.marketEntry.step2Desc") },
+        { num: "03", title: t("servicesPage.marketEntry.step3Title"), desc: t("servicesPage.marketEntry.step3Desc") },
+      ],
     },
     {
       id: "partnership-facilitation",
-      href: "/services/partnership-facilitation",
       icon: <Handshake className="size-8 text-jibb-orange" />,
       title: t("servicesPage.partnership.title"),
       subtitle: t("servicesPage.partnership.subtitle"),
-      desc: t("whatWeDo.partnership.description"),
-      colorClass: "hover:border-jibb-indigo/30 group-hover:bg-primary/5",
+      desc: t("servicesPage.partnership.para1"),
+      colorClass: "hover:border-jibb-indigo/30",
+      bgText: "PARTNERS",
+      headline: "Connecting Precision with Speed",
+      para1: t("servicesPage.partnership.para1"),
+      para2: t("servicesPage.partnership.para2"),
+      sidebarTitle: "Bilateral Matchmaking",
+      sidebarItems: ["Verified Directory Listings", "Technical Standards Vetting", "Joint Venture Structuring", "Shared R&D Agreements"],
+      stepsTitle: "Facilitation Deliverables",
+      steps: [
+        { num: "01", title: t("servicesPage.partnership.step1Title"), desc: t("servicesPage.partnership.step1Desc") },
+        { num: "02", title: t("servicesPage.partnership.step2Title"), desc: t("servicesPage.partnership.step2Desc") },
+        { num: "03", title: t("servicesPage.partnership.step3Title"), desc: t("servicesPage.partnership.step3Desc") },
+      ],
     },
     {
       id: "co-innovation-collaboration",
-      href: "/services/co-innovation-collaboration",
       icon: <Lightbulb className="size-8 text-jibb-orange" />,
       title: t("servicesPage.coInnovation.title"),
       subtitle: t("servicesPage.coInnovation.subtitle"),
-      desc: t("servicesPage.coInnovation.step1Desc"),
-      colorClass: "hover:border-jibb-sakura/30 group-hover:bg-jibb-sakura/5",
+      desc: t("servicesPage.coInnovation.para1"),
+      colorClass: "hover:border-jibb-sakura/30",
+      bgText: "INNOVATE",
+      headline: "Groundbreaking Joint Products",
+      para1: t("servicesPage.coInnovation.para1"),
+      para2: t("servicesPage.coInnovation.para2"),
+      sidebarTitle: "Innovation Areas",
+      sidebarItems: ["AI & Robotics", "EV Powertrains", "Sustainable Tech", "Advanced Materials"],
+      stepsTitle: "Our Collaboration Process",
+      steps: [
+        { num: "01", title: t("servicesPage.coInnovation.step1Title"), desc: t("servicesPage.coInnovation.step1Desc") },
+        { num: "02", title: t("servicesPage.coInnovation.step2Title"), desc: t("servicesPage.coInnovation.step2Desc") },
+        { num: "03", title: t("servicesPage.coInnovation.step3Title"), desc: t("servicesPage.coInnovation.step3Desc") },
+      ],
     },
     {
       id: "investment-support",
-      href: "/services/investment-support",
       icon: <DollarSign className="size-8 text-jibb-orange" />,
       title: t("servicesPage.investment.title"),
       subtitle: t("servicesPage.investment.subtitle"),
-      desc: t("servicesPage.investment.step1Desc"),
-      colorClass: "hover:border-amber-500/30 group-hover:bg-amber-500/5",
+      desc: t("servicesPage.investment.para1"),
+      colorClass: "hover:border-amber-500/30",
+      bgText: "INVEST",
+      headline: "Deploying Capital Channels Securely",
+      para1: t("servicesPage.investment.para1"),
+      para2: t("servicesPage.investment.para2"),
+      sidebarTitle: "Capital Facilitation",
+      sidebarItems: ["India-Japan Angel Networks", "PLI Subsidy & Regulatory Claims", "Financial Due Diligences", "Cross-Border Banking Support"],
+      stepsTitle: "Investment Advisories",
+      steps: [
+        { num: "01", title: t("servicesPage.investment.step1Title"), desc: t("servicesPage.investment.step1Desc") },
+        { num: "02", title: t("servicesPage.investment.step2Title"), desc: t("servicesPage.investment.step2Desc") },
+        { num: "03", title: t("servicesPage.investment.step3Title"), desc: t("servicesPage.investment.step3Desc") },
+      ],
     },
     {
       id: "diaspora-networking",
-      href: "/services/diaspora-networking",
       icon: <Globe className="size-8 text-jibb-orange" />,
       title: t("servicesPage.diaspora.title"),
       subtitle: t("servicesPage.diaspora.subtitle"),
-      desc: t("servicesPage.diaspora.step1Desc"),
-      colorClass: "hover:border-emerald-500/30 group-hover:bg-emerald-500/5",
+      desc: t("servicesPage.diaspora.para1"),
+      colorClass: "hover:border-emerald-500/30",
+      bgText: "NETWORK",
+      headline: "Connecting People and Opportunities",
+      para1: t("servicesPage.diaspora.para1"),
+      para2: t("servicesPage.diaspora.para2"),
+      sidebarTitle: "Networking Highlights",
+      sidebarItems: ["Cultural Mixers", "Business Panels", "Startup Mixers", "Investor Meetups"],
+      stepsTitle: "Our Networking Pathways",
+      steps: [
+        { num: "01", title: t("servicesPage.diaspora.step1Title"), desc: t("servicesPage.diaspora.step1Desc") },
+        { num: "02", title: t("servicesPage.diaspora.step2Title"), desc: t("servicesPage.diaspora.step2Desc") },
+        { num: "03", title: t("servicesPage.diaspora.step3Title"), desc: t("servicesPage.diaspora.step3Desc") },
+      ],
     },
   ];
 
@@ -114,18 +171,17 @@ export default async function ServicesPage({
       </PageHero>
 
       {/* ============================================================
-          SERVICES MAIN GRID
+          SERVICES OVERVIEW GRID — Quick navigation anchors
           ============================================================ */}
       <section className="py-20 md:py-28 bg-jibb-gradient-subtle">
         <div className="section-container max-w-5xl">
           <ScrollReveal staggerChildren={0.12} className="grid md:grid-cols-2 gap-8">
             {services.map((svc) => (
-              <Link
+              <a
                 key={svc.id}
-                href={svc.href}
+                href={`#${svc.id}`}
                 className={`group relative rounded-3xl p-8 bg-card border border-border/60 transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 flex flex-col justify-between min-h-[300px] text-left overflow-hidden ${svc.colorClass}`}
               >
-                {/* Background decorative glow */}
                 <div aria-hidden="true" className="absolute -top-6 -right-6 w-28 h-28 bg-jibb-orange/5 rounded-full blur-xl pointer-events-none transition-all duration-500 group-hover:bg-jibb-orange/15 group-hover:scale-125" />
 
                 <div className="space-y-5">
@@ -133,15 +189,9 @@ export default async function ServicesPage({
                     {svc.icon}
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors tracking-tight">
-                      {svc.title}
-                    </h3>
-                    <span className="text-xs font-semibold text-jibb-orange block uppercase tracking-wider">
-                      {svc.subtitle}
-                    </span>
-                    <p className="text-sm text-muted-foreground leading-relaxed pt-2">
-                      {svc.desc}
-                    </p>
+                    <h3 className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors tracking-tight">{svc.title}</h3>
+                    <span className="text-xs font-semibold text-jibb-orange block uppercase tracking-wider">{svc.subtitle}</span>
+                    <p className="text-sm text-muted-foreground leading-relaxed pt-2">{svc.desc}</p>
                   </div>
                 </div>
 
@@ -149,7 +199,7 @@ export default async function ServicesPage({
                   <span>{t("common.learnMore")}</span>
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
                 </div>
-              </Link>
+              </a>
             ))}
           </ScrollReveal>
         </div>
@@ -162,6 +212,71 @@ export default async function ServicesPage({
       </section>
 
       <WorkProcess />
+
+      {/* ============================================================
+          EACH SERVICE — Full detail sections
+          ============================================================ */}
+      {services.map((svc, svcIdx) => (
+        <div key={svc.id} id={svc.id}>
+          {/* Detail Copy Section */}
+          <section className={`py-16 md:py-24 border-b border-border/30 ${svcIdx % 2 === 0 ? "bg-jibb-gradient-subtle" : "bg-background"}`}>
+            <div className="section-container max-w-5xl">
+              {/* Service Header */}
+              <div className="mb-12 flex flex-col gap-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 w-fit">
+                  {svc.icon}
+                  <span className="text-xs font-bold tracking-wider uppercase text-primary">{svc.subtitle}</span>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">{svc.title}</h2>
+              </div>
+
+              <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-start">
+                <div className="md:col-span-8 space-y-6 text-left">
+                  <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">{svc.headline}</h3>
+                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{svc.para1}</p>
+                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{svc.para2}</p>
+                </div>
+
+                <div className="md:col-span-4 flex justify-center">
+                  <div className="relative w-full max-w-xs rounded-2xl p-6 bg-card border border-border shadow-jibb flex flex-col gap-4 text-left overflow-hidden">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
+                    <h4 className="text-xs font-bold text-foreground tracking-tight uppercase">{svc.sidebarTitle}</h4>
+                    <ul className="space-y-2 text-xs text-muted-foreground">
+                      {svc.sidebarItems.map((item) => (
+                        <li key={item} className="flex items-center gap-1.5">
+                          <span className="text-jibb-orange font-bold">•</span> {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Step Roadmap */}
+          <section className={`py-20 md:py-28 ${svcIdx % 2 === 0 ? "bg-background" : "bg-jibb-gradient-subtle"}`}>
+            <div className="section-container max-w-5xl text-center space-y-16">
+              <div className="space-y-4">
+                <h3 className="text-3xl font-extrabold text-foreground tracking-tight">{svc.stepsTitle}</h3>
+                <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                {svc.steps.map((st) => (
+                  <div key={st.num} className="group relative rounded-2xl p-8 bg-card border border-border/50 hover:border-primary/20 hover:shadow-lg transition-all duration-300 text-left flex flex-col justify-between min-h-[220px]">
+                    <div className="absolute top-4 right-6 text-4xl font-extrabold text-primary/5 group-hover:text-primary/10 select-none tracking-wider">{st.num}</div>
+                    <div className="space-y-3">
+                      <h4 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors tracking-tight">{st.title}</h4>
+                      <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">{st.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
+      ))}
 
       {/* ============================================================
           CO-INNOVATION & ECOSYSTEM STRATEGY BANNER
@@ -182,9 +297,7 @@ export default async function ServicesPage({
               </p>
               <div className="flex flex-wrap gap-2 pt-2">
                 {["Semiconductors", "EV Powertrains", "Pharma Analytics", "Advanced Materials"].map((tag) => (
-                  <span key={tag} className="text-[10px] font-bold px-2.5 py-1 rounded-md bg-muted text-foreground/80 border border-border">
-                    {tag}
-                  </span>
+                  <span key={tag} className="text-[10px] font-bold px-2.5 py-1 rounded-md bg-muted text-foreground/80 border border-border">{tag}</span>
                 ))}
               </div>
             </ScrollReveal>

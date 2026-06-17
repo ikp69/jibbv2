@@ -27,6 +27,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
       if (
         section.classList.contains("pointer-events-none") ||
         section.id === "logo-marquee-section" ||
+        section.classList.contains("events-venue") ||
         section.tagName === "FOOTER" && section.classList.contains("bg-grid-mesh")
       ) {
         return;
@@ -113,7 +114,6 @@ export default function Template({ children }: { children: React.ReactNode }) {
         if (t.scrollTrigger) t.scrollTrigger.kill();
         t.kill();
       });
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 

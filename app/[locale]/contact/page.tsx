@@ -8,11 +8,12 @@ import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { Parallax } from "@/components/ui/Parallax";
 import { OfficeMap } from "@/components/sections/OfficeMap";
-import { 
-  Mail, Phone, MapPin, CheckCircle, Sparkles, Send, ArrowRight, 
-  Building2, Landmark, HelpCircle, Briefcase, FileText 
+import {
+  Mail, Phone, MapPin, CheckCircle, Sparkles, Send, ArrowRight,
+  Building2, Landmark, HelpCircle, Briefcase, FileText
 } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
+import { submitContactForm } from "@/app/actions/contact";
 
 export default function ContactPage() {
   const t = useTranslations("contactPage");
@@ -23,7 +24,8 @@ export default function ContactPage() {
     name: "",
     email: "",
     phone: "",
-    message: ""
+    message: "",
+    honeypot: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -65,13 +67,17 @@ export default function ContactPage() {
       temp.email = "Invalid email format";
     }
     if (!form.phone.trim()) temp.phone = "Phone number is required";
-    if (!form.message.trim()) temp.message = "Message details are required";
-    
+    if (!form.message.trim()) {
+      temp.message = "Message details are required";
+    } else if (form.message.trim().length < 10) {
+      temp.message = "Message details must be at least 10 characters long";
+    }
+
     setErrors(temp);
     return Object.keys(temp).length === 0;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) {
       setShouldShake(true);
@@ -80,22 +86,32 @@ export default function ContactPage() {
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
+    try {
+      const response = await submitContactForm(form);
+      if (response.success) {
+        setIsSuccess(true);
+        setForm({
+          inquiryType: "",
+          name: "",
+          email: "",
+          phone: "",
+          message: "",
+          honeypot: "",
+        });
+        setTimeout(() => {
+          setIsSuccess(false);
+        }, 7000);
+      } else {
+        alert(response.error || "Submission failed. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Submission error. Please check your internet connection.");
+    } finally {
       setIsSubmitting(false);
-      setIsSuccess(true);
-      setForm({
-        inquiryType: "",
-        name: "",
-        email: "",
-        phone: "",
-        message: ""
-      });
-
-      setTimeout(() => {
-        setIsSuccess(false);
-      }, 7000);
-    }, 1500);
+    }
   }
+
 
   return (
     <main className="flex-1 bg-background text-foreground animate-in fade-in duration-300">
@@ -116,7 +132,7 @@ export default function ContactPage() {
             className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight"
             immediate
           />
-          
+
           <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
             {t("subtitle")}
           </p>
@@ -137,7 +153,7 @@ export default function ContactPage() {
       <section className="py-20 bg-jibb-gradient-subtle">
         <div className="section-container max-w-5xl">
           <div className="grid lg:grid-cols-12 gap-12 items-start">
-            
+
             {/* Left Column: Form Details (Col span 7) */}
             <ScrollReveal direction="left" className="lg:col-span-7 relative">
               <div className="relative rounded-3xl p-6 sm:p-8 bg-card border border-border/80 shadow-jibb-lg overflow-hidden text-left">
@@ -162,6 +178,20 @@ export default function ContactPage() {
                 </h3>
 
                 <form onSubmit={handleSubmit} className={`space-y-5 ${shouldShake ? "animate-shake" : ""}`}>
+                  {/* Honeypot field (hidden from users, visible to bots) */}
+                  <div className="absolute opacity-0 pointer-events-none -z-10 h-0 w-0 overflow-hidden">
+                    <label htmlFor="website-url">Leave this field blank</label>
+                    <input
+                      id="website-url"
+                      type="text"
+                      name="honeypot"
+                      tabIndex={-1}
+                      value={form.honeypot}
+                      onChange={handleInputChange}
+                      autoComplete="off"
+                    />
+                  </div>
+
                   {/* Inquiry Type */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
@@ -171,9 +201,8 @@ export default function ContactPage() {
                       name="inquiryType"
                       value={form.inquiryType}
                       onChange={handleSelectChange}
-                      className={`w-full rounded-lg border border-input bg-card px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 h-11 ${
-                        errors.inquiryType ? "border-red-500 focus:ring-red-500/20" : ""
-                      }`}
+                      className={`w-full rounded-lg border border-input bg-card px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 h-11 ${errors.inquiryType ? "border-red-500 focus:ring-red-500/20" : ""
+                        }`}
                     >
                       <option value="">{t("form.typeSelect")}</option>
                       <option value="membership">{t("form.type1")}</option>
@@ -194,9 +223,8 @@ export default function ContactPage() {
                       name="name"
                       value={form.name}
                       onChange={handleInputChange}
-                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
-                        errors.name ? "border-red-500 focus-visible:ring-red-500" : ""
-                      }`}
+                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${errors.name ? "border-red-500 focus-visible:ring-red-500" : ""
+                        }`}
                       placeholder="Jane Doe / Acme Corp"
                     />
                     {errors.name && <span className="text-[10px] text-red-500 font-semibold">{errors.name}</span>}
@@ -212,9 +240,8 @@ export default function ContactPage() {
                       name="email"
                       value={form.email}
                       onChange={handleInputChange}
-                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
-                        errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
-                      }`}
+                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
+                        }`}
                       placeholder="corporate@example.com"
                     />
                     {errors.email && <span className="text-[10px] text-red-500 font-semibold">{errors.email}</span>}
@@ -230,9 +257,8 @@ export default function ContactPage() {
                       name="phone"
                       value={form.phone}
                       onChange={handleInputChange}
-                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
-                        errors.phone ? "border-red-500 focus-visible:ring-red-500" : ""
-                      }`}
+                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${errors.phone ? "border-red-500 focus-visible:ring-red-500" : ""
+                        }`}
                       placeholder="+91 98765 43210"
                     />
                     {errors.phone && <span className="text-[10px] text-red-500 font-semibold">{errors.phone}</span>}
@@ -247,9 +273,8 @@ export default function ContactPage() {
                       name="message"
                       value={form.message}
                       onChange={handleInputChange}
-                      className={`focus-visible:ring-jibb-orange rounded-xl min-h-[120px] text-sm ${
-                        errors.message ? "border-red-500 focus-visible:ring-red-500" : ""
-                      }`}
+                      className={`focus-visible:ring-jibb-orange rounded-xl min-h-[120px] text-sm ${errors.message ? "border-red-500 focus-visible:ring-red-500" : ""
+                        }`}
                       placeholder="Please details your inquiry..."
                     />
                     {errors.message && <span className="text-[10px] text-red-500 font-semibold">{errors.message}</span>}
@@ -275,7 +300,7 @@ export default function ContactPage() {
                 {t("officesTitle")}
               </h3>
 
-              {/* Tokyo Headquarters */}
+              {/* Tokyo Office */}
               <div className="relative rounded-2xl p-6 bg-card border border-border shadow-jibb overflow-hidden flex flex-col gap-4">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none animate-glow-pulse" />
                 <div className="flex items-start gap-3">
@@ -293,7 +318,7 @@ export default function ContactPage() {
                 </div>
                 <div className="border-t border-border pt-4 text-xs flex items-center gap-3 text-muted-foreground">
                   <Phone className="size-3.5 text-jibb-orange animate-soft-pulse" />
-                  <span>+81 3 1234 5678</span>
+                  <span>+81 90-9325-3456, Shigemaro Yasui</span>
                 </div>
               </div>
 
@@ -315,7 +340,7 @@ export default function ContactPage() {
                 </div>
                 <div className="border-t border-border pt-4 text-xs flex items-center gap-3 text-muted-foreground">
                   <Phone className="size-3.5 text-jibb-orange animate-soft-pulse" />
-                  <span>+91 120 123 4567</span>
+                  <span>+91 70000 17005, Vardaan Chaudhary</span>
                 </div>
               </div>
 

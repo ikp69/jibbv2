@@ -11,7 +11,6 @@ interface Member {
 }
 
 const MEMBERS: Member[] = [
-  { key: "hitesh", img: "/leaders/hitesh-gupttaa.png" },
   { key: "varun", img: "/leaders/varun-tyagi.png" },
   { key: "ujjawal", img: "/leaders/ujjawal-dahiya.png" },
   { key: "pratiksha", img: "/leaders/pratiksha-pandey.png" },

@@ -111,7 +111,7 @@ export function ComparisonTable() {
                     {/* JIBB Column */}
                     <td className="p-6 align-middle border-l border-border/40 bg-jibb-indigo/[0.015] text-xs md:text-sm text-foreground dark:text-foreground leading-relaxed font-medium">
                       <div className="flex items-start gap-2.5">
-                        <span className="inline-flex items-center justify-center size-5 shrink-0 rounded-full bg-emerald-500/10 text-emerald-500 mt-0.5">
+                        <span className="inline-flex items-center justify-center size-5 shrink-0 rounded-full bg-jibb-indigo/15 text-jibb-indigo mt-0.5">
                           <Check className="size-3 stroke-[3]" />
                         </span>
                         <span>{row.jibb}</span>

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Sparkles, ArrowRight, Hourglass, Mail, CheckCircle, ExternalLink } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
+import { subscribeToNewsletter } from "@/app/actions/newsletter";
 
 interface ComingSoonPageProps {
   titleKey: string;
@@ -50,11 +51,12 @@ export function ComingSoonPage({
 
   // Newsletter State
   const [email, setEmail] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [shouldShake, setShouldShake] = useState(false);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setShouldShake(true);
@@ -63,11 +65,25 @@ export function ComingSoonPage({
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
+    try {
+      const response = await subscribeToNewsletter({
+        email: email.trim(),
+        source: `coming-soon:${sectionName}`,
+        honeypot,
+      });
+
+      if (response.success) {
+        setIsSuccess(true);
+        setEmail("");
+      } else {
+        alert(response.error || "Subscription failed.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Subscription failed.");
+    } finally {
       setIsSubmitting(false);
-      setIsSuccess(true);
-      setEmail("");
-    }, 1000);
+    }
   };
 
   const themeClasses = {
@@ -351,6 +367,20 @@ export function ComingSoonPage({
                   </div>
                 ) : (
                   <form onSubmit={handleSubscribe} className="space-y-3">
+                    {/* Honeypot field (hidden from users, visible to bots) */}
+                    <div className="absolute opacity-0 pointer-events-none -z-10 h-0 w-0 overflow-hidden">
+                      <label htmlFor="comingsoon-website-url">Leave this field blank</label>
+                      <input
+                        id="comingsoon-website-url"
+                        type="text"
+                        name="honeypot"
+                        tabIndex={-1}
+                        value={honeypot}
+                        onChange={(e) => setHoneypot(e.target.value)}
+                        autoComplete="off"
+                      />
+                    </div>
+
                     <div className="relative">
                       <Input
                         type="email"

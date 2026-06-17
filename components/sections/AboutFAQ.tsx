@@ -13,7 +13,7 @@ const FAQS = [
   },
   {
     question: "Is JIBB officially affiliated with the Japanese or Indian governments?",
-    answer: "While JIBB works closely with governmental bodies like METI (Japan) and DPIIT (India) to align with national industrial policies, we remain an independent, private entity. This autonomy allows us to act with agility and represent the best interests of our corporate and institutional members."
+    answer: "While JIBB works closely with Indian governmental bodies like Invest India, Guidance Tamil Nadu, etc., In Japan we work closely with industry associations and small-medium enterprises. This autonomy allows us to act with agility and represent the best interests of our corporate and institutional members."
   },
   {
     question: "How are the Advisory Board members selected?",
@@ -21,11 +21,11 @@ const FAQS = [
   },
   {
     question: "How is funding and membership revenue utilized?",
-    answer: "All revenues from memberships, sponsorships, and consulting services are reinvested into our core programs. This includes maintaining the Innovation Hubs, organizing bilateral trade missions, conducting market research, and supporting early-stage cross-border startups."
+    answer: "All revenues from memberships, sponsorships, and consulting services are reinvested into our core programs. This includes supporting cross-border delegations, education or training programs, organizing bilateral trade missions, conducting market research, and supporting early-stage cross-border startups."
   },
   {
     question: "What is JIBB's policy on data privacy and corporate confidentiality?",
-    answer: "We adhere strictly to both Japanese (APPI) and Indian (DPDP) data protection regulations. Corporate strategies, proprietary technology details, and member data shared during partnership facilitation are protected under stringent Non-Disclosure Agreements (NDAs)."
+    answer: "We strictly adhere to both Japanese (APPI) and Indian (DPDP) data protection regulations. Corporate strategies, proprietary technology details, and member data shared during partnership facilitation are protected under stringent Non-Disclosure Agreements (NDAs)."
   }
 ];
 
@@ -40,11 +40,11 @@ export function AboutFAQ() {
     <section className="py-20 md:py-28 bg-jibb-gradient-subtle border-t border-border/20">
       <div className="section-container max-w-4xl">
         <div className="text-center space-y-4 mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 backdrop-blur-md mx-auto">
+          {/* <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 backdrop-blur-md mx-auto">
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary">
               Governance & Transparency
             </span>
-          </div>
+          </div> */}
           <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">
             Frequently Asked Questions
           </h2>
@@ -61,11 +61,10 @@ export function AboutFAQ() {
               return (
                 <div
                   key={index}
-                  className={`border rounded-2xl transition-all duration-300 overflow-hidden ${
-                    isOpen
-                      ? "border-primary/30 bg-primary/5 shadow-sm"
-                      : "border-border/50 bg-card hover:border-primary/20"
-                  }`}
+                  className={`border rounded-2xl transition-all duration-300 overflow-hidden ${isOpen
+                    ? "border-primary/30 bg-primary/5 shadow-sm"
+                    : "border-border/50 bg-card hover:border-primary/20"
+                    }`}
                 >
                   <button
                     onClick={() => toggleOpen(index)}
@@ -73,26 +72,23 @@ export function AboutFAQ() {
                   >
                     <div className="flex items-center gap-3">
                       <div
-                        className={`p-1.5 rounded-full transition-colors ${
-                          isOpen ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-                        }`}
+                        className={`p-1.5 rounded-full transition-colors ${isOpen ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                          }`}
                       >
                         <Info className="size-4" />
                       </div>
                       <span
-                        className={`font-semibold text-sm md:text-base transition-colors ${
-                          isOpen ? "text-primary" : "text-foreground"
-                        }`}
+                        className={`font-semibold text-sm md:text-base transition-colors ${isOpen ? "text-primary" : "text-foreground"
+                          }`}
                       >
                         {faq.question}
                       </span>
                     </div>
                     <div
-                      className={`shrink-0 p-1 rounded-full border transition-all duration-300 ${
-                        isOpen
-                          ? "bg-primary text-primary-foreground border-primary rotate-180"
-                          : "bg-background text-muted-foreground border-border"
-                      }`}
+                      className={`shrink-0 p-1 rounded-full border transition-all duration-300 ${isOpen
+                        ? "bg-primary text-primary-foreground border-primary rotate-180"
+                        : "bg-background text-muted-foreground border-border"
+                        }`}
                     >
                       {isOpen ? <Minus className="size-4" /> : <Plus className="size-4" />}
                     </div>

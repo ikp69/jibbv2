@@ -55,7 +55,7 @@ export default async function DiasporaNetworkingPage({
           <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight">
             {t("servicesPage.diaspora.title")}
           </h1>
-          
+
           <p className="text-sm md:text-base text-white/80 max-w-2xl leading-relaxed">
             {t("servicesPage.diaspora.subtitle")}
           </p>

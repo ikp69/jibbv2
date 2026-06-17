@@ -15,17 +15,17 @@ interface OfficeLocation {
 const LOCATIONS: OfficeLocation[] = [
   {
     id: "tokyo",
-    name: "Tokyo Headquarters",
-    city: "Chiyoda-ku, Tokyo",
-    address: "1-1 Marunouchi, Chiyoda-ku, Tokyo 100-0005, Japan",
-    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.826847274836!2d139.7570498!3d35.6894875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188c0c4b4d5fff%3A0x2a3e0b77b7e6f6cb!2sChiyoda%20City%2C%20Tokyo!5e0!3m2!1sen!2sjp!4v1680000000000!5m2!1sen!2sjp",
+    name: "Tokyo Office",
+    city: "Minato-ku, Tokyo",
+    address: "Tameike Suzuki Building 3F, 1-2-13 Akasaka, Minato-ku, Tokyo",
+    mapUrl: "https://maps.google.com/maps?q=Tameike%20Suzuki%20Building,%201-2-13%20Akasaka,%20Minato-ku,%20Tokyo&t=&z=16&ie=UTF8&iwloc=&output=embed",
   },
   {
     id: "noida",
-    name: "Noida Operations Office",
-    city: "Sector 62, Noida",
-    address: "Block C, Sector 62, Noida, Uttar Pradesh 201301, India",
-    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3503.562145610214!2d77.3872223!3d28.5828731!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce5a5312d1b5b%3A0xa193fa7a34cb941e!2sSector%2062%2C%20Noida%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1680000000000!5m2!1sen!2sin",
+    name: "Noida Office",
+    city: "Sector 136, Noida",
+    address: "JIBB, 6th Floor, 162, Sector 136, Arihant Business Centre, Noida, Uttar Pradesh",
+    mapUrl: "https://maps.google.com/maps?q=Arihant%20Business%20Centre,%20Sector%20136,%20Noida,%20Uttar%20Pradesh&t=&z=16&ie=UTF8&iwloc=&output=embed",
   },
 ];
 
@@ -46,14 +46,13 @@ export function OfficeMap() {
             key={loc.id}
             type="button"
             onClick={() => setActiveLocId(loc.id)}
-            className={`relative flex-1 py-2 text-[10px] md:text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 rounded-lg transition-all ${
-              activeLocId === loc.id
-                ? "bg-primary text-white shadow-sm"
-                : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
-            }`}
+            className={`relative flex-1 py-2 text-[10px] md:text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 rounded-lg transition-all ${activeLocId === loc.id
+              ? "bg-primary text-white shadow-sm"
+              : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
+              }`}
           >
             <MapPin className="size-3.5" />
-            {loc.id === "tokyo" ? "Tokyo HQ" : "Noida Hub"}
+            {loc.id === "tokyo" ? "Tokyo HQ" : "Noida HQ"}
           </button>
         ))}
       </div>
@@ -72,7 +71,7 @@ export function OfficeMap() {
             <iframe
               title={activeLoc.name}
               src={activeLoc.mapUrl}
-              className="w-full h-full border-0 filter grayscale contrast-125 opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+              className="w-full h-full border-0 transition-all duration-300"
               allowFullScreen={false}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

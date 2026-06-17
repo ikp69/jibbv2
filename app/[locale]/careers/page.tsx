@@ -11,9 +11,10 @@ import { HiringProcess } from "@/components/sections/HiringProcess";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Building2, Briefcase, Globe, Award, Sparkles, ChevronDown, CheckCircle, 
-  Send, Phone, Mail, Link as LinkIcon, User, SendHorizontal 
+  Send, Phone, Mail, Link as LinkIcon, User, SendHorizontal, FileText
 } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
+import { submitCareerApplication } from "@/app/actions/careers";
 
 export default function CareersPage() {
   const t = useTranslations("careersPage");
@@ -27,9 +28,12 @@ export default function CareersPage() {
     email: "",
     phone: "",
     linkedin: "",
-    message: ""
+    position: "consultant",
+    message: "",
+    honeypot: "",
   });
   
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -46,15 +50,29 @@ export default function CareersPage() {
 
   function toggleJob(jobId: string) {
     setActiveJob(activeJob === jobId ? null : jobId);
+    // Auto pre-select position when they toggle a job detail
+    setFormState(prev => ({ ...prev, position: jobId }));
   }
 
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
     const { name, value } = e.target;
     setFormState(prev => ({ ...prev, [name]: value }));
     if (errors[name]) {
       setErrors(prev => {
         const copy = { ...prev };
         delete copy[name];
+        return copy;
+      });
+    }
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] || null;
+    setResumeFile(file);
+    if (errors.resume) {
+      setErrors(prev => {
+        const copy = { ...prev };
+        delete copy.resume;
         return copy;
       });
     }
@@ -75,11 +93,23 @@ export default function CareersPage() {
       tempErrors.linkedin = "Must be a valid LinkedIn link";
     }
 
+    if (!resumeFile) {
+      tempErrors.resume = "Resume CV file is required";
+    } else {
+      if (resumeFile.size > 5 * 1024 * 1024) {
+        tempErrors.resume = "File must be under 5MB";
+      }
+      const ext = resumeFile.name.split(".").pop()?.toLowerCase();
+      if (ext && !["pdf", "doc", "docx"].includes(ext)) {
+        tempErrors.resume = "Only .pdf, .doc, and .docx files are allowed";
+      }
+    }
+
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validateForm()) {
       setShouldShake(true);
@@ -88,24 +118,51 @@ export default function CareersPage() {
     }
 
     setIsSubmitting(true);
+    try {
+      const dataPayload = new FormData();
+      dataPayload.append("name", formState.name);
+      dataPayload.append("email", formState.email);
+      dataPayload.append("phone", formState.phone);
+      dataPayload.append("position", formState.position);
+      dataPayload.append("honeypot", formState.honeypot);
 
-    // Simulate API Submission
-    setTimeout(() => {
+      // Concatenate LinkedIn and message to cover letter
+      const coverLetter = `LinkedIn: ${formState.linkedin}\n\nIntro Message: ${formState.message}`;
+      dataPayload.append("coverLetter", coverLetter);
+
+      if (resumeFile) {
+        dataPayload.append("resume", resumeFile);
+      }
+
+      const response = await submitCareerApplication(dataPayload);
+
+      if (response.success) {
+        setIsSuccess(true);
+        setFormState({
+          name: "",
+          email: "",
+          phone: "",
+          linkedin: "",
+          position: "consultant",
+          message: "",
+          honeypot: "",
+        });
+        setResumeFile(null);
+        if (formRef.current) formRef.current.reset();
+        
+        // Auto-reset success state after 7 seconds
+        setTimeout(() => {
+          setIsSuccess(false);
+        }, 7000);
+      } else {
+        alert(response.error || "Failed to submit career application.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Submission error. Please check your internet connection.");
+    } finally {
       setIsSubmitting(false);
-      setIsSuccess(true);
-      setFormState({
-        name: "",
-        email: "",
-        phone: "",
-        linkedin: "",
-        message: ""
-      });
-      
-      // Auto-reset success state after 7 seconds
-      setTimeout(() => {
-        setIsSuccess(false);
-      }, 7000);
-    }, 1500);
+    }
   }
 
   return (
@@ -405,104 +462,152 @@ export default function CareersPage() {
               </div>
             )}
 
-            <form ref={formRef} onSubmit={handleSubmit} className={`space-y-5 ${shouldShake ? "animate-shake" : ""}`}>
-              {/* Name */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
-                  <User className="size-3.5 text-muted-foreground" /> {t("form.nameLabel")} <span className="text-red-500">*</span>
-                </label>
-                <Input 
-                  type="text" 
-                  name="name" 
-                  value={formState.name}
-                  onChange={handleInputChange}
-                  className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
-                    errors.name ? "border-red-500 focus-visible:ring-red-500" : ""
-                  }`}
-                  placeholder="John Doe" 
-                />
-                {errors.name && <span className="text-[10px] text-red-500 font-semibold">{errors.name}</span>}
-              </div>
+             <form ref={formRef} onSubmit={handleSubmit} className={`space-y-5 ${shouldShake ? "animate-shake" : ""}`}>
+               {/* Honeypot field (hidden from users, visible to bots) */}
+               <div className="absolute opacity-0 pointer-events-none -z-10 h-0 w-0 overflow-hidden">
+                 <label htmlFor="careers-website-url">Leave this field blank</label>
+                 <input
+                   id="careers-website-url"
+                   type="text"
+                   name="honeypot"
+                   tabIndex={-1}
+                   value={formState.honeypot}
+                   onChange={handleInputChange}
+                   autoComplete="off"
+                 />
+               </div>
 
-              {/* Email */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
-                  <Mail className="size-3.5 text-muted-foreground" /> {t("form.emailLabel")} <span className="text-red-500">*</span>
-                </label>
-                <Input 
-                  type="email" 
-                  name="email" 
-                  value={formState.email}
-                  onChange={handleInputChange}
-                  className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
-                    errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
-                  }`}
-                  placeholder="john@example.com" 
-                />
-                {errors.email && <span className="text-[10px] text-red-500 font-semibold">{errors.email}</span>}
-              </div>
+               {/* Name */}
+               <div className="space-y-1.5">
+                 <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
+                   <User className="size-3.5 text-muted-foreground" /> {t("form.nameLabel")} <span className="text-red-500">*</span>
+                 </label>
+                 <Input 
+                   type="text" 
+                   name="name" 
+                   value={formState.name}
+                   onChange={handleInputChange}
+                   className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                     errors.name ? "border-red-500 focus-visible:ring-red-500" : ""
+                   }`}
+                   placeholder="John Doe" 
+                 />
+                 {errors.name && <span className="text-[10px] text-red-500 font-semibold">{errors.name}</span>}
+               </div>
 
-              {/* Phone */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
-                  <Phone className="size-3.5 text-muted-foreground" /> {t("form.phoneLabel")} <span className="text-red-500">*</span>
-                </label>
-                <Input 
-                  type="tel" 
-                  name="phone" 
-                  value={formState.phone}
-                  onChange={handleInputChange}
-                  className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
-                    errors.phone ? "border-red-500 focus-visible:ring-red-500" : ""
-                  }`}
-                  placeholder="+91 98765 43210 / +81 90 1234 5678" 
-                />
-                {errors.phone && <span className="text-[10px] text-red-500 font-semibold">{errors.phone}</span>}
-              </div>
+               {/* Position Dropdown */}
+               <div className="space-y-1.5">
+                 <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
+                   <Briefcase className="size-3.5 text-muted-foreground" /> Position applied for <span className="text-red-500">*</span>
+                 </label>
+                 <select
+                   name="position"
+                   value={formState.position}
+                   onChange={handleInputChange}
+                   className="flex h-11 w-full rounded-xl border border-input bg-card px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-jibb-orange/20 focus:border-jibb-orange transition-all duration-200"
+                 >
+                   <option value="consultant">Bilateral Business Consultant</option>
+                   <option value="translator">Bilateral Translator / Coordinator</option>
+                   <option value="bde">Business Development Executive</option>
+                 </select>
+               </div>
 
-              {/* LinkedIn */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
-                  <LinkIcon className="size-3.5 text-muted-foreground" /> {t("form.linkedinLabel")} <span className="text-red-500">*</span>
-                </label>
-                <Input 
-                  type="text" 
-                  name="linkedin" 
-                  value={formState.linkedin}
-                  onChange={handleInputChange}
-                  className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
-                    errors.linkedin ? "border-red-500 focus-visible:ring-red-500" : ""
-                  }`}
-                  placeholder="https://linkedin.com/in/username" 
-                />
-                {errors.linkedin && <span className="text-[10px] text-red-500 font-semibold">{errors.linkedin}</span>}
-              </div>
+               {/* Email */}
+               <div className="space-y-1.5">
+                 <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
+                   <Mail className="size-3.5 text-muted-foreground" /> {t("form.emailLabel")} <span className="text-red-500">*</span>
+                 </label>
+                 <Input 
+                   type="email" 
+                   name="email" 
+                   value={formState.email}
+                   onChange={handleInputChange}
+                   className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                     errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
+                   }`}
+                   placeholder="john@example.com" 
+                 />
+                 {errors.email && <span className="text-[10px] text-red-500 font-semibold">{errors.email}</span>}
+               </div>
 
-              {/* Message */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
-                  <Send className="size-3.5 text-muted-foreground" /> {t("form.messageLabel")}
-                </label>
-                <Textarea 
-                  name="message" 
-                  value={formState.message}
-                  onChange={handleInputChange}
-                  className="focus-visible:ring-jibb-orange rounded-xl min-h-[100px] text-sm"
-                  placeholder="Tell us about yourself and why you'd like to join JIBB..."
-                />
-              </div>
+               {/* Phone */}
+               <div className="space-y-1.5">
+                 <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
+                   <Phone className="size-3.5 text-muted-foreground" /> {t("form.phoneLabel")} <span className="text-red-500">*</span>
+                 </label>
+                 <Input 
+                   type="tel" 
+                   name="phone" 
+                   value={formState.phone}
+                   onChange={handleInputChange}
+                   className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                     errors.phone ? "border-red-500 focus-visible:ring-red-500" : ""
+                   }`}
+                   placeholder="+91 98765 43210 / +81 90 1234 5678" 
+                 />
+                 {errors.phone && <span className="text-[10px] text-red-500 font-semibold">{errors.phone}</span>}
+               </div>
 
-              {/* Submit */}
-              <div className="pt-3">
-                <AnimatedButton 
-                  type="submit" 
-                  className="w-full h-11 font-bold rounded-xl shadow-lg bg-jibb-orange text-white text-sm"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? t("form.submitting") : t("form.submitButton")}
-                </AnimatedButton>
-              </div>
-            </form>
+               {/* LinkedIn */}
+               <div className="space-y-1.5">
+                 <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
+                   <LinkIcon className="size-3.5 text-muted-foreground" /> {t("form.linkedinLabel")} <span className="text-red-500">*</span>
+                 </label>
+                 <Input 
+                   type="text" 
+                   name="linkedin" 
+                   value={formState.linkedin}
+                   onChange={handleInputChange}
+                   className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${
+                     errors.linkedin ? "border-red-500 focus-visible:ring-red-500" : ""
+                   }`}
+                   placeholder="https://linkedin.com/in/username" 
+                 />
+                 {errors.linkedin && <span className="text-[10px] text-red-500 font-semibold">{errors.linkedin}</span>}
+               </div>
+
+               {/* Resume Upload */}
+               <div className="space-y-1.5">
+                 <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
+                   <FileText className="size-3.5 text-muted-foreground" /> Resume / CV (PDF, DOC, DOCX - Max 5MB) <span className="text-red-500">*</span>
+                 </label>
+                 <input 
+                   type="file" 
+                   name="resume" 
+                   accept=".pdf,.doc,.docx"
+                   onChange={handleFileChange}
+                   className={`flex w-full rounded-xl border border-input bg-card px-4 py-2 text-sm text-foreground file:border-0 file:bg-primary/10 file:text-primary file:rounded-lg file:text-xs file:font-semibold file:px-3 file:py-1 file:mr-4 hover:file:bg-primary/20 ${
+                     errors.resume ? "border-red-500 focus-visible:ring-red-500" : ""
+                   }`}
+                 />
+                 {errors.resume && <span className="text-[10px] text-red-500 font-semibold">{errors.resume}</span>}
+               </div>
+
+               {/* Message */}
+               <div className="space-y-1.5">
+                 <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
+                   <Send className="size-3.5 text-muted-foreground" /> {t("form.messageLabel")}
+                 </label>
+                 <Textarea 
+                   name="message" 
+                   value={formState.message}
+                   onChange={handleInputChange}
+                   className="focus-visible:ring-jibb-orange rounded-xl min-h-[100px] text-sm"
+                   placeholder="Tell us about yourself and why you'd like to join JIBB..."
+                 />
+               </div>
+
+               {/* Submit */}
+               <div className="pt-3">
+                 <AnimatedButton 
+                   type="submit" 
+                   className="w-full h-11 font-bold rounded-xl shadow-lg bg-jibb-orange text-white text-sm"
+                   disabled={isSubmitting}
+                 >
+                   {isSubmitting ? t("form.submitting") : t("form.submitButton")}
+                 </AnimatedButton>
+               </div>
+             </form>
           </div>
         </div>
       </section>

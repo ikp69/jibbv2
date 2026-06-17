@@ -20,6 +20,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       ...(await import(`../../messages/${locale}/hub.json`)).default,
       ...(await import(`../../messages/${locale}/contact.json`)).default,
       ...(await import(`../../messages/${locale}/notFound.json`)).default,
+      ...(await import(`../../messages/${locale}/auth.json`)).default,
     },
   };
 });

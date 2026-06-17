@@ -7,20 +7,24 @@ import React from "react";
 interface Partner {
   name: string;
   href: string;
-  type: "government" | "chamber" | "agency";
-  icon: React.ComponentType<{ className?: string }>;
+  type: string;
+  logo: string;
 }
 
 const PARTNERS: Partner[] = [
-  { name: "METI Japan", href: "https://www.meti.go.jp/english/", type: "government", icon: Landmark },
-  { name: "DPIIT India", href: "https://dpiit.gov.in", type: "government", icon: Landmark },
-  { name: "JETRO", href: "https://www.jetro.go.jp/en/", type: "agency", icon: Globe },
-  { name: "Invest India", href: "https://www.investindia.gov.in", type: "agency", icon: Zap },
-  { name: "FICCI", href: "https://ficci.in", type: "chamber", icon: Briefcase },
-  { name: "Keidanren", href: "https://www.keidanren.or.jp/en/", type: "chamber", icon: Shield },
-  { name: "JICA", href: "https://www.jica.go.jp/english/", type: "agency", icon: Globe },
-  { name: "CII", href: "https://www.cii.in", type: "chamber", icon: Briefcase },
-  { name: "Startup India", href: "https://www.startupindia.gov.in", type: "agency", icon: Sparkles },
+  //{ name: "METI Japan", href: "https://www.meti.go.jp/english/", type: "Government", logo: "/logos/meti-logo.jpeg" },
+  { name: "Guidance Tamil Nadu", href: "https://investingintamilnadu.com", type: "Agency", logo: "/logos/gui-logo-black.png" },
+  //{ name: "JETRO", href: "https://www.jetro.go.jp/en/", type: "Agency", logo: "/logos/jetro-logo.png" },
+  { name: "Invest India", href: "https://www.investindia.gov.in", type: "Agency", logo: "/logos/invest-india-logo.png" },
+  { name: "CII", href: "https://www.cii.in", type: "Chamber", logo: "/logos/cii-logo.png" },
+  //{ name: "FICCI", href: "https://ficci.in", type: "Chamber", logo: "/logos/ficci-logo.png" },
+  //{ name: "JICA", href: "https://www.jica.go.jp/english/", type: "Agency", logo: "/logos/jica-logo.png" },
+  { name: "IMTMA", href: "https://www.imtma.in", type: "Chamber", logo: "/logos/imtma-logo.png" },
+  { name: "AMTTF", href: "http://www.amttf.in", type: "Agency", logo: "/logos/amttf-logo.png" },
+  { name: "Japan India Semiconductor Committee", href: "#", type: "Committee", logo: "/logos/JISC Png.png" },
+  { name: "India Semiconductor Mission", href: "https://ism.gov.in", type: "Government", logo: "/logos/ism_header_logo.png" },
+  { name: "World Development Council", href: "https://www.worlddevelopment.org", type: "Council", logo: "/logos/wdc-logo.png" },
+  //{ name: "JBIC", href: "https://www.jbic.go.jp/en/", type: "Agency", logo: "/logos/jbic-logo.png" }
 ];
 
 export function LogoMarquee() {
@@ -30,7 +34,7 @@ export function LogoMarquee() {
   const duplicatedPartners = [...PARTNERS, ...PARTNERS, ...PARTNERS];
 
   return (
-    <section className="py-16 relative overflow-hidden bg-jibb-indigo border-y border-white/5 select-none">
+    <section className="py-10 relative overflow-hidden bg-white dark:bg-[#0c101d] border-y border-border/40 select-none">
       <style jsx global>{`
         @keyframes marquee-scroll {
           0% {
@@ -43,61 +47,50 @@ export function LogoMarquee() {
         .animate-marquee-scroll {
           display: flex;
           width: max-content;
-          gap: 1.5rem;
-          animation: marquee-scroll 35s linear infinite;
+          gap: 3.5rem;
+          align-items: center;
+          animation: marquee-scroll 45s linear infinite;
         }
         .animate-marquee-scroll:hover {
           animation-play-state: paused;
         }
       `}</style>
-
-      {/* Decorative background lights */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-80 h-32 bg-jibb-orange/5 rounded-full blur-[60px] pointer-events-none" />
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-80 h-32 bg-jibb-sakura/5 rounded-full blur-[60px] pointer-events-none" />
-
-      <div className="section-container relative z-10 text-center space-y-8 mb-12">
-        <div className="space-y-2 max-w-2xl mx-auto">
+      <div className="section-container relative z-10 text-center space-y-4 mb-12">
+        <div className="space-y-2 max-w-3xl mx-auto">
           <span className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-jibb-orange">
-            {t("partners.sectionTitle")}
+            {t("partners.sectionTitle") || "Global Networks"}
           </span>
-          <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">
             Supported by Bilateral Trade &amp; Development Leaders
           </h2>
-          <p className="text-sm text-white/60">
-            {t("partners.sectionSubtitle")}
+          <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
+            {t("partners.sectionSubtitle") || "Facilitating seamless collaboration across governmental bodies, chambers, and academic institutions."}
           </p>
         </div>
       </div>
 
       {/* Gradient masks on left/right edges */}
-      <div className="relative w-full flex items-center overflow-hidden py-4">
-        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-r from-jibb-indigo to-transparent z-20 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-l from-jibb-indigo to-transparent z-20 pointer-events-none" />
+      <div className="relative w-full flex items-center overflow-hidden">
+        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-r from-white dark:from-[#0c101d] to-transparent z-20 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-l from-white dark:from-[#0c101d] to-transparent z-20 pointer-events-none" />
 
         {/* Marquee Inner Container */}
         <div className="animate-marquee-scroll py-2">
           {duplicatedPartners.map((partner, idx) => {
-            const Icon = partner.icon;
             return (
               <a
                 key={`${partner.name}-${idx}`}
                 href={partner.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative flex items-center gap-3.5 px-6 py-4.5 rounded-2xl bg-white/5 border border-white/8 backdrop-blur-md hover:bg-white/10 hover:border-jibb-orange/30 hover:shadow-jibb-orange-glow transition-all duration-300 select-none min-w-[200px]"
+                className="flex items-center justify-center h-16 w-36 md:h-20 md:w-44 shrink-0 transition-transform duration-300 hover:scale-105"
+                title={partner.name}
               >
-                <div className="p-2 rounded-xl bg-white/5 group-hover:bg-jibb-orange/15 transition-all duration-300">
-                  <Icon className="size-5.5 text-white/50 group-hover:text-jibb-orange group-hover:scale-110 transition-all duration-300" />
-                </div>
-                <div className="flex flex-col text-left">
-                  <span className="text-sm font-bold text-white/70 group-hover:text-white transition-colors duration-300">
-                    {partner.name}
-                  </span>
-                  <span className="text-[10px] text-white/40 uppercase tracking-wider group-hover:text-white/60 transition-colors duration-300">
-                    {partner.type}
-                  </span>
-                </div>
-                <ExternalLink className="size-3 text-white/20 group-hover:text-white/50 absolute top-3.5 right-3.5 transition-colors" />
+                <img
+                  src={partner.logo}
+                  alt={partner.name}
+                  className="max-h-full max-w-full object-contain transition-all duration-300"
+                />
               </a>
             );
           })}

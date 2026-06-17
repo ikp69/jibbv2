@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     : "Resources | JIBB — Japan India Business Bureau";
   const description = isJa
     ? "JIBBのリソースライブラリ。市場インサイト、事例紹介、リーダーシップ論考、ニュースレターをご覧ください。"
-    : "Access JIBB's knowledge library — market insights, case studies, leadership thoughts, and newsletters.";
+    : "Access JIBB's knowledge library — market insights, case studies, thought leadership, and newsletters.";
 
   return {
     title,
@@ -81,7 +81,7 @@ export default async function ResourcesPage({ params }: PageProps) {
       color: "from-jibb-sakura to-jibb-sakura-light",
       title: t("resourcesMenu.leadership"),
       desc: t("resourcesMenu.leadershipDesc"),
-      href: "/resources/leadership-thoughts",
+      href: "/resources/thought-leadership",
       cta: isJa ? "論考を読む" : "Read Thoughts",
     },
     {

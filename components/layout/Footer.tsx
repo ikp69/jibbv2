@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/navigation";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
@@ -10,6 +11,7 @@ import {
   Mail,
   ExternalLink,
 } from "lucide-react";
+import { subscribeToNewsletter } from "@/app/actions/newsletter";
 
 function LinkedInIcon({ className }: { className?: string }) {
   return (
@@ -125,6 +127,40 @@ function DelhiNcrIcon({ className }: { className?: string }) {
 export function Footer() {
   const t = useTranslations();
   const currentYear = new Date().getFullYear();
+
+  const [email, setEmail] = useState("");
+  const [honeypot, setHoneypot] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<"idle" | "success" | "already" | "error">("idle");
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setStatus("idle");
+    try {
+      const response = await subscribeToNewsletter({ email, source: "footer", honeypot });
+      if (response.success) {
+        if (response.alreadySubscribed) {
+          setStatus("already");
+        } else {
+          setStatus("success");
+          setEmail("");
+        }
+      } else {
+        setStatus("error");
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <footer className="relative bg-primary text-primary-foreground border-t border-white/10 overflow-hidden">
@@ -367,25 +403,54 @@ export function Footer() {
             </div>
 
             <form
-              onSubmit={(e) => e.preventDefault()}
-              className="flex flex-col sm:flex-row gap-3 w-full"
-            >
-              <div className="relative flex-1">
-                <Input
-                  type="email"
-                  placeholder={t("footer.newsletter.placeholder")}
-                  className="w-full bg-white/5 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-jibb-orange pl-10 h-11 text-xs rounded-xl"
-                />
-                <Mail className="absolute left-3.5 top-3.5 size-4 text-white/40" />
-              </div>
-              <AnimatedButton
-                type="submit"
-                variant="accent"
-                className="h-11 px-6 font-bold shadow-lg rounded-xl shrink-0 text-xs"
-              >
-                {t("footer.newsletter.button")}
-              </AnimatedButton>
-            </form>
+               onSubmit={handleSubscribe}
+               className="flex flex-col gap-2 w-full"
+             >
+               {/* Honeypot field (hidden from users, visible to bots) */}
+               <div className="absolute opacity-0 pointer-events-none -z-10 h-0 w-0 overflow-hidden">
+                 <label htmlFor="footer-website-url">Leave this field blank</label>
+                 <input
+                   id="footer-website-url"
+                   type="text"
+                   name="honeypot"
+                   tabIndex={-1}
+                   value={honeypot}
+                   onChange={(e) => setHoneypot(e.target.value)}
+                   autoComplete="off"
+                 />
+               </div>
+
+               <div className="flex flex-col sm:flex-row gap-3 w-full">
+                 <div className="relative flex-1">
+                   <Input
+                     type="email"
+                     value={email}
+                     onChange={(e) => setEmail(e.target.value)}
+                     placeholder={t("footer.newsletter.placeholder")}
+                     className="w-full bg-white/5 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-jibb-orange pl-10 h-11 text-xs rounded-xl"
+                   />
+                   <Mail className="absolute left-3.5 top-3.5 size-4 text-white/40" />
+                 </div>
+                 <AnimatedButton
+                   type="submit"
+                   variant="accent"
+                   disabled={isSubmitting}
+                   className="h-11 px-6 font-bold shadow-lg rounded-xl shrink-0 text-xs bg-jibb-orange hover:bg-jibb-orange/90 text-white border-none"
+                 >
+                   {isSubmitting ? "..." : t("footer.newsletter.button")}
+                 </AnimatedButton>
+               </div>
+               
+               {status === "success" && (
+                 <p className="text-[10px] text-emerald-400 font-bold mt-1">✓ Thank you for subscribing!</p>
+               )}
+               {status === "already" && (
+                 <p className="text-[10px] text-amber-400 font-bold mt-1">✓ You are already subscribed!</p>
+               )}
+               {status === "error" && (
+                 <p className="text-[10px] text-red-400 font-bold mt-1">✗ Subscription failed. Please try again.</p>
+               )}
+             </form>
           </ScrollReveal>
 
         </div>

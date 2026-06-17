@@ -15,6 +15,14 @@ interface Testimonial {
 
 const TESTIMONIALS: Testimonial[] = [
   {
+    quoteTitle: "Accelerating Mutual Growth",
+    quote: "The Japan India Business Bureau (JIBB) is working on a futuristic initiative: Japan India Semiconductor Committee (JISC) where they are bridging the gap between Japanese companies and India’s growing semiconductor ecosystem. We look forward to working closely with JISC and its member companies to build meaningful partnerships, support technology transfers, and accelerate mutual growth. India is open for business, and we are excited to welcome innovative Japanese players through this dedicated platform.",
+    author: "Dr. Manish Kumar Hooda",
+    role: "Director, Technology – India Semiconductor Mission",
+    location: "India",
+    avatarUrl: "/testimonials/manishhooda.jpeg",
+  },
+  {
     quoteTitle: "Enhanced Learning Experience",
     quote: "The innovative approach has revolutionized our study methods. Their AI-powered tools have saved us countless hours and allowed us to grasp complex concepts more effectively. We've seen a remarkable improvement in our overall academic performance.",
     author: "Emmily Patel",

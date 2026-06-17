@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 
+import { submitMembershipApplication } from "@/app/actions/membership";
+
 export default function MembershipPage() {
   const t = useTranslations("membershipPage");
 
@@ -30,9 +32,15 @@ export default function MembershipPage() {
 
   // Booking Form State
   const [form, setForm] = useState({
-    name: "",
+    membershipTier: "associate" as "associate" | "silver" | "gold" | "platinum",
+    companyName: "",
+    contactPerson: "",
     email: "",
-    purpose: ""
+    phone: "",
+    industry: "",
+    companySize: "",
+    message: "",
+    honeypot: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,11 +66,25 @@ export default function MembershipPage() {
     setSelectedTime(timeVal);
   }
 
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => {
+        const c = { ...prev };
+        delete c[name];
+        return c;
+      });
+    }
+  }
+
   function validate() {
     const tempErrors: Record<string, string> = {};
     if (!selectedDate) tempErrors.date = "Please select a date";
     if (!selectedTime) tempErrors.time = "Please select a time slot";
-    if (!form.name.trim()) tempErrors.name = "Name is required";
+    if (!form.companyName.trim()) tempErrors.companyName = "Company name is required";
+    if (!form.contactPerson.trim()) tempErrors.contactPerson = "Contact person name is required";
+    if (!form.phone.trim()) tempErrors.phone = "Phone number is required";
     if (!form.email.trim()) {
       tempErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
@@ -72,7 +94,7 @@ export default function MembershipPage() {
     return Object.keys(tempErrors).length === 0;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) {
       setShouldShake(true);
@@ -81,13 +103,39 @@ export default function MembershipPage() {
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
+    try {
+      // Prepend selected date/time details to the application message
+      const enrichedMessage = `[Requested Meeting: ${selectedDate} at ${selectedTime}]\n\n${form.message}`;
+      const payload = {
+        ...form,
+        message: enrichedMessage,
+      };
+
+      const result = await submitMembershipApplication(payload);
+      if (result.success) {
+        setIsSuccess(true);
+        setForm({
+          membershipTier: "associate",
+          companyName: "",
+          contactPerson: "",
+          email: "",
+          phone: "",
+          industry: "",
+          companySize: "",
+          message: "",
+          honeypot: "",
+        });
+        setSelectedDate(null);
+        setSelectedTime(null);
+      } else {
+        alert(result.error || "Submission failed. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An unexpected error occurred.");
+    } finally {
       setIsSubmitting(false);
-      setIsSuccess(true);
-      setForm({ name: "", email: "", purpose: "" });
-      setSelectedDate(null);
-      setSelectedTime(null);
-    }, 1200);
+    }
   }
 
   return (
@@ -167,7 +215,7 @@ export default function MembershipPage() {
                 </ul>
               </div>
               <div className="pt-6">
-                <a href="#scheduler" className="block">
+                <a href="#scheduler" className="block" onClick={() => setForm(prev => ({ ...prev, membershipTier: "associate" }))}>
                   <AnimatedButton variant="outline" className="w-full font-semibold border-blue-500/20 hover:bg-blue-500/5 hover:text-blue-500">Inquire Plan</AnimatedButton>
                 </a>
               </div>
@@ -206,25 +254,25 @@ export default function MembershipPage() {
                 </ul>
               </div>
               <div className="pt-6">
-                <a href="#scheduler" className="block">
+                <a href="#scheduler" className="block" onClick={() => setForm(prev => ({ ...prev, membershipTier: "silver" }))}>
                   <AnimatedButton variant="outline" className="w-full font-semibold border-orange-500/20 hover:bg-orange-500/5 hover:text-orange-500">Inquire Plan</AnimatedButton>
                 </a>
               </div>
             </div>
 
             {/* Gold Member - Recommended */}
-            <div className="group relative rounded-3xl p-6 md:p-8 bg-emerald-500/10 text-foreground border-2 border-emerald-500 shadow-lg scale-105 transition-all duration-300 text-left flex flex-col justify-between min-h-[380px]">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+            <div className="group relative rounded-3xl p-6 md:p-8 bg-jibb-indigo/10 text-foreground border-2 border-jibb-indigo shadow-lg scale-105 transition-all duration-300 text-left flex flex-col justify-between min-h-[380px]">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-jibb-indigo text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                 Popular Choice
               </div>
 
               <div className="space-y-6">
                 <div>
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-md bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 uppercase tracking-wide">
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-md bg-jibb-indigo/20 text-jibb-indigo dark:text-jibb-indigo-light uppercase tracking-wide">
                     Gold Member
                   </span>
                   <h3 className="text-2xl font-bold text-foreground mt-3 tracking-tight flex items-center gap-1.5">
-                    Professional <Sparkles className="size-4 text-emerald-500 fill-emerald-500 stroke-none animate-pulse" />
+                    Professional <Sparkles className="size-4 text-jibb-indigo fill-jibb-indigo stroke-none animate-pulse" />
                   </h3>
                   <p className="text-xs text-muted-foreground mt-1.5">
                     For scaling and full co-innovation access
@@ -235,22 +283,22 @@ export default function MembershipPage() {
 
                 <ul className="space-y-3.5 text-xs text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-500 font-bold">✓</span> Limited Intelligence Access
+                    <span className="text-jibb-indigo font-bold">✓</span> Limited Intelligence Access
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-500 font-bold">✓</span> 20% Business Matching Discount
+                    <span className="text-jibb-indigo font-bold">✓</span> 20% Business Matching Discount
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-500 font-bold">✓</span> 3 Free Training Programs
+                    <span className="text-jibb-indigo font-bold">✓</span> 3 Free Training Programs
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-500 font-bold">✓</span> Active Japan Delegations
+                    <span className="text-jibb-indigo font-bold">✓</span> Active Japan Delegations
                   </li>
                 </ul>
               </div>
               <div className="pt-6">
-                <a href="#scheduler" className="block">
-                  <AnimatedButton variant="accent" className="w-full font-bold shadow-md bg-emerald-500 hover:bg-emerald-600 border-none text-white">Apply Gold</AnimatedButton>
+                <a href="#scheduler" className="block" onClick={() => setForm(prev => ({ ...prev, membershipTier: "gold" }))}>
+                  <AnimatedButton variant="accent" className="w-full font-bold shadow-md bg-jibb-indigo hover:bg-jibb-indigo-dark border-none text-white">Apply Gold</AnimatedButton>
                 </a>
               </div>
             </div>
@@ -288,7 +336,7 @@ export default function MembershipPage() {
                 </ul>
               </div>
               <div className="pt-6">
-                <a href="#scheduler" className="block">
+                <a href="#scheduler" className="block" onClick={() => setForm(prev => ({ ...prev, membershipTier: "platinum" }))}>
                   <AnimatedButton variant="outline" className="w-full font-semibold border-slate-500/20 hover:bg-slate-500/5 hover:text-slate-500">Partner Inquiry</AnimatedButton>
                 </a>
               </div>
@@ -438,55 +486,131 @@ export default function MembershipPage() {
                   )}
                 </div>
 
-                {/* Column 2: Personal Details */}
-                <div className="space-y-4 text-left">
-                  <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">
-                    3. {t("bookingDetailsTitle")}
-                  </label>
+                 {/* Column 2: Personal Details */}
+                 <div className="space-y-4 text-left">
+                   <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">
+                     3. {t("bookingDetailsTitle")}
+                   </label>
 
-                  {/* Name */}
-                  <div className="space-y-1.5">
-                    <Input
-                      type="text"
-                      placeholder="Your Full Name"
-                      value={form.name}
-                      onChange={(e) => {
-                        setForm(prev => ({ ...prev, name: e.target.value }));
-                        if (errors.name) setErrors(prev => { const c = { ...prev }; delete c.name; return c; });
-                      }}
-                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${errors.name ? "border-red-500 focus-visible:ring-red-500" : ""
-                        }`}
-                    />
-                    {errors.name && <span className="text-[10px] text-red-500 font-semibold">{errors.name}</span>}
-                  </div>
+                   {/* Honeypot field (hidden from users, visible to bots) */}
+                   <div className="absolute opacity-0 pointer-events-none -z-10 h-0 w-0 overflow-hidden">
+                     <label htmlFor="membership-website-url">Leave this field blank</label>
+                     <input
+                       id="membership-website-url"
+                       type="text"
+                       name="honeypot"
+                       tabIndex={-1}
+                       value={form.honeypot}
+                       onChange={handleInputChange}
+                       autoComplete="off"
+                     />
+                   </div>
 
-                  {/* Email */}
-                  <div className="space-y-1.5">
-                    <Input
-                      type="email"
-                      placeholder="Corporate Email Address"
-                      value={form.email}
-                      onChange={(e) => {
-                        setForm(prev => ({ ...prev, email: e.target.value }));
-                        if (errors.email) setErrors(prev => { const c = { ...prev }; delete c.email; return c; });
-                      }}
-                      className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
-                        }`}
-                    />
-                    {errors.email && <span className="text-[10px] text-red-500 font-semibold">{errors.email}</span>}
-                  </div>
+                   {/* Tier Select */}
+                   <div className="space-y-1.5">
+                     <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+                       Membership Tier
+                     </label>
+                     <select
+                       name="membershipTier"
+                       value={form.membershipTier}
+                       onChange={handleInputChange}
+                       className="flex h-11 w-full rounded-xl border border-input bg-card px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-jibb-orange/20 focus:border-jibb-orange transition-all duration-200"
+                     >
+                       <option value="associate">Associate Member</option>
+                       <option value="silver">Silver Member</option>
+                       <option value="gold">Gold Member</option>
+                       <option value="platinum">Platinum Member</option>
+                     </select>
+                   </div>
 
-                  {/* Purpose */}
-                  <div className="space-y-1.5">
-                    <Input
-                      type="text"
-                      placeholder="Meeting Purpose (e.g., Market Entry consultation)"
-                      value={form.purpose}
-                      onChange={(e) => setForm(prev => ({ ...prev, purpose: e.target.value }))}
-                      className="focus-visible:ring-jibb-orange rounded-xl h-11 text-sm"
-                    />
-                  </div>
-                </div>
+                   {/* Company Name */}
+                   <div className="space-y-1.5">
+                     <Input
+                       type="text"
+                       name="companyName"
+                       placeholder="Company Name"
+                       value={form.companyName}
+                       onChange={handleInputChange}
+                       className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${errors.companyName ? "border-red-500 focus-visible:ring-red-500" : ""
+                         }`}
+                     />
+                     {errors.companyName && <span className="text-[10px] text-red-500 font-semibold">{errors.companyName}</span>}
+                   </div>
+
+                   {/* Contact Person Name */}
+                   <div className="space-y-1.5">
+                     <Input
+                       type="text"
+                       name="contactPerson"
+                       placeholder="Contact Person Name"
+                       value={form.contactPerson}
+                       onChange={handleInputChange}
+                       className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${errors.contactPerson ? "border-red-500 focus-visible:ring-red-500" : ""
+                         }`}
+                     />
+                     {errors.contactPerson && <span className="text-[10px] text-red-500 font-semibold">{errors.contactPerson}</span>}
+                   </div>
+
+                   {/* Phone */}
+                   <div className="space-y-1.5">
+                     <Input
+                       type="tel"
+                       name="phone"
+                       placeholder="Phone Number"
+                       value={form.phone}
+                       onChange={handleInputChange}
+                       className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${errors.phone ? "border-red-500 focus-visible:ring-red-500" : ""
+                         }`}
+                     />
+                     {errors.phone && <span className="text-[10px] text-red-500 font-semibold">{errors.phone}</span>}
+                   </div>
+
+                   {/* Email */}
+                   <div className="space-y-1.5">
+                     <Input
+                       type="email"
+                       name="email"
+                       placeholder="Corporate Email Address"
+                       value={form.email}
+                       onChange={handleInputChange}
+                       className={`focus-visible:ring-jibb-orange rounded-xl h-11 text-sm ${errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
+                         }`}
+                     />
+                     {errors.email && <span className="text-[10px] text-red-500 font-semibold">{errors.email}</span>}
+                   </div>
+
+                   {/* Industry & Size */}
+                   <div className="grid grid-cols-2 gap-2">
+                     <Input
+                       type="text"
+                       name="industry"
+                       placeholder="Industry (e.g. Semiconductors)"
+                       value={form.industry}
+                       onChange={handleInputChange}
+                       className="focus-visible:ring-jibb-orange rounded-xl h-11 text-sm"
+                     />
+                     <Input
+                       type="text"
+                       name="companySize"
+                       placeholder="Company Size (e.g. 50-200)"
+                       value={form.companySize}
+                       onChange={handleInputChange}
+                       className="focus-visible:ring-jibb-orange rounded-xl h-11 text-sm"
+                     />
+                   </div>
+
+                   {/* Message */}
+                   <div className="space-y-1.5">
+                     <textarea
+                       name="message"
+                       placeholder="Tell us about your bilateral objectives or special requests..."
+                       value={form.message}
+                       onChange={handleInputChange}
+                       className="flex min-h-[90px] w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jibb-orange focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                     />
+                   </div>
+                 </div>
 
               </div>
 

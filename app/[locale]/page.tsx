@@ -9,6 +9,8 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { LogoMarquee } from "@/components/sections/LogoMarquee";
 import { StatCounter } from "@/components/sections/StatCounter";
 import { TestimonialCarousel } from "@/components/sections/TestimonialCarousel";
+import { NewsRoom } from "@/components/sections/NewsRoom";
+import { getAllPosts } from "@/lib/markdown";
 import {
   Compass, Handshake, Lightbulb, Globe, Cpu, Car, Factory, Pill, Sun, Building2,
   FlaskConical, Microscope, BookOpen, Users, Rocket, Sparkles, ArrowRight, GraduationCap, Landmark
@@ -22,6 +24,15 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations({ locale });
+
+  // Fetch Newsroom contents
+  const blogPosts = await getAllPosts("blog", locale);
+  const insightsPosts = await getAllPosts("insights", locale);
+  const mediaPosts = [...blogPosts, ...insightsPosts].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+  const caseStudies = await getAllPosts("case-studies", locale);
+  const thoughtLeadership = await getAllPosts("thought-leadership", locale);
 
   return (
     <main className="flex-1">
@@ -171,27 +182,38 @@ export default async function HomePage({
 
           <ScrollReveal staggerChildren={0.08} className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { icon: <Cpu className="size-6 text-primary" />, label: t("sectors.semiconductor") },
-              { icon: <Car className="size-6 text-primary" />, label: t("sectors.ev") },
-              { icon: <Factory className="size-6 text-primary" />, label: t("sectors.electronics") },
-              { icon: <Pill className="size-6 text-primary" />, label: t("sectors.pharma") },
-              { icon: <Sun className="size-6 text-primary" />, label: t("sectors.renewable") },
-              { icon: <Building2 className="size-6 text-primary" />, label: t("sectors.infrastructure") },
-              { icon: <FlaskConical className="size-6 text-primary" />, label: t("sectors.chemicals") },
-              { icon: <Microscope className="size-6 text-primary" />, label: t("sectors.emerging") },
-            ].map((sector) => (
-              <div
-                key={sector.label}
-                className="group bg-card dark:bg-card/45 backdrop-blur-sm rounded-2xl p-6 text-center border border-border/50 hover:border-primary/30 shadow-sm hover:shadow-jibb transition-all duration-300 hover:-translate-y-1 cursor-pointer"
-              >
-                <div className="mb-4 transition-transform duration-300 group-hover:scale-110 flex justify-center p-3 rounded-xl bg-primary/5 dark:bg-primary/10 w-fit mx-auto">
-                  {sector.icon}
+              { icon: Cpu, label: t("sectors.semiconductor"), bgImage: "/images/sectors/semiconductor.png" },
+              { icon: Car, label: t("sectors.ev"), bgImage: "/images/sectors/ev.png" },
+              { icon: Factory, label: t("sectors.electronics"), bgImage: "/images/sectors/manufacturing.png" },
+              { icon: Pill, label: t("sectors.pharma"), bgImage: "/images/sectors/pharma.png" },
+              { icon: Sun, label: t("sectors.renewable"), bgImage: "/images/sectors/renewable.png" },
+              { icon: Building2, label: t("sectors.infrastructure"), bgImage: "/images/sectors/infrastructure.png" },
+              { icon: FlaskConical, label: t("sectors.chemicals"), bgImage: "/images/sectors/chemicals.png" },
+              { icon: Microscope, label: t("sectors.emerging"), bgImage: "/images/sectors/emerging.png" },
+            ].map((sector) => {
+              const Icon = sector.icon;
+              return (
+                <div
+                  key={sector.label}
+                  className="group relative bg-card dark:bg-[#161f38]/60 p-6 text-center border border-border/50 hover:border-primary/50 shadow-sm hover:shadow-jibb transition-all duration-500 hover:-translate-y-1 cursor-pointer overflow-hidden rounded-2xl"
+                >
+                  {/* Background Image that fades in on hover */}
+                  <div 
+                    className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-transform duration-700 group-hover:scale-110 bg-cover bg-center"
+                    style={{ backgroundImage: `url(${sector.bgImage})` }}
+                  />
+                  {/* Dark overlay to ensure text readability */}
+                  <div className="absolute inset-0 z-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className="relative z-10 mb-4 transition-all duration-500 group-hover:scale-110 flex justify-center p-3 rounded-xl bg-primary/5 group-hover:bg-white/20 w-fit mx-auto backdrop-blur-md border border-primary/10 group-hover:border-white/10 transition-colors">
+                    <Icon className="size-6 text-primary group-hover:text-white transition-colors duration-300" />
+                  </div>
+                  <div className="relative z-10 font-bold text-foreground group-hover:text-white text-sm tracking-tight transition-colors duration-300">
+                    {sector.label}
+                  </div>
                 </div>
-                <div className="font-bold text-foreground text-sm group-hover:text-primary tracking-tight transition-colors duration-200">
-                  {sector.label}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </ScrollReveal>
         </div>
       </section>
@@ -390,8 +412,8 @@ export default async function HomePage({
               {
                 tier: "Gold Member",
                 desc: "Professional co-innovation",
-                colorClass: "border-emerald-500/40 bg-emerald-500/5",
-                badge: "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300",
+                colorClass: "border-jibb-indigo/40 bg-jibb-indigo/5",
+                badge: "bg-jibb-indigo/15 dark:bg-jibb-indigo/30 text-jibb-indigo dark:text-jibb-indigo-light",
                 recommended: true,
                 features: [
                   "20% Business Matching",
@@ -415,12 +437,12 @@ export default async function HomePage({
               <div
                 key={plan.tier}
                 className={`relative rounded-3xl p-6 text-left border transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between min-h-[220px] ${plan.recommended
-                  ? "bg-card text-foreground border-emerald-500 dark:border-emerald-400 shadow-lg scale-105 z-10"
+                  ? "bg-card text-foreground border-jibb-indigo dark:border-jibb-indigo shadow-lg scale-105 z-10"
                   : "bg-card text-foreground border-border/50 hover:shadow-lg backdrop-blur-sm"
                   } ${plan.colorClass}`}
               >
                 {plan.recommended && (
-                  <div className="absolute -top-3 left-6 bg-emerald-500 text-white text-[11px] uppercase font-bold tracking-wider px-3.5 py-1 rounded-full shadow-sm whitespace-nowrap">
+                  <div className="absolute -top-3 left-6 bg-jibb-indigo text-white text-[11px] uppercase font-bold tracking-wider px-3.5 py-1 rounded-full shadow-sm whitespace-nowrap">
                     Popular Choice
                   </div>
                 )}
@@ -435,7 +457,7 @@ export default async function HomePage({
                   <ul className="mt-4 space-y-2 text-xs text-muted-foreground border-t border-border/30 pt-3">
                     {plan.features.map((feat) => (
                       <li key={feat} className="flex items-center gap-1.5 font-medium">
-                        <span className="text-emerald-500 font-bold">✓</span> {feat}
+                        <span className="text-jibb-indigo font-bold">✓</span> {feat}
                       </li>
                     ))}
                   </ul>
@@ -454,6 +476,12 @@ export default async function HomePage({
           </div>
         </div>
       </section>
+
+      <NewsRoom 
+        mediaPosts={mediaPosts}
+        caseStudies={caseStudies}
+        thoughtLeadership={thoughtLeadership}
+      />
     </main>
   );
 }

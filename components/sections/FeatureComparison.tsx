@@ -94,7 +94,7 @@ export function FeatureComparison() {
       if (value) {
         return (
           <div className="flex justify-center">
-            <span className="inline-flex items-center justify-center size-6 rounded-md bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+            <span className="inline-flex items-center justify-center size-6 rounded-md bg-jibb-indigo/15 text-jibb-indigo border border-jibb-indigo/25">
               <Check className="size-3.5 stroke-[3]" />
             </span>
           </div>
@@ -113,7 +113,7 @@ export function FeatureComparison() {
     // Custom styling based on value text
     let textStyle = "text-foreground/80 dark:text-foreground/95 font-medium";
     if (value.includes("Free")) {
-      textStyle = "text-emerald-600 dark:text-emerald-400 font-bold";
+      textStyle = "text-jibb-indigo dark:text-jibb-indigo-light font-bold";
     } else if (value.includes("Discount")) {
       textStyle = "text-jibb-indigo dark:text-jibb-indigo-light font-semibold";
     } else if (value.includes("Access") || value.includes("Ones") || value.includes("Only")) {
@@ -170,10 +170,10 @@ export function FeatureComparison() {
                     </div>
                     <span className="block text-[11px] text-muted-foreground font-semibold">Standard Growth</span>
                   </th>
-                  <th className="p-5 text-center w-[18%] border-l border-border bg-emerald-500/5 relative">
-                    <div className="absolute top-0 inset-x-0 h-[3px] bg-emerald-500" />
-                    <div className="inline-flex items-center justify-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold uppercase tracking-wider mb-1">
-                      Gold Member <Sparkles className="size-3 fill-emerald-500 stroke-none animate-pulse" />
+                  <th className="p-5 text-center w-[18%] border-l border-border bg-jibb-indigo/5 relative">
+                    <div className="absolute top-0 inset-x-0 h-[3px] bg-jibb-indigo" />
+                    <div className="inline-flex items-center justify-center gap-1 px-2.5 py-0.5 rounded-full bg-jibb-indigo/15 dark:bg-jibb-indigo/35 text-jibb-indigo dark:text-jibb-indigo-light text-[10px] font-bold uppercase tracking-wider mb-1">
+                      Gold Member <Sparkles className="size-3 fill-jibb-indigo stroke-none animate-pulse" />
                     </div>
                     <span className="block text-[11px] text-muted-foreground font-semibold">Professional Tier</span>
                   </th>
@@ -215,7 +215,7 @@ export function FeatureComparison() {
                     </td>
 
                     {/* Gold Member */}
-                    <td className="p-5 text-center align-middle border-l border-border/40 bg-emerald-500/[0.02]">
+                    <td className="p-5 text-center align-middle border-l border-border/40 bg-jibb-indigo/[0.02]">
                       {renderCellValue(row.gold)}
                     </td>
 

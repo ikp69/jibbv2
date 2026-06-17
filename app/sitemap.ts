@@ -20,7 +20,7 @@ const STATIC_PAGES = [
   "/resources/blog",
   "/resources/insights",
   "/resources/case-studies",
-  "/resources/leadership-thoughts",
+  "/resources/thought-leadership",
 ];
 
 // Content types with markdown files
@@ -28,7 +28,7 @@ const CONTENT_TYPES: PostType[] = [
   "blog",
   "insights",
   "case-studies",
-  "leadership-thoughts",
+  "thought-leadership",
 ];
 
 // Maps PostType to its URL segment
@@ -36,7 +36,7 @@ const TYPE_TO_PATH: Record<PostType, string> = {
   blog: "blog",
   insights: "insights",
   "case-studies": "case-studies",
-  "leadership-thoughts": "leadership-thoughts",
+  "thought-leadership": "thought-leadership",
 };
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

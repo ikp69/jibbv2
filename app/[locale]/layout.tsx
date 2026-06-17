@@ -105,6 +105,16 @@ export default async function LocaleLayout({
       className={`${inter.variable} ${plusJakartaSans.variable} ${notoSansJP.variable} ${geistMono.variable} antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className="min-h-screen flex flex-col bg-background text-foreground bg-grid-mesh relative overflow-x-hidden">
         {/* Global background column layout grid lines aligning with the page container */}
         <div className="pointer-events-none fixed inset-0 z-0 flex justify-between max-w-7xl mx-auto px-6 lg:px-8" aria-hidden="true">

@@ -32,12 +32,11 @@ export function LeadershipGrid() {
 
   // Render only the 11 leaders who have local portrait files in public/leaders
   const allKeys = [
-    "hitesh", "varun", "shigemaro", "nobuchika", "ujjawal", "pratiksha",
+    "varun", "shigemaro", "nobuchika", "ujjawal", "pratiksha",
     "gyanendra", "akash", "vardaan", "mai", "aya"
   ];
 
   const imageMap: Record<string, string> = {
-    hitesh: "/leaders/hitesh-gupttaa.png",
     varun: "/leaders/varun-tyagi.png",
     shigemaro: "/leaders/shigemaro-yasui.png",
     nobuchika: "/leaders/nobichuka-akiya.png",
@@ -127,7 +126,7 @@ export function LeadershipGrid() {
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
-                    priority={person.key === "hitesh" || person.key === "varun"}
+                    priority={person.key === "varun" || person.key === "shigemaro"}
                   />
 
                   {/* Floating glassmorphic info tag at the bottom (Static View) */}

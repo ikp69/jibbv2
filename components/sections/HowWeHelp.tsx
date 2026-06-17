@@ -135,10 +135,10 @@ export function HowWeHelp() {
             </span>
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight">
-            {t("sectionTitle") || "How We Help"}
+            {t("sectionTitle") || "Why Join Us"}
           </h2>
           <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            {t("sectionSubtitle") || "Providing tailored support to bridge businesses, innovators, and researchers across the Japan-India corridor."}
+            {t("sectionSubtitle") || "Japan India Business Bureau (JIBB) is a powerful bilateral bridge between India and Japan. Backed by different government bodies in India and strong support by Japanese innovators. We are redefining Indian manufacturing ecosystem."}
           </p>
         </div>
 

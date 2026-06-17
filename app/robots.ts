@@ -14,7 +14,7 @@ export default function robots(): MetadataRoute.Robots {
           "*/resources/blog?*",
           "*/resources/insights?*",
           "*/resources/case-studies?*",
-          "*/resources/leadership-thoughts?*",
+          "*/resources/thought-leadership?*",
         ],
       },
     ],

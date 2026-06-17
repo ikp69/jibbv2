@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, type ReactNode, type ElementType } from "react";
+import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -75,6 +76,7 @@ export function ScrollReveal({
   scale = 1,
 }: ScrollRevealProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -134,7 +136,7 @@ export function ScrollReveal({
     }, el);
 
     return () => ctx.revert();
-  }, [direction, distance, duration, staggerChildren, delay, ease, triggerStart]);
+  }, [direction, distance, duration, staggerChildren, delay, ease, triggerStart, pathname]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const Component = Tag as any;

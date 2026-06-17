@@ -19,7 +19,7 @@ export interface MarkdownPost {
   impact?: string;
 }
 
-export type PostType = "blog" | "case-studies" | "insights" | "leadership-thoughts";
+export type PostType = "blog" | "case-studies" | "insights" | "thought-leadership";
 
 const CONTENT_DIRECTORY = path.join(process.cwd(), "content");
 

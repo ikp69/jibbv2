@@ -241,12 +241,45 @@ export function WhoWeAre() {
               </svg>
             </div>
 
-            {/* Floating City Labels (Visualizing Japan-India Corridor) */}
-            <div className="absolute inset-0 pointer-events-none select-none hidden md:block text-[9px] font-bold tracking-wider text-muted-foreground/35 uppercase z-10">
-              <span className="absolute top-[32%] left-[18%]">DELHI</span>
-              <span className="absolute top-[38%] right-[18%]">TOKYO</span>
-              <span className="absolute bottom-[35%] left-[16%]">MUMBAI</span>
-              <span className="absolute bottom-[32%] right-[18%]">OSAKA</span>
+            {/* Country Maps Visualizations (India & Japan Outlines in background) */}
+            <div className="absolute inset-0 pointer-events-none select-none hidden md:block z-0 opacity-20 dark:opacity-15">
+              {/* India Map (Left Side) */}
+              <motion.div
+                className="absolute left-[1%] top-[18%] w-[220px] h-[360px]"
+                animate={{
+                  y: [0, -6, 0],
+                }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 6,
+                  ease: "easeInOut",
+                }}
+              >
+                <img
+                  src="/india.svg"
+                  alt="India Map"
+                  className="w-full h-full object-contain filter dark:invert contrast-[0.85] opacity-50 dark:opacity-70 transition-all duration-300 drop-shadow-[0_0_20px_rgba(249,115,22,0.08)]"
+                />
+              </motion.div>
+
+              {/* Japan Map (Right Side) */}
+              <motion.div
+                className="absolute right-[5%] top-[18%] w-[220px] h-[360px]"
+                animate={{
+                  y: [0, 6, 0],
+                }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 6.5,
+                  ease: "easeInOut",
+                }}
+              >
+                <img
+                  src="/japan.svg"
+                  alt="Japan Map"
+                  className="w-full h-full object-contain filter dark:invert contrast-[0.85] opacity-50 dark:opacity-70 transition-all duration-300 drop-shadow-[0_0_20px_rgba(99,102,241,0.08)]"
+                />
+              </motion.div>
             </div>
 
             {/* Center Logo Ball (Enlarged centerpiece with glow ring and rotating gradient border) */}
@@ -389,7 +422,7 @@ export function WhoWeAre() {
               </div>
 
               {/* Centered Logo Ball for Mobile View */}
-              <div 
+              <div
                 className="absolute z-20 flex items-center justify-center pointer-events-none top-1/2 left-1/2"
                 style={{ transform: "translate(-50%, -50%)" }}
               >

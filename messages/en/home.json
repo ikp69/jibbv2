@@ -5,7 +5,7 @@
     "headline2": "Building Lasting Partnerships.",
     "subtext": "Connecting Japan and India through innovation, trade, manufacturing, and cross-border collaboration.",
     "ctaJoin": "Join JIBB",
-    "ctaExplore": "Explore Innovation Hub",
+    "ctaExplore": "Join JISC",
     "stat1Value": "100+",
     "stat1Label": "Bilateral Projects",
     "stat2Value": "₹850 Cr+",
@@ -36,7 +36,7 @@
     "ctaHeadline": "Your Journey Starts Here",
     "ctaText": "Expand your reach. Innovate without borders. Join JIBB today and start building your own success story.",
     "ctaJoin": "Join JIBB",
-    "ctaExplore": "Explore Innovation Hub",
+    "ctaExplore": "Join JISC",
     "ctaButton": "Become a Member",
     "storyDesc": "Discover how JIBB connects Japanese manufacturing precision with Indian software innovation.",
     "ctaBody1": "Kenji and Aarav turned a complex cross-border challenge into a massive success story.",
@@ -59,8 +59,8 @@
       "description": "Facilitating joint projects, shared resources, and co-development to create groundbreaking products for the global market."
     },
     "diaspora": {
-      "title": "Diaspora Networking",
-      "description": "Exclusive networking events connecting the Indian diaspora with Japanese business opportunities and cross-cultural partnerships."
+      "title": "Cross Border Delegations",
+      "description": "Exclusive delegation from India to Japan and vice-versa fostering partnerships, joint-ventures, technology transfer and policy dialogues."
     },
     "localization": {
       "title": "Localization Support",
@@ -69,8 +69,8 @@
     "learnMore": "Learn More"
   },
   "howWeHelp": {
-    "sectionTitle": "How We Help",
-    "sectionSubtitle": "Providing tailored support to bridge businesses, innovators, and researchers across the Japan-India corridor.",
+    "sectionTitle": "Why Join Us",
+    "sectionSubtitle": "Japan India Business Bureau (JIBB) is a powerful bilateral bridge between India and Japan. Backed by different government bodies in India and strong support by Japanese innovators. We are redefining Indian manufacturing ecosystem.",
     "tagline": "Tailored Solutions",
     "japaneseCompanies": {
       "title": "For Japanese Companies",
@@ -97,9 +97,9 @@
   },
   "featOpportunities": {
     "sectionTitle": "Featured Opportunities",
-    "sectionSubtitle": "Discover active collaboration opportunities between India and Japan.",
+    "sectionSubtitle": "Become a member and discover active collaboration opportunities between India and Japan.",
     "tagline": "Opportunity Marketplace",
-    "viewAll": "View All Opportunities",
+    "viewAll": "Become our member to explore all opportunities",
     "tabs": {
       "partnerships": "Partnerships",
       "delegations": "Delegations",
@@ -125,33 +125,51 @@
     "data": {
       "partnerships": {
         "p1": {
-          "company": "Tokyo Semiconductor Solutions",
-          "lookingFor": "Indian Manufacturing Partner",
-          "details": "PCB supplier & assembly · R&D collaboration on custom silicon architecture.",
-          "industry": "Semiconductors",
-          "location": "Tokyo, Japan",
+          "company": "Confidential Member",
+          "lookingFor": "Joint Venture Partner in India",
+          "details": "Japanese die and mould manufacturer is looking for a Joint Venture partner in India.",
+          "industry": "Manufacturing",
+          "location": "Japan",
           "direction": "JAPAN → INDIA",
-          "time": "3 days ago"
+          "time": "1 day ago"
         },
         "p2": {
-          "company": "Bharat Robotics",
-          "lookingFor": "Japanese Distributor",
-          "details": "Strategic technology partner for autonomous assembly & global robotics sales.",
-          "industry": "Industrial Automation",
-          "location": "Noida, India",
+          "company": "Confidential Member",
+          "lookingFor": "Japanese JV Partner",
+          "details": "Indian company interested in setting up ATMP and OSAT in power semiconductors is looking for a Japanese JV partner.",
+          "industry": "Semiconductors",
+          "location": "India",
           "direction": "INDIA → JAPAN",
+          "time": "3 days ago"
+        },
+        "p3": {
+          "company": "Confidential Member",
+          "lookingFor": "Indian Distributor",
+          "details": "Japanese machine tool and manufacturing company is looking to enter Indian market with a distributor.",
+          "industry": "Machine Tools",
+          "location": "Japan",
+          "direction": "JAPAN → INDIA",
           "time": "5 days ago"
         }
       },
       "delegations": {
         "d1": {
-          "title": "Japan → India Business Delegation 2026",
-          "date": "15–20 March 2026",
-          "cities": "Delhi, Bengaluru, Hyderabad",
-          "focus": "Semiconductor, Electronics, AI",
-          "participants": "40 Japanese Companies",
+          "title": "Delegation of Japanese semiconductor players to India",
+          "date": "Upcoming 2026",
+          "cities": "Delhi NCR, Bengaluru, Hyderabad",
+          "focus": "Semiconductors, Electronics, AI",
+          "participants": "Japanese Semiconductor Players",
           "direction": "JAPAN → INDIA",
-          "benefits": "B2B Meetings, Factory Visits, Government Networking Events"
+          "benefits": "B2B Matchmaking, Policy Briefings, Joint Ventures"
+        },
+        "d2": {
+          "title": "Delegation of Government of India to Japan",
+          "date": "Upcoming 2026",
+          "cities": "Tokyo, Osaka, Nagoya",
+          "focus": "Bilateral Trade, Advanced Manufacturing",
+          "participants": "Indian Officials & Industry Leaders",
+          "direction": "INDIA → JAPAN",
+          "benefits": "G2B Dialogues, Investment Pitching, Technology Transfer"
         }
       },
       "tradeMissions": {
@@ -172,28 +190,12 @@
       },
       "investment": {
         "i1": {
-          "title": "AI Manufacturing Platform",
-          "seeking": "$1.5M Seed Funding",
-          "industry": "AI / Manufacturing",
+          "title": "Indian PCB Manufacturer seeking Japanese Investor",
+          "seeking": "Growth Capital / JV Investment",
+          "industry": "Electronics / PCB Manufacturing",
           "location": "India",
           "direction": "INDIA → JAPAN",
-          "type": "Startup Equity"
-        },
-        "i2": {
-          "title": "Tokyo Venture Group",
-          "seeking": "Seeking Startups",
-          "industry": "AI, Robotics, Deep Tech",
-          "location": "Japan",
-          "direction": "JAPAN → INDIA",
-          "type": "VC Fund ($500K–$5M)"
-        },
-        "i3": {
-          "title": "Japanese Electronics Firm",
-          "seeking": "Joint Venture Partner",
-          "industry": "Consumer Electronics",
-          "location": "India / Japan",
-          "direction": "Bilateral JV",
-          "type": "$10M+ Joint Investment"
+          "type": "Strategic Equity Partner"
         }
       }
     }
@@ -233,7 +235,7 @@
       "title": "Expert Ecosystem",
       "description": "Industry experts, government officials, and entrepreneurs."
     },
-    "cta": "Explore Innovation Hub"
+    "cta": "Join JISC"
   },
   "membership": {
     "sectionTitle": "Membership",
@@ -271,7 +273,7 @@
     "sectionTitle": "Who We Are",
     "tagline": "About JIBB",
     "aboutUs": "About Us",
-    "aboutUsDesc": "JIBB serve as a strategic bridge connecting businesses, governments, and startups across Japan and India. Our goal is to empower innovation and facilitate cross-border collaborations that drive mutual growth.",
+    "aboutUsDesc": "JIBB serve as a strategic bridge connecting stakeholders, businesses, government, academia and startups. Our goal is to enable next global manufacturing shift by bringing more Japanese technologies to Indian manufacturing hub.",
     "consultingTitle": "Consulting Services",
     "consultingItems": [
       "Landscaping",
@@ -405,23 +407,74 @@
     "gallery": {
       "title": "Memories of Bilateral Collaboration",
       "subtitle": "A glimpse into our past business matchmaking sessions, delegation visits, and tech summits.",
-      "img1": { "title": "Joint Tech Summit", "desc": "Leading tech giants discussing cross-border SaaS opportunities." },
-      "img2": { "title": "MoU Signing Ceremony", "desc": "Formalizing bilateral research partnerships in deep-tech." },
-      "img3": { "title": "Executive Roundtable", "desc": "Exploring next-generation clean energy distribution networks." },
-      "img4": { "title": "Semiconductor Forum", "desc": "Delegates align on supply chain resiliency and local fab partnerships." },
-      "img5": { "title": "AI & Innovation Pitch", "desc": "Startups showcasing generative AI tools to Japanese corporate VC." },
-      "img6": { "title": "EV Battery Alliance Meeting", "desc": "Collaborative research on lithium-ion and solid-state alternatives." },
-      "img7": { "title": "Industrial Corridor Tour", "desc": "Delegates visiting smart manufacturing facilities in Noida." },
-      "img8": { "title": "Bilateral Trade Dialogue", "desc": "High-level policy discussion on easing capital flow and talent exchange." },
-      "img9": { "title": "Startup Incubation Launch", "desc": "Inaugurating the joint incubation facility in Tokyo." },
-      "img10": { "title": "B2B Matchmaking Mixer", "desc": "Nurturing relationships between suppliers and buyers." },
-      "img11": { "title": "Global Trade Pavilion", "desc": "Showcasing local craft and tech integrations to global buyers." },
-      "img12": { "title": "Smart Manufacturing Workshop", "desc": "Hands-on learning session on automated assembly line software." },
-      "img13": { "title": "Renewable Energy Panel", "desc": "Pioneering hydrogen energy systems and solar grids." },
-      "img14": { "title": "Academic Exchange Signing", "desc": "Fostering university-level joint-degrees and internships." },
-      "img15": { "title": "Hardware Showcase", "desc": "Displaying edge-computing prototypes designed in India." },
-      "img16": { "title": "Ministerial Welcome", "desc": "Warm reception for the visiting trade delegation." },
-      "img17": { "title": "JIBB Annual Reception", "desc": "Celebrating successful years of partnership." }
+      "img1": {
+        "title": "Joint Tech Summit",
+        "desc": "Leading tech giants discussing cross-border SaaS opportunities."
+      },
+      "img2": {
+        "title": "MoU Signing Ceremony",
+        "desc": "Formalizing bilateral research partnerships in deep-tech."
+      },
+      "img3": {
+        "title": "Executive Roundtable",
+        "desc": "Exploring next-generation clean energy distribution networks."
+      },
+      "img4": {
+        "title": "Semiconductor Forum",
+        "desc": "Delegates align on supply chain resiliency and local fab partnerships."
+      },
+      "img5": {
+        "title": "AI & Innovation Pitch",
+        "desc": "Startups showcasing generative AI tools to Japanese corporate VC."
+      },
+      "img6": {
+        "title": "EV Battery Alliance Meeting",
+        "desc": "Collaborative research on lithium-ion and solid-state alternatives."
+      },
+      "img7": {
+        "title": "Industrial Corridor Tour",
+        "desc": "Delegates visiting smart manufacturing facilities in Noida."
+      },
+      "img8": {
+        "title": "Bilateral Trade Dialogue",
+        "desc": "High-level policy discussion on easing capital flow and talent exchange."
+      },
+      "img9": {
+        "title": "Startup Incubation Launch",
+        "desc": "Inaugurating the joint incubation facility in Tokyo."
+      },
+      "img10": {
+        "title": "B2B Matchmaking Mixer",
+        "desc": "Nurturing relationships between suppliers and buyers."
+      },
+      "img11": {
+        "title": "Global Trade Pavilion",
+        "desc": "Showcasing local craft and tech integrations to global buyers."
+      },
+      "img12": {
+        "title": "Smart Manufacturing Workshop",
+        "desc": "Hands-on learning session on automated assembly line software."
+      },
+      "img13": {
+        "title": "Renewable Energy Panel",
+        "desc": "Pioneering hydrogen energy systems and solar grids."
+      },
+      "img14": {
+        "title": "Academic Exchange Signing",
+        "desc": "Fostering university-level joint-degrees and internships."
+      },
+      "img15": {
+        "title": "Hardware Showcase",
+        "desc": "Displaying edge-computing prototypes designed in India."
+      },
+      "img16": {
+        "title": "Ministerial Welcome",
+        "desc": "Warm reception for the visiting trade delegation."
+      },
+      "img17": {
+        "title": "JIBB Annual Reception",
+        "desc": "Celebrating successful years of partnership."
+      }
     }
   }
 }
