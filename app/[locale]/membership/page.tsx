@@ -14,17 +14,18 @@ import { MemberBenefits } from "@/components/sections/MemberBenefits";
 import { motion } from "framer-motion";
 import {
   Users, Award, ShieldCheck, Calendar, Clock, Globe, ArrowRight, CheckCircle,
-  MapPin, ClipboardList, Lightbulb, Sparkles, Server, Laptop
+  MapPin, ClipboardList, Lightbulb, Sparkles, Server, Laptop, BookOpen
 } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 
 import { submitMembershipApplication } from "@/app/actions/membership";
+import { isValidPhone, PHONE_ERROR } from "@/app/lib/validation/phone";
 
 export default function MembershipPage() {
   const t = useTranslations("membershipPage");
 
-  // Tab State for Scheduler: "calendly" or "bookings"
-  const [activeTab, setActiveTab] = useState<"calendly" | "bookings">("calendly");
+  // Tab State for Scheduler: "calendly" | "ms-bookings" | "bookings"
+  const [activeTab, setActiveTab] = useState<"calendly" | "ms-bookings" | "bookings">("calendly");
 
   // Active Selected Date and Time
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -47,13 +48,32 @@ export default function MembershipPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [shouldShake, setShouldShake] = useState(false);
 
-  const dates = [
-    { label: "Mon, Jun 1", value: "2026-06-01" },
-    { label: "Tue, Jun 2", value: "2026-06-02" },
-    { label: "Wed, Jun 3", value: "2026-06-03" },
-    { label: "Thu, Jun 4", value: "2026-06-04" },
-    { label: "Fri, Jun 5", value: "2026-06-05" },
-  ];
+  // Dynamically generate the next 5 available weekdays from today
+  const dates = (() => {
+    const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const results: { label: string; value: string }[] = [];
+    const cursor = new Date();
+    // Start from tomorrow to avoid partial-day issues
+    cursor.setDate(cursor.getDate() + 1);
+    cursor.setHours(0, 0, 0, 0);
+
+    while (results.length < 5) {
+      const dow = cursor.getDay();
+      // Skip weekends (0 = Sunday, 6 = Saturday)
+      if (dow !== 0 && dow !== 6) {
+        const yyyy = cursor.getFullYear();
+        const mm = String(cursor.getMonth() + 1).padStart(2, "0");
+        const dd = String(cursor.getDate()).padStart(2, "0");
+        results.push({
+          label: `${DAY_NAMES[dow]}, ${MONTH_NAMES[cursor.getMonth()]} ${cursor.getDate()}`,
+          value: `${yyyy}-${mm}-${dd}`,
+        });
+      }
+      cursor.setDate(cursor.getDate() + 1);
+    }
+    return results;
+  })();
 
   const times = ["10:00 AM", "11:30 AM", "2:00 PM", "3:30 PM", "5:00 PM"];
 
@@ -84,7 +104,11 @@ export default function MembershipPage() {
     if (!selectedTime) tempErrors.time = "Please select a time slot";
     if (!form.companyName.trim()) tempErrors.companyName = "Company name is required";
     if (!form.contactPerson.trim()) tempErrors.contactPerson = "Contact person name is required";
-    if (!form.phone.trim()) tempErrors.phone = "Phone number is required";
+    if (!form.phone.trim()) {
+      tempErrors.phone = "Phone number is required";
+    } else if (!isValidPhone(form.phone)) {
+      tempErrors.phone = PHONE_ERROR;
+    }
     if (!form.email.trim()) {
       tempErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
@@ -411,6 +435,24 @@ export default function MembershipPage() {
               </button>
               <button
                 type="button"
+                onClick={() => { setActiveTab("ms-bookings"); setSelectedDate(null); setSelectedTime(null); }}
+                className={`relative flex-1 py-4 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${activeTab === "ms-bookings"
+                    ? "bg-card text-jibb-orange"
+                    : "text-muted-foreground hover:bg-muted/65 hover:text-foreground"
+                  }`}
+              >
+                <BookOpen className="size-4" />
+                MS Bookings
+                {activeTab === "ms-bookings" && (
+                  <motion.div
+                    layoutId="activeTabIndicator"
+                    className="absolute bottom-0 inset-x-0 h-[2px] bg-jibb-orange"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </button>
+              <button
+                type="button"
                 onClick={() => { setActiveTab("bookings"); setSelectedDate(null); setSelectedTime(null); }}
                 className={`relative flex-1 py-4 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${activeTab === "bookings"
                     ? "bg-card text-jibb-orange"
@@ -429,7 +471,57 @@ export default function MembershipPage() {
               </button>
             </div>
 
-            {/* Scheduler Workspace Grid */}
+            {/* Calendly Embed Tab */}
+            {activeTab === "calendly" && (
+              <div className="flex-1 flex flex-col min-h-[580px]">
+                {process.env.NEXT_PUBLIC_CALENDLY_URL ? (
+                  <iframe
+                    src={`${process.env.NEXT_PUBLIC_CALENDLY_URL}?hide_gdpr_banner=1&primary_color=f97316`}
+                    title="Schedule a meeting via Calendly"
+                    width="100%"
+                    height="100%"
+                    className="flex-1 min-h-[580px] border-0"
+                    allow="payment"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="flex-1 flex flex-col items-center justify-center gap-4 p-10 text-center text-muted-foreground min-h-[580px]">
+                    <Calendar className="size-10 opacity-30" />
+                    <p className="text-sm font-medium">Calendly is not configured yet.</p>
+                    <p className="text-xs opacity-60">
+                      Set <code className="bg-muted px-1.5 py-0.5 rounded text-foreground/70">NEXT_PUBLIC_CALENDLY_URL</code> in your environment variables to enable the Calendly embed.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* MS Bookings Embed Tab */}
+            {activeTab === "ms-bookings" && (
+              <div className="flex-1 flex flex-col min-h-[580px]">
+                {process.env.NEXT_PUBLIC_MS_BOOKINGS_URL ? (
+                  <iframe
+                    src={process.env.NEXT_PUBLIC_MS_BOOKINGS_URL}
+                    title="Schedule a meeting via Microsoft Bookings"
+                    width="100%"
+                    height="100%"
+                    className="flex-1 min-h-[580px] border-0"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="flex-1 flex flex-col items-center justify-center gap-4 p-10 text-center text-muted-foreground min-h-[580px]">
+                    <BookOpen className="size-10 opacity-30" />
+                    <p className="text-sm font-medium">Microsoft Bookings is not configured yet.</p>
+                    <p className="text-xs opacity-60">
+                      Set <code className="bg-muted px-1.5 py-0.5 rounded text-foreground/70">NEXT_PUBLIC_MS_BOOKINGS_URL</code> in your environment variables to enable the MS Bookings embed.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Bookings Form Tab */}
+            {activeTab === "bookings" && (
             <form onSubmit={handleSubmit} className={`p-6 sm:p-8 flex-1 flex flex-col justify-between gap-8 ${shouldShake ? "animate-shake" : ""}`}>
               <div className="grid md:grid-cols-2 gap-8 items-start">
 
@@ -629,6 +721,7 @@ export default function MembershipPage() {
                 </AnimatedButton>
               </div>
             </form>
+            )}
           </div>
         </div>
       </section>

@@ -2,6 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 import matter from "gray-matter";
 import { marked } from "marked";
+import sanitizeHtml from "sanitize-html";
 
 export interface MarkdownPost {
   slug: string;
@@ -57,8 +58,25 @@ export async function getPostBySlug(
     const fileContent = await fs.readFile(filePath, "utf-8");
     const { data, content } = matter(fileContent);
 
-    // Convert markdown body to HTML string safely
-    const contentHtml = await marked.parse(content);
+    // Convert markdown to HTML, then sanitize to prevent XSS if content
+    // is ever edited outside of the repository (e.g., CMS integration).
+    const rawHtml = await marked.parse(content);
+    const contentHtml = sanitizeHtml(rawHtml, {
+      allowedTags: [
+        ...sanitizeHtml.defaults.allowedTags,
+        "img", "figure", "figcaption", "details", "summary",
+      ],
+      allowedAttributes: {
+        ...sanitizeHtml.defaults.allowedAttributes,
+        img: ["src", "alt", "class", "width", "height", "loading"],
+        "*": ["class", "id"],
+        a: ["href", "name", "target", "rel"],
+      },
+      // Ensure external links open safely
+      transformTags: {
+        a: sanitizeHtml.simpleTransform("a", { rel: "noopener noreferrer" }),
+      },
+    });
 
     return {
       slug,

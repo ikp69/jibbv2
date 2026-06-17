@@ -327,6 +327,7 @@ export function DesktopStoryHero() {
               src="/JIBB_LandingPage_Illustration_Final.webp"
               alt="Cover Illustration"
               fill
+              sizes="100vw"
               className="story-cover-image object-cover object-center will-change-transform"
               priority
             />

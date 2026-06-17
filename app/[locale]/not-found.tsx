@@ -1,12 +1,13 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Link } from "@/src/i18n/navigation";
+import { Link, useRouter } from "@/src/i18n/navigation";
 import { motion } from "framer-motion";
 import { Compass, ArrowLeft, Home, BookOpen, Users } from "lucide-react";
 
 export default function NotFound() {
   const t = useTranslations("notFound");
+  const router = useRouter();
 
   return (
     <main className="relative min-h-[85vh] flex items-center justify-center overflow-hidden py-16 px-4 bg-background">
@@ -58,7 +59,7 @@ export default function NotFound() {
             </Link>
 
             <button 
-              onClick={() => window.history.back()}
+              onClick={() => router.back()}
               className="w-full sm:w-auto px-8 py-4 bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold rounded-xl border border-border transition-all duration-300 flex items-center justify-center gap-2 transform active:scale-95 cursor-pointer"
             >
               <ArrowLeft className="size-5" />

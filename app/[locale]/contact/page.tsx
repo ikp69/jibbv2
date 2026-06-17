@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 import { submitContactForm } from "@/app/actions/contact";
+import { isValidPhone, PHONE_ERROR } from "@/app/lib/validation/phone";
 
 export default function ContactPage() {
   const t = useTranslations("contactPage");
@@ -66,7 +67,11 @@ export default function ContactPage() {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       temp.email = "Invalid email format";
     }
-    if (!form.phone.trim()) temp.phone = "Phone number is required";
+    if (!form.phone.trim()) {
+      temp.phone = "Phone number is required";
+    } else if (!isValidPhone(form.phone)) {
+      temp.phone = PHONE_ERROR;
+    }
     if (!form.message.trim()) {
       temp.message = "Message details are required";
     } else if (form.message.trim().length < 10) {

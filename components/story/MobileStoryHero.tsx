@@ -71,6 +71,7 @@ export function MobileStoryHero() {
           alt="JIBB Background Illustration"
           fill
           priority
+          sizes="100vw"
           className="object-cover object-top scale-[1.25] opacity-[0.99]"
         />
 

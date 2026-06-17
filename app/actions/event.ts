@@ -59,8 +59,9 @@ export async function registerForEvent(data: EventInput) {
     });
 
     return { success: true };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("registerForEvent error:", err);
-    return { success: false, error: err.message || "Failed to complete event registration" };
+    const message = err instanceof Error ? err.message : "Failed to complete event registration";
+    return { success: false, error: message };
   }
 }

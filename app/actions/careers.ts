@@ -1,9 +1,12 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { CareerSchema, validateResume } from "@/app/lib/validation/career";
+import { CareerSchema, validateResume, validateResumeMagicBytes } from "@/app/lib/validation/career";
 import { sendEmail } from "@/lib/email/resend";
 import { getCareerApplicationNotificationEmail } from "@/lib/email/email-templates";
+
+// Signed URL expiry: 7 days — long enough for HR to review without a permanent link
+const RESUME_SIGNED_URL_EXPIRY_SECONDS = 60 * 60 * 24 * 7;
 
 export async function submitCareerApplication(formData: FormData) {
   try {
@@ -35,31 +38,33 @@ export async function submitCareerApplication(formData: FormData) {
       return { success: true };
     }
 
-    // 3. Validate Resume File
+    // 3. Validate Resume File — MIME type check (client-reported)
     const resumeVal = validateResume(file);
     if (!resumeVal.isValid || !file) {
       return { success: false, error: resumeVal.error || "Invalid file" };
     }
 
-    // 4. Supabase Client Setup
-    const supabase = await createClient();
-
-    // 5. Upload File to Storage
-    const fileExt = file.name.split(".").pop();
-    const uniqueId = Math.random().toString(36).substring(2, 9);
-    const fileName = `${Date.now()}-${uniqueId}.${fileExt}`;
-    const storagePath = `${fileName}`;
-
-    // Convert file to arrayBuffer and then Buffer
+    // 4. Magic byte validation — verifies true file format, not just browser-reported MIME type
     const arrayBuffer = await file.arrayBuffer();
+    if (!validateResumeMagicBytes(arrayBuffer)) {
+      return { success: false, error: "File content does not match a valid PDF, DOC, or DOCX format." };
+    }
+
     const buffer = Buffer.from(arrayBuffer);
 
-    // Upload to 'resumes' bucket
+    // 5. Supabase Client Setup
+    const supabase = await createClient();
+
+    // 6. Upload File to Storage (resumes bucket must be set to PRIVATE in Supabase dashboard)
+    const fileExt = file.name.split(".").pop();
+    const uniqueId = Math.random().toString(36).substring(2, 9);
+    const storagePath = `${Date.now()}-${uniqueId}.${fileExt}`;
+
     const { error: uploadError } = await supabase.storage
       .from("resumes")
       .upload(storagePath, buffer, {
         contentType: file.type,
-        upsert: false
+        upsert: false,
       });
 
     if (uploadError) {
@@ -67,12 +72,21 @@ export async function submitCareerApplication(formData: FormData) {
       throw new Error(`Failed to upload resume: ${uploadError.message}`);
     }
 
-    // Get the Public URL of the uploaded resume
-    const { data: { publicUrl } } = supabase.storage
+    // 7. Generate a short-lived signed URL for the HR notification email.
+    //    The storage path (not the URL) is saved in the DB so admins can
+    //    generate fresh signed URLs on demand without relying on a permanent link.
+    const { data: signedUrlData, error: signedUrlError } = await supabase.storage
       .from("resumes")
-      .getPublicUrl(storagePath);
+      .createSignedUrl(storagePath, RESUME_SIGNED_URL_EXPIRY_SECONDS);
 
-    // 6. Insert Application Record into Database
+    if (signedUrlError || !signedUrlData?.signedUrl) {
+      // Non-fatal: application still saved, but email won't have the link
+      console.error("Failed to generate signed URL for resume:", signedUrlError);
+    }
+
+    const resumeSignedUrl = signedUrlData?.signedUrl ?? "(link unavailable — check admin panel)";
+
+    // 8. Insert Application Record — store the storage path, not a permanent public URL
     const { error: dbError } = await supabase
       .from("career_applications")
       .insert({
@@ -80,25 +94,25 @@ export async function submitCareerApplication(formData: FormData) {
         email,
         phone,
         position,
-        resume_url: publicUrl,
+        resume_url: storagePath, // path only; generate signed URL on demand in admin
         cover_letter: coverLetter || null,
         status: "new",
       });
 
     if (dbError) {
       console.error("Database insert error:", dbError);
-      // Attempt to clean up uploaded file if DB insert fails
+      // Attempt to clean up the uploaded file if DB insert fails
       await supabase.storage.from("resumes").remove([storagePath]);
       throw new Error(dbError.message);
     }
 
-    // 7. Send HR Notification Email
+    // 9. Send HR Notification Email with the time-limited signed URL
     const emailHtml = getCareerApplicationNotificationEmail({
       name,
       email,
       phone,
       position,
-      resumeUrl: publicUrl,
+      resumeUrl: resumeSignedUrl,
       coverLetter,
     });
 
@@ -110,8 +124,9 @@ export async function submitCareerApplication(formData: FormData) {
     });
 
     return { success: true };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("submitCareerApplication error:", err);
-    return { success: false, error: err.message || "Failed to submit application" };
+    const message = err instanceof Error ? err.message : "Failed to submit application";
+    return { success: false, error: message };
   }
 }

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 import { submitCareerApplication } from "@/app/actions/careers";
+import { isValidPhone, PHONE_ERROR } from "@/app/lib/validation/phone";
 
 export default function CareersPage() {
   const t = useTranslations("careersPage");
@@ -86,7 +87,11 @@ export default function CareersPage() {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email)) {
       tempErrors.email = "Invalid email format";
     }
-    if (!formState.phone.trim()) tempErrors.phone = "Phone number is required";
+    if (!formState.phone.trim()) {
+      tempErrors.phone = "Phone number is required";
+    } else if (!isValidPhone(formState.phone)) {
+      tempErrors.phone = PHONE_ERROR;
+    }
     if (!formState.linkedin.trim()) {
       tempErrors.linkedin = "LinkedIn profile is required";
     } else if (!/linkedin\.com/.test(formState.linkedin)) {

@@ -85,8 +85,9 @@ export async function submitMembershipApplication(data: MembershipInput) {
     });
 
     return { success: true };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("submitMembershipApplication error:", err);
-    return { success: false, error: err.message || "Failed to submit membership application" };
+    const message = err instanceof Error ? err.message : "Failed to submit membership application";
+    return { success: false, error: message };
   }
 }

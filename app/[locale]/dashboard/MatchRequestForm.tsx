@@ -51,8 +51,9 @@ export function MatchRequestForm({ locale }: { locale: string }) {
         setTitle("");
         setDetails("");
       }
-    } catch (err: any) {
-      setError(err.message || (locale === "ja" ? "エラーが発生しました。" : "Something went wrong"));
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : (locale === "ja" ? "エラーが発生しました。" : "Something went wrong");
+      setError(message);
     } finally {
       setIsLoading(false);
     }

@@ -65,8 +65,9 @@ export async function submitMatchmakingRequest(data: MatchmakingInput) {
     });
 
     return { success: true };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("submitMatchmakingRequest error:", err);
-    return { success: false, error: err.message || "Failed to submit matchmaking request" };
+    const message = err instanceof Error ? err.message : "Failed to submit matchmaking request";
+    return { success: false, error: message };
   }
 }

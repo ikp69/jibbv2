@@ -6,18 +6,21 @@ export async function updateSession(request: NextRequest) {
     request,
   });
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder-url.supabase.co";
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key";
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  const isConfigured = 
-    process.env.NEXT_PUBLIC_SUPABASE_URL && 
-    process.env.NEXT_PUBLIC_SUPABASE_URL !== "https://placeholder-url.supabase.co" &&
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY !== "placeholder-anon-key";
+  // Middleware runs on every request, so we gracefully skip auth checks
+  // when Supabase is not configured (local dev without .env.local).
+  // Server actions and page components use a fail-fast client instead.
+  const isConfigured = Boolean(url && key);
+
+  if (!isConfigured) {
+    return { supabaseResponse, user: null };
+  }
 
   const supabase = createServerClient(
-    url,
-    key,
+    url!,
+    key!,
     {
       cookies: {
         getAll() {
@@ -37,16 +40,14 @@ export async function updateSession(request: NextRequest) {
   );
 
   let user = null;
-  if (isConfigured) {
-    try {
-      // Only make a fetch request if credentials are configured
-      const {
-        data: { user: fetchedUser },
-      } = await supabase.auth.getUser();
-      user = fetchedUser;
-    } catch (err) {
-      console.warn("Supabase session retrieval warning in middleware:", err);
-    }
+  try {
+    const {
+      data: { user: fetchedUser },
+    } = await supabase.auth.getUser();
+    user = fetchedUser;
+  } catch {
+    // Session refresh failure is non-fatal in middleware — the page-level
+    // auth guard (dashboard/layout.tsx) will redirect if the session is invalid.
   }
 
   return { supabaseResponse, user };

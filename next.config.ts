@@ -12,7 +12,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  allowedDevOrigins: ['*']
+  // Restrict dev origins — do NOT use wildcard '*' as it opens CORS attack surface
+  ...(process.env.NODE_ENV === "development" && {
+    allowedDevOrigins: ["localhost:3000"],
+  }),
 };
 
 export default withNextIntl(nextConfig);

@@ -8,13 +8,15 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        // Disallow search result pages (they have dynamic ?q= params)
         disallow: [
+          // API routes — never index
           "/api/",
-          "*/resources/blog?*",
-          "*/resources/insights?*",
-          "*/resources/case-studies?*",
-          "*/resources/thought-leadership?*",
+          // Auth pages — no value in indexing login/register flows
+          "/en/auth/",
+          "/ja/auth/",
+          // Member dashboard — private, authenticated content
+          "/en/dashboard/",
+          "/ja/dashboard/",
         ],
       },
     ],

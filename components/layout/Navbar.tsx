@@ -80,18 +80,19 @@ const navItems: NavItem[] = [
       { labelKey: "servicesMenu.diaspora", href: "/services#diaspora-networking", descKey: "servicesMenu.diasporaDesc", icon: Globe },
     ],
   },
-  {
-    labelKey: "nav.innovationHub",
-    href: "/innovation-hub",
-    align: "center",
-    megaMenu: [
-      { labelKey: "hubMenu.coe", href: "/innovation-hub#center-of-excellence", descKey: "hubMenu.coeDesc", icon: Trophy },
-      { labelKey: "hubMenu.labs", href: "/innovation-hub#laboratories", descKey: "hubMenu.labsDesc", icon: FlaskConical },
-      { labelKey: "hubMenu.incubation", href: "/innovation-hub#startup-incubation", descKey: "hubMenu.incubationDesc", icon: Lightbulb },
-      { labelKey: "hubMenu.partners", href: "/innovation-hub#partner-institutions", descKey: "hubMenu.partnersDesc", icon: GraduationCap },
-      { labelKey: "hubMenu.challenges", href: "/innovation-hub#innovation-challenges", descKey: "hubMenu.challengesDesc", icon: BookOpen },
-    ],
-  },
+  // Innovation Hub — temporarily hidden per management
+  // {
+  //   labelKey: "nav.innovationHub",
+  //   href: "/innovation-hub",
+  //   align: "center",
+  //   megaMenu: [
+  //     { labelKey: "hubMenu.coe", href: "/innovation-hub#center-of-excellence", descKey: "hubMenu.coeDesc", icon: Trophy },
+  //     { labelKey: "hubMenu.labs", href: "/innovation-hub#laboratories", descKey: "hubMenu.labsDesc", icon: FlaskConical },
+  //     { labelKey: "hubMenu.incubation", href: "/innovation-hub#startup-incubation", descKey: "hubMenu.incubationDesc", icon: Lightbulb },
+  //     { labelKey: "hubMenu.partners", href: "/innovation-hub#partner-institutions", descKey: "hubMenu.partnersDesc", icon: GraduationCap },
+  //     { labelKey: "hubMenu.challenges", href: "/innovation-hub#innovation-challenges", descKey: "hubMenu.challengesDesc", icon: BookOpen },
+  //   ],
+  // },
   {
     labelKey: "nav.ecosystem",
     href: "/membership",
@@ -368,12 +369,13 @@ function MobileDrawer({
             {/* Bottom Actions */}
             <div className="p-4 border-t border-border space-y-3 bg-muted/30">
               <LanguageSwitcher className="w-full" triggerClassName="w-full justify-center bg-card border border-border" />
-              <Link href="/auth/login" onClick={onClose} className="block">
+              {/* Member Login — temporarily hidden per management */}
+              {/* <Link href="/auth/login" onClick={onClose} className="block">
                 <AnimatedButton variant="outline" className="w-full justify-center gap-2 font-semibold">
                   <LogIn className="size-4" />
                   {t("nav.memberLogin")}
                 </AnimatedButton>
-              </Link>
+              </Link> */}
               <Link href="/membership" onClick={onClose} className="block">
                 <AnimatedButton variant="accent" className="w-full justify-center gap-2 font-semibold">
                   {t("nav.joinJibb")}
@@ -551,8 +553,8 @@ export function Navbar() {
                 />
               </div>
 
-              {/* Login Button (Desktop) */}
-              <Link href="/auth/login" className="hidden lg:block">
+              {/* Login Button (Desktop) — temporarily hidden per management */}
+              {/* <Link href="/auth/login" className="hidden lg:block">
                 <AnimatedButton
                   variant="ghost"
                   size="sm"
@@ -561,7 +563,7 @@ export function Navbar() {
                   <LogIn className="size-3.5" />
                   {t("nav.memberLogin")}
                 </AnimatedButton>
-              </Link>
+              </Link> */}
 
               {/* Join CTA (Desktop) */}
               <Link href="/membership" className="hidden lg:block">

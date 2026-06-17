@@ -2270,7 +2270,7 @@ div[class*="bg-primary"]:not(.no-hover-fill):has(svg) svg {
 
 .event-detail-back-btn {
   position: absolute;
-  top: 125px;
+  top: 50px;
   left: 48px;
   z-index: 10;
   display: flex;
@@ -4893,7 +4893,7 @@ body:has(.event-ticker) .nav {
 
 .event-detail-back-btn {
   position: absolute;
-  top: 125px;
+  top: 50px;
   left: 48px;
   z-index: 10;
   display: flex;

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Noto_Sans_JP, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Noto_Sans_JP, Geist_Mono, Plus_Jakarta_Sans, Cormorant_Garamond, Montserrat } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -10,7 +10,7 @@ import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvide
 import { PageTransitionProvider } from "@/components/providers/PageTransitionProvider";
 
 // ============================================================
-// FONTS — Inter (Latin) + Noto Sans JP (Japanese) + Geist Mono
+// FONTS — all loaded via next/font (no external CDN requests)
 // ============================================================
 const inter = Inter({
   variable: "--font-inter",
@@ -34,6 +34,20 @@ const notoSansJP = Noto_Sans_JP({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const cormorantGaramond = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
   display: "swap",
 });
@@ -102,16 +116,13 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${inter.variable} ${plusJakartaSans.variable} ${notoSansJP.variable} ${geistMono.variable} antialiased`}
+      className={`${inter.variable} ${plusJakartaSans.variable} ${notoSansJP.variable} ${geistMono.variable} ${cormorantGaramond.variable} ${montserrat.variable} antialiased`}
       suppressHydrationWarning
     >
       <head>
+        {/* Material Symbols — kept as external for now; move to self-hosted to eliminate CDN dependency */}
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
           rel="stylesheet"
         />
       </head>

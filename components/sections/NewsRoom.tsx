@@ -103,7 +103,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
         return {
           title: "Media & Insights",
           viewAllLink: "/insights",
-          viewAllText: "View All Media & Insights",
+          viewAllText: "View All",
           items: mediaPosts.map(post => ({
             id: post.slug,
             title: post.title,
@@ -119,7 +119,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
         return {
           title: "Case Studies",
           viewAllLink: "/case-studies",
-          viewAllText: "View All Case Studies",
+          viewAllText: "View All",
           items: caseStudies.map(post => ({
             id: post.slug,
             title: post.title,
@@ -150,8 +150,8 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
       case "social":
         return {
           title: "Social Feed",
-          viewAllLink: "https://www.linkedin.com/company/npo-jibb",
-          viewAllText: "View All Social Posts",
+          viewAllLink: "https://www.linkedin.com/company/japan-india-business-bureau",
+          viewAllText: "View All",
           isExternal: true,
           items: LINKEDIN_POSTS.map(post => ({
             id: post.id,
@@ -160,7 +160,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
             date: post.timeAgo,
             author: post.authorName,
             image: post.image,
-            link: "https://www.linkedin.com/company/npo-jibb",
+            link: "https://www.linkedin.com/company/japan-india-business-bureau",
             badge: "LinkedIn",
             isSocial: true,
             authorHandle: post.authorHandle,

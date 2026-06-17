@@ -47,6 +47,16 @@ export function LoginForm() {
       errs.password = t("passwordRequired");
     }
 
+    // Register-mode: validate required profile fields
+    if (mode === "register") {
+      if (!fullName.trim()) {
+        errs.fullName = "Full name is required";
+      }
+      if (password && password.length < 8) {
+        errs.password = "Password must be at least 8 characters";
+      }
+    }
+
     setFieldErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -219,7 +229,7 @@ export function LoginForm() {
             </motion.div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <AnimatePresence mode="popLayout">
               {mode === "register" && (
                 <motion.div
@@ -232,7 +242,7 @@ export function LoginForm() {
                   {/* Full Name */}
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold uppercase tracking-wider text-white/60 block">
-                      {t("fullName")}
+                      {t("fullName")} <span className="text-red-400">*</span>
                     </label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-white/40" />
@@ -240,10 +250,16 @@ export function LoginForm() {
                         type="text"
                         placeholder="John Doe"
                         value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        className="pl-10 h-11 bg-white/5 border-white/10 text-white focus:border-jibb-orange focus:ring-jibb-orange/20"
+                        onChange={(e) => {
+                          setFullName(e.target.value);
+                          if (fieldErrors.fullName) setFieldErrors(prev => { const c = { ...prev }; delete c.fullName; return c; });
+                        }}
+                        className={`pl-10 h-11 bg-white/5 border-white/10 text-white focus:border-jibb-orange focus:ring-jibb-orange/20 ${
+                          fieldErrors.fullName ? "border-red-500 focus:ring-red-500/20" : ""
+                        }`}
                       />
                     </div>
+                    {fieldErrors.fullName && <span className="text-[10px] text-red-400 font-medium">{fieldErrors.fullName}</span>}
                   </div>
 
                   {/* Company Name */}

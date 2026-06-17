@@ -3,6 +3,9 @@ import { Link } from "@/src/i18n/navigation";
 import { Cpu, Car, Sun, Pill, Landmark, FlaskConical, Factory, Rocket, ArrowRight, Sparkles } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 import { Button } from "@/components/ui/button";
+import { WorkProcess } from "@/components/sections/WorkProcess";
+import { HorizontalScroll } from "@/components/sections/HorizontalScroll";
+
 
 export async function generateMetadata({
   params,
@@ -127,6 +130,9 @@ export default async function SectorsPage({
           </div>
         </div>
       </section>
+
+      <WorkProcess/>
+      <HorizontalScroll />
 
       {/* Call to Action */}
       <section className="py-16 bg-jibb-gradient text-white relative overflow-hidden">

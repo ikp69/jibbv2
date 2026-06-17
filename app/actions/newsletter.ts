@@ -38,8 +38,9 @@ export async function subscribeToNewsletter(data: NewsletterInput) {
     }
 
     return { success: true };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("subscribeToNewsletter error:", err);
-    return { success: false, error: err.message || "Failed to subscribe to newsletter" };
+    const message = err instanceof Error ? err.message : "Failed to subscribe to newsletter";
+    return { success: false, error: message };
   }
 }

@@ -49,8 +49,9 @@ export async function submitContactForm(data: ContactInput) {
     });
 
     return { success: true };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("submitContactForm error:", err);
-    return { success: false, error: err.message || "Failed to submit contact inquiry" };
+    const message = err instanceof Error ? err.message : "Failed to submit contact inquiry";
+    return { success: false, error: message };
   }
 }

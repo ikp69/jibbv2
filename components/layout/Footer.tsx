@@ -316,14 +316,15 @@ export function Footer() {
               {t("footer.resources")}
             </h4>
             <ul className="space-y-2 text-sm">
-              <li>
+              {/* Innovation Hub — temporarily hidden per management */}
+              {/* <li>
                 <Link
                   href="/innovation-hub"
                   className="text-white/60 hover:text-white transition-colors block py-0.5"
                 >
                   {t("nav.innovationHub")}
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   href="/resources/case-studies"
