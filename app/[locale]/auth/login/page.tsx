@@ -3,6 +3,9 @@ import { LoginForm } from "./LoginForm";
 import { Link } from "@/src/i18n/navigation";
 import { ArrowLeft } from "lucide-react";
 
+// Never statically prerender — auth pages need runtime env vars
+export const dynamic = "force-dynamic";
+
 export default async function LoginPage({
   params,
 }: {

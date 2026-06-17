@@ -13,7 +13,8 @@ import { Mail, Lock, User, Building, Briefcase, Eye, EyeOff, AlertCircle, CheckC
 export function LoginForm() {
   const t = useTranslations("auth.login");
   const router = useRouter();
-  const supabase = createClient();
+  // Supabase client is created lazily inside handlers so it never runs during SSR/prerender
+  // (avoids build failures when env vars are absent at build time)
 
   // Authentication Mode: 'login' | 'register'
   const [mode, setMode] = useState<"login" | "register">("login");
@@ -71,6 +72,8 @@ export function LoginForm() {
     setIsLoading(true);
 
     try {
+      const supabase = createClient();
+
       if (mode === "login") {
         // Sign In Flow
         const { error: signInError } = await supabase.auth.signInWithPassword({
