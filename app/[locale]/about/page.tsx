@@ -4,6 +4,7 @@ import { AnimatedHeading } from "@/components/ui/AnimatedHeading";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { Parallax } from "@/components/ui/Parallax";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
+import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { Timeline } from "@/components/sections/Timeline";
 import { LogoMarquee } from "@/components/sections/LogoMarquee";
 import { AboutFAQ } from "@/components/sections/AboutFAQ";
@@ -36,9 +37,60 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+  const title = locale === "ja"
+    ? "JIBBについて | 日印ビジネス機構"
+    : "About Us — Japan India Business Bureau";
+  const description = locale === "ja"
+    ? "日印ビジネス機構（JIBB）は、日本とインドの企業・政府・スタートアップを結ぶ戦略的な橋渡し役。クロスボーダー協力と産業成長を推進します。"
+    : "JIBB is a strategic bridge connecting businesses, governments, and startups across Japan and India. We empower innovation and facilitate cross-border collaborations for mutual growth.";
+
   return {
-    title: "About Us — Japan India Business Bureau",
-    description: t("description"),
+    title,
+    description,
+    keywords: [
+      "JIBB about",
+      "Japan India Business Bureau",
+      "Japan India collaboration",
+      "bilateral business organization",
+      "cross-border innovation",
+      "Tokyo Noida axis",
+      "Japan India partnership",
+      "日印ビジネス",
+      "日印協力",
+      "二国間ビジネス機構",
+    ],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `${baseUrl}/${locale}/about`,
+      siteName: "JIBB — Japan India Business Bureau",
+      locale: locale === "en" ? "en_US" : "ja_JP",
+      alternateLocale: locale === "en" ? "ja_JP" : "en_US",
+      images: [
+        {
+          url: `${baseUrl}/images/og/about-og.jpg`,
+          width: 1200,
+          height: 630,
+          alt: "About JIBB — Connecting Japan & India",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`${baseUrl}/images/og/about-og.jpg`],
+    },
+    alternates: {
+      canonical: `${baseUrl}/${locale}/about`,
+      languages: {
+        en: `${baseUrl}/en/about`,
+        ja: `${baseUrl}/ja/about`,
+      },
+    },
   };
 }
 
@@ -162,11 +214,21 @@ export default async function AboutPage({
                   </div>
                   <div className="grid grid-cols-2 gap-3 border-t border-border/50 pt-4">
                     <div className="text-center">
-                      <span className="text-2xl font-black text-jibb-indigo block">500+</span>
+                      <AnimatedCounter 
+                        value={500} 
+                        suffix="+" 
+                        className="text-2xl font-black text-jibb-indigo block"
+                        duration={2}
+                      />
                       <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Members</span>
                     </div>
                     <div className="text-center">
-                      <span className="text-2xl font-black text-jibb-orange block">$100M+</span>
+                      <span className="text-2xl font-black text-jibb-orange block">$<AnimatedCounter 
+                        value={100} 
+                        suffix="M+" 
+                        className="text-2xl font-black text-jibb-orange"
+                        duration={2}
+                      /></span>
                       <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Deals Facilitated</span>
                     </div>
                   </div>

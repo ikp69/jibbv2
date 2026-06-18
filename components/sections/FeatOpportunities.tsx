@@ -475,9 +475,9 @@ export function FeatOpportunities() {
         {/* View All Button at the bottom */}
         <ScrollReveal direction="up" delay={0.1} className="text-center mt-14">
           <Link href="/membership">
-            <Button variant="accent" size="lg" className="px-8 py-6 text-base font-semibold rounded-xl shadow-lg group">
-              <span>{t("viewAll") || "Join Us to Explore All Opportunities"}</span>
-              <ArrowRight className="size-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+            <Button variant="accent" size="lg" className="px-6 md:px-8 py-6 text-sm md:text-base font-semibold rounded-xl shadow-lg group">
+              <span className="whitespace-normal md:whitespace-nowrap">{t("viewAll") || "Become a Member to Explore All Opportunities"}</span>
+              <ArrowRight className="size-5 ml-2 group-hover:translate-x-1 transition-transform duration-300 flex-shrink-0" />
             </Button>
           </Link>
         </ScrollReveal>

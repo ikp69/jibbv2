@@ -19,6 +19,54 @@ import { isValidPhone, PHONE_ERROR } from "@/app/lib/validation/phone";
 export default function ContactPage() {
   const t = useTranslations("contactPage");
 
+  // LocalBusiness Schema for SEO
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Japan India Business Bureau",
+    "alternateName": "JIBB",
+    "url": "https://npo-jibb.org",
+    "logo": "https://npo-jibb.org/images/jibb-logo.png",
+    "description": "Cross-border innovation and industrial collaboration ecosystem connecting Japan and India",
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "telephone": "+81-90-9325-3456",
+        "contactType": "General Inquiries",
+        "areaServed": "JP",
+        "availableLanguage": ["English", "Japanese"],
+        "contactOption": "TollFree"
+      },
+      {
+        "@type": "ContactPoint",
+        "telephone": "+91-70000-17005",
+        "contactType": "General Inquiries",
+        "areaServed": "IN",
+        "availableLanguage": ["English", "Hindi"],
+        "email": "vc@npo-jibb.org"
+      }
+    ],
+    "address": [
+      {
+        "@type": "PostalAddress",
+        "addressLocality": "Tokyo",
+        "addressCountry": "JP"
+      },
+      {
+        "@type": "PostalAddress",
+        "streetAddress": "Bhutani Cyberpark, Tower B, 8th Floor",
+        "addressLocality": "Noida",
+        "addressRegion": "Uttar Pradesh",
+        "postalCode": "201301",
+        "addressCountry": "IN"
+      }
+    ],
+    "sameAs": [
+      "https://www.linkedin.com/company/jibb",
+      "https://twitter.com/jibb_official"
+    ]
+  };
+
   // Form State
   const [form, setForm] = useState({
     inquiryType: "",
@@ -120,6 +168,12 @@ export default function ContactPage() {
 
   return (
     <main className="flex-1 bg-background text-foreground animate-in fade-in duration-300">
+      {/* Schema.org JSON-LD for LocalBusiness/Organization */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+
       {/* ============================================================
           CINEMATIC HERO
           ============================================================ */}

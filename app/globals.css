@@ -7866,3 +7866,62 @@ body:has(.event-ticker) .nav {
     font-size: 0.9rem;
   }
 }
+
+/* ============================================================
+   EVENT TICKER — Fixed positioning with navbar spacing
+   ============================================================ */
+/* Ticker heights:
+   - Mobile: 38px
+   - Desktop: 42px
+   
+   Navbar heights:
+   - Mobile: 64px (h-16)
+   - Desktop: 72px (h-18 on lg screens)
+   
+   Total fixed height when ticker visible:
+   - Mobile: 102px (38px + 64px)
+   - Tablet: 106px (42px + 64px)
+   - Desktop: 114px (42px + 72px)
+*/
+
+/* Homepage components use pt-20 (80px) or pt-24 (96px) for navbar spacing
+   We need to add the ticker height to these when ticker is visible */
+
+/* Mobile: add 38px (ticker) */
+body.ticker-visible .pt-20 {
+  padding-top: calc(5rem + 38px) !important; /* 80px + 38px = 118px */
+}
+
+body.ticker-visible .pt-24 {
+  padding-top: calc(6rem + 38px) !important; /* 96px + 38px = 134px */
+}
+
+/* Tablet and up: add 42px (ticker) */
+@media (min-width: 768px) {
+  body.ticker-visible .pt-20 {
+    padding-top: calc(5rem + 42px) !important; /* 80px + 42px = 122px */
+  }
+
+  body.ticker-visible .pt-24 {
+    padding-top: calc(6rem + 42px) !important; /* 96px + 42px = 138px */
+  }
+
+  body.ticker-visible .md\:pt-24 {
+    padding-top: calc(6rem + 42px) !important;
+  }
+}
+
+/* When ticker is hidden, revert to original padding */
+body.ticker-hidden .pt-20 {
+  padding-top: 5rem !important; /* 80px */
+}
+
+body.ticker-hidden .pt-24 {
+  padding-top: 6rem !important; /* 96px */
+}
+
+@media (min-width: 768px) {
+  body.ticker-hidden .md\:pt-24 {
+    padding-top: 6rem !important;
+  }
+}

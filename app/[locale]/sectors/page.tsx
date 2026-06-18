@@ -14,9 +14,60 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale });
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+  const title = locale === "ja"
+    ? "対象産業セクター | JIBB — 日印ビジネス機構"
+    : "Industry Sectors | JIBB — Japan India Business Bureau";
+  const description = locale === "ja"
+    ? "半導体、EV、再生可能エネルギー、医薬品、インフラ、化学、電子機器、新興技術など、日印間の8つの重点産業セクター。"
+    : "Eight focus industry sectors for Japan-India collaboration: Semiconductors, Electric Vehicles, Renewable Energy, Pharmaceuticals, Infrastructure, Chemicals, Electronics, and Emerging Technologies.";
+
   return {
-    title: `${t("sectorsPage.title")} — Japan India Business Bureau`,
-    description: t("sectorsPage.subtitle"),
+    title,
+    description,
+    keywords: [
+      "Japan India sectors",
+      "semiconductor Japan India",
+      "EV manufacturing India",
+      "renewable energy collaboration",
+      "pharma India Japan",
+      "infrastructure development",
+      "electronics manufacturing",
+      "emerging technologies",
+      "bilateral trade sectors",
+      "Japan India industries",
+    ],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `${baseUrl}/${locale}/sectors`,
+      siteName: "JIBB — Japan India Business Bureau",
+      locale: locale === "en" ? "en_US" : "ja_JP",
+      alternateLocale: locale === "en" ? "ja_JP" : "en_US",
+      images: [
+        {
+          url: `${baseUrl}/images/og/sectors-og.jpg`,
+          width: 1200,
+          height: 630,
+          alt: "JIBB Industry Sectors — Japan India Focus Areas",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`${baseUrl}/images/og/sectors-og.jpg`],
+    },
+    alternates: {
+      canonical: `${baseUrl}/${locale}/sectors`,
+      languages: {
+        en: `${baseUrl}/en/sectors`,
+        ja: `${baseUrl}/ja/sectors`,
+      },
+    },
   };
 }
 
@@ -72,8 +123,29 @@ export default async function SectorsPage({
     },
   ];
 
+  // ItemList Schema for SEO
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "JIBB Focus Industry Sectors",
+    "description": "Eight strategic industry sectors for Japan-India business collaboration",
+    "itemListElement": sectors.map((sector, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": t(`sectorsPage.details.${sector.key}.title`),
+      "description": t(`sectorsPage.details.${sector.key}.desc`),
+      "url": `https://npo-jibb.org/${locale}/sectors#${sector.key}`
+    }))
+  };
+
   return (
     <main className="flex-1 bg-background text-foreground animate-in fade-in duration-300">
+      {/* Schema.org JSON-LD for ItemList */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+
       {/* Cinematic Banner */}
       <PageHero className="py-20 lg:py-28" bgText="SECTORS">
         <div className="section-container relative z-10 text-left max-w-4xl space-y-6">
@@ -101,7 +173,8 @@ export default async function SectorsPage({
             {sectors.map((sec) => (
               <div
                 key={sec.key}
-                className="group relative rounded-3xl bg-card border border-border/80 hover:border-primary/20 hover:shadow-xl transition-all duration-300 p-6 flex flex-col justify-between min-h-[280px]"
+                id={sec.key}
+                className="group relative rounded-3xl bg-card border border-border/80 hover:border-primary/20 hover:shadow-xl transition-all duration-300 p-6 flex flex-col justify-between min-h-[280px] scroll-mt-20"
               >
                 <div className="space-y-4">
                   {/* Icon Panel */}

@@ -3,18 +3,18 @@ import { Link } from "@/src/i18n/navigation";
 import { StoryHero } from "@/components/story/StoryHero";
 import { HowWeHelp } from "@/components/sections/HowWeHelp";
 import { WhoWeAre } from "@/components/sections/WhoWeAre";
+import { EventNoticeBoard } from "@/components/sections/EventNoticeBoard";
 import { FeatOpportunities } from "@/components/sections/FeatOpportunities";
-import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
-import { LogoMarquee } from "@/components/sections/LogoMarquee";
-import { StatCounter } from "@/components/sections/StatCounter";
+import { TiltCard } from "@/components/ui/TiltCard";
 import { TestimonialCarousel } from "@/components/sections/TestimonialCarousel";
 import { NewsRoom } from "@/components/sections/NewsRoom";
 import { getAllPosts } from "@/lib/markdown";
 import {
   Compass, Handshake, Lightbulb, Globe, Cpu, Car, Factory, Pill, Sun, Building2,
-  FlaskConical, Microscope, BookOpen, Users, Rocket, Sparkles, ArrowRight, GraduationCap, Landmark
+  FlaskConical, Microscope, BookOpen, Users, Rocket, Sparkles, ArrowRight, GraduationCap, Landmark,
+  Zap, Crown, Star, Diamond
 } from "lucide-react";
 
 export default async function HomePage({
@@ -25,6 +25,73 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations({ locale });
+
+  // Organization Schema for Homepage SEO
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Japan India Business Bureau",
+    "alternateName": ["JIBB", "日印ビジネス機構"],
+    "url": "https://npo-jibb.org",
+    "logo": "https://npo-jibb.org/images/jibb-logo.png",
+    "description": "A cross-border innovation and industrial collaboration ecosystem connecting Japan and India through partnerships, trade, manufacturing, and technology.",
+    "foundingDate": "2023",
+    "address": [
+      {
+        "@type": "PostalAddress",
+        "addressLocality": "Tokyo",
+        "addressCountry": "JP"
+      },
+      {
+        "@type": "PostalAddress",
+        "streetAddress": "Bhutani Cyberpark, Tower B, 8th Floor",
+        "addressLocality": "Noida",
+        "addressRegion": "Uttar Pradesh",
+        "postalCode": "201301",
+        "addressCountry": "IN"
+      }
+    ],
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "telephone": "+81-90-9325-3456",
+        "contactType": "General Inquiries",
+        "areaServed": "JP",
+        "availableLanguage": ["English", "Japanese"]
+      },
+      {
+        "@type": "ContactPoint",
+        "telephone": "+91-70000-17005",
+        "contactType": "General Inquiries",
+        "areaServed": "IN",
+        "availableLanguage": ["English", "Hindi"],
+        "email": "vc@npo-jibb.org"
+      }
+    ],
+    "sameAs": [
+      "https://www.linkedin.com/company/jibb",
+      "https://twitter.com/jibb_official"
+    ],
+    "areaServed": [
+      {
+        "@type": "Country",
+        "name": "Japan"
+      },
+      {
+        "@type": "Country",
+        "name": "India"
+      }
+    ],
+    "knowsAbout": [
+      "Japan India Trade",
+      "Cross-Border Business",
+      "Semiconductor Industry",
+      "Electric Vehicles",
+      "Market Entry Services",
+      "Business Matching",
+      "Innovation Collaboration"
+    ]
+  };
 
   // Fetch Newsroom contents
   const blogPosts = await getAllPosts("blog", locale);
@@ -37,7 +104,16 @@ export default async function HomePage({
 
   return (
     <main className="flex-1">
+      {/* Schema.org JSON-LD for Organization */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+
       <StoryHero />
+
+      {/* Event Notice Board */}
+      <EventNoticeBoard />
 
       {/* <LogoMarquee /> */}
 
@@ -355,14 +431,14 @@ export default async function HomePage({
 
           </ScrollReveal>
 
-          <div className="text-center mt-12">
+          {/* <div className="text-center mt-12">
             <Link href="/innovation-hub">
               <button className="px-8 py-4 bg-primary text-primary-foreground font-bold rounded-xl hover:bg-primary/95 hover:scale-105 active:scale-[0.98] transition-all shadow-xl text-sm flex items-center justify-center gap-2 mx-auto">
                 <span>Explore Innovation Hub</span>
                 <ArrowRight className="size-4" />
               </button>
             </Link>
-          </div>
+          </div> */}
         </div>
       </section>
 
@@ -396,6 +472,7 @@ export default async function HomePage({
                 colorClass: "border-blue-500/20 hover:border-blue-500/30",
                 badge: "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300",
                 recommended: false,
+                icon: Zap,
                 features: [
                   "5% Business Matching",
                   "5% Training Programs",
@@ -408,6 +485,7 @@ export default async function HomePage({
                 colorClass: "border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600 bg-slate-500/[0.03]",
                 badge: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300",
                 recommended: false,
+                icon: Star,
                 features: [
                   "10% Business Matching",
                   "2.5% Exhibition Support",
@@ -420,6 +498,7 @@ export default async function HomePage({
                 colorClass: "border-amber-500/40 bg-amber-500/[0.04]",
                 badge: "bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400",
                 recommended: true,
+                icon: Crown,
                 features: [
                   "20% Business Matching",
                   "3 Free Training Programs",
@@ -432,43 +511,58 @@ export default async function HomePage({
                 colorClass: "border-slate-400/80 dark:border-slate-500/80 bg-slate-500/[0.06] hover:shadow-lg border-2",
                 badge: "bg-slate-300 dark:bg-slate-700 text-slate-800 dark:text-slate-200",
                 recommended: false,
+                icon: Diamond,
                 features: [
                   "30% Business Matching",
                   "7 Free Training Programs",
                   "Full Intelligence Access",
                 ],
               },
-            ].map((plan) => (
-              <div
+            ].map((plan) => {
+              const IconComponent = plan.icon;
+              return (
+              <TiltCard
                 key={plan.tier}
-                className={`relative rounded-3xl p-6 text-left border transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between min-h-[220px] ${plan.recommended
-                  ? "bg-card text-foreground border-amber-500 dark:border-amber-400 shadow-lg scale-105 z-10"
-                  : "bg-card text-foreground border-border/50 hover:shadow-lg backdrop-blur-sm"
-                  } ${plan.colorClass}`}
+                tiltMaxAngle={8}
+                scale={1.05}
+                speed={0.6}
               >
-                {plan.recommended && (
-                  <div className="absolute -top-3 left-6 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[11px] uppercase font-bold tracking-wider px-3.5 py-1 rounded-full shadow-sm whitespace-nowrap">
-                    Popular Choice
-                  </div>
-                )}
-                <div className="space-y-3 flex-grow">
-                  <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${plan.badge}`}>
-                    {plan.tier}
-                  </span>
-                  <p className="text-sm text-muted-foreground mt-2 font-semibold">
-                    {plan.desc}
-                  </p>
+                <div
+                  className={`relative rounded-3xl p-6 text-left border transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between min-h-[220px] ${plan.recommended
+                    ? "bg-card text-foreground border-amber-500 dark:border-amber-400 shadow-lg scale-105 z-10"
+                    : "bg-card text-foreground border-border/50 hover:shadow-lg backdrop-blur-sm"
+                    } ${plan.colorClass}`}
+                >
+                  {plan.recommended && (
+                    <div className="absolute -top-3 left-6 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[11px] uppercase font-bold tracking-wider px-3.5 py-1 rounded-full shadow-sm whitespace-nowrap">
+                      Popular Choice
+                    </div>
+                  )}
+                  <div className="space-y-3 flex-grow">
+                    {/* Icon */}
+                    <div className="mb-3 p-2 rounded-lg bg-foreground/10 w-fit">
+                      <IconComponent className="w-6 h-6 text-foreground" />
+                    </div>
+                    
+                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${plan.badge}`}>
+                      {plan.tier}
+                    </span>
+                    <p className="text-sm text-muted-foreground mt-2 font-semibold">
+                      {plan.desc}
+                    </p>
 
-                  <ul className="mt-4 space-y-2 text-xs text-muted-foreground border-t border-border/30 pt-3">
-                    {plan.features.map((feat) => (
-                      <li key={feat} className="flex items-center gap-1.5 font-medium">
-                        <span className={`${plan.recommended ? "text-amber-500" : plan.tier.includes("Platinum") ? "text-slate-500 dark:text-slate-400" : plan.tier.includes("Silver") ? "text-slate-400 dark:text-slate-300" : "text-jibb-indigo"} font-bold`}>✓</span> {feat}
-                      </li>
-                    ))}
-                  </ul>
+                    <ul className="mt-4 space-y-2 text-xs text-muted-foreground border-t border-border/30 pt-3">
+                      {plan.features.map((feat) => (
+                        <li key={feat} className="flex items-center gap-1.5 font-medium">
+                          <span className={`${plan.recommended ? "text-amber-500" : plan.tier.includes("Platinum") ? "text-slate-500 dark:text-slate-400" : plan.tier.includes("Silver") ? "text-slate-400 dark:text-slate-300" : "text-jibb-indigo"} font-bold`}>✓</span> {feat}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            ))}
+              </TiltCard>
+            );
+            })}
           </ScrollReveal>
 
           <div className="text-center mt-12">

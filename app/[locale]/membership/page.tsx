@@ -24,6 +24,82 @@ import { isValidPhone, PHONE_ERROR } from "@/app/lib/validation/phone";
 export default function MembershipPage() {
   const t = useTranslations("membershipPage");
 
+  // Membership Offer Schema for SEO
+  const membershipOffers = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Offer",
+      "name": "Associate Membership",
+      "description": "Entry level network access with 5% business matching discount and standard portal access",
+      "category": "Membership",
+      "seller": {
+        "@type": "Organization",
+        "name": "Japan India Business Bureau"
+      },
+      "availability": "https://schema.org/InStock",
+      "eligibleRegion": ["JP", "IN"],
+      "itemOffered": {
+        "@type": "Service",
+        "name": "JIBB Associate Membership",
+        "serviceType": "Business Network Membership"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Offer",
+      "name": "Silver Membership",
+      "description": "Standard growth tier with 10% business matching discount, intelligence newsletter, and delegation access",
+      "category": "Membership",
+      "seller": {
+        "@type": "Organization",
+        "name": "Japan India Business Bureau"
+      },
+      "availability": "https://schema.org/InStock",
+      "eligibleRegion": ["JP", "IN"],
+      "itemOffered": {
+        "@type": "Service",
+        "name": "JIBB Silver Membership",
+        "serviceType": "Business Network Membership"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Offer",
+      "name": "Gold Membership",
+      "description": "Professional co-innovation tier with 20% business matching discount, 3 free training programs, and active delegation participation",
+      "category": "Membership",
+      "seller": {
+        "@type": "Organization",
+        "name": "Japan India Business Bureau"
+      },
+      "availability": "https://schema.org/InStock",
+      "eligibleRegion": ["JP", "IN"],
+      "itemOffered": {
+        "@type": "Service",
+        "name": "JIBB Gold Membership",
+        "serviceType": "Business Network Membership"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Offer",
+      "name": "Platinum Membership",
+      "description": "Ultimate access tier with 30% business matching discount, 7 free training programs, full intelligence access, and selected collaboration",
+      "category": "Membership",
+      "seller": {
+        "@type": "Organization",
+        "name": "Japan India Business Bureau"
+      },
+      "availability": "https://schema.org/InStock",
+      "eligibleRegion": ["JP", "IN"],
+      "itemOffered": {
+        "@type": "Service",
+        "name": "JIBB Platinum Membership",
+        "serviceType": "Business Network Membership"
+      }
+    }
+  ];
+
   // Tab State for Scheduler: "consultation" | "inquiry"
   const [activeTab, setActiveTab] = useState<"consultation" | "inquiry">("consultation");
 
@@ -111,6 +187,15 @@ export default function MembershipPage() {
 
   return (
     <main className="flex-1 bg-background text-foreground animate-in fade-in duration-300">
+      {/* Schema.org JSON-LD for Membership Offers */}
+      {membershipOffers.map((offer, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(offer) }}
+        />
+      ))}
+
       {/* ============================================================
           CINEMATIC HERO
           ============================================================ */}

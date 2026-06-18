@@ -20,6 +20,136 @@ import { isValidPhone, PHONE_ERROR } from "@/app/lib/validation/phone";
 export default function CareersPage() {
   const t = useTranslations("careersPage");
   
+  // JobPosting Schema for Google Jobs Integration
+  const jobPostings = [
+    {
+      "@context": "https://schema.org",
+      "@type": "JobPosting",
+      "title": "Japan Desk Consultant (Bilingual: Japanese & English)",
+      "description": "We are seeking a Japan Desk Consultant with expertise in Japan-India business relations to provide strategic advisory, market research, and client liaison services.",
+      "identifier": {
+        "@type": "PropertyValue",
+        "name": "JIBB",
+        "value": "JDC-2026-001"
+      },
+      "datePosted": "2026-01-15",
+      "validThrough": "2026-12-31",
+      "employmentType": "FULL_TIME",
+      "hiringOrganization": {
+        "@type": "Organization",
+        "name": "Japan India Business Bureau",
+        "sameAs": "https://npo-jibb.org",
+        "logo": "https://npo-jibb.org/images/jibb-logo.png"
+      },
+      "jobLocation": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Bhutani Cyberpark, Tower B",
+          "addressLocality": "Noida",
+          "addressRegion": "Uttar Pradesh",
+          "postalCode": "201301",
+          "addressCountry": "IN"
+        }
+      },
+      "baseSalary": {
+        "@type": "MonetaryAmount",
+        "currency": "INR",
+        "value": {
+          "@type": "QuantitativeValue",
+          "value": "Competitive",
+          "unitText": "YEAR"
+        }
+      },
+      "qualifications": "Fluency in Japanese and English, 3+ years experience in Japan-India business",
+      "responsibilities": "Market research, client liaison, business development support, delegation coordination"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "JobPosting",
+      "title": "Bilateral Translator / Coordinator (Japanese-English-Hindi)",
+      "description": "Seeking a multilingual translator and coordinator to bridge communication between Japanese and Indian stakeholders in business negotiations and events.",
+      "identifier": {
+        "@type": "PropertyValue",
+        "name": "JIBB",
+        "value": "BTC-2026-002"
+      },
+      "datePosted": "2026-01-15",
+      "validThrough": "2026-12-31",
+      "employmentType": "FULL_TIME",
+      "hiringOrganization": {
+        "@type": "Organization",
+        "name": "Japan India Business Bureau",
+        "sameAs": "https://npo-jibb.org",
+        "logo": "https://npo-jibb.org/images/jibb-logo.png"
+      },
+      "jobLocation": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Bhutani Cyberpark, Tower B",
+          "addressLocality": "Noida",
+          "addressRegion": "Uttar Pradesh",
+          "postalCode": "201301",
+          "addressCountry": "IN"
+        }
+      },
+      "baseSalary": {
+        "@type": "MonetaryAmount",
+        "currency": "INR",
+        "value": {
+          "@type": "QuantitativeValue",
+          "value": "Competitive",
+          "unitText": "YEAR"
+        }
+      },
+      "qualifications": "Native or near-native fluency in Japanese, English, and Hindi",
+      "responsibilities": "Translation, interpretation, event coordination, documentation management"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "JobPosting",
+      "title": "Business Development Executive (India-Japan Markets)",
+      "description": "Drive business growth by identifying partnership opportunities, managing client relationships, and supporting market entry strategies between India and Japan.",
+      "identifier": {
+        "@type": "PropertyValue",
+        "name": "JIBB",
+        "value": "BDE-2026-003"
+      },
+      "datePosted": "2026-01-15",
+      "validThrough": "2026-12-31",
+      "employmentType": "FULL_TIME",
+      "hiringOrganization": {
+        "@type": "Organization",
+        "name": "Japan India Business Bureau",
+        "sameAs": "https://npo-jibb.org",
+        "logo": "https://npo-jibb.org/images/jibb-logo.png"
+      },
+      "jobLocation": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Bhutani Cyberpark, Tower B",
+          "addressLocality": "Noida",
+          "addressRegion": "Uttar Pradesh",
+          "postalCode": "201301",
+          "addressCountry": "IN"
+        }
+      },
+      "baseSalary": {
+        "@type": "MonetaryAmount",
+        "currency": "INR",
+        "value": {
+          "@type": "QuantitativeValue",
+          "value": "Competitive",
+          "unitText": "YEAR"
+        }
+      },
+      "qualifications": "2+ years in business development, strong understanding of India-Japan trade dynamics",
+      "responsibilities": "Lead generation, partnership development, client management, market analysis"
+    }
+  ];
+  
   // Job Board Accordion State
   const [activeJob, setActiveJob] = useState<string | null>(null);
 
@@ -172,6 +302,15 @@ export default function CareersPage() {
 
   return (
     <main className="flex-1 bg-background text-foreground animate-in fade-in duration-300">
+      {/* Schema.org JSON-LD for JobPosting - Google Jobs Integration */}
+      {jobPostings.map((job, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(job) }}
+        />
+      ))}
+
       {/* ============================================================
           HERO BANNER
           ============================================================ */}

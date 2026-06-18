@@ -7,6 +7,7 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useTickerContext } from "@/components/providers/TickerContext";
 import {
   Menu,
   X,
@@ -385,6 +386,7 @@ function MobileDrawer({
 export function Navbar() {
   const t = useTranslations();
   const pathname = usePathname();
+  const { isTickerVisible } = useTickerContext();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -460,7 +462,8 @@ export function Navbar() {
         ref={navRef}
         data-lenis-prevent
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent",
+          "fixed left-0 right-0 z-50 transition-all duration-300 border-b border-transparent",
+          isTickerVisible ? "top-[38px] md:top-[42px]" : "top-0",
           scrolled ? "navbar-solid" : "navbar-transparent"
         )}
       >
@@ -585,8 +588,13 @@ export function Navbar() {
         onClose={() => setMobileOpen(false)}
       />
 
-      {/* Dynamic Spacer: Rendered only on non-homepage screens to maintain layout overrides */}
-      {!isHomePage && <div className="h-16 lg:h-18" />}
+      {/* Dynamic Spacer: Rendered only on non-homepage screens to account for fixed ticker + navbar */}
+      {!isHomePage && (
+        <div className={cn(
+          "transition-all duration-300",
+          isTickerVisible ? "h-[102px] md:h-[106px] lg:h-[114px]" : "h-16 lg:h-18"
+        )} />
+      )}
     </>
   );
 }

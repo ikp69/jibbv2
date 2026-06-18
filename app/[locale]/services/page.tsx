@@ -17,9 +17,60 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale });
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+  const title = locale === "ja"
+    ? "ビジネスサービス | JIBB — 日印ビジネス機構"
+    : "Business Services | JIBB — Japan India Business Bureau";
+  const description = locale === "ja"
+    ? "市場調査、パートナー発掘、市場参入、デューデリジェンス、販売・マーケティング支援など、日印間の8つの統合ビジネスサービス。"
+    : "Eight integrated service lines connecting Japan and India: Market landscaping, partner identification, market entry, due diligence, sales & marketing, and full operational support.";
+
   return {
-    title: "Our Services | JIBB",
-    description: t("servicesPage.subtitle"),
+    title,
+    description,
+    keywords: [
+      "Japan India business services",
+      "market entry Japan",
+      "market entry India",
+      "business matching Japan India",
+      "due diligence services",
+      "partnership facilitation",
+      "Japan market research",
+      "India market research",
+      "cross-border business support",
+      "bilateral trade services",
+    ],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `${baseUrl}/${locale}/services`,
+      siteName: "JIBB — Japan India Business Bureau",
+      locale: locale === "en" ? "en_US" : "ja_JP",
+      alternateLocale: locale === "en" ? "ja_JP" : "en_US",
+      images: [
+        {
+          url: `${baseUrl}/images/og/services-og.jpg`,
+          width: 1200,
+          height: 630,
+          alt: "JIBB Services — End-to-End Bilateral Support",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`${baseUrl}/images/og/services-og.jpg`],
+    },
+    alternates: {
+      canonical: `${baseUrl}/${locale}/services`,
+      languages: {
+        en: `${baseUrl}/en/services`,
+        ja: `${baseUrl}/ja/services`,
+      },
+    },
   };
 }
 

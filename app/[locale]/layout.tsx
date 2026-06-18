@@ -123,13 +123,7 @@ export default async function LocaleLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-background text-foreground bg-grid-mesh relative overflow-x-hidden">
-        {/* Global background column layout grid lines aligning with the page container */}
-        <div className="pointer-events-none fixed inset-0 z-0 flex justify-between max-w-7xl mx-auto px-6 lg:px-8" aria-hidden="true">
-          <div className="w-[1px] bg-border/20 dark:bg-white/5 h-full" />
-          <div className="w-[1px] bg-border/20 dark:bg-white/5 h-full" />
-        </div>
-
+      <body className="min-h-screen flex flex-col bg-background text-foreground relative overflow-x-hidden">
         <ClientProviders messages={messages} locale={locale}>
             {children}
           </ClientProviders>
