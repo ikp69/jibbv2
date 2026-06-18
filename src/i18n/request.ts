@@ -3,7 +3,7 @@ import { hasLocale } from "next-intl";
 import { routing } from "./routing";
 
 export default getRequestConfig(async ({ requestLocale }) => {
-  // Typically corresponds to the `[locale]` segment
+  // Typically corresponds to the `[locale]` segment (touch to reload messages)
   const requested = await requestLocale;
   const locale = hasLocale(routing.locales, requested)
     ? requested
@@ -11,6 +11,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
 
   return {
     locale,
+    timeZone: "Asia/Kolkata",
     messages: {
       ...(await import(`../../messages/${locale}/layout.json`)).default,
       ...(await import(`../../messages/${locale}/home.json`)).default,

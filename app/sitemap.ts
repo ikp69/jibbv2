@@ -19,7 +19,6 @@ const STATIC_PAGES = [
   "/terms",
   "/resources/blog",
   "/resources/insights",
-  "/resources/case-studies",
   "/resources/thought-leadership",
 ];
 
@@ -27,7 +26,6 @@ const STATIC_PAGES = [
 const CONTENT_TYPES: PostType[] = [
   "blog",
   "insights",
-  "case-studies",
   "thought-leadership",
 ];
 
@@ -35,7 +33,6 @@ const CONTENT_TYPES: PostType[] = [
 const TYPE_TO_PATH: Record<PostType, string> = {
   blog: "blog",
   insights: "insights",
-  "case-studies": "case-studies",
   "thought-leadership": "thought-leadership",
 };
 

@@ -25,7 +25,7 @@ interface PageProps {
 // STATIC PARAMS
 // ============================================================
 export async function generateStaticParams() {
-  const slugs = await getAllSlugs("case-studies");
+  const slugs = await getAllSlugs("blog");
   const locales = ["en", "ja"];
   return locales.flatMap((locale) =>
     slugs.map((slug) => ({ locale, slug }))
@@ -37,11 +37,11 @@ export async function generateStaticParams() {
 // ============================================================
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params;
-  const post = await getPostBySlug("case-studies", slug, locale);
+  const post = await getPostBySlug("blog", slug, locale);
 
   if (!post) return { title: "Not Found | JIBB" };
 
-  const canonicalUrl = `${SITE_URL}/${locale}/resources/case-studies/${slug}`;
+  const canonicalUrl = `${SITE_URL}/${locale}/resources/blog/${slug}`;
   const ogTitle =
     locale === "ja" ? `${post.title} | 日印ビジネスビューロー` : `${post.title} | JIBB`;
 
@@ -69,9 +69,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     alternates: {
       canonical: canonicalUrl,
       languages: {
-        en: `${SITE_URL}/en/resources/case-studies/${slug}`,
-        ja: `${SITE_URL}/ja/resources/case-studies/${slug}`,
-        "x-default": `${SITE_URL}/en/resources/case-studies/${slug}`,
+        en: `${SITE_URL}/en/resources/blog/${slug}`,
+        ja: `${SITE_URL}/ja/resources/blog/${slug}`,
+        "x-default": `${SITE_URL}/en/resources/blog/${slug}`,
       },
     },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
@@ -83,14 +83,14 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale });
-  const post = await getPostBySlug("case-studies", slug, locale);
+  const post = await getPostBySlug("blog", slug, locale);
 
   if (!post) {
     notFound();
   }
 
-  const canonicalUrl = `${SITE_URL}/${locale}/resources/case-studies/${slug}`;
-  const listUrl = `${SITE_URL}/${locale}/resources/case-studies`;
+  const canonicalUrl = `${SITE_URL}/${locale}/resources/blog/${slug}`;
+  const listUrl = `${SITE_URL}/${locale}/resources/blog`;
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -129,9 +129,9 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
           ============================================================ */}
       <section className="pt-28 pb-8 bg-jibb-gradient-subtle border-b border-border/30">
         <div className="section-container max-w-4xl">
-          <Link href="/resources/case-studies" className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-jibb-orange transition-colors group mb-6">
+          <Link href="/resources/blog" className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-jibb-orange transition-colors group mb-6">
             <ArrowLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
-            {locale === "ja" ? "事例一覧へ戻る" : "Back to Case Studies"}
+            {locale === "ja" ? "ブログ一覧へ戻る" : "Back to Blog"}
           </Link>
 
           <div className="space-y-4">
@@ -260,9 +260,9 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
 
           {/* Footer Back Button */}
           <div className="border-t border-border/80 mt-12 pt-8">
-            <Link href="/resources/case-studies">
+            <Link href="/resources/blog">
               <Button variant="outline" className="font-semibold gap-1.5">
-                <ArrowLeft className="size-4" /> {locale === "ja" ? "事例一覧へ戻る" : "Back to Case Studies"}
+                <ArrowLeft className="size-4" /> {locale === "ja" ? "ブログ一覧へ戻る" : "Back to Blog"}
               </Button>
             </Link>
           </div>

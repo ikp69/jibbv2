@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useLocale } from 'next-intl'
 import EventsProgramTable from '@/components/events/EventsProgramTable'
@@ -25,7 +24,7 @@ const getPartnerLogo = (name: string): string | null => {
 
 export default function MobilityEventPage() {
   const locale = useLocale()
-  const jpFont = locale === 'ja' ? { fontFamily: 'var(--font-noto-jp)' } : {}
+  const jpFont = locale === 'ja' ? { fontFamily: 'var(--font-noto-sans-jp)' } : {}
 
   const eventData = getEventBySlug('bharat-mobility-2026')!
   const t = eventData[locale as 'en' | 'ja']
@@ -46,10 +45,10 @@ export default function MobilityEventPage() {
   const lb = labels[locale as 'en' | 'ja']
 
   return (
-    <main className="event-detail-main">
-      <Link href="/events" className="event-detail-back-btn" title={locale === 'ja' ? 'イベント一覧へ戻る' : 'Back to Events'}>
-        <span className="material-symbols-outlined">arrow_back</span>
-      </Link>
+      <main className="event-detail-main">
+        <Link href="/events" className="event-detail-back-btn" title={locale === 'ja' ? 'イベント一覧へ戻る' : 'Back to Events'}>
+          <span className="material-symbols-outlined">arrow_back</span>
+        </Link>
 
       {/* Past event banner */}
       <div className="event-concluded-banner">
@@ -117,7 +116,7 @@ export default function MobilityEventPage() {
           <h2 className="events-section-title" style={jpFont}>{lb.programTitle}</h2>
           <span className="events-section-date">{t.date}</span>
         </motion.div>
-        <EventsProgramTable
+        <EventsProgramTable 
           program={t.program}
           locale={locale}
           eventId="mobility-2026"
@@ -137,7 +136,7 @@ export default function MobilityEventPage() {
             <div className="events-partners-track">
               {marqueeItems.map((logo, index) => (
                 <div key={index} className="events-partner-logo-item">
-                  <Image src={logo.src} alt={logo.name} width={200} height={80} className="events-partner-marquee-img" style={{ width: 'auto', height: 'auto' }} />
+                  <Image src={logo.src} alt={logo.name} width={200} height={80} className="events-partner-marquee-img" />
                 </div>
               ))}
             </div>
@@ -197,6 +196,6 @@ export default function MobilityEventPage() {
         </motion.div>
       </section>
 
-    </main>
+      </main>
   )
 }

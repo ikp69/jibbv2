@@ -117,8 +117,8 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
         };
       case "cases":
         return {
-          title: "Case Studies",
-          viewAllLink: "/case-studies",
+          title: "Blog",
+          viewAllLink: "/resources/blog",
           viewAllText: "View All",
           items: caseStudies.map(post => ({
             id: post.slug,
@@ -127,15 +127,15 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
             date: post.date,
             author: post.author,
             image: post.image,
-            link: `/case-studies/${post.slug}`,
-            badge: "Case Study"
+            link: `/resources/blog/${post.slug}`,
+            badge: "Blog"
           }))
         };
       case "thought":
         return {
           title: "Thought Leadership",
           viewAllLink: "/thought-leadership",
-          viewAllText: "View All Thought Leadership",
+          viewAllText: "View All",
           items: thoughtLeadership.map(post => ({
             id: post.slug,
             title: post.title,

@@ -6,6 +6,7 @@ import { WhoWeAre } from "@/components/sections/WhoWeAre";
 import { FeatOpportunities } from "@/components/sections/FeatOpportunities";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { LogoMarquee } from "@/components/sections/LogoMarquee";
 import { StatCounter } from "@/components/sections/StatCounter";
 import { TestimonialCarousel } from "@/components/sections/TestimonialCarousel";
@@ -31,7 +32,7 @@ export default async function HomePage({
   const mediaPosts = [...blogPosts, ...insightsPosts].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
-  const caseStudies = await getAllPosts("case-studies", locale);
+  const caseStudies = await getAllPosts("blog", locale);
   const thoughtLeadership = await getAllPosts("thought-leadership", locale);
 
   return (
@@ -169,11 +170,15 @@ export default async function HomePage({
               </div>
               <div className="flex md:flex-col gap-4 shrink-0 justify-center w-full md:w-auto text-center border-t md:border-t-0 md:border-l border-border/40 pt-4 md:pt-0 md:pl-6">
                 <div>
-                  <div className="text-2xl font-black text-jibb-orange">$100B+</div>
+                  <div className="text-2xl font-black text-jibb-orange">
+                    <AnimatedCounter value={100} prefix="$" suffix="B+" className="text-2xl font-black text-jibb-orange" />
+                  </div>
                   <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">Semiconductors (2030)</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-black text-jibb-indigo">16%</div>
+                  <div className="text-2xl font-black text-jibb-indigo">
+                    <AnimatedCounter value={16} suffix="%" className="text-2xl font-black text-jibb-indigo" />
+                  </div>
                   <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">Projected CAGR</div>
                 </div>
               </div>
@@ -400,8 +405,8 @@ export default async function HomePage({
               {
                 tier: "Silver Member",
                 desc: "Standard market growth",
-                colorClass: "border-orange-500/20 hover:border-orange-500/30",
-                badge: "bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300",
+                colorClass: "border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600 bg-slate-500/[0.03]",
+                badge: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300",
                 recommended: false,
                 features: [
                   "10% Business Matching",
@@ -412,8 +417,8 @@ export default async function HomePage({
               {
                 tier: "Gold Member",
                 desc: "Professional co-innovation",
-                colorClass: "border-jibb-indigo/40 bg-jibb-indigo/5",
-                badge: "bg-jibb-indigo/15 dark:bg-jibb-indigo/30 text-jibb-indigo dark:text-jibb-indigo-light",
+                colorClass: "border-amber-500/40 bg-amber-500/[0.04]",
+                badge: "bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400",
                 recommended: true,
                 features: [
                   "20% Business Matching",
@@ -424,8 +429,8 @@ export default async function HomePage({
               {
                 tier: "Platinum Member",
                 desc: "Ultimate advocacy & scale",
-                colorClass: "border-slate-500/20 hover:border-slate-500/30",
-                badge: "bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300",
+                colorClass: "border-slate-400/80 dark:border-slate-500/80 bg-slate-500/[0.06] hover:shadow-lg border-2",
+                badge: "bg-slate-300 dark:bg-slate-700 text-slate-800 dark:text-slate-200",
                 recommended: false,
                 features: [
                   "30% Business Matching",
@@ -437,12 +442,12 @@ export default async function HomePage({
               <div
                 key={plan.tier}
                 className={`relative rounded-3xl p-6 text-left border transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between min-h-[220px] ${plan.recommended
-                  ? "bg-card text-foreground border-jibb-indigo dark:border-jibb-indigo shadow-lg scale-105 z-10"
+                  ? "bg-card text-foreground border-amber-500 dark:border-amber-400 shadow-lg scale-105 z-10"
                   : "bg-card text-foreground border-border/50 hover:shadow-lg backdrop-blur-sm"
                   } ${plan.colorClass}`}
               >
                 {plan.recommended && (
-                  <div className="absolute -top-3 left-6 bg-jibb-indigo text-white text-[11px] uppercase font-bold tracking-wider px-3.5 py-1 rounded-full shadow-sm whitespace-nowrap">
+                  <div className="absolute -top-3 left-6 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[11px] uppercase font-bold tracking-wider px-3.5 py-1 rounded-full shadow-sm whitespace-nowrap">
                     Popular Choice
                   </div>
                 )}
@@ -457,7 +462,7 @@ export default async function HomePage({
                   <ul className="mt-4 space-y-2 text-xs text-muted-foreground border-t border-border/30 pt-3">
                     {plan.features.map((feat) => (
                       <li key={feat} className="flex items-center gap-1.5 font-medium">
-                        <span className="text-jibb-indigo font-bold">✓</span> {feat}
+                        <span className={`${plan.recommended ? "text-amber-500" : plan.tier.includes("Platinum") ? "text-slate-500 dark:text-slate-400" : plan.tier.includes("Silver") ? "text-slate-400 dark:text-slate-300" : "text-jibb-indigo"} font-bold`}>✓</span> {feat}
                       </li>
                     ))}
                   </ul>

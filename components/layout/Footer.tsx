@@ -190,163 +190,104 @@ export function Footer() {
 
             {/* Social Links */}
             <div className="flex items-center gap-3">
-              {([
-                { icon: <LinkedInIcon className="size-4" />, href: "https://linkedin.com/company/japan-india-business-bureau", label: "LinkedIn" },
-                { icon: <TwitterIcon className="size-4" />, href: "https://twitter.com/jibb_org", label: "Twitter / X" },
-                { icon: <YouTubeIcon className="size-4" />, href: "https://youtube.com/@jibb_org", label: "YouTube" }
-              ]).map((soc, idx) => (
-                <motion.a
-                  key={idx}
-                  href={soc.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.15, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ type: "spring", stiffness: 450, damping: 12 }}
-                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 hover:text-white transition-colors"
-                  aria-label={soc.label}
-                >
-                  {soc.icon}
-                </motion.a>
-              ))}
+              <motion.a
+                href="https://linkedin.com/company/japan-india-business-bureau"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05, y: -1 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 450, damping: 12 }}
+                className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#0A66C2]/20 hover:bg-[#0A66C2]/40 border border-[#0A66C2]/40 hover:border-[#0A66C2]/70 text-white transition-all duration-200"
+                aria-label="LinkedIn"
+              >
+                <LinkedInIcon className="size-4 shrink-0" />
+                <span className="text-xs font-semibold">Follow on LinkedIn</span>
+              </motion.a>
             </div>
           </div>
 
-          {/* Column 2: About & Network (Span 2) */}
+          {/* Column 2: About (Span 2) */}
           <div className="lg:col-span-2 space-y-4">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
-              {t("footer.aboutNetwork")}
+              {t("nav.about")}
             </h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link
-                  href="/about"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  About
+                <Link href="/about" className="text-white/60 hover:text-white transition-colors block py-0.5">
+                  {t("nav.about")}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/sectors"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  Sectors
+                <Link href="/about/leadership" className="text-white/60 hover:text-white transition-colors block py-0.5">
+                  {t("aboutMenu.leadership")}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/membership"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  Membership
+                <Link href="/sectors" className="text-white/60 hover:text-white transition-colors block py-0.5">
+                  {t("nav.sectors")}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/events"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  Events
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/careers"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  Careers
+                <Link href="/careers" className="text-white/60 hover:text-white transition-colors block py-0.5">
+                  {t("nav.careers")}
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 3: Services (Span 3) */}
-          <div className="lg:col-span-3 space-y-4">
+          {/* Column 3: Network (Span 2) */}
+          <div className="lg:col-span-2 space-y-4">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
-              {t("footer.services")}
+              Network
             </h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link
-                  href="/services/market-entry"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  Market Entry Support
+                <Link href="/services" className="text-white/60 hover:text-white transition-colors block py-0.5">
+                  {t("nav.services")}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/services/partnership-facilitation"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  Partnership Facilitation
+                <Link href="/membership" className="text-white/60 hover:text-white transition-colors block py-0.5">
+                  {t("nav.membership")}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/services/co-innovation-collaboration"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  Co-Innovation Collaboration
+                <Link href="/events" className="text-white/60 hover:text-white transition-colors block py-0.5">
+                  {t("nav.events")}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/services/investment-support"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  Investment Support & JVs
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/services/diaspora-networking"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  Diaspora Networking
+                <Link href="/contact" className="text-white/60 hover:text-white transition-colors block py-0.5">
+                  {t("nav.contact")}
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 4: Resources (Span 3) */}
-          <div className="lg:col-span-3 space-y-4">
+          {/* Column 4: Resources (Span 4) */}
+          <div className="lg:col-span-4 space-y-4">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
               {t("footer.resources")}
             </h4>
             <ul className="space-y-2 text-sm">
-              {/* Innovation Hub — temporarily hidden per management */}
-              {/* <li>
-                <Link
-                  href="/innovation-hub"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  {t("nav.innovationHub")}
-                </Link>
-              </li> */}
               <li>
-                <Link
-                  href="/resources/case-studies"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  {t("resourcesMenu.caseStudies")}
+                <Link href="/resources/blog" className="text-white/60 hover:text-white transition-colors block py-0.5">
+                  {t("resourcesMenu.blog")}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/resources/insights"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
+                <Link href="/resources/thought-leadership" className="text-white/60 hover:text-white transition-colors block py-0.5">
+                  {t("resourcesMenu.leadership")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/resources/insights" className="text-white/60 hover:text-white transition-colors block py-0.5">
                   {t("resourcesMenu.insights")}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/contact"
-                  className="text-white/60 hover:text-white transition-colors block py-0.5"
-                >
-                  {t("nav.contact")}
+                <Link href="/resources/newsletter" className="text-white/60 hover:text-white transition-colors block py-0.5">
+                  {t("resourcesMenu.newsletter")}
                 </Link>
               </li>
             </ul>

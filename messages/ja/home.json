@@ -141,6 +141,15 @@
           "location": "インド、ノイダ",
           "direction": "インド → 日本",
           "time": "5日"
+        },
+        "p3": {
+          "company": "非公開メンバー",
+          "lookingFor": "インドのディストリビューター",
+          "details": "日本の工作機械・製造企業が、ディストリビューターを通じてインド市場への参入を目指しています。",
+          "industry": "工作機械",
+          "location": "日本",
+          "direction": "日本 → インド",
+          "time": "5日"
         }
       },
       "delegations": {

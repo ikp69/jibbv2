@@ -29,7 +29,7 @@ const stagger = {
 
 export default function EventsLandingPage() {
   const locale = useLocale()
-  const jpFont = locale === 'ja' ? { fontFamily: 'var(--font-noto-jp)' } : {}
+  const jpFont = locale === 'ja' ? { fontFamily: 'var(--font-noto-sans-jp)' } : {}
 
   const labels = {
     en: {
@@ -253,8 +253,8 @@ export default function EventsLandingPage() {
   }, [showAllImages, allGalleryImages])
 
   return (
-    <main className="evl-main">
-      {/* ─── Hero ─── */}
+      <main className="evl-main">
+        {/* ─── Hero ─── */}
         <section className="evl-hero">
           <div className="evl-hero-bg"></div>
           <motion.div

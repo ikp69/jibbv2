@@ -84,8 +84,7 @@ const getPartnerLogo = (name: string): string | null => {
 // ─── Main component ───────────────────────────────────────────────────────────
 export default function ManufacturingEventPage() {
   const locale = useLocale()
-  const [posterLang] = useState<'en' | 'ja'>('en')
-  const jpFont = locale === 'ja' ? { fontFamily: 'var(--font-noto-jp)' } : {}
+  const jpFont = locale === 'ja' ? { fontFamily: 'var(--font-noto-sans-jp)' } : {}
 
   const eventData = getEventBySlug('india-japan-manufacturing-collaboration-2026')!
   const t = eventData[locale as 'en' | 'ja']
@@ -147,7 +146,7 @@ export default function ManufacturingEventPage() {
   const lb = labels[locale as 'en' | 'ja']
 
   return (
-    <main className="event-detail-main">
+      <main className="event-detail-main">
         <Link href="/events" className="event-detail-back-btn" title={locale === 'ja' ? 'イベント一覧へ戻る' : 'Back to Events'}>
           <span className="material-symbols-outlined">arrow_back</span>
         </Link>
@@ -280,7 +279,7 @@ export default function ManufacturingEventPage() {
               <div className="events-partners-track">
                 {marqueeItems.map((logo, index) => (
                   <div key={index} className="events-partner-logo-item">
-                    <Image src={logo.src} alt={logo.name} width={200} height={80} className="events-partner-marquee-img" style={{ width: 'auto', height: 'auto' }} />
+                    <Image src={logo.src} alt={logo.name} width={200} height={80} className="events-partner-marquee-img" />
                   </div>
                 ))}
               </div>

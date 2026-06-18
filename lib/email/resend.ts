@@ -22,7 +22,7 @@ export async function sendEmail({
   if (resend) {
     try {
       const { data, error } = await resend.emails.send({
-        from: "NPO JIBB <noreply@npo-jibb.org>",
+        from: "NPO JIBB <onboarding@resend.dev>",
         to,
         subject,
         html,

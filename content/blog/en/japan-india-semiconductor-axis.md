@@ -21,15 +21,6 @@ Japan has long been a global powerhouse in the semiconductor stack, holding domi
 
 Conversely, India is investing heavily in manufacturing facilities, backed by the **$10 billion India Semiconductor Mission (ISM)**. With new fabs and assembly units breaking ground in Gujarat (Sanand and Dholera) and Noida, India provides the scaling grounds, skilled engineering talent, and growing market demand.
 
-```
-+------------------------------------+      +-----------------------------------+
-|          JAPAN'S STRENGTH          |      |          INDIA'S STRENGTH         |
-|  - Advanced lithography systems     | ---> |  - Multi-billion dollar subsidies |
-|  - Precision chemical photoresists  |      |  - Mass engineering workforce      |
-|  - Silicon wafer manufacturing      |      |  - High-volume fabrication plants |
-+------------------------------------+      +-----------------------------------+
-```
-
 ## Joint Achievements in Noida and Beyond
 
 Over the past year, JIBB has facilitated several key partnerships along the Tokyo-Noida corridor:

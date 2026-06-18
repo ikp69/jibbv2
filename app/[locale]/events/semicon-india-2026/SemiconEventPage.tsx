@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useLocale } from 'next-intl'
 import EventsProgramTable from '@/components/events/EventsProgramTable'
@@ -58,7 +57,7 @@ const getPartnerLogo = (name: string): string | null => {
 
 export default function SemiconEventPage() {
   const locale = useLocale()
-  const jpFont = locale === 'ja' ? { fontFamily: 'var(--font-noto-jp)' } : {}
+  const jpFont = locale === 'ja' ? { fontFamily: 'var(--font-noto-sans-jp)' } : {}
 
   const eventData = getEventBySlug('semicon-india-2026')!
   const t = eventData[locale as 'en' | 'ja']
@@ -81,8 +80,8 @@ export default function SemiconEventPage() {
   const lb = labels[locale as 'en' | 'ja']
 
   return (
-    <main className="event-detail-main">
-      <Link href="/events" className="event-detail-back-btn" title={locale === 'ja' ? 'イベント一覧へ戻る' : 'Back to Events'}>
+      <main className="event-detail-main">
+        <Link href="/events" className="event-detail-back-btn" title={locale === 'ja' ? 'イベント一覧へ戻る' : 'Back to Events'}>
           <span className="material-symbols-outlined">arrow_back</span>
         </Link>
 
@@ -188,7 +187,7 @@ export default function SemiconEventPage() {
             <div className="events-partners-track">
               {marqueeItems.map((logo, index) => (
                 <div key={index} className="events-partner-logo-item">
-                  <Image src={logo.src} alt={logo.name} width={200} height={80} className="events-partner-marquee-img" style={{ width: 'auto', height: 'auto' }} />
+                  <Image src={logo.src} alt={logo.name} width={200} height={80} className="events-partner-marquee-img" />
                 </div>
               ))}
             </div>

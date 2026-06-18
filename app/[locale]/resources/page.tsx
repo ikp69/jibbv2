@@ -71,10 +71,10 @@ export default async function ResourcesPage({ params }: PageProps) {
     {
       icon: <BookMarked className="size-7 text-white" />,
       color: "from-jibb-indigo to-jibb-indigo-light",
-      title: t("resourcesMenu.caseStudies"),
-      desc: t("resourcesMenu.caseStudiesDesc"),
-      href: "/resources/case-studies",
-      cta: isJa ? "事例を見る" : "View Case Studies",
+      title: t("resourcesMenu.blog"),
+      desc: t("resourcesMenu.blogDesc"),
+      href: "/resources/blog",
+      cta: isJa ? "ブログを見る" : "View Blog",
     },
     {
       icon: <Quote className="size-7 text-white" />,

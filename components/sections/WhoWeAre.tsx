@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { Link } from "@/src/i18n/navigation";
 import { Button } from "@/components/ui/button";
+import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import {
   ArrowRight,
   Monitor,
@@ -299,7 +300,7 @@ export function WhoWeAre() {
               {/* Core logo ball */}
               <motion.div
                 whileHover={{ scale: 1.08 }}
-                className="relative w-36 h-36 md:w-44 md:h-44 rounded-full bg-white dark:bg-card border border-border/80 shadow-jibb-xl flex items-center justify-center p-5 cursor-pointer transition-all duration-300"
+                className="relative w-36 h-36 md:w-40 md:h-40 rounded-full bg-[#01109f] dark:bg-card border border-border/80 shadow-jibb-xl flex items-center justify-center p-5 cursor-pointer transition-all duration-300"
               >
                 <img
                   src="/japan_india_business_bureau_logo.jpg"
@@ -322,7 +323,9 @@ export function WhoWeAre() {
                   <Monitor className="size-6" />
                 </div>
                 <div>
-                  <div className="text-xl font-extrabold text-foreground leading-none">{t("expValue") || "20+"}</div>
+                  <div className="text-xl font-extrabold text-foreground leading-none">
+                    <AnimatedCounter value={20} suffix="+" className="text-xl font-extrabold text-foreground leading-none" />
+                  </div>
                   <div className="text-[10px] font-bold text-muted-foreground mt-1.5 leading-snug">{t("expLabel") || "Years of Cross-Border Experience"}</div>
                 </div>
               </motion.div>
@@ -337,7 +340,9 @@ export function WhoWeAre() {
                   <FolderClosed className="size-6" />
                 </div>
                 <div>
-                  <div className="text-xl font-extrabold text-foreground leading-none">{t("dealsValue") || "100+"}</div>
+                  <div className="text-xl font-extrabold text-foreground leading-none">
+                    <AnimatedCounter value={100} suffix="+" className="text-xl font-extrabold text-foreground leading-none" />
+                  </div>
                   <div className="text-[10px] font-bold text-muted-foreground mt-1.5 leading-snug">{t("dealsLabel") || "Facilitated Business Deals"}</div>
                 </div>
               </motion.div>
@@ -352,7 +357,9 @@ export function WhoWeAre() {
                   <BrainCircuit className="size-6" />
                 </div>
                 <div>
-                  <div className="text-xl font-extrabold text-foreground leading-none">{t("teamValue") || "50+"}</div>
+                  <div className="text-xl font-extrabold text-foreground leading-none">
+                    <AnimatedCounter value={50} suffix="+" className="text-xl font-extrabold text-foreground leading-none" />
+                  </div>
                   <div className="text-[10px] font-bold text-muted-foreground mt-1.5 leading-snug">{t("teamLabel") || "On Ground Industry Experts"}</div>
                 </div>
               </motion.div>
@@ -367,7 +374,9 @@ export function WhoWeAre() {
                   <Landmark className="size-6" />
                 </div>
                 <div>
-                  <div className="text-xl font-extrabold text-foreground leading-none">{t("partnershipsValue") || "30+"}</div>
+                  <div className="text-xl font-extrabold text-foreground leading-none">
+                    <AnimatedCounter value={30} suffix="+" className="text-xl font-extrabold text-foreground leading-none" />
+                  </div>
                   <div className="text-[10px] font-bold text-muted-foreground mt-1.5 leading-snug">{t("partnershipsLabel") || "Strategic Government Partnerships"}</div>
                 </div>
               </motion.div>
@@ -382,7 +391,9 @@ export function WhoWeAre() {
                     <Monitor className="size-5" />
                   </div>
                   <div>
-                    <div className="text-lg font-extrabold text-foreground">{t("expValue") || "20+"}</div>
+                    <div className="text-lg font-extrabold text-foreground">
+                      <AnimatedCounter value={20} suffix="+" className="text-lg font-extrabold text-foreground" />
+                    </div>
                     <div className="text-[10px] font-semibold text-muted-foreground leading-tight mt-0.5">{t("expLabel") || "Cross-Border Exp."}</div>
                   </div>
                 </div>
@@ -393,7 +404,9 @@ export function WhoWeAre() {
                     <FolderClosed className="size-5" />
                   </div>
                   <div>
-                    <div className="text-lg font-extrabold text-foreground">{t("dealsValue") || "100+"}</div>
+                    <div className="text-lg font-extrabold text-foreground">
+                      <AnimatedCounter value={100} suffix="+" className="text-lg font-extrabold text-foreground" />
+                    </div>
                     <div className="text-[10px] font-semibold text-muted-foreground leading-tight mt-0.5">{t("dealsLabel") || "Business Deals"}</div>
                   </div>
                 </div>
@@ -404,7 +417,9 @@ export function WhoWeAre() {
                     <BrainCircuit className="size-5" />
                   </div>
                   <div>
-                    <div className="text-lg font-extrabold text-foreground">{t("teamValue") || "50+"}</div>
+                    <div className="text-lg font-extrabold text-foreground">
+                      <AnimatedCounter value={50} suffix="+" className="text-lg font-extrabold text-foreground" />
+                    </div>
                     <div className="text-[10px] font-semibold text-muted-foreground leading-tight mt-0.5">{t("teamLabel") || "Industry Experts"}</div>
                   </div>
                 </div>
@@ -415,7 +430,9 @@ export function WhoWeAre() {
                     <Landmark className="size-5" />
                   </div>
                   <div>
-                    <div className="text-lg font-extrabold text-foreground">{t("partnershipsValue") || "30+"}</div>
+                    <div className="text-lg font-extrabold text-foreground">
+                      <AnimatedCounter value={30} suffix="+" className="text-lg font-extrabold text-foreground" />
+                    </div>
                     <div className="text-[10px] font-semibold text-muted-foreground leading-tight mt-0.5">{t("partnershipsLabel") || "Gov Partnerships"}</div>
                   </div>
                 </div>
@@ -439,7 +456,7 @@ export function WhoWeAre() {
                   className="absolute w-[108px] h-[108px] rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10"
                 />
                 {/* Core logo ball */}
-                <div className="relative w-22 h-22 rounded-full bg-white dark:bg-card border border-border/80 shadow-jibb-xl flex items-center justify-center p-3 pointer-events-auto">
+                <div className="relative w-22 h-22 rounded-full bg-[#01109f] dark:bg-card border border-border/80 shadow-jibb-xl flex items-center justify-center p-3 pointer-events-auto">
                   <img
                     src="/japan_india_business_bureau_logo.jpg"
                     alt="JIBB NPO Logo"

@@ -20,17 +20,12 @@ import {
   Globe,
   Handshake,
   MapPin,
-  Landmark,
   DollarSign,
-  FlaskConical,
-  Microscope,
   BookOpen,
   Lightbulb,
   Trophy,
   GraduationCap,
-  Newspaper,
-  FileText,
-  Camera,
+  FlaskConical,
   BookMarked,
   Mail,
   TrendingUp,
@@ -61,10 +56,8 @@ const navItems: NavItem[] = [
     href: "/about",
     align: "left",
     megaMenu: [
-      { labelKey: "nav.about", href: "/about", descKey: "aboutMenu.whoWeAre", icon: Building2 },
-      { labelKey: "aboutMenu.vision", href: "/about#vision-mission", descKey: "aboutMenu.visionDesc", icon: Eye },
       { labelKey: "aboutMenu.leadership", href: "/about/leadership", descKey: "aboutMenu.leadershipDesc", icon: Users },
-      { labelKey: "aboutMenu.approach", href: "/about#our-approach", descKey: "aboutMenu.approachDesc", icon: Compass },
+      { labelKey: "nav.sectors", href: "/sectors", descKey: "sectorsMenu.desc", icon: Cpu },
       { labelKey: "nav.careers", href: "/careers", descKey: "careersMenu.desc", icon: Briefcase },
     ],
   },
@@ -72,36 +65,14 @@ const navItems: NavItem[] = [
     labelKey: "nav.services",
     href: "/services",
     align: "center",
-    megaMenu: [
-      { labelKey: "servicesMenu.marketEntry", href: "/services#market-entry", descKey: "servicesMenu.marketEntryDesc", icon: MapPin },
-      { labelKey: "servicesMenu.partnership", href: "/services#partnership-facilitation", descKey: "servicesMenu.partnershipDesc", icon: Handshake },
-      { labelKey: "servicesMenu.coInnovation", href: "/services#co-innovation-collaboration", descKey: "servicesMenu.coInnovationDesc", icon: Lightbulb },
-      { labelKey: "servicesMenu.investment", href: "/services#investment-support", descKey: "servicesMenu.investmentDesc", icon: DollarSign },
-      { labelKey: "servicesMenu.diaspora", href: "/services#diaspora-networking", descKey: "servicesMenu.diasporaDesc", icon: Globe },
-    ],
   },
-  // Innovation Hub — temporarily hidden per management
-  // {
-  //   labelKey: "nav.innovationHub",
-  //   href: "/innovation-hub",
-  //   align: "center",
-  //   megaMenu: [
-  //     { labelKey: "hubMenu.coe", href: "/innovation-hub#center-of-excellence", descKey: "hubMenu.coeDesc", icon: Trophy },
-  //     { labelKey: "hubMenu.labs", href: "/innovation-hub#laboratories", descKey: "hubMenu.labsDesc", icon: FlaskConical },
-  //     { labelKey: "hubMenu.incubation", href: "/innovation-hub#startup-incubation", descKey: "hubMenu.incubationDesc", icon: Lightbulb },
-  //     { labelKey: "hubMenu.partners", href: "/innovation-hub#partner-institutions", descKey: "hubMenu.partnersDesc", icon: GraduationCap },
-  //     { labelKey: "hubMenu.challenges", href: "/innovation-hub#innovation-challenges", descKey: "hubMenu.challengesDesc", icon: BookOpen },
-  //   ],
-  // },
   {
-    labelKey: "nav.ecosystem",
+    labelKey: "nav.membership",
     href: "/membership",
-    align: "center",
-    megaMenu: [
-      { labelKey: "nav.sectors", href: "/sectors", descKey: "sectorsMenu.desc", icon: Cpu },
-      { labelKey: "nav.membership", href: "/membership", descKey: "membershipMenu.desc", icon: Users },
-      { labelKey: "nav.events", href: "/events", descKey: "eventsMenu.desc", icon: GraduationCap },
-    ],
+  },
+  {
+    labelKey: "nav.events",
+    href: "/events",
   },
   {
     labelKey: "nav.resources",
@@ -109,13 +80,27 @@ const navItems: NavItem[] = [
     align: "right",
     megaMenu: [
       { labelKey: "resourcesMenu.insights", href: "/resources/insights", descKey: "resourcesMenu.insightsDesc", icon: TrendingUp },
-      { labelKey: "resourcesMenu.caseStudies", href: "/resources/case-studies", descKey: "resourcesMenu.caseStudiesDesc", icon: BookMarked },
+      { labelKey: "resourcesMenu.blog", href: "/resources/blog", descKey: "resourcesMenu.blogDesc", icon: BookMarked },
       { labelKey: "resourcesMenu.leadership", href: "/resources/thought-leadership", descKey: "resourcesMenu.leadershipDesc", icon: Quote },
       { labelKey: "resourcesMenu.newsletter", href: "/resources/newsletter", descKey: "resourcesMenu.newsletterDesc", icon: Mail },
     ],
   },
   { labelKey: "nav.contact", href: "/contact" },
 ];
+
+// Innovation Hub — temporarily hidden per management
+// {
+//   labelKey: "nav.innovationHub",
+//   href: "/innovation-hub",
+//   align: "center",
+//   megaMenu: [
+//     { labelKey: "hubMenu.coe", href: "/innovation-hub#center-of-excellence", descKey: "hubMenu.coeDesc", icon: Trophy },
+//     { labelKey: "hubMenu.labs", href: "/innovation-hub#laboratories", descKey: "hubMenu.labsDesc", icon: FlaskConical },
+//     { labelKey: "hubMenu.incubation", href: "/innovation-hub#startup-incubation", descKey: "hubMenu.incubationDesc", icon: Lightbulb },
+//     { labelKey: "hubMenu.partners", href: "/innovation-hub#partner-institutions", descKey: "hubMenu.partnersDesc", icon: GraduationCap },
+//     { labelKey: "hubMenu.challenges", href: "/innovation-hub#innovation-challenges", descKey: "hubMenu.challengesDesc", icon: BookOpen },
+//   ],
+// },
 
 /* ============================================================
    MEGA MENU DROPDOWN — Stripe/Linear layout alignment
@@ -367,21 +352,25 @@ function MobileDrawer({
             </nav>
 
             {/* Bottom Actions */}
-            <div className="p-4 border-t border-border space-y-3 bg-muted/30">
-              <LanguageSwitcher className="w-full" triggerClassName="w-full justify-center bg-card border border-border" />
-              {/* Member Login — temporarily hidden per management */}
-              {/* <Link href="/auth/login" onClick={onClose} className="block">
-                <AnimatedButton variant="outline" className="w-full justify-center gap-2 font-semibold">
-                  <LogIn className="size-4" />
-                  {t("nav.memberLogin")}
-                </AnimatedButton>
-              </Link> */}
-              <Link href="/membership" onClick={onClose} className="block">
-                <AnimatedButton variant="accent" className="w-full justify-center gap-2 font-semibold">
-                  {t("nav.joinJibb")}
-                  <ArrowRight className="size-4" />
-                </AnimatedButton>
-              </Link>
+            <div className="p-4 border-t border-border bg-muted/30">
+  <div className="flex flex-col items-center gap-3">
+    <LanguageSwitcher triggerClassName="justify-center bg-card border border-border" />
+
+    {/* Member Login — temporarily hidden per management */}
+    {/* <Link href="/auth/login" onClick={onClose}>
+      <AnimatedButton variant="outline" className="justify-center gap-2 font-semibold">
+        <LogIn className="size-4" />
+        {t("nav.memberLogin")}
+      </AnimatedButton>
+    </Link> */}
+
+    <Link href="/membership" onClick={onClose}>
+      <AnimatedButton variant="accent" className="justify-center gap-2 font-semibold">
+        {t("nav.joinJibb")}
+        <ArrowRight className="size-4" />
+      </AnimatedButton>
+    </Link>
+  </div>
             </div>
           </motion.div>
         </>

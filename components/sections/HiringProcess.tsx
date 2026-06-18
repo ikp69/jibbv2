@@ -58,9 +58,9 @@ export function HiringProcess() {
       <div className="section-container relative z-10 max-w-5xl">
         {/* Header */}
         <div className="text-center space-y-4 mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-jibb-indigo/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
-            <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-white/80">
+            <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-jibb-indigo">
               Join Our Team
             </span>
           </div>

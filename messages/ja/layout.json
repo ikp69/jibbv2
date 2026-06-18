@@ -59,6 +59,8 @@
   "resourcesMenu": {
     "insights": "メディア＆インサイト",
     "insightsDesc": "深掘り分析、最新ニュース、リーダーシップ・ソーツ",
+    "blog": "ブログ",
+    "blogDesc": "最新記事、お知らせ、業界インサイト",
     "caseStudies": "ケーススタディ",
     "caseStudiesDesc": "JIBB会員のリアルな成功事例のご紹介",
     "newsletter": "メールマガジン",

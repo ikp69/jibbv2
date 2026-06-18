@@ -55,7 +55,7 @@ export function FeatOpportunities() {
             borderColor: "border-jibb-indigo/20 dark:border-jibb-indigo-light/20",
             hoverBorderColor: "hover:border-jibb-indigo/40 dark:hover:border-jibb-indigo-light/40",
             glowColor: "shadow-jibb-glow",
-            link: "/memberships",
+            link: "/membership",
             actionLabel: "Become a Member",
           },
           {
@@ -74,7 +74,7 @@ export function FeatOpportunities() {
             borderColor: "border-jibb-orange/20 dark:border-jibb-orange-light/20",
             hoverBorderColor: "hover:border-jibb-orange/40 dark:hover:border-jibb-orange-light/40",
             glowColor: "shadow-jibb-orange-glow",
-            link: "/memberships",
+            link: "/membership",
             actionLabel: "Become a Member",
           },
           {
@@ -93,7 +93,7 @@ export function FeatOpportunities() {
             borderColor: "border-jibb-sakura/20 dark:border-jibb-sakura-light/20",
             hoverBorderColor: "hover:border-jibb-sakura/40 dark:hover:border-jibb-sakura-light/40",
             glowColor: "shadow-jibb-sakura-glow",
-            link: "/memberships",
+            link: "/membership",
             actionLabel: "Become a Member",
           },
         ];
@@ -115,7 +115,7 @@ export function FeatOpportunities() {
             borderColor: "border-jibb-orange/20 dark:border-jibb-orange-light/20",
             hoverBorderColor: "hover:border-jibb-orange/40 dark:hover:border-jibb-orange-light/40",
             glowColor: "shadow-jibb-orange-glow",
-            link: "/memberships",
+            link: "/membership",
             actionLabel: t("labels.apply") || "Apply Now",
           },
           {
@@ -134,7 +134,7 @@ export function FeatOpportunities() {
             borderColor: "border-jibb-indigo/20 dark:border-jibb-indigo-light/20",
             hoverBorderColor: "hover:border-jibb-indigo/40 dark:hover:border-jibb-indigo-light/40",
             glowColor: "shadow-jibb-glow",
-            link: "/memberships",
+            link: "/membership",
             actionLabel: t("labels.apply") || "Apply Now",
           },
         ];
@@ -192,7 +192,7 @@ export function FeatOpportunities() {
             borderColor: "border-jibb-orange/20 dark:border-jibb-orange-light/20",
             hoverBorderColor: "hover:border-jibb-orange/40 dark:hover:border-jibb-orange-light/40",
             glowColor: "shadow-jibb-orange-glow",
-            link: "/memberships",
+            link: "/membership",
             actionLabel: t("labels.details") || "View Details",
           },
         ];
@@ -474,9 +474,9 @@ export function FeatOpportunities() {
 
         {/* View All Button at the bottom */}
         <ScrollReveal direction="up" delay={0.1} className="text-center mt-14">
-          <Link href="/memberships">
+          <Link href="/membership">
             <Button variant="accent" size="lg" className="px-8 py-6 text-base font-semibold rounded-xl shadow-lg group">
-              <span>{t("viewAll") || "Become our member to explore all opportunities"}</span>
+              <span>{t("viewAll") || "Join Us to Explore All Opportunities"}</span>
               <ArrowRight className="size-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
             </Button>
           </Link>

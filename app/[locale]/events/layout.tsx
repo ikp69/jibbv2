@@ -1,4 +1,6 @@
 import { Metadata } from 'next'
+import { Navbar } from '@/components/layout/Navbar'
+import { Footer } from '@/components/layout/Footer'
 
 export const metadata: Metadata = {
   title: 'Upcoming Events & Seminars | 開催予定イベント・セミナー',
@@ -42,5 +44,9 @@ export const metadata: Metadata = {
 
 
 export default function EventsLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return (
+    <>
+      {children}
+    </>
+  )
 }

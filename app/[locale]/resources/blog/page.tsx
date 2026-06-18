@@ -27,12 +27,12 @@ export async function generateMetadata({
   const isJa = locale === "ja";
 
   const title = isJa
-    ? "事例研究 | 日印ビジネスビューロー"
-    : "Case Studies | JIBB — Japan India Business Bureau";
+    ? "ブログ | 日印ビジネスビューロー"
+    : "Blog | JIBB — Japan India Business Bureau";
   const description = isJa
-    ? "JIBBが支援した日印ビジネスの実際の成功事例を紹介します。"
-    : "Real success stories from JIBB member companies crossing Japan-India borders — market entry, partnerships, and innovation outcomes.";
-  const canonicalUrl = `${SITE_URL}/${locale}/resources/case-studies`;
+    ? "JIBBの最新記事、お知らせ、業界インサイトをご覧ください。"
+    : "Latest articles, updates and industry insights from Japan India Business Bureau.";
+  const canonicalUrl = `${SITE_URL}/${locale}/resources/blog`;
 
   return {
     title,
@@ -48,9 +48,9 @@ export async function generateMetadata({
     alternates: {
       canonical: canonicalUrl,
       languages: {
-        en: `${SITE_URL}/en/resources/case-studies`,
-        ja: `${SITE_URL}/ja/resources/case-studies`,
-        "x-default": `${SITE_URL}/en/resources/case-studies`,
+        en: `${SITE_URL}/en/resources/blog`,
+        ja: `${SITE_URL}/ja/resources/blog`,
+        "x-default": `${SITE_URL}/en/resources/blog`,
       },
     },
     robots: { index: true, follow: true },
@@ -66,7 +66,7 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
   const { q: search = "" } = await searchParams;
 
   const t = await getTranslations({ locale });
-  const allCaseStudies = await getAllPosts("case-studies", locale);
+  const allCaseStudies = await getAllPosts("blog", locale);
 
   // Filter case studies by search query
   const filteredCaseStudies = allCaseStudies.filter((post) => {
@@ -139,7 +139,7 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
               <p className="text-lg text-muted-foreground">
                 {locale === "ja" ? "事例が見つかりませんでした。" : "No case studies found matching your criteria."}
               </p>
-              <Link href="/resources/case-studies">
+              <Link href="/resources/blog">
                 <Button variant="outline" className="font-semibold">
                   {locale === "ja" ? "検索をリセット" : "Reset Search"}
                 </Button>
@@ -187,7 +187,7 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
                       </div>
 
                       <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight leading-snug group-hover:text-jibb-orange transition-colors">
-                        <Link href={`/resources/case-studies/${post.slug}`}>
+                        <Link href={`/resources/blog/${post.slug}`}>
                           {post.title}
                         </Link>
                       </h2>
@@ -221,9 +221,9 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
                         ))}
                       </div>
 
-                      <Link href={`/resources/case-studies/${post.slug}`}>
+                      <Link href={`/resources/blog/${post.slug}`}>
                         <Button variant="link" className="text-jibb-orange p-0 font-bold gap-1 group-hover:gap-2 transition-all">
-                          {locale === "ja" ? "実績分析を見る" : "View Case Study"} <ArrowRight className="size-4" />
+                          {locale === "ja" ? "記事を読む" : "Read Post"} <ArrowRight className="size-4" />
                         </Button>
                       </Link>
                     </div>

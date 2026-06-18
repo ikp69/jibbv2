@@ -75,7 +75,7 @@ const jsonLd = {
     availability: 'https://schema.org/InStock',
     url: 'https://forms.office.com/r/d7tMkBLaq8',
     validFrom: '2026-05-01T00:00:00+09:00',
-    validThrough: '2026-07-03'
+    validThrough: '2026-07-03T23:59:59+09:00'
   },
   identifier: 'JIBB-IJMC-2026',
   image: OG_IMAGE,

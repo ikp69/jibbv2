@@ -89,12 +89,18 @@ const COMPARISON_ROWS: ComparisonRow[] = [
 ];
 
 export function FeatureComparison() {
-  const renderCellValue = (value: string | boolean) => {
+  const renderCellValue = (value: string | boolean, tier: "associate" | "silver" | "gold" | "platinum") => {
     if (typeof value === "boolean") {
       if (value) {
+        let iconColor = "bg-jibb-indigo/15 text-jibb-indigo border-jibb-indigo/25";
+        if (tier === "associate") iconColor = "bg-blue-500/15 text-blue-500 border-blue-500/25";
+        if (tier === "silver") iconColor = "bg-slate-500/15 text-slate-600 dark:text-slate-400 border-slate-500/25";
+        if (tier === "gold") iconColor = "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/25";
+        if (tier === "platinum") iconColor = "bg-slate-500/30 text-slate-700 dark:text-slate-200 border-slate-500/50";
+
         return (
           <div className="flex justify-center">
-            <span className="inline-flex items-center justify-center size-6 rounded-md bg-jibb-indigo/15 text-jibb-indigo border border-jibb-indigo/25">
+            <span className={`inline-flex items-center justify-center size-6 rounded-md border ${iconColor}`}>
               <Check className="size-3.5 stroke-[3]" />
             </span>
           </div>
@@ -110,12 +116,18 @@ export function FeatureComparison() {
       }
     }
 
-    // Custom styling based on value text
+    // Custom styling based on value text and tier
     let textStyle = "text-foreground/80 dark:text-foreground/95 font-medium";
     if (value.includes("Free")) {
-      textStyle = "text-jibb-indigo dark:text-jibb-indigo-light font-bold";
+      if (tier === "gold") textStyle = "text-amber-600 dark:text-amber-400 font-bold";
+      else if (tier === "platinum") textStyle = "text-slate-600 dark:text-slate-400 font-bold";
+      else textStyle = "text-jibb-indigo dark:text-jibb-indigo-light font-bold";
     } else if (value.includes("Discount")) {
-      textStyle = "text-jibb-indigo dark:text-jibb-indigo-light font-semibold";
+      if (tier === "associate") textStyle = "text-blue-600 dark:text-blue-400 font-semibold";
+      else if (tier === "silver") textStyle = "text-slate-600 dark:text-slate-400 font-semibold";
+      else if (tier === "gold") textStyle = "text-amber-600 dark:text-amber-400 font-semibold";
+      else if (tier === "platinum") textStyle = "text-slate-600 dark:text-slate-400 font-semibold";
+      else textStyle = "text-jibb-indigo dark:text-jibb-indigo-light font-semibold";
     } else if (value.includes("Access") || value.includes("Ones") || value.includes("Only")) {
       textStyle = "text-foreground font-semibold";
     }
@@ -164,21 +176,22 @@ export function FeatureComparison() {
                     </div>
                     <span className="block text-[11px] text-muted-foreground font-semibold">Entry Level</span>
                   </th>
-                  <th className="p-5 text-center w-[18%] border-l border-border bg-orange-500/5">
-                    <div className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 text-[10px] font-bold uppercase tracking-wider mb-1">
+                  <th className="p-5 text-center w-[18%] border-l border-border bg-slate-500/5">
+                    <div className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-bold uppercase tracking-wider mb-1">
                       Silver Member
                     </div>
                     <span className="block text-[11px] text-muted-foreground font-semibold">Standard Growth</span>
                   </th>
-                  <th className="p-5 text-center w-[18%] border-l border-border bg-jibb-indigo/5 relative">
-                    <div className="absolute top-0 inset-x-0 h-[3px] bg-jibb-indigo" />
-                    <div className="inline-flex items-center justify-center gap-1 px-2.5 py-0.5 rounded-full bg-jibb-indigo/15 dark:bg-jibb-indigo/35 text-jibb-indigo dark:text-jibb-indigo-light text-[10px] font-bold uppercase tracking-wider mb-1">
-                      Gold Member <Sparkles className="size-3 fill-jibb-indigo stroke-none animate-pulse" />
+                  <th className="p-5 text-center w-[18%] border-l border-border bg-amber-500/5 relative">
+                    <div className="absolute top-0 inset-x-0 h-[3px] bg-amber-500" />
+                    <div className="inline-flex items-center justify-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 text-[10px] font-bold uppercase tracking-wider mb-1">
+                      Gold Member <Sparkles className="size-3 fill-amber-500 text-amber-500 stroke-none animate-pulse" />
                     </div>
                     <span className="block text-[11px] text-muted-foreground font-semibold">Professional Tier</span>
                   </th>
-                  <th className="p-5 text-center w-[18%] border-l border-border bg-slate-500/5">
-                    <div className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-bold uppercase tracking-wider mb-1">
+                  <th className="p-5 text-center w-[18%] border-l border-border bg-slate-500/10 relative">
+                    <div className="absolute top-0 inset-x-0 h-[3px] bg-slate-400" />
+                    <div className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-800 dark:text-slate-200 text-[10px] font-bold uppercase tracking-wider mb-1">
                       Platinum Member
                     </div>
                     <span className="block text-[11px] text-muted-foreground font-semibold">Ultimate Access</span>
@@ -206,22 +219,22 @@ export function FeatureComparison() {
 
                     {/* Associate Member */}
                     <td className="p-5 text-center align-middle border-l border-border/40 bg-blue-500/[0.01]">
-                      {renderCellValue(row.associate)}
+                      {renderCellValue(row.associate, "associate")}
                     </td>
 
                     {/* Silver Member */}
-                    <td className="p-5 text-center align-middle border-l border-border/40 bg-orange-500/[0.01]">
-                      {renderCellValue(row.silver)}
+                    <td className="p-5 text-center align-middle border-l border-border/40 bg-slate-500/[0.01]">
+                      {renderCellValue(row.silver, "silver")}
                     </td>
 
                     {/* Gold Member */}
-                    <td className="p-5 text-center align-middle border-l border-border/40 bg-jibb-indigo/[0.02]">
-                      {renderCellValue(row.gold)}
+                    <td className="p-5 text-center align-middle border-l border-border/40 bg-amber-500/[0.01]">
+                      {renderCellValue(row.gold, "gold")}
                     </td>
 
                     {/* Platinum Member */}
-                    <td className="p-5 text-center align-middle border-l border-border/40 bg-slate-500/[0.01]">
-                      {renderCellValue(row.platinum)}
+                    <td className="p-5 text-center align-middle border-l border-border/40 bg-slate-500/[0.03]">
+                      {renderCellValue(row.platinum, "platinum")}
                     </td>
                   </tr>
                 ))}

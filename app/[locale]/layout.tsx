@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, Noto_Sans_JP, Geist_Mono, Plus_Jakarta_Sans, Cormorant_Garamond, Montserrat } from "next/font/google";
-import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { hasLocale } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/src/i18n/routing";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
+import { ClientProviders } from "@/components/providers/ClientProviders";
 
 // ============================================================
 // FONTS — all loaded via next/font (no external CDN requests)
@@ -132,13 +130,9 @@ export default async function LocaleLayout({
           <div className="w-[1px] bg-border/20 dark:bg-white/5 h-full" />
         </div>
 
-        <NextIntlClientProvider messages={messages}>
-          <SmoothScrollProvider>
-            <Navbar />
+        <ClientProviders messages={messages} locale={locale}>
             {children}
-            <Footer />
-          </SmoothScrollProvider>
-        </NextIntlClientProvider>
+          </ClientProviders>
       </body>
     </html>
   );

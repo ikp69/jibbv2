@@ -343,9 +343,18 @@ export default function ContactPage() {
                     </p>
                   </div>
                 </div>
-                <div className="border-t border-border pt-4 text-xs flex items-center gap-3 text-muted-foreground">
-                  <Phone className="size-3.5 text-jibb-orange animate-soft-pulse" />
-                  <span>+91 70000 17005, Vardaan Chaudhary</span>
+                <div className="border-t border-border pt-4 text-xs flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 text-muted-foreground">
+                  <div className="flex items-center gap-3">
+                    <Phone className="size-3.5 text-jibb-orange animate-soft-pulse shrink-0" />
+                    <span>+91 70000 17005, Vardaan Chaudhary</span>
+                  </div>
+                  <a
+                    href="mailto:vc@npo-jibb.org"
+                    className="sm:ml-auto flex items-center gap-3 text-jibb-orange hover:text-jibb-orange/80 font-semibold hover:underline transition-colors"
+                  >
+                    <Mail className="size-3.5 shrink-0" />
+                    vc@npo-jibb.org
+                  </a>
                 </div>
               </div>
 
