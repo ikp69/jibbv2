@@ -90,6 +90,17 @@ const nextConfig: NextConfig = {
     ];
   },
 
+  reactStrictMode: true,
+  poweredByHeader: false,
+  generateEtags: true,
+
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "framer-motion",
+    ],
+  },
+
   // Restrict dev origins — do NOT use wildcard '*' as it opens CORS attack surface
   ...(process.env.NODE_ENV === "development" && {
     allowedDevOrigins: ["localhost:3000"],
