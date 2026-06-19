@@ -40,27 +40,6 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/(.*)",
-        headers: [
-          // Enable compression
-          {
-            key: "Content-Encoding",
-            value: "gzip",
-          },
-          // Cache control for static assets
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-            // Only for static files
-          },
-          // Enable HTTP/2 Server Push for critical resources
-          {
-            key: "Link",
-            value: "</fonts/inter.woff2>; rel=preload; as=font; crossorigin",
-          },
-        ],
-      },
-      {
         source: "/api/:path*",
         headers: [
           {
