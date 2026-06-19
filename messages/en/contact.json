@@ -21,7 +21,8 @@
       "message": "Detailed Message",
       "submit": "Send Message",
       "successTitle": "Message Sent Successfully!",
-      "successDesc": "Thank you for contacting JIBB. A trade specialist from our team will reach out to you shortly."
+      "successDesc": "Thank you for contacting JIBB. A trade specialist from our team will reach out to you shortly.",
+      "emailErrorText": "Email service is facing some problems. Please try again after some time or directly write to"
     }
   }
 }

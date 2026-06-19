@@ -41,12 +41,16 @@ export async function submitContactForm(data: ContactInput) {
 
     // 4. Send Email Notification to Admin
     const emailHtml = getContactNotificationEmail({ inquiryType, name, email, phone, message });
-    await sendEmail({
+    const emailResult = await sendEmail({
       to: "gurpreet@npo-jibb.org",
       subject: `[Contact Form] ${inquiryType.toUpperCase()} - ${name}`,
       html: emailHtml,
       replyTo: email,
     });
+
+    if (!emailResult.success) {
+      throw new Error("email_failed");
+    }
 
     return { success: true };
   } catch (err: unknown) {
