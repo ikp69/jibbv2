@@ -13,6 +13,7 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
+  fallback: ["system-ui", "-apple-system", "sans-serif"],
 });
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -27,6 +28,7 @@ const notoSansJP = Noto_Sans_JP({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
+  fallback: ["system-ui", "-apple-system", "sans-serif"],
 });
 
 const geistMono = Geist_Mono({
