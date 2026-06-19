@@ -94,19 +94,32 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
 
   const articleJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "NewsArticle",
     headline: post.title,
-    description: post.description,
-    image: post.image || undefined,
+    alternativeHeadline: post.description,
+    image: post.image ? [post.image] : undefined,
     datePublished: post.date,
     dateModified: post.date,
-    author: post.author ? { "@type": "Person", name: post.author } : PUBLISHER,
+    author: post.author ? 
+      { "@type": "Person", name: post.author, affiliation: PUBLISHER } 
+      : PUBLISHER,
     publisher: PUBLISHER,
-    mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
+    mainEntityOfPage: { 
+      "@type": "WebPage", 
+      "@id": canonicalUrl 
+    },
+    description: post.description,
+    articleBody: post.contentHtml ? post.contentHtml.replace(/<[^>]*>/g, '') : "",
     keywords: post.tags.join(", "),
+    articleSection: locale === "ja" ? "ケーススタディ" : "Case Studies",
     inLanguage: locale === "ja" ? "ja-JP" : "en-US",
     isAccessibleForFree: true,
-    ...(post.client && { about: { "@type": "Organization", name: post.client } }),
+    ...(post.client && { 
+      about: { 
+        "@type": "Organization", 
+        name: post.client 
+      } 
+    }),
   };
 
   const breadcrumbJsonLd = {

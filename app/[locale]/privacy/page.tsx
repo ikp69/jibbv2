@@ -37,6 +37,46 @@ export async function generateMetadata({
   return {
     title,
     description,
+    keywords: [
+      "privacy policy",
+      "data protection",
+      "personal data",
+      "GDPR compliance",
+      "data privacy",
+      "information security",
+      "cookie policy",
+      "user privacy",
+      "data collection",
+      "privacy JIBB",
+      "プライバシー",
+      "データ保護",
+      "個人情報",
+      "セキュリティ",
+    ],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `${baseUrl}/${locale}/privacy`,
+      siteName: "JIBB — Japan India Business Bureau",
+      locale: locale === "en" ? "en_US" : "ja_JP",
+      alternateLocale: locale === "en" ? "ja_JP" : "en_US",
+      images: [
+        {
+          url: `${baseUrl}/images/og/privacy-og.jpg`,
+          width: 1200,
+          height: 630,
+          alt: "JIBB Privacy Policy — Data Protection & Security",
+          type: "image/jpeg",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`${baseUrl}/images/og/privacy-og.jpg`],
+    },
     alternates: {
       canonical: `${baseUrl}/${locale}/privacy`,
       languages: {

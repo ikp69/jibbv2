@@ -37,6 +37,46 @@ export async function generateMetadata({
   return {
     title,
     description,
+    keywords: [
+      "terms of service",
+      "service terms",
+      "legal terms",
+      "user agreement",
+      "terms and conditions",
+      "service agreement",
+      "website terms",
+      "membership terms",
+      "legal agreement",
+      "JIBB terms",
+      "利用規約",
+      "サービス利用条件",
+      "会員規約",
+      "法的条件",
+    ],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `${baseUrl}/${locale}/terms`,
+      siteName: "JIBB — Japan India Business Bureau",
+      locale: locale === "en" ? "en_US" : "ja_JP",
+      alternateLocale: locale === "en" ? "ja_JP" : "en_US",
+      images: [
+        {
+          url: `${baseUrl}/images/og/terms-og.jpg`,
+          width: 1200,
+          height: 630,
+          alt: "JIBB Terms of Service",
+          type: "image/jpeg",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`${baseUrl}/images/og/terms-og.jpg`],
+    },
     alternates: {
       canonical: `${baseUrl}/${locale}/terms`,
       languages: {

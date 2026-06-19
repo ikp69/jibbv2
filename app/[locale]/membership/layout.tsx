@@ -45,7 +45,8 @@ export async function generateMetadata({
           url: `${baseUrl}/images/og/membership-og.jpg`,
           width: 1200,
           height: 630,
-          alt: "JIBB Membership Tiers — Associate, Silver, Gold, Platinum",
+          alt: "JIBB Membership Tiers — Associate, Silver, Gold, Platinum benefits",
+          type: "image/jpeg",
         },
       ],
     },
@@ -70,5 +71,34 @@ export default function MembershipLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  // BreadcrumbList Schema
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://npo-jibb.org"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Membership",
+        "item": "https://npo-jibb.org/membership"
+      }
+    ]
+  };
+
+  return (
+    <>
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      {children}
+    </>
+  );
 }

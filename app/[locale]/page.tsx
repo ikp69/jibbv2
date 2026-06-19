@@ -11,11 +11,82 @@ import { TiltCard } from "@/components/ui/TiltCard";
 import { TestimonialCarousel } from "@/components/sections/TestimonialCarousel";
 import { NewsRoom } from "@/components/sections/NewsRoom";
 import { getAllPosts } from "@/lib/markdown";
+import type { Metadata } from "next";
 import {
   Compass, Handshake, Lightbulb, Globe, Cpu, Car, Factory, Pill, Sun, Building2,
   FlaskConical, Microscope, BookOpen, Users, Rocket, Sparkles, ArrowRight, GraduationCap, Landmark,
   Zap, Crown, Star, Diamond
 } from "lucide-react";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+  
+  const title = locale === "ja"
+    ? "JIBB — 日印ビジネス機構 | 日本・インド間のビジネス協力と産業成長"
+    : "JIBB — Japan India Business Bureau | Bilateral Growth & Innovation";
+  
+  const description = locale === "ja"
+    ? "日本とインドの企業・政府・スタートアップを結ぶ戦略的な橋渡し。市場参入支援、ビジネスマッチング、イノベーション協業で日印間の産業成長を推進します。"
+    : "JIBB connects businesses, governments, and startups across Japan and India. We facilitate market entry, enable partnerships, and drive innovation collaboration for bilateral growth.";
+
+  return {
+    title,
+    description,
+    keywords: [
+      "Japan India business",
+      "bilateral collaboration",
+      "market entry Japan",
+      "market entry India",
+      "business matching",
+      "Japan India partnership",
+      "cross-border business",
+      "innovation collaboration",
+      "semiconductor Japan India",
+      "EV automotive Japan India",
+      "日本インドビジネス",
+      "日印協力",
+      "市場参入",
+      "ビジネスマッチング",
+      "日印パートナーシップ",
+    ],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `${baseUrl}/${locale}`,
+      siteName: "JIBB — Japan India Business Bureau",
+      locale: locale === "en" ? "en_US" : "ja_JP",
+      alternateLocale: locale === "en" ? "ja_JP" : "en_US",
+      images: [
+        {
+          url: `${baseUrl}/images/og/home-og.jpg`,
+          width: 1200,
+          height: 630,
+          alt: "JIBB — Connecting Japan & India for Bilateral Growth & Innovation",
+          type: "image/jpeg",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`${baseUrl}/images/og/home-og.jpg`],
+    },
+    alternates: {
+      canonical: `${baseUrl}/${locale}`,
+      languages: {
+        en: `${baseUrl}/en`,
+        ja: `${baseUrl}/ja`,
+      },
+    },
+  };
+}
 
 export default async function HomePage({
   params,
@@ -33,21 +104,21 @@ export default async function HomePage({
     "name": "Japan India Business Bureau",
     "alternateName": ["JIBB", "日印ビジネス機構"],
     "url": "https://npo-jibb.org",
-    "logo": "https://npo-jibb.org/images/jibb-logo.png",
+    "logo": "https://www.npo-jibb.org/logo.webp",
     "description": "A cross-border innovation and industrial collaboration ecosystem connecting Japan and India through partnerships, trade, manufacturing, and technology.",
-    "foundingDate": "2023",
+    "foundingDate": "2018",
     "address": [
       {
         "@type": "PostalAddress",
+        "streetAddress": "Tameike Suzuki Building 3F, 1-2-13 Akasaka, Minato-ku",
         "addressLocality": "Tokyo",
         "addressCountry": "JP"
       },
       {
         "@type": "PostalAddress",
-        "streetAddress": "Bhutani Cyberpark, Tower B, 8th Floor",
+        "streetAddress": "6th Floor, 162, Sector 136, Arihant Business Centre",
         "addressLocality": "Noida",
         "addressRegion": "Uttar Pradesh",
-        "postalCode": "201301",
         "addressCountry": "IN"
       }
     ],
@@ -69,8 +140,7 @@ export default async function HomePage({
       }
     ],
     "sameAs": [
-      "https://www.linkedin.com/company/jibb",
-      "https://twitter.com/jibb_official"
+      "https://linkedin.com/company/japan-india-business-bureau"
     ],
     "areaServed": [
       {
@@ -102,12 +172,32 @@ export default async function HomePage({
   const caseStudies = await getAllPosts("blog", locale);
   const thoughtLeadership = await getAllPosts("thought-leadership", locale);
 
+  // BreadcrumbList Schema for Homepage
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": `https://npo-jibb.org/${locale}`
+      }
+    ]
+  };
+
   return (
     <main className="flex-1">
       {/* Schema.org JSON-LD for Organization */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      
+      {/* BreadcrumbList Schema for Navigation */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <StoryHero />

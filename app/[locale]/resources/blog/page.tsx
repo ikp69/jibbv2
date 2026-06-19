@@ -57,8 +57,6 @@ export async function generateMetadata({
   };
 }
 
-
-
 export default async function CaseStudiesPage({ params, searchParams }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
@@ -80,8 +78,38 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
     );
   });
 
+  // CollectionPage Schema for Blog Listing with NewsArticle items
+  const collectionPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${SITE_URL}/${locale}/resources/blog`,
+    name: locale === "ja" ? "ブログ | 日印ビジネスビューロー" : "Blog | JIBB",
+    description: locale === "ja" 
+      ? "JIBBの最新記事、お知らせ、業界インサイトをご覧ください。"
+      : "Latest articles, updates and industry insights from Japan India Business Bureau.",
+    url: `${SITE_URL}/${locale}/resources/blog`,
+    publisher: {
+      "@type": "Organization",
+      name: "Japan India Business Bureau",
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
+      url: SITE_URL,
+    },
+    inLanguage: locale === "ja" ? "ja-JP" : "en-US",
+    isPartOf: { "@type": "WebSite", "@id": SITE_URL },
+    hasPart: filteredCaseStudies.slice(0, 10).map(post => ({
+      "@type": "NewsArticle",
+      headline: post.title,
+      description: post.description,
+      image: post.image,
+      datePublished: post.date,
+      url: `${SITE_URL}/${locale}/resources/blog/${post.slug}`,
+      author: post.author ? { "@type": "Person", name: post.author } : undefined,
+    })),
+  };
+
   return (
     <main className="flex-1 bg-background text-foreground animate-in fade-in duration-300">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }} />
       {/* ============================================================
           CINEMATIC BANNER
           ============================================================ */}

@@ -27,10 +27,11 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: 'https://www.npo-jibb.org/hero-illustration.webp',
+        url: 'https://www.npo-jibb.org/images/og/events-og.jpg',
         width: 1200,
         height: 630,
-        alt: 'JIBB Events & Seminars'
+        alt: 'JIBB Events & Seminars — Japan-India Bilateral Business Opportunities',
+        type: 'image/jpeg',
       }
     ]
   },
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Upcoming Events & Seminars | JIBB',
     description: 'Join Japan-India Business seminars, including Semicon India 2026 and Bharat Mobility entry opportunities.',
-    images: ['https://www.npo-jibb.org/hero-illustration.webp']
+    images: ['https://www.npo-jibb.org/images/og/events-og.jpg']
   },
 }
 

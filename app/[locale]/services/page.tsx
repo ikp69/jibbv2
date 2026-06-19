@@ -54,7 +54,8 @@ export async function generateMetadata({
           url: `${baseUrl}/images/og/services-og.jpg`,
           width: 1200,
           height: 630,
-          alt: "JIBB Services — End-to-End Bilateral Support",
+          alt: "JIBB Services — End-to-End Bilateral Business Support",
+          type: "image/jpeg",
         },
       ],
     },
@@ -365,8 +366,68 @@ export default async function ServicesPage({
   setRequestLocale(locale);
   const t = await getTranslations({ locale });
 
+  // BreadcrumbList Schema for Services Page
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": `https://npo-jibb.org/${locale}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": locale === "ja" ? "ビジネスサービス" : "Services",
+        "item": `https://npo-jibb.org/${locale}/services`
+      }
+    ]
+  };
+
   return (
     <main className="flex-1 bg-background text-foreground">
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
+      {/* Service Schema for SEO */}
+      {SERVICES.map((service) => {
+        const serviceSchema = {
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "name": service.title,
+          "description": service.intro,
+          "serviceType": "Business Consulting",
+          "provider": {
+            "@type": "Organization",
+            "name": "Japan India Business Bureau",
+            "url": "https://npo-jibb.org"
+          },
+          "areaServed": [
+            { "@type": "Country", "name": "Japan" },
+            { "@type": "Country", "name": "India" }
+          ],
+          "url": `https://npo-jibb.org/${locale}/services#${service.id}`,
+          "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "priceCurrency": "INR",
+            "price": "Contact for Quote"
+          }
+        };
+
+        return (
+          <script
+            key={`service-schema-${service.id}`}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+          />
+        );
+      })}
 
       {/* ── HERO ─────────────────────────────────────────── */}
       <PageHero className="py-20 lg:py-28" bgText="SERVICES">
@@ -385,7 +446,7 @@ export default async function ServicesPage({
           />
 
           <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
-            From initial market landscaping to full operational setup — eight integrated service lines that take Japan–India partnerships from ambition to execution.
+            From initial market landscaping to full operational setup — eight integrated service lines that take Japan–India partnerships from ambition to execution. Our services align with <Link href="/sectors" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">our 8 focus sectors</Link> and <Link href="/membership" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">membership tiers</Link>.
           </p>
 
           <div className="flex justify-center gap-3 pt-4">
@@ -397,6 +458,25 @@ export default async function ServicesPage({
           </div>
         </div>
       </PageHero>
+
+      {/* ── FEATURED SNIPPET OPTIMIZATION — Numbered List ──────────────────── */}
+      <section className="py-12 md:py-16 bg-background border-b border-border/20">
+        <div className="section-container max-w-4xl">
+          <div className="space-y-4">
+            <h3 className="text-lg md:text-xl font-bold text-foreground tracking-tight">JIBB's 8 Core Business Services</h3>
+            <ol className="space-y-2 ml-4 list-decimal">
+              <li className="text-sm text-muted-foreground"><strong>Market Landscaping</strong> — Deep market research and comprehensive environment analysis</li>
+              <li className="text-sm text-muted-foreground"><strong>Opportunity Landscape</strong> — Quantified opportunities and prioritized revenue pathways</li>
+              <li className="text-sm text-muted-foreground"><strong>Partner Identification</strong> — Strategic partner mapping and ecosystem building</li>
+              <li className="text-sm text-muted-foreground"><strong>Due Diligence</strong> — Comprehensive risk assessment and investment evaluation</li>
+              <li className="text-sm text-muted-foreground"><strong>Go-to-Market Strategy</strong> — Launch and scaling roadmap for new markets</li>
+              <li className="text-sm text-muted-foreground"><strong>Sales & Marketing Support</strong> — Growth enablement and market penetration strategies</li>
+              <li className="text-sm text-muted-foreground"><strong>Back Office Support</strong> — Operational excellence and administrative support</li>
+              <li className="text-sm text-muted-foreground"><strong>Regulatory Navigation</strong> — Compliance guidance and legal framework support</li>
+            </ol>
+          </div>
+        </div>
+      </section>
 
       {/* ── QUICK-NAV INDEX ──────────────────────────────── */}
       <section className="py-14 md:py-20 bg-jibb-gradient-subtle border-b border-border/30">
@@ -572,7 +652,7 @@ export default async function ServicesPage({
               Eight services. One unified corridor.
             </h2>
             <p className="text-white/75 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-              Whether you are entering India from Japan or Japan from India, our integrated service lines remove every barrier between ambition and execution.
+              Whether you are entering India from Japan or Japan from India, our integrated service lines remove every barrier between ambition and execution. Explore how our services connect with <Link href="/sectors" className="text-jibb-orange hover:text-jibb-orange-light font-semibold">industry sectors</Link> and <Link href="/about" className="text-jibb-orange hover:text-jibb-orange-light font-semibold">our company mission</Link>.
             </p>
           </ScrollReveal>
 

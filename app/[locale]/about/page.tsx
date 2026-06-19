@@ -74,7 +74,8 @@ export async function generateMetadata({
           url: `${baseUrl}/images/og/about-og.jpg`,
           width: 1200,
           height: 630,
-          alt: "About JIBB — Connecting Japan & India",
+          alt: "About JIBB — Connecting Japan & India for Bilateral Growth",
+          type: "image/jpeg",
         },
       ],
     },
@@ -126,6 +127,137 @@ export default async function AboutPage({
 
   return (
     <main className="flex-1 bg-background text-foreground">
+      {/* AboutPage Schema for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AboutPage",
+            "name": "About JIBB — Japan India Business Bureau",
+            "url": `https://npo-jibb.org/${locale}/about`,
+            "organization": {
+              "@type": "Organization",
+              "name": "Japan India Business Bureau",
+              "alternateName": ["JIBB", "日印ビジネス機構"],
+              "url": "https://npo-jibb.org",
+              "description": "A cross-border innovation and industrial collaboration ecosystem connecting Japan and India",
+              "foundingDate": "2018",
+              "address": [
+                {
+                  "@type": "PostalAddress",
+                  "streetAddress": "Tameike Suzuki Building 3F, 1-2-13 Akasaka, Minato-ku",
+                  "addressLocality": "Tokyo",
+                  "addressCountry": "JP"
+                },
+                {
+                  "@type": "PostalAddress",
+                  "streetAddress": "6th Floor, 162, Sector 136, Arihant Business Centre",
+                  "addressLocality": "Noida",
+                  "addressRegion": "Uttar Pradesh",
+                  "addressCountry": "IN"
+                }
+              ],
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "+81-90-9325-3456",
+                  "contactType": "General",
+                  "areaServed": "JP"
+                },
+                {
+                  "@type": "ContactPoint",
+                  "telephone": "+91-70000-17005",
+                  "contactType": "General",
+                  "areaServed": "IN"
+                }
+              ],
+              "sameAs": [
+                "https://linkedin.com/company/japan-india-business-bureau"
+              ]
+            }
+          })
+        }}
+      />
+
+      {/* FAQ Schema for About Page */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is JIBB?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "JIBB (Japan India Business Bureau) is a strategic bridge connecting businesses, governments, and startups across Japan and India. We facilitate cross-border collaborations, drive investments, and build long-term industrial growth between the two nations."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Where are JIBB's offices located?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "JIBB operates a dual-hub model with headquarters in Tokyo, Japan and Noida, India. This Tokyo-Noida axis enables seamless support for bilateral business operations across both ecosystems."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What services does JIBB provide?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "JIBB provides comprehensive market entry and partnership facilitation services including market landscaping, partnership facilitation, market entry strategy, due diligence, go-to-market strategy, sales and marketing support, regulatory navigation, and back-office support."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How can I become a JIBB member?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "JIBB offers four membership tiers: Associate, Silver, Gold, and Platinum, each designed for different business needs. Visit our membership page to explore the benefits of each tier and apply for the one that best fits your organization."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What industries does JIBB focus on?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "JIBB focuses on high-growth sectors including semiconductors, electric vehicles, renewable energy, pharmaceuticals, infrastructure, chemicals, electronics, and emerging technologies that drive bilateral innovation and industrial collaboration."
+                }
+              }
+            ]
+          })
+        }}
+      />
+
+      {/* BreadcrumbList Schema for About Page */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": `https://npo-jibb.org/${locale}`
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "About",
+                "item": `https://npo-jibb.org/${locale}/about`
+              }
+            ]
+          })
+        }}
+      />
+
       {/* ============================================================
           HERO — "Who We Are"
           ============================================================ */}
@@ -185,7 +317,7 @@ export default async function AboutPage({
                 Japanese and Indian industries, we help you overcome barriers and
                 connect seamlessly. Whether you want to expand your corporate
                 footprint, find reliable manufacturing partners, or scale a new
-                technology, we guide you through every step of the journey.
+                technology, we guide you through every step of the journey via our <Link href="/services" className="text-primary hover:text-primary-foreground font-semibold underline">comprehensive service offerings</Link>.
               </p>
             </ScrollReveal>
 
@@ -283,7 +415,7 @@ export default async function AboutPage({
                   </div>
                   <h3 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">Our Mission</h3>
                   <p className="text-base text-muted-foreground leading-relaxed">
-                    To drive meaningful partnerships and industrial progress by providing expert market entry support, fostering cross-border collaboration, and delivering world-class innovation incubation for businesses and governments.
+                    To drive meaningful partnerships and industrial progress by providing expert <Link href="/services" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">market entry support</Link>, fostering cross-border collaboration across <Link href="/sectors" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">8 focus sectors</Link>, and delivering world-class innovation incubation for businesses and governments.
                   </p>
                 </div>
               </div>

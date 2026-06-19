@@ -19,23 +19,23 @@ import { isValidPhone, PHONE_ERROR } from "@/app/lib/validation/phone";
 export default function ContactPage() {
   const t = useTranslations("contactPage");
 
-  // LocalBusiness Schema for SEO
+  // Organization Schema for SEO (NPO - Non-Profit Organization)
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Japan India Business Bureau",
-    "alternateName": "JIBB",
+    "alternateName": ["JIBB", "日印ビジネス機構"],
     "url": "https://npo-jibb.org",
-    "logo": "https://npo-jibb.org/images/jibb-logo.png",
+    "logo": "https://www.npo-jibb.org/logo.webp",
     "description": "Cross-border innovation and industrial collaboration ecosystem connecting Japan and India",
+    "image": "https://npo-jibb.org/images/jibb-hero.jpg",
     "contactPoint": [
       {
         "@type": "ContactPoint",
         "telephone": "+81-90-9325-3456",
         "contactType": "General Inquiries",
         "areaServed": "JP",
-        "availableLanguage": ["English", "Japanese"],
-        "contactOption": "TollFree"
+        "availableLanguage": ["English", "Japanese"]
       },
       {
         "@type": "ContactPoint",
@@ -49,21 +49,20 @@ export default function ContactPage() {
     "address": [
       {
         "@type": "PostalAddress",
+        "streetAddress": "Tameike Suzuki Building 3F, 1-2-13 Akasaka, Minato-ku",
         "addressLocality": "Tokyo",
         "addressCountry": "JP"
       },
       {
         "@type": "PostalAddress",
-        "streetAddress": "Bhutani Cyberpark, Tower B, 8th Floor",
+        "streetAddress": "6th Floor, 162, Sector 136, Arihant Business Centre",
         "addressLocality": "Noida",
         "addressRegion": "Uttar Pradesh",
-        "postalCode": "201301",
         "addressCountry": "IN"
       }
     ],
     "sameAs": [
-      "https://www.linkedin.com/company/jibb",
-      "https://twitter.com/jibb_official"
+      "https://linkedin.com/company/japan-india-business-bureau"
     ]
   };
 
@@ -371,7 +370,7 @@ export default function ContactPage() {
                       {t("tokyoOffice")}
                     </h4>
                     <p className="text-xs text-muted-foreground leading-relaxed mt-1">
-                      {t("tokyoAddr")}
+                      Tameike Suzuki Building 3F, 1-2-13 Akasaka, Minato-ku, Tokyo
                     </p>
                   </div>
                 </div>
@@ -393,7 +392,7 @@ export default function ContactPage() {
                       {t("noidaOffice")}
                     </h4>
                     <p className="text-xs text-muted-foreground leading-relaxed mt-1">
-                      {t("noidaAddr")}
+                      6th Floor, 162, Sector 136, Arihant Business Centre, Noida, Uttar Pradesh
                     </p>
                   </div>
                 </div>

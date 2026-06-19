@@ -22,9 +22,63 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+  const title = locale === "ja"
+    ? "イノベーションハブ | JIBB — 日印ビジネス機構"
+    : "Innovation Hub | JIBB — Japan India Business Bureau";
+  const description = locale === "ja"
+    ? "日印の革新的なビジネスハブ。卓越センター、イノベーションチャレンジ、研究施設、パートナー機関、スタートアップインキュベーションで協創を推進。"
+    : "Japan-India innovation hub for research, technology transfer, and collaborative development. Centers of Excellence, innovation challenges, laboratories, and startup incubation.";
+
   return {
-    title: "Innovation Hub — JIBB",
-    description: t("description"),
+    title,
+    description,
+    keywords: [
+      "innovation hub",
+      "Japan India innovation",
+      "center of excellence",
+      "technology transfer",
+      "research collaboration",
+      "startup incubation",
+      "innovation challenges",
+      "bilateral R&D",
+      "emerging technology",
+      "イノベーション",
+      "技術移転",
+      "スタートアップ",
+    ],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `${baseUrl}/${locale}/innovation-hub`,
+      siteName: "JIBB — Japan India Business Bureau",
+      locale: locale === "en" ? "en_US" : "ja_JP",
+      alternateLocale: locale === "en" ? "ja_JP" : "en_US",
+      images: [
+        {
+          url: `${baseUrl}/images/og/innovation-hub-og.jpg`,
+          width: 1200,
+          height: 630,
+          alt: "JIBB Innovation Hub — Japan India Collaborative Research & Technology Transfer",
+          type: "image/jpeg",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`${baseUrl}/images/og/innovation-hub-og.jpg`],
+    },
+    alternates: {
+      canonical: `${baseUrl}/${locale}/innovation-hub`,
+      languages: {
+        en: `${baseUrl}/en/innovation-hub`,
+        ja: `${baseUrl}/ja/innovation-hub`,
+      },
+    },
   };
 }
 
@@ -161,8 +215,47 @@ export default async function InnovationHubPage({
     { icon: <Users className="size-5 text-jibb-orange" />, title: "Sponsor PoC Access", desc: "Direct proof-of-concept project opportunities with sponsoring corporations" },
   ];
 
+  // ResearchProject Schema for SEO
+  const researchSchema = {
+    "@context": "https://schema.org",
+    "@type": "ResearchProject",
+    "name": "JIBB Innovation Hub",
+    "description": "Collaborative Japan-India innovation hub for research, technology transfer, and startup development",
+    "url": `https://npo-jibb.org/${locale}/innovation-hub`,
+    "funder": {
+      "@type": "Organization",
+      "name": "Japan India Business Bureau"
+    },
+    "location": [
+      {
+        "@type": "Place",
+        "name": "Tokyo Innovation Center",
+        "address": { "@type": "PostalAddress", "addressCountry": "JP" }
+      },
+      {
+        "@type": "Place",
+        "name": "Noida Research Lab",
+        "address": { "@type": "PostalAddress", "addressCountry": "IN" }
+      }
+    ],
+    "knowsAbout": [
+      "Semiconductor Technology",
+      "Electric Vehicle Research",
+      "Pharmaceutical Development",
+      "Manufacturing Innovation",
+      "Startup Incubation",
+      "Technology Transfer"
+    ]
+  };
+
   return (
     <main className="flex-1 bg-background text-foreground animate-in fade-in duration-300">
+      {/* Schema.org JSON-LD for Research Project */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(researchSchema) }}
+      />
+
       {/* ============================================================
           CINEMATIC BANNER
           ============================================================ */}

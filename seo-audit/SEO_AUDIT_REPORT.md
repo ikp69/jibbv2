@@ -1185,7 +1185,7 @@ export default function HomePage() {
     name: "Japan India Business Bureau",
     alternateName: "JIBB",
     url: "https://npo-jibb.org",
-    logo: "https://npo-jibb.org/images/jibb-logo.png",
+    logo: "/logo.webp",
     description:
       "A cross-border innovation and industrial collaboration ecosystem connecting Japan and India through partnerships, trade, manufacturing, and technology.",
     foundingDate: "2023",
@@ -1210,8 +1210,7 @@ export default function HomePage() {
       },
     ],
     sameAs: [
-      "https://www.linkedin.com/company/jibb",
-      "https://twitter.com/jibb_official",
+      "https://linkedin.com/company/japan-india-business-bureau"
       // Add other social profiles
     ],
   };
@@ -1253,7 +1252,7 @@ export default function CareersPage() {
         "@type": "Organization",
         name: "Japan India Business Bureau",
         sameAs: "https://npo-jibb.org",
-        logo: "https://npo-jibb.org/images/jibb-logo.png",
+        logo: "/logo.webp",
       },
       jobLocation: {
         "@type": "Place",

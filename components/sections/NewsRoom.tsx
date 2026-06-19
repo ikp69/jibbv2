@@ -150,7 +150,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
       case "social":
         return {
           title: "Social Feed",
-          viewAllLink: "https://www.linkedin.com/company/japan-india-business-bureau",
+          viewAllLink: "https://linkedin.com/company/japan-india-business-bureau",
           viewAllText: "View All",
           isExternal: true,
           items: LINKEDIN_POSTS.map(post => ({
@@ -160,7 +160,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
             date: post.timeAgo,
             author: post.authorName,
             image: post.image,
-            link: "https://www.linkedin.com/company/japan-india-business-bureau",
+            link: "https://linkedin.com/company/japan-india-business-bureau",
             badge: "LinkedIn",
             isSocial: true,
             authorHandle: post.authorHandle,
@@ -409,7 +409,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
         {activeTab === "social" && (
           <div className="text-center mt-8">
             <a
-              href="https://www.linkedin.com/company/npo-jibb"
+              href="https://linkedin.com/company/japan-india-business-bureau"
               target="_blank"
               rel="noopener noreferrer"
               className="px-6 py-2.5 bg-background border border-border/60 hover:border-primary/50 text-foreground text-xs font-bold rounded-lg transition-all active:scale-[0.98] inline-flex items-center gap-2 hover:shadow-sm"

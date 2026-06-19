@@ -1,0 +1,121 @@
+# Robots.txt for JIBB (Japan India Business Bureau)
+# Generated: June 19, 2026
+# Purpose: Guide search engine crawlers for optimal indexing
+
+# ============================================================
+# DEFAULT RULES - All Bots
+# ============================================================
+User-agent: *
+
+# Allow all pages and assets (no restrictions)
+Allow: /
+
+# Disallow specific patterns that shouldn't be indexed
+Disallow: /admin/
+Disallow: /api/
+Disallow: /auth/
+Disallow: /_next/
+Disallow: /dashboard/
+Disallow: /*.json$
+Disallow: /*.pdf$
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+Disallow: /search?
+Disallow: /*?page=
+
+# ============================================================
+# CRAWL PARAMETERS
+# ============================================================
+
+# Request rate limiting (delay between requests)
+# 1000ms = 1 second (reasonable for NPO site)
+Crawl-delay: 1
+
+# Maximum number of connections per second
+Request-rate: 1/1s
+
+# ============================================================
+# GOOGLE-SPECIFIC RULES
+# ============================================================
+User-agent: Googlebot
+
+# Google can crawl everything
+Allow: /
+
+# Slightly faster crawl rate for Google (they handle it well)
+Crawl-delay: 0.5
+
+# ============================================================
+# BING/MICROSOFT-SPECIFIC RULES
+# ============================================================
+User-agent: Bingbot
+
+# Bingbot can access everything
+Allow: /
+
+# Standard crawl rate for Bing
+Crawl-delay: 1
+
+# ============================================================
+# YANDEX-SPECIFIC RULES
+# ============================================================
+User-agent: Yandexbot
+
+# Yandex can access main content
+Allow: /
+
+Crawl-delay: 1
+
+# ============================================================
+# BAD BOTS / BOT BLOCKING
+# ============================================================
+
+# Block known bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: ZoominfoBot
+Disallow: /
+
+# ============================================================
+# SITEMAP DECLARATION
+# ============================================================
+# Points search engines to the XML sitemap
+Sitemap: https://npo-jibb.org/sitemap.xml
+Sitemap: https://npo-jibb.org/en/sitemap.xml
+Sitemap: https://npo-jibb.org/ja/sitemap.xml
+
+# ============================================================
+# COMMENT: CRAWL RULES EXPLANATION
+# ============================================================
+# 
+# Disallowed Paths:
+#   - /admin/ → Backend admin panel (not public)
+#   - /api/ → API endpoints (not for crawling)
+#   - /auth/ → Authentication pages (not indexable)
+#   - /_next/ → Next.js build artifacts (not content)
+#   - /dashboard/ → User dashboards (private)
+#   - *.json → JSON data files (not content)
+#   - *.pdf → PDF documents (handled separately)
+#   - ?sort=, ?filter= → Duplicate parameter variations
+#   - /search? → Search results page (dynamic, avoid duplication)
+#   - ?page= → Pagination params (handled by rel=next/prev)
+#
+# Crawl Delays:
+#   - Default: 1 second (reasonable, not too aggressive)
+#   - Googlebot: 0.5 second (Google's infrastructure handles faster rates)
+#
+# Bad Bots Blocked:
+#   - Known aggressive or malicious crawlers
+#   - Scrapers that don't respect robots.txt
+#   - SEO spam tools
+#

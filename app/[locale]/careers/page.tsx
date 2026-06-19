@@ -39,16 +39,15 @@ export default function CareersPage() {
         "@type": "Organization",
         "name": "Japan India Business Bureau",
         "sameAs": "https://npo-jibb.org",
-        "logo": "https://npo-jibb.org/images/jibb-logo.png"
+        "logo": "https://www.npo-jibb.org/logo.webp"
       },
       "jobLocation": {
         "@type": "Place",
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "Bhutani Cyberpark, Tower B",
+          "streetAddress": "6th Floor, 162, Sector 136, Arihant Business Centre",
           "addressLocality": "Noida",
           "addressRegion": "Uttar Pradesh",
-          "postalCode": "201301",
           "addressCountry": "IN"
         }
       },
@@ -81,16 +80,15 @@ export default function CareersPage() {
         "@type": "Organization",
         "name": "Japan India Business Bureau",
         "sameAs": "https://npo-jibb.org",
-        "logo": "https://npo-jibb.org/images/jibb-logo.png"
+        "logo": "https://www.npo-jibb.org/logo.webp"
       },
       "jobLocation": {
         "@type": "Place",
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "Bhutani Cyberpark, Tower B",
+          "streetAddress": "6th Floor, 162, Sector 136, Arihant Business Centre",
           "addressLocality": "Noida",
           "addressRegion": "Uttar Pradesh",
-          "postalCode": "201301",
           "addressCountry": "IN"
         }
       },
@@ -123,16 +121,15 @@ export default function CareersPage() {
         "@type": "Organization",
         "name": "Japan India Business Bureau",
         "sameAs": "https://npo-jibb.org",
-        "logo": "https://npo-jibb.org/images/jibb-logo.png"
+        "logo": "https://www.npo-jibb.org/logo.webp"
       },
       "jobLocation": {
         "@type": "Place",
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "Bhutani Cyberpark, Tower B",
+          "streetAddress": "6th Floor, 162, Sector 136, Arihant Business Centre",
           "addressLocality": "Noida",
           "addressRegion": "Uttar Pradesh",
-          "postalCode": "201301",
           "addressCountry": "IN"
         }
       },
