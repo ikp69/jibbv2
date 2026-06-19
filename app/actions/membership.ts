@@ -67,7 +67,7 @@ export async function submitMembershipApplication(data: MembershipInput) {
       message,
     });
     await sendEmail({
-      to: "membership@npo-jibb.org",
+      to: "hitesh@npo-jibb.org",
       subject: `[Membership App] ${membershipTier.toUpperCase()} - ${companyName}`,
       html: adminEmailHtml,
       replyTo: email,

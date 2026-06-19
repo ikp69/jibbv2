@@ -117,7 +117,7 @@ export async function submitCareerApplication(formData: FormData) {
     });
 
     await sendEmail({
-      to: "hr@npo-jibb.org",
+      to: "hitesh@npo-jibb.org",
       subject: `[Career App] ${position} - ${name}`,
       html: emailHtml,
       replyTo: email,

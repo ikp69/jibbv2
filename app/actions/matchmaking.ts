@@ -58,7 +58,7 @@ export async function submitMatchmakingRequest(data: MatchmakingInput) {
     });
 
     await sendEmail({
-      to: "partnerships@npo-jibb.org",
+      to: "hitesh@npo-jibb.org",
       subject: `[B2B Match Request] ${targetSector.toUpperCase()} - ${profile?.company_name || memberName}`,
       html: emailHtml,
       replyTo: user.email,

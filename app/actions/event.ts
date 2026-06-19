@@ -52,7 +52,7 @@ export async function registerForEvent(data: EventInput) {
     });
 
     await sendEmail({
-      to: "events@npo-jibb.org",
+      to: "hitesh@npo-jibb.org",
       subject: `[Event Reg] ${eventId} - ${name} (${company})`,
       html: emailHtml,
       replyTo: email,

@@ -277,4 +277,25 @@ grant insert on table public.event_registrations to anon, authenticated;
 grant insert on table public.career_applications to anon, authenticated;
 grant insert on table public.newsletter_subscribers to anon, authenticated;
 
+-- ============================================================
+-- 12. Storage Bucket Policies (For Careers Resume Uploads)
+-- ============================================================
+-- Note: Make sure to create a private bucket named 'resumes' in the Supabase Dashboard first.
+-- The following policies allow the Next.js Server Action (running with anon key) to upload
+-- resumes and generate temporary signed URLs for HR review.
+
+-- Enable RLS on storage.objects (if not already enabled by default)
+-- alter table storage.objects enable row level security;
+
+-- Policy to allow anyone (anon and authenticated) to upload resumes
+create policy "Allow public uploads to resumes bucket"
+  on storage.objects for insert
+  with check (bucket_id = 'resumes');
+
+-- Policy to allow reading resumes (needed to generate signed URLs via anon key)
+create policy "Allow public select for resumes bucket"
+  on storage.objects for select
+  using (bucket_id = 'resumes');
+
+
 
