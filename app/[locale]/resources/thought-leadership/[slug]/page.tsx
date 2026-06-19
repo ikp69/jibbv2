@@ -204,7 +204,7 @@ export default async function LeadershipThoughtDetailPage({ params }: PageProps)
               </p>
             </div>
             <div>
-              <a href="mailto:leadership@npo-jibb.org">
+              <a href="mailto:vc@npo-jibb.org">
                 <Button variant="accent" className="font-bold gap-1.5 shadow-md">
                   {isJa ? "リーダーシップへメール" : "Email Leadership"} <Sparkles className="size-4" />
                 </Button>

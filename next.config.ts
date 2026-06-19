@@ -74,6 +74,9 @@ const nextConfig: NextConfig = {
   generateEtags: true,
 
   experimental: {
+    serverActions: {
+      bodySizeLimit: "6mb",
+    },
     optimizePackageImports: [
       "lucide-react",
       "framer-motion",

@@ -201,7 +201,7 @@ export default async function InsightDetailPage({ params }: PageProps) {
               </p>
             </div>
             <div>
-              <a href="mailto:research@npo-jibb.org">
+              <a href="mailto:hitesh@npo-jibb.org">
                 <Button variant="accent" className="font-bold gap-1.5 shadow-md">
                   {locale === "ja" ? "調査部門へメールする" : "Email Research Division"} <Sparkles className="size-4" />
                 </Button>

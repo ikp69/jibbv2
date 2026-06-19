@@ -116,12 +116,16 @@ export async function submitCareerApplication(formData: FormData) {
       coverLetter,
     });
 
-    await sendEmail({
+    const emailResult = await sendEmail({
       to: "hitesh@npo-jibb.org",
       subject: `[Career App] ${position} - ${name}`,
       html: emailHtml,
       replyTo: email,
     });
+
+    if (!emailResult.success) {
+      throw new Error("email_failed");
+    }
 
     return { success: true };
   } catch (err: unknown) {

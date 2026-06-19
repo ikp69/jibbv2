@@ -459,59 +459,122 @@ export default async function ServicesPage({
         </div>
       </PageHero>
 
-      {/* ── FEATURED SNIPPET OPTIMIZATION — Numbered List ──────────────────── */}
-      <section className="py-12 md:py-16 bg-background border-b border-border/20">
-        <div className="section-container max-w-4xl">
-          <div className="space-y-4">
-            <h3 className="text-lg md:text-xl font-bold text-foreground tracking-tight">JIBB's 8 Core Business Services</h3>
-            <ol className="space-y-2 ml-4 list-decimal">
-              <li className="text-sm text-muted-foreground"><strong>Market Landscaping</strong> — Deep market research and comprehensive environment analysis</li>
-              <li className="text-sm text-muted-foreground"><strong>Opportunity Landscape</strong> — Quantified opportunities and prioritized revenue pathways</li>
-              <li className="text-sm text-muted-foreground"><strong>Partner Identification</strong> — Strategic partner mapping and ecosystem building</li>
-              <li className="text-sm text-muted-foreground"><strong>Due Diligence</strong> — Comprehensive risk assessment and investment evaluation</li>
-              <li className="text-sm text-muted-foreground"><strong>Go-to-Market Strategy</strong> — Launch and scaling roadmap for new markets</li>
-              <li className="text-sm text-muted-foreground"><strong>Sales & Marketing Support</strong> — Growth enablement and market penetration strategies</li>
-              <li className="text-sm text-muted-foreground"><strong>Back Office Support</strong> — Operational excellence and administrative support</li>
-              <li className="text-sm text-muted-foreground"><strong>Regulatory Navigation</strong> — Compliance guidance and legal framework support</li>
-            </ol>
-          </div>
-        </div>
-      </section>
-
-      {/* ── QUICK-NAV INDEX ──────────────────────────────── */}
+      {/* ── QUICK-NAV INDEX + SERVICES LIST ──────────────────────────────── */}
       <section className="py-14 md:py-20 bg-jibb-gradient-subtle border-b border-border/30">
-        <div className="section-container max-w-6xl">
-          <ScrollReveal
-            staggerChildren={0.07}
-            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3"
-          >
-            {SERVICES.map((svc) => {
-              const c = COLOR[svc.color];
-              const Icon = svc.icon;
-              return (
-                <a
-                  key={svc.id}
-                  href={`#${svc.id}`}
-                  className={`group flex items-center gap-3 p-4 rounded-2xl bg-card border border-border/60
-                    hover:border-border hover:shadow-jibb-md hover:-translate-y-0.5
-                    transition-all duration-200`}
-                >
-                  <div className={`shrink-0 p-2 rounded-xl ${c.icon} transition-transform duration-300 group-hover:scale-110`}>
-                    <Icon className="size-4" />
+        <div className="section-container max-w-7xl">
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-12">
+            
+            {/* Left: 2-column card grid (4 rows) */}
+            <ScrollReveal
+              staggerChildren={0.07}
+              className="lg:col-span-7 grid sm:grid-cols-2 gap-4"
+            >
+              {SERVICES.map((svc) => {
+                const c = COLOR[svc.color];
+                const Icon = svc.icon;
+                return (
+                  <a
+                    key={svc.id}
+                    href={`#${svc.id}`}
+                    className={`group flex flex-col gap-4 p-5 rounded-2xl bg-card border border-border/60
+                      hover:border-border hover:shadow-jibb-md hover:-translate-y-1
+                      transition-all duration-300`}
+                  >
+                    <div className="flex items-start justify-between">
+                      <span className={`text-xs font-black tracking-wider ${c.num}`}>
+                        {svc.num}
+                      </span>
+                      <div className={`shrink-0 p-2.5 rounded-xl ${c.icon} transition-transform duration-300 group-hover:scale-110`}>
+                        <Icon className="size-5" />
+                      </div>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-foreground leading-snug">
+                        {svc.title}
+                      </p>
+                      <p className="text-[11px] text-muted-foreground leading-relaxed mt-2">
+                        {svc.tagline}
+                      </p>
+                    </div>
+                  </a>
+                );
+              })}
+            </ScrollReveal>
+
+            {/* Right: 8 Core Services List */}
+            <ScrollReveal direction="right" className="lg:col-span-5 hidden lg:block">
+              <div className="rounded-3xl bg-card border border-border/80 p-8 md:p-10 shadow-jibb-md h-full">
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <h3 className="text-lg md:text-xl font-extrabold text-foreground tracking-tight">
+                      JIBB's 8 Core Business Services
+                    </h3>
+                    <div className="h-1 w-10 bg-jibb-orange/60 rounded-full" />
                   </div>
-                  <div className="min-w-0">
-                    <span className={`text-[10px] font-black tracking-widest ${c.num}`}>
-                      {svc.num}
-                    </span>
-                    <p className="text-xs font-semibold text-foreground leading-snug truncate">
-                      {svc.title}
-                    </p>
-                  </div>
-                  <ChevronRight className="size-3.5 text-muted-foreground/50 shrink-0 ml-auto group-hover:translate-x-0.5 transition-transform" />
-                </a>
-              );
-            })}
-          </ScrollReveal>
+                  
+                  <ol className="space-y-4">
+                    <li className="flex gap-4">
+                      <span className="text-jibb-orange font-black text-sm shrink-0 pt-0.5">01</span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-foreground">Market Landscaping</p>
+                        <p className="text-xs text-muted-foreground mt-1">Deep market research and comprehensive environment analysis</p>
+                      </div>
+                    </li>
+                    <li className="flex gap-4">
+                      <span className="text-jibb-indigo font-black text-sm shrink-0 pt-0.5">02</span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-foreground">Opportunity Landscape</p>
+                        <p className="text-xs text-muted-foreground mt-1">Quantified opportunities and prioritized revenue pathways</p>
+                      </div>
+                    </li>
+                    <li className="flex gap-4">
+                      <span className="text-jibb-sakura font-black text-sm shrink-0 pt-0.5">03</span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-foreground">Partner Identification</p>
+                        <p className="text-xs text-muted-foreground mt-1">Strategic partner mapping and ecosystem building</p>
+                      </div>
+                    </li>
+                    <li className="flex gap-4">
+                      <span className="text-jibb-orange font-black text-sm shrink-0 pt-0.5">04</span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-foreground">Due Diligence</p>
+                        <p className="text-xs text-muted-foreground mt-1">Comprehensive risk assessment and investment evaluation</p>
+                      </div>
+                    </li>
+                    <li className="flex gap-4">
+                      <span className="text-jibb-indigo font-black text-sm shrink-0 pt-0.5">05</span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-foreground">Go-to-Market Strategy</p>
+                        <p className="text-xs text-muted-foreground mt-1">Launch and scaling roadmap for new markets</p>
+                      </div>
+                    </li>
+                    <li className="flex gap-4">
+                      <span className="text-jibb-sakura font-black text-sm shrink-0 pt-0.5">06</span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-foreground">Sales & Marketing Support</p>
+                        <p className="text-xs text-muted-foreground mt-1">Growth enablement and market penetration strategies</p>
+                      </div>
+                    </li>
+                    <li className="flex gap-4">
+                      <span className="text-jibb-orange font-black text-sm shrink-0 pt-0.5">07</span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-foreground">Back Office Support</p>
+                        <p className="text-xs text-muted-foreground mt-1">Operational excellence and administrative support</p>
+                      </div>
+                    </li>
+                    <li className="flex gap-4">
+                      <span className="text-jibb-indigo font-black text-sm shrink-0 pt-0.5">08</span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-foreground">Regulatory Navigation</p>
+                        <p className="text-xs text-muted-foreground mt-1">Compliance guidance and legal framework support</p>
+                      </div>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </ScrollReveal>
+
+          </div>
         </div>
       </section>
 

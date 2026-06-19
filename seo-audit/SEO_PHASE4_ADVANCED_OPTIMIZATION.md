@@ -171,7 +171,7 @@ Create comparison table:
   "description": "Bilateral business partnership bureau",
   "url": "https://npo-jibb.org",
   "telephone": "+91-70000-17005",
-  "email": "info@npo-jibb.org",
+  "email": "vc@npo-jibb.org",
   "logo": "/logo.webp",
   "image": "https://npo-jibb.org/images/jibb-hero.jpg",
   "address": [

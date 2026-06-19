@@ -253,6 +253,7 @@ create policy "Admins can view career applications" on public.career_application
 -- 10. Create Newsletter Subscribers table
 create table if not exists public.newsletter_subscribers (
   id uuid default gen_random_uuid() primary key,
+  full_name text, -- Subscriber name support
   email text unique not null,
   source text not null default 'footer',
   created_at timestamp with time zone default timezone('utc'::text, now()) not null

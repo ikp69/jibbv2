@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect, useMemo } from 'react'
 import { useLocale } from 'next-intl'
 import { upcomingEvents, pastEvents } from '@/lib/eventsData'
+import { EventCountdown, EventCalendar, EventDetailsSummary } from '@/components/events'
+import { Event } from '@/components/events/EventDetailsSummary'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 24 },
@@ -30,6 +32,27 @@ const stagger = {
 export default function EventsLandingPage() {
   const locale = useLocale()
   const jpFont = locale === 'ja' ? { fontFamily: 'var(--font-noto-sans-jp)' } : {}
+
+  const formatBadgeDate = (dateStr: string) => {
+    try {
+      const date = new Date(dateStr)
+      if (isNaN(date.getTime())) return dateStr
+      if (locale === 'ja') {
+        const year = date.getFullYear()
+        const month = date.getMonth() + 1
+        const day = date.getDate()
+        return `${year}年${month}月${day}日`
+      } else {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        const month = months[date.getMonth()]
+        const day = date.getDate()
+        const year = date.getFullYear()
+        return `${month} ${day}, ${year}`
+      }
+    } catch {
+      return dateStr
+    }
+  }
 
   const labels = {
     en: {
@@ -73,15 +96,141 @@ export default function EventsLandingPage() {
   }
   const l = labels[locale as 'en' | 'ja']
 
-  // State for toggling between Upcoming and Past events (showing banners only)
-  const [showPast, setShowPast] = useState(false)
-  const [currentBannerIndex, setCurrentBannerIndex] = useState(0)
+  // Redesigned state and architecture for events
+  const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming')
+  const [selectedEventId, setSelectedEventId] = useState<string>('manufacturing')
 
-  const activeEvents = showPast ? pastEvents : upcomingEvents
-  const activeBannerIndex = activeEvents.length > 0 && Number.isInteger(currentBannerIndex) && currentBannerIndex >= 0 && currentBannerIndex < activeEvents.length
-    ? currentBannerIndex
-    : 0
-  const activeEvent = activeEvents[activeBannerIndex]
+  // Localization labels for the interactive elements
+  const tabLabels = {
+    en: {
+      upcomingEvents: 'Upcoming Events',
+      pastEvents: 'Past Events',
+      eventsCalendar: 'Events Calendar',
+      otherEvents: 'Other Events in this Category',
+      noEvents: 'No events found in this category.',
+      registerButton: 'REGISTER NOW',
+      detailsButton: 'VIEW DETAILS',
+      organisedBy: 'ORGANISED BY',
+      fee: 'FEE',
+      languages: 'LANGUAGES',
+      capacity: 'CAPACITY',
+      venue: 'VENUE',
+      time: 'TIME',
+      date: 'DATE',
+      backToUpcoming: 'Back to Upcoming Events'
+    },
+    ja: {
+      upcomingEvents: '今後のイベント',
+      pastEvents: '過去のイベント',
+      eventsCalendar: 'イベントカレンダー',
+      otherEvents: 'このカテゴリのその他のイベント',
+      noEvents: 'このカテゴリのイベントはありません。',
+      registerButton: '今すぐ登録する',
+      detailsButton: '詳細を見る',
+      organisedBy: '主催',
+      fee: '参加費',
+      languages: '言語',
+      capacity: '定員',
+      venue: '会場',
+      time: '時間',
+      date: '日程',
+      backToUpcoming: '今後のイベントに戻る'
+    }
+  }
+
+  // Helper to extract city from venueAddress
+  const getEventCity = (address: string) => {
+    const addr = address.toLowerCase()
+    if (addr.includes('tokyo') || addr.includes('東京') || addr.includes('chiyoda') || addr.includes('chuo') || addr.includes('ginza') || addr.includes('六番町')) {
+      return locale === 'ja' ? '東京' : 'Tokyo'
+    }
+    if (addr.includes('delhi') || addr.includes('デリー') || addr.includes('noida') || addr.includes('ノイダ')) {
+      return locale === 'ja' ? 'ニューデリー' : 'New Delhi'
+    }
+    return locale === 'ja' ? '東京' : 'Tokyo'
+  }
+
+  // Map and enrich all events (combining database events + mock upcoming events)
+  const allEvents = useMemo(() => {
+    // 1. Map real upcoming events
+    const realUpcoming = upcomingEvents.map(e => {
+      const loc = e[locale as 'en' | 'ja'] || e.en
+      return {
+        id: e.id,
+        title: loc.title + ' ' + (loc.titleHighlight ? loc.titleHighlight + ' ' : '') + (loc.titleEnd || ''),
+        description: loc.subtitle || loc.overview || '',
+        image: locale === 'ja' ? e.posterJa : e.posterEn,
+        startDate: e.eventDate,
+        venue: loc.venue,
+        city: getEventCity(loc.venueAddress),
+        country: locale === 'ja' ? '日本' : 'Japan',
+        capacity: parseInt(loc.seminarCapacity) || 80,
+        registeredCount: 57,
+        language: locale === 'ja' ? ['日本語', '英語'] : ['Japanese', 'English'],
+        status: 'upcoming' as const,
+        organizer: loc.organizer + (loc.coOrganizers?.length ? ` & ${loc.coOrganizers.join(' & ')}` : ''),
+        fee: locale === 'ja' ? '無料' : 'Free of Charge',
+        time: loc.time,
+        slug: e.slug,
+        registrationUrl: e.registrationUrl,
+        eventType: loc.title.toLowerCase().includes('briefing') || loc.title.toLowerCase().includes('説明会')
+          ? (locale === 'ja' ? '説明会' : 'Briefing')
+          : (locale === 'ja' ? 'セミナー' : 'Seminar')
+      }
+    })
+
+    // 2. Map real past events
+    const realPast = pastEvents.map(e => {
+      const loc = e[locale as 'en' | 'ja'] || e.en
+      return {
+        id: e.id,
+        title: loc.title + ' ' + (loc.titleHighlight ? loc.titleHighlight + ' ' : '') + (loc.titleEnd || ''),
+        description: loc.subtitle || loc.overview || '',
+        image: locale === 'ja' ? e.posterJa : e.posterEn,
+        startDate: e.eventDate,
+        venue: loc.venue,
+        city: getEventCity(loc.venueAddress),
+        country: locale === 'ja' ? '日本' : 'Japan',
+        capacity: parseInt(loc.seminarCapacity) || 120,
+        registeredCount: parseInt(loc.seminarCapacity) || 120,
+        language: locale === 'ja' ? ['日本語', '英語'] : ['Japanese', 'English'],
+        status: 'past' as const,
+        organizer: loc.organizer + (loc.coOrganizers?.length ? ` & ${loc.coOrganizers.join(' & ')}` : ''),
+        fee: locale === 'ja' ? '無料' : 'Free of Charge',
+        time: loc.time,
+        slug: e.slug,
+        registrationUrl: e.registrationUrl,
+        eventType: loc.title.toLowerCase().includes('briefing') || loc.title.toLowerCase().includes('説明会')
+          ? (locale === 'ja' ? '説明会' : 'Briefing')
+          : (locale === 'ja' ? 'セミナー' : 'Seminar')
+      }
+    })
+
+    return [...realUpcoming, ...realPast]
+  }, [locale])
+
+  // Filter events based on active tab
+  const filteredEvents = useMemo(() => {
+    return allEvents.filter(e => e.status === activeTab)
+  }, [allEvents, activeTab])
+
+  // Selected event computation
+  const selectedEvent = useMemo(() => {
+    return allEvents.find(e => e.id === selectedEventId) || allEvents.find(e => e.status === 'upcoming')
+  }, [allEvents, selectedEventId])
+
+  // Non-selected events for the active category
+  const otherEvents = useMemo(() => {
+    return filteredEvents.filter(e => e.id !== selectedEventId)
+  }, [filteredEvents, selectedEventId])
+
+  // Automatically update selected event when switching tabs
+  useEffect(() => {
+    const categoryEvents = allEvents.filter(e => e.status === activeTab)
+    if (categoryEvents.length > 0) {
+      setSelectedEventId(categoryEvents[0].id)
+    }
+  }, [activeTab, allEvents])
 
   // State for gallery lightbox
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
@@ -162,17 +311,7 @@ export default function EventsLandingPage() {
   const [showAllImages, setShowAllImages] = useState(false)
   const [displayedImages, setDisplayedImages] = useState<typeof allGalleryImages>([])
 
-  // Reset banner index when switching tabs
-  useEffect(() => {
-    setCurrentBannerIndex(0)
-  }, [showPast])
-
-  // Re-clamp the current banner index if the active event list shrinks or changes
-  useEffect(() => {
-    if (activeEvents.length > 0 && (currentBannerIndex < 0 || currentBannerIndex >= activeEvents.length || !Number.isInteger(currentBannerIndex))) {
-      setCurrentBannerIndex(0)
-    }
-  }, [activeEvents.length, currentBannerIndex])
+  // The old carousel effects were removed and replaced with activeTab state listeners.
 
   // Handle keyboard events for lightbox navigation
   useEffect(() => {
@@ -277,12 +416,14 @@ export default function EventsLandingPage() {
           </motion.div>
         </section>
 
-        {/* ─── Events Banners Section ─── */}
-        <section className="evl-banners-section">
-          <div className="evl-tabs-container" style={jpFont}>
+        {/* ─── Interactive Events Section ─── */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+          
+          {/* Tabs Navigation */}
+          <div className="evl-tabs-container mb-8" style={jpFont}>
             <button 
-              className={`evl-tab-btn ${!showPast ? 'active' : ''}`}
-              onClick={() => setShowPast(false)}
+              className={`evl-tab-btn ${activeTab === 'upcoming' ? 'active' : ''}`}
+              onClick={() => setActiveTab('upcoming')}
             >
               <span className="evl-tab-box">
                 {l.upcomingBox}
@@ -293,8 +434,8 @@ export default function EventsLandingPage() {
             </button>
 
             <button 
-              className={`evl-tab-btn ${showPast ? 'active' : ''}`}
-              onClick={() => setShowPast(true)}
+              className={`evl-tab-btn ${activeTab === 'past' ? 'active' : ''}`}
+              onClick={() => setActiveTab('past')}
             >
               <span className="evl-tab-box">
                 {l.pastBox}
@@ -305,81 +446,201 @@ export default function EventsLandingPage() {
             </button>
           </div>
 
-          <div className="evl-banners-container">
-            {(activeEvents.length > 0 && activeEvent) && (
-              <div className="evl-banner-carousel-wrapper">
-                {/* Banner Card */}
+          <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 items-start">
+            {/* Left Column: 70% */}
+            <div className="lg:col-span-7 flex flex-col gap-8">
+              
+              {/* Mobile Countdown (Only for upcoming events and if countdown is not expired) */}
+              {activeTab === 'upcoming' && selectedEvent && (
+                <div className="block lg:hidden">
+                  <EventCountdown
+                    targetDate={selectedEvent.startDate}
+                    startTime={selectedEvent.time}
+                    eventTitle={selectedEvent.title}
+                    venueCity={selectedEvent.city}
+                    organizer={selectedEvent.organizer}
+                    locale={locale}
+                  />
+                </div>
+              )}
+
+              <AnimatePresence mode="wait">
                 <motion.div
-                  key={`${showPast ? 'past' : 'upcoming'}-${activeBannerIndex}`}
-                  className="evl-banner-card"
-                  initial="hidden"
-                  animate="visible"
-                  variants={scaleIn}
+                  key={activeTab}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.4 }}
                 >
-                  <Link 
-                    href={`/events/${activeEvent.slug}`} 
-                    className="evl-banner-link"
-                  >
-                    <Image
-                      src={locale === 'ja' 
-                        ? activeEvent.posterJa 
-                        : activeEvent.posterEn
-                      }
-                      alt={activeEvent[locale as 'en' | 'ja'].title}
-                      width={1200}
-                      height={630}
-                      style={{ width: '100%', height: 'auto', display: 'block' }}
-                      className="evl-banner-img"
-                      priority
-                    />
-                  </Link>
+                  {filteredEvents.length === 0 ? (
+                    <div className="text-center py-16 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
+                      <span className="material-symbols-outlined text-slate-300 text-5xl">event_busy</span>
+                      <p className="text-slate-500 mt-4 font-medium" style={jpFont}>
+                        {tabLabels[locale as 'en' | 'ja'].noEvents}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-8">
+                      {/* Prominent Selected Card */}
+                      {selectedEvent && (
+                        <motion.div
+                          key={selectedEvent.id}
+                          className="evl-banner-card overflow-hidden flex flex-col"
+                          initial="hidden"
+                          animate="visible"
+                          variants={scaleIn}
+                        >
+                          <Link 
+                            href={`/events/${selectedEvent.slug}`} 
+                            className="evl-banner-link"
+                          >
+                            <Image
+                              src={selectedEvent.image}
+                              alt={selectedEvent.title}
+                              width={1200}
+                              height={630}
+                              style={{ width: '100%', height: 'auto', display: 'block' }}
+                              className="evl-banner-img transition-transform duration-500 hover:scale-[1.02]"
+                              priority
+                            />
+                          </Link>
+
+                          {/* Event Actions Panel */}
+                          <div className="p-5 border-t border-slate-100 flex flex-col sm:flex-row gap-4 items-center justify-between bg-slate-50/50">
+                            <div className="flex flex-col gap-1 text-left w-full sm:w-auto">
+                              <h4 className="font-bold text-slate-800 text-sm md:text-base line-clamp-1 leading-snug">
+                                {selectedEvent.title}
+                              </h4>
+                              <p className="text-xs text-slate-500 flex items-center gap-1.5">
+                                <span className="material-symbols-outlined text-sm">location_on</span>
+                                {selectedEvent.venue} ({selectedEvent.city})
+                              </p>
+                            </div>
+
+                            <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+                              <Link
+                                href={`/events/${selectedEvent.slug}`}
+                                className="px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold text-xs md:text-sm transition-all hover:bg-slate-50 hover:border-slate-300 text-center w-full sm:w-auto"
+                                style={jpFont}
+                              >
+                                {locale === 'ja' ? '詳細を見る' : 'View more details'}
+                              </Link>
+
+                              {selectedEvent.status === 'upcoming' && (
+                                <a
+                                  href={selectedEvent.registrationUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="px-6 py-2.5 rounded-xl bg-[#F58220] hover:bg-[#e07216] text-white font-bold text-xs md:text-sm shadow-md shadow-[#F58220]/25 transition-all text-center w-full sm:w-auto relative overflow-hidden group btn-pulsate"
+                                  style={jpFont}
+                                >
+                                  <span className="relative z-10 flex items-center justify-center gap-1.5">
+                                    <span className="material-symbols-outlined text-xs md:text-sm">local_activity</span>
+                                    {locale === 'ja' ? '今すぐ登録する' : 'Register Now'}
+                                  </span>
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {/* Smaller Cards List (Other Events in this category) */}
+                      {otherEvents.length > 0 && (
+                        <div className="mt-4">
+                          <h4 className="text-slate-800 text-sm font-semibold tracking-wider uppercase mb-4">
+                            {tabLabels[locale as 'en' | 'ja'].otherEvents}
+                          </h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {otherEvents.map((ev) => (
+                              <div
+                                key={ev.id}
+                                onClick={() => setSelectedEventId(ev.id)}
+                                className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-md group"
+                              >
+                                <div className="relative h-40 w-full overflow-hidden bg-slate-50">
+                                  <Image
+                                    src={ev.image}
+                                    alt={ev.title}
+                                    fill
+                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                    sizes="(max-width: 768px) 100vw, 25vw"
+                                  />
+                                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-[#162D6B] text-[10px] font-bold px-2.5 py-1 rounded-lg border border-slate-100">
+                                    {formatBadgeDate(ev.startDate)}
+                                  </div>
+                                </div>
+                                <div className="p-5 flex-1 flex flex-col justify-between">
+                                  <div>
+                                    <h5 className="font-bold text-slate-800 text-sm line-clamp-2 mb-2 group-hover:text-[#162D6B] transition-colors leading-snug">
+                                      {ev.title}
+                                    </h5>
+                                    <p className="text-slate-500 text-xs line-clamp-2 leading-relaxed">
+                                      {ev.description}
+                                    </p>
+                                  </div>
+                                  <div className="mt-4 pt-3 border-t border-slate-50 flex items-center justify-between text-[11px] text-slate-400 font-semibold uppercase">
+                                    <span className="flex items-center gap-1">
+                                      <span className="material-symbols-outlined text-xs">location_on</span>
+                                      {ev.city}
+                                    </span>
+                                    <span className="text-[#F58220] flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
+                                      {tabLabels[locale as 'en' | 'ja'].detailsButton}
+                                      <span className="material-symbols-outlined text-xs font-bold">chevron_right</span>
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </motion.div>
+              </AnimatePresence>
+            </div>
 
-                {/* Carousel Navigation Arrows */}
-                {(showPast ? pastEvents : upcomingEvents).length > 1 && (
-                  <>
-                    <button 
-                      className="evl-carousel-arrow left" 
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        const len = (showPast ? pastEvents : upcomingEvents).length
-                        setCurrentBannerIndex((prev) => (prev - 1 + len) % len)
-                      }}
-                      aria-label="Previous event"
-                    >
-                      <span className="material-symbols-outlined">chevron_left</span>
-                    </button>
-                    <button 
-                      className="evl-carousel-arrow right" 
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        const len = (showPast ? pastEvents : upcomingEvents).length
-                        setCurrentBannerIndex((prev) => (prev + 1) % len)
-                      }}
-                      aria-label="Next event"
-                    >
-                      <span className="material-symbols-outlined">chevron_right</span>
-                    </button>
-                  </>
-                )}
+            {/* Right Column: 30% */}
+            <div className="lg:col-span-3 lg:sticky lg:top-[120px] flex flex-col gap-6">
+              
+              {/* Desktop Countdown (Only for upcoming events) */}
+              {selectedEvent && selectedEvent.status === 'upcoming' && (
+                <div className="hidden lg:block">
+                  <EventCountdown
+                    targetDate={selectedEvent.startDate}
+                    startTime={selectedEvent.time}
+                    eventTitle={selectedEvent.title}
+                    venueCity={selectedEvent.city}
+                    organizer={selectedEvent.organizer}
+                    locale={locale}
+                  />
+                </div>
+              )}
 
-                {/* Carousel Indicators (Dots) */}
-                {(showPast ? pastEvents : upcomingEvents).length > 1 && (
-                  <div className="evl-carousel-dots">
-                    {(showPast ? pastEvents : upcomingEvents).map((_, index) => (
-                      <button
-                        key={index}
-                        className={`evl-carousel-dot ${index === currentBannerIndex ? 'active' : ''}`}
-                        onClick={() => setCurrentBannerIndex(index)}
-                        aria-label={`Go to event slide ${index + 1}`}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+              {/* Event Calendar Widget */}
+              <EventCalendar
+                events={allEvents}
+                selectedEventId={selectedEventId}
+                onSelectEvent={(id) => {
+                  setSelectedEventId(id)
+                  // Switch tab based on event status
+                  const selected = allEvents.find(e => e.id === id)
+                  if (selected) {
+                    setActiveTab(selected.status)
+                  }
+                }}
+                locale={locale}
+              />
+
+              {/* Event Details Summary Widget */}
+              {selectedEvent && (
+                <EventDetailsSummary
+                  event={selectedEvent}
+                  locale={locale}
+                />
+              )}
+            </div>
           </div>
         </section>
 

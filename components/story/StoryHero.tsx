@@ -6,8 +6,10 @@ import { MobileStoryHero } from "./MobileStoryHero";
 
 export function StoryHero() {
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const mediaQuery = window.matchMedia("(max-width: 767px)");
     
     const handleMediaQueryChange = (e: MediaQueryListEvent | MediaQueryList) => {
@@ -25,16 +27,18 @@ export function StoryHero() {
     }
   }, []);
 
-  if (isMobile === null) {
+  if (!mounted || isMobile === null) {
     return (
-      <>
-        <div className="hidden md:block">
-          <DesktopStoryHero />
+      <section className="relative w-full h-screen overflow-hidden bg-background" style={{ height: "100dvh" }}>
+        <div className="absolute inset-0 w-full h-full overflow-hidden">
+          <img
+            src="/JIBB_LandingPage_Illustration_Final.webp"
+            alt="Cover Illustration"
+            className="w-full h-full object-cover object-center"
+          />
         </div>
-        <div className="block md:hidden">
-          <MobileStoryHero />
-        </div>
-      </>
+        <div className="absolute inset-0 bg-black/10 pointer-events-none z-10" />
+      </section>
     );
   }
 

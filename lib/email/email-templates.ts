@@ -70,7 +70,7 @@ export function getMembershipConfirmationEmail(data: { contactPerson: string; me
         <h2 style="margin-top: 0; color: #0f172a;">Dear ${escapeHtml(data.contactPerson)},</h2>
         <p style="font-size: 15px; line-height: 1.6; color: #334155;">Thank you for applying for a <strong>${escapeHtml(data.membershipTier.toUpperCase())}</strong> membership with the Japan-India Business Bureau (JIBB) Association.</p>
         <p style="font-size: 15px; line-height: 1.6; color: #334155;">Our team is currently reviewing your registration information. Once approved, we will send you an invitation to activate your access key to the member-only portal, unlocking research databases and bilateral networking opportunities.</p>
-        <p style="font-size: 15px; line-height: 1.6; color: #334155;">If you have any questions in the meantime, feel free to reach out to us at <a href="mailto:membership@npo-jibb.org">membership@npo-jibb.org</a>.</p>
+        <p style="font-size: 15px; line-height: 1.6; color: #334155;">If you have any questions in the meantime, feel free to reach out to us at <a href="mailto:hitesh@npo-jibb.org">hitesh@npo-jibb.org</a>.</p>
         <p style="margin-top: 32px; font-weight: 700; font-size: 15px;">Warm regards,<br><span style="color: #FF6000;">The JIBB Onboarding Team</span></p>
       </div>
       <div class="footer"><p>&copy; 2026 Japan-India Business Bureau. All rights reserved.</p></div>

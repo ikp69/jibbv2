@@ -6,6 +6,9 @@ author: "Kenji Sato & Aarav Sharma"
 image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80"
 tags: ["Semiconductors", "Manufacturing", "Bilateral Policy"]
 featured: true
+corridor: "Tokyo – Noida – Gujarat"
+client: "Semiconductor Industry Consortium"
+impact: "Established joint venture for OSAT facility reducing supply chain delays by 40%"
 ---
 
 The global semiconductor supply chain is undergoing a historic realignment. As countries seek to diversify cleanroom manufacturing and packaging capabilities, the partnership between **Japan** and **India** is emerging as a critical anchor of resilience. 

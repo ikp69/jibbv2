@@ -58,7 +58,8 @@
       "submitButton": "Submit Application",
       "submitting": "Submitting...",
       "successTitle": "Application Submitted!",
-      "successDesc": "Thank you for applying. We have received your details and our team will get in touch with you shortly."
+      "successDesc": "Thank you for applying. We have received your details and our team will get in touch with you shortly.",
+      "emailErrorText": "Email service is facing some problems. Please try again after some time or directly write to"
     },
     "jobs": {
       "consultant": {

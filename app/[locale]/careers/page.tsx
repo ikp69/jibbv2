@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Input, Textarea } from "@/components/ui/input";
 import { AnimatedHeading } from "@/components/ui/AnimatedHeading";
@@ -11,7 +11,7 @@ import { HiringProcess } from "@/components/sections/HiringProcess";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Building2, Briefcase, Globe, Award, Sparkles, ChevronDown, CheckCircle, 
-  Send, Phone, Mail, Link as LinkIcon, User, SendHorizontal, FileText
+  Send, Phone, Mail, Link as LinkIcon, User, SendHorizontal, FileText, AlertCircle
 } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 import { submitCareerApplication } from "@/app/actions/careers";
@@ -166,7 +166,8 @@ export default function CareersPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [shouldShake, setShouldShake] = useState(false);
-
+  const [generalError, setGeneralError] = useState<ReactNode | null>(null);
+  
   const formRef = useRef<HTMLFormElement>(null);
 
   // Job Opening Array
@@ -250,6 +251,7 @@ export default function CareersPage() {
     }
 
     setIsSubmitting(true);
+    setGeneralError(null);
     try {
       const dataPayload = new FormData();
       dataPayload.append("name", formState.name);
@@ -287,11 +289,25 @@ export default function CareersPage() {
           setIsSuccess(false);
         }, 7000);
       } else {
-        alert(response.error || "Failed to submit career application.");
+        if (response.error === "email_failed") {
+          setGeneralError(
+            <span>
+              {t("form.emailErrorText")}{" "}
+              <a
+                href="mailto:hitesh@npo-jibb.org"
+                className="underline font-bold hover:opacity-80 transition-opacity"
+              >
+                hitesh@npo-jibb.org
+              </a>
+            </span>
+          );
+        } else {
+          setGeneralError(response.error || "Failed to submit career application.");
+        }
       }
     } catch (err) {
       console.error(err);
-      alert("Submission error. Please check your internet connection.");
+      setGeneralError("Submission error. Please check your internet connection.");
     } finally {
       setIsSubmitting(false);
     }
@@ -604,6 +620,17 @@ export default function CareersPage() {
             )}
 
              <form ref={formRef} onSubmit={handleSubmit} className={`space-y-5 ${shouldShake ? "animate-shake" : ""}`}>
+               {generalError && (
+                 <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                   <AlertCircle className="size-5 shrink-0 mt-0.5 text-red-500" />
+                   <div className="space-y-1">
+                     <p className="font-semibold text-red-700 dark:text-red-400">Submission Error</p>
+                     <div className="text-xs text-red-600/90 dark:text-red-400/95 leading-relaxed">
+                       {generalError}
+                     </div>
+                   </div>
+                 </div>
+               )}
                {/* Honeypot field (hidden from users, visible to bots) */}
                <div className="absolute opacity-0 pointer-events-none -z-10 h-0 w-0 overflow-hidden">
                  <label htmlFor="careers-website-url">Leave this field blank</label>

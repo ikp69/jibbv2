@@ -317,7 +317,7 @@ export default async function AboutPage({
                 Japanese and Indian industries, we help you overcome barriers and
                 connect seamlessly. Whether you want to expand your corporate
                 footprint, find reliable manufacturing partners, or scale a new
-                technology, we guide you through every step of the journey via our <Link href="/services" className="text-primary hover:text-primary-foreground font-semibold underline">comprehensive service offerings</Link>.
+                technology, we guide you through every step of the journey via our <Link href="/services" className="text-primary hover:text-jibb-orange-light font-semibold underline transition-colors">comprehensive service offerings</Link>.
               </p>
             </ScrollReveal>
 

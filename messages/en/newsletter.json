@@ -1,0 +1,59 @@
+{
+  "newsletterPage": {
+    "meta": {
+      "title": "Bilateral Bulletin — Japan India Business Bureau",
+      "description": "Subscribe to JIBB's newsletter for weekly updates, market insights, and bilateral developments between Japan and India."
+    },
+    "hero": {
+      "badge": "JIBB Intelligence",
+      "title": "The Bilateral Bulletin",
+      "subtitle": "Get deep-dive market insights, bilateral policy updates, and business briefs on the Japan-India corridor delivered directly to your inbox."
+    },
+    "form": {
+      "title": "Subscribe to the Bulletin",
+      "ctaText": "Join the amazing group of businessmen around India and Japan",
+      "nameLabel": "Full Name",
+      "namePlaceholder": "Jane Doe",
+      "emailLabel": "Corporate Email Address",
+      "emailPlaceholder": "corporate@example.com",
+      "submitButton": "Subscribe Now",
+      "submitting": "Subscribing...",
+      "successTitle": "Welcome to the Bulletin!",
+      "successDesc": "Thank you for subscribing to NPO JIBB. You will receive our next briefing directly in your inbox.",
+      "alreadySubscribedTitle": "Already Subscribed!",
+      "alreadySubscribedDesc": "Your email address is already registered on our newsletter list. We look forward to sharing our next briefing with you!",
+      "emailErrorText": "The subscription service is facing temporary issues. Try again later or directly write to",
+      "secureNotice": "No spam. Unsubscribe at any time. Your data is handled securely.",
+      "linkedinText": "Follow us on LinkedIn for daily updates",
+      "linkedinFollow": "Follow on LinkedIn",
+      "linkedinTopicTitle": "What we share on LinkedIn:",
+      "linkedinTopic1": "Bilateral Policy Updates: Real-time alerts on PLI schemes, semiconductor tariffs, and trade regulations.",
+      "linkedinTopic2": "Real-time Delegation News: Photos and summaries from bilateral summits, roundtables, and industrial park tours.",
+      "linkedinTopic3": "Strategic JV Alerts: Public announcements of collaborative engineering and supply chain partnerships."
+    },
+    "membershipCTA": {
+      "title": "Looking for Deeper Intelligence?",
+      "subtitle": "Free subscribers receive public updates. Become a JIBB Member to unlock our complete policy PDF reports, raw semiconductor databases, and bilateral business-matching services.",
+      "button": "Explore Membership Plans"
+    },
+    "features": {
+      "title": "Subscriber Benefits",
+      "item1Title": "Strategic Insights",
+      "item1Desc": "First-hand analysis of policy shifts, PLI scheme adjustments, and joint-venture opportunities.",
+      "item2Title": "Market Intelligence",
+      "item2Desc": "Key data points and briefs on high-growth sectors: semiconductors, EV, green hydrogen, and infrastructure.",
+      "item3Title": "Early Access",
+      "item3Desc": "Priority registration and notifications for bilateral delegations, business matching events, and summits."
+    },
+    "archives": {
+      "title": "Past Bulletin Editions",
+      "subtitle": "Take a look at what you've been missing. Explore highlights from our recent weekly releases.",
+      "issue14Title": "Issue #14: Noida-Tokyo Semiconductor Corridor Blueprints",
+      "issue14Desc": "Analysis of the new bilateral agreement focusing on semiconductor packaging technology transfers, raw supply security, and combined fab talent programs.",
+      "issue13Title": "Issue #13: EV Components & Parts Localization Dynamics",
+      "issue13Desc": "A complete breakdown of domestic content requirements, export tariff exemptions, and collaborative research initiatives in electric mobility.",
+      "issue12Title": "Issue #12: Strategic Digital Trade Corridors Roadmap",
+      "issue12Desc": "Details on how G2B customs clearances are being streamlined through shared electronic documentation, reducing freight times by up to 35%."
+    }
+  }
+}

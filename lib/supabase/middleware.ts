@@ -45,9 +45,13 @@ export async function updateSession(request: NextRequest) {
       data: { user: fetchedUser },
     } = await supabase.auth.getUser();
     user = fetchedUser;
-  } catch {
+  } catch (error) {
     // Session refresh failure is non-fatal in middleware — the page-level
     // auth guard (dashboard/layout.tsx) will redirect if the session is invalid.
+    // Network errors during middleware are expected in edge environments and can be ignored.
+    if (error instanceof Error) {
+      console.debug("Middleware auth check skipped:", error.message);
+    }
   }
 
   return { supabaseResponse, user };

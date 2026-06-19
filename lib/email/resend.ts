@@ -2,30 +2,30 @@ import { Resend } from "resend";
 import dns from "dns";
 
 // Prevent Windows connection suffix redirection (like .domain.name) from breaking Resend API calls in development
-if (process.env.NODE_ENV === "development") {
-  const originalLookup = dns.lookup;
-  // @ts-ignore
-  dns.lookup = function (hostname, options, callback) {
-    const cb = typeof options === "function" ? options : callback;
-    const opts = typeof options === "object" ? options : {};
 
-    if (hostname === "api.resend.com") {
-      dns.resolve4("api.resend.com", (err, addresses) => {
-        if (err || !addresses || addresses.length === 0) {
-          return (originalLookup as any)(hostname, options, callback);
-        }
-        if (opts.all) {
-          const results = addresses.map((addr) => ({ address: addr, family: 4 as const }));
-          return (cb as any)(null, results);
-        } else {
-          return (cb as any)(null, addresses[0], 4);
-        }
-      });
-      return;
-    }
-    return (originalLookup as any)(hostname, options, callback);
-  };
-}
+const originalLookup = dns.lookup;
+// @ts-ignore
+dns.lookup = function (hostname, options, callback) {
+  const cb = typeof options === "function" ? options : callback;
+  const opts = typeof options === "object" ? options : {};
+
+  if (hostname === "api.resend.com") {
+    dns.resolve4("api.resend.com", (err, addresses) => {
+      if (err || !addresses || addresses.length === 0) {
+        return (originalLookup as any)(hostname, options, callback);
+      }
+      if (opts.all) {
+        const results = addresses.map((addr) => ({ address: addr, family: 4 as const }));
+        return (cb as any)(null, results);
+      } else {
+        return (cb as any)(null, addresses[0], 4);
+      }
+    });
+    return;
+  }
+  return (originalLookup as any)(hostname, options, callback);
+};
+
 
 const apiKey = process.env.RESEND_API_KEY;
 

@@ -42,7 +42,7 @@ export async function submitContactForm(data: ContactInput) {
     // 4. Send Email Notification to Admin
     const emailHtml = getContactNotificationEmail({ inquiryType, name, email, phone, message });
     const emailResult = await sendEmail({
-      to: "gurpreet@npo-jibb.org",
+      to: "hitesh@npo-jibb.org",
       subject: `[Contact Form] ${inquiryType.toUpperCase()} - ${name}`,
       html: emailHtml,
       replyTo: email,

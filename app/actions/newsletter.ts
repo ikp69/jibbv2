@@ -11,7 +11,7 @@ export async function subscribeToNewsletter(data: NewsletterInput) {
       return { success: false, error: parsed.error.issues[0]?.message || "Validation failed" };
     }
 
-    const { email, source, honeypot } = parsed.data;
+    const { name, email, source, honeypot } = parsed.data;
 
     // 2. Honeypot check
     if (honeypot) {
@@ -24,6 +24,7 @@ export async function subscribeToNewsletter(data: NewsletterInput) {
     const { error: dbError } = await supabase
       .from("newsletter_subscribers")
       .insert({
+        full_name: name ? name.trim() : null,
         email: email.toLowerCase().trim(),
         source,
       });
