@@ -12,9 +12,6 @@ const nextConfig = {
   // Optimize for production
   productionBrowserSourceMaps: false,
   
-  // Font optimization
-  optimizeFonts: true,
-  
   // Headers for proper encoding
   async headers() {
     return [
@@ -52,17 +49,8 @@ const nextConfig = {
     ];
   },
 
-  // Webpack config for optimization
-  webpack: (config, { isServer }) => {
-    config.optimization.minimize = true;
-    return config;
-  },
-
-  // Internationalization
-  i18n: {
-    locales: ['en', 'ja'],
-    defaultLocale: 'en',
-  },
+  // Enable Turbopack (Next.js 16 default)
+  turbopack: {},
 
   // Image optimization
   images: {
@@ -80,9 +68,6 @@ const nextConfig = {
     maxInactiveAge: 60 * 1000,
     pagesBufferLength: 5,
   },
-
-  // Disable static optimization for now (can be enabled later)
-  staticOptimization: true,
 
   // Enable experimental features if needed
   experimental: {
