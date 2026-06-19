@@ -3,16 +3,16 @@
 import React, { useRef, useState } from "react";
 import { Link } from "@/src/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ArrowRight, 
-  ArrowLeft, 
-  Calendar, 
-  User, 
-  FileText, 
-  BookOpen, 
-  Share2, 
-  ThumbsUp, 
-  MessageSquare 
+import {
+  ArrowRight,
+  ArrowLeft,
+  Calendar,
+  User,
+  FileText,
+  BookOpen,
+  Share2,
+  ThumbsUp,
+  MessageSquare
 } from "lucide-react";
 import { MarkdownPost } from "@/lib/markdown";
 
@@ -82,7 +82,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
 
   const tabs = [
     { id: "media", label: "Media & Insights", count: mediaPosts.length },
-    { id: "cases", label: "Case Studies", count: caseStudies.length },
+    { id: "cases", label: "Blog", count: caseStudies.length },
     { id: "thought", label: "Thought Leadership", count: thoughtLeadership.length },
     { id: "social", label: "Social Feed (LinkedIn)", count: LINKEDIN_POSTS.length },
   ] as const;
@@ -180,7 +180,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
       <div aria-hidden="true" className="absolute bottom-0 left-0 w-96 h-96 bg-jibb-orange/5 dark:bg-[#f0a455]/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="section-container relative z-10 max-w-7xl mx-auto px-4">
-        
+
         {/* Header Block */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="space-y-3">
@@ -192,8 +192,8 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
             </p>
           </div>
           <div className="shrink-0">
-            <Link 
-              href="/insights" 
+            <Link
+              href="/insights"
               className="inline-flex items-center gap-2 text-jibb-indigo dark:text-jibb-indigo-light font-bold hover:underline group"
             >
               <span>VISIT NEWSROOM</span>
@@ -211,16 +211,15 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`relative py-4 px-1 text-sm md:text-base font-bold uppercase tracking-wider whitespace-nowrap transition-colors duration-300 ${
-                    isActive 
-                      ? "text-primary dark:text-[#7b9fe0]" 
+                  className={`relative py-4 px-1 text-sm md:text-base font-bold uppercase tracking-wider whitespace-nowrap transition-colors duration-300 ${isActive
+                      ? "text-primary dark:text-[#7b9fe0]"
                       : "text-muted-foreground hover:text-foreground"
-                  }`}
+                    }`}
                 >
                   <span>{tab.label}</span>
                   {isActive && (
-                    <motion.div 
-                      layoutId="newsroomActiveLine" 
+                    <motion.div
+                      layoutId="newsroomActiveLine"
                       className="absolute bottom-0 left-0 right-0 h-[3px] bg-jibb-orange dark:bg-jibb-orange-light rounded-full"
                     />
                   )}
@@ -239,7 +238,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
           <div className="flex items-center gap-3">
             {/* Carousel Controls */}
             <div className="flex items-center gap-1.5 border border-border/30 dark:border-border/10 rounded-full p-1 bg-background/50 backdrop-blur-sm">
-              <button 
+              <button
                 onClick={() => handleScroll("left")}
                 className="p-1.5 rounded-full hover:bg-muted dark:hover:bg-muted/10 transition-colors"
                 aria-label="Previous posts"
@@ -247,7 +246,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
                 <ArrowLeft className="size-4 text-foreground/80" />
               </button>
               <div className="w-px h-4 bg-border/40" />
-              <button 
+              <button
                 onClick={() => handleScroll("right")}
                 className="p-1.5 rounded-full hover:bg-muted dark:hover:bg-muted/10 transition-colors"
                 aria-label="Next posts"
@@ -258,7 +257,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
 
             {/* View All Button */}
             {content.isExternal ? (
-              <a 
+              <a
                 href={content.viewAllLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -268,7 +267,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
                 <ArrowRight className="size-3" />
               </a>
             ) : (
-              <Link 
+              <Link
                 href={content.viewAllLink}
                 className="px-4 py-2 bg-jibb-indigo dark:bg-[#7b9fe0] text-white dark:text-[#0f1629] font-bold text-xs rounded-xl hover:bg-jibb-indigo-light dark:hover:bg-[#9ab5e8] active:scale-[0.98] transition-all shadow-md inline-flex items-center gap-1.5"
               >
@@ -281,7 +280,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
 
         {/* Carousel Grid View */}
         <div className="relative">
-          <div 
+          <div
             ref={scrollContainerRef}
             className="flex overflow-x-auto gap-6 pb-6 no-scrollbar snap-x snap-mandatory"
           >
@@ -327,8 +326,8 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
 
                       {/* Image Banner */}
                       <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden mb-4 border border-border/30 bg-muted shrink-0">
-                        <img 
-                          src={item.image} 
+                        <img
+                          src={item.image}
                           alt="LinkedIn post visual"
                           className="object-cover w-full h-full"
                         />
@@ -351,8 +350,8 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
                     <div className="bg-card dark:bg-[#161f38]/45 border border-border/50 hover:border-primary/30 rounded-2xl overflow-hidden hover:shadow-jibb-md transition-all duration-300 flex flex-col h-[400px] justify-between group">
                       {/* Image at Top */}
                       <div className="relative aspect-[16/10] w-full bg-muted overflow-hidden">
-                        <img 
-                          src={item.image} 
+                        <img
+                          src={item.image}
                           alt={item.title}
                           className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
                         />
@@ -389,7 +388,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
 
                         {/* Learn More link */}
                         <div className="pt-4 border-t border-border/30">
-                          <Link 
+                          <Link
                             href={item.link}
                             className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-[#7b9fe0] hover:underline"
                           >

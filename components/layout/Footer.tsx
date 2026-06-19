@@ -264,8 +264,8 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Resources (Span 4) */}
-          <div className="lg:col-span-4 space-y-4">
+          {/* Column 4: Resources (Span 2) */}
+          <div className="lg:col-span-2 space-y-4">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
               {t("footer.resources")}
             </h4>
@@ -288,6 +288,25 @@ export function Footer() {
               <li>
                 <Link href="/resources/newsletter" className="text-white/60 hover:text-white transition-colors block py-0.5">
                   {t("resourcesMenu.newsletter")}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 5: Legal (Span 2) */}
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
+              Legal
+            </h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="/terms" className="text-white/60 hover:text-white transition-colors block py-0.5">
+                  {t("footer.terms")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className="text-white/60 hover:text-white transition-colors block py-0.5">
+                  {t("footer.privacy")}
                 </Link>
               </li>
             </ul>
