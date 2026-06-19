@@ -1,0 +1,30 @@
+{
+  "aboutPage": {
+    "meta": {
+      "title": "About Us — Japan India Business Bureau",
+      "description": "JIBB is a strategic bridge connecting businesses, governments, and startups across Japan and India. We empower innovation and facilitate cross-border collaborations for mutual growth.",
+      "og": {
+        "title": "About JIBB — Connecting Japan & India",
+        "description": "Learn about JIBB's mission, vision, and leadership team."
+      }
+    }
+  },
+  "contactPage": {
+    "meta": {
+      "title": "Contact Us — Japan India Business Bureau",
+      "description": "Get in touch with JIBB. We have offices in Tokyo and Noida. Contact us for business inquiries, partnerships, and general questions."
+    }
+  },
+  "careersPage": {
+    "meta": {
+      "title": "Careers — Japan India Business Bureau",
+      "description": "Join the JIBB team. We're hiring for strategic positions connecting Japan and India. Apply now for career opportunities."
+    }
+  },
+  "servicesPage": {
+    "meta": {
+      "title": "Services — Japan India Business Bureau",
+      "description": "JIBB offers comprehensive business services including market entry support, partnership facilitation, and cross-border collaboration."
+    }
+  }
+}
