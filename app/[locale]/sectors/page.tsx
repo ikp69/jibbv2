@@ -4,7 +4,8 @@ import { Cpu, Car, Sun, Pill, Landmark, FlaskConical, Factory, Rocket, ArrowRigh
 import { PageHero } from "@/components/sections/PageHero";
 import { Button } from "@/components/ui/button";
 import { WorkProcess } from "@/components/sections/WorkProcess";
-import { HorizontalScroll } from "@/components/sections/HorizontalScroll";
+import { HighvalueEcosystem } from "@/components/sections/HighvalueEcosystem";
+// import { HorizontalScroll } from "@/components/sections/HorizontalScroll";
 
 
 export async function generateMetadata({
@@ -160,7 +161,7 @@ export default async function SectorsPage({
           <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight">
             {t("sectorsPage.title")}
           </h1>
-          
+
           <p className="text-sm md:text-base text-white/80 max-w-2xl leading-relaxed">
             {t("sectorsPage.subtitle")} Our <Link href="/services" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">integrated services</Link> and flexible <Link href="/membership" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">membership tiers</Link> support growth across all sectors.
           </p>
@@ -197,7 +198,7 @@ export default async function SectorsPage({
                   <div className={`p-3.5 rounded-2xl bg-gradient-to-tr ${sec.color} inline-flex shadow-md transition-transform duration-300 group-hover:scale-105`}>
                     {sec.icon}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors tracking-tight">
                       {t(`sectorsPage.details.${sec.key}.title`)}
@@ -220,8 +221,9 @@ export default async function SectorsPage({
         </div>
       </section>
 
-      <WorkProcess/>
-      <HorizontalScroll />
+      <WorkProcess />
+      <HighvalueEcosystem />
+      {/* <HorizontalScroll /> */}
 
       {/* Call to Action */}
       <section className="py-16 bg-jibb-gradient text-white relative overflow-hidden">

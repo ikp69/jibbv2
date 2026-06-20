@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org"),
   title: {
     default: "JIBB — Japan India Business Bureau",
-    template: "%s | JIBB",
+    template: "%s",
   },
   description:
     "A cross-border innovation and industrial collaboration ecosystem connecting Japan and India through partnerships, trade, manufacturing, and technology.",
@@ -127,8 +127,8 @@ export default async function LocaleLayout({
       </head>
       <body className="min-h-screen flex flex-col bg-background text-foreground relative overflow-x-hidden">
         <ClientProviders messages={messages} locale={locale}>
-            {children}
-          </ClientProviders>
+          {children}
+        </ClientProviders>
       </body>
     </html>
   );

@@ -479,6 +479,15 @@
     scrollbar-width: none;
   }
 
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
   /* ---- Bento Grid Card ---- */
   .bento-card {
     @apply bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 transition-all duration-300 hover:bg-white/15 hover:border-white/20 hover:-translate-y-1 hover:shadow-jibb-md cursor-pointer;
