@@ -7581,6 +7581,7 @@ body:has(.event-ticker) .nav {
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -7940,4 +7941,28 @@ body.ticker-hidden .pt-24 {
   body.ticker-hidden .md\:pt-24 {
     padding-top: 6rem !important;
   }
+}
+
+/* Sleek Scrollbar for LinkedIn iframe embeds */
+.sleek-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.sleek-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sleek-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(123, 159, 224, 0.3);
+  border-radius: 9999px;
+}
+
+.sleek-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(233, 139, 42, 0.5);
+}
+
+.sleek-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(123, 159, 224, 0.3) transparent;
 }

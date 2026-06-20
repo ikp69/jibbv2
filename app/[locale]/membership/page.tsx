@@ -495,13 +495,13 @@ export default function MembershipPage() {
               <button
                 type="button"
                 onClick={() => setActiveTab("consultation")}
-                className={`relative flex-1 py-4 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${activeTab === "consultation"
+                className={`relative flex-1 py-3 sm:py-4 px-2 sm:px-4 text-[10px] sm:text-xs font-bold uppercase tracking-normal sm:tracking-wider flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all ${activeTab === "consultation"
                     ? "bg-card text-jibb-orange"
                     : "text-muted-foreground hover:bg-muted/65 hover:text-foreground"
                   }`}
               >
-                <Laptop className="size-4" />
-                {t("consultationTab")}
+                <Laptop className="size-3.5 sm:size-4 shrink-0" />
+                <span className="text-center">{t("consultationTab")}</span>
                 {activeTab === "consultation" && (
                   <motion.div
                     layoutId="activeTabIndicator"
@@ -513,13 +513,13 @@ export default function MembershipPage() {
               <button
                 type="button"
                 onClick={() => setActiveTab("inquiry")}
-                className={`relative flex-1 py-4 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${activeTab === "inquiry"
+                className={`relative flex-1 py-3 sm:py-4 px-2 sm:px-4 text-[10px] sm:text-xs font-bold uppercase tracking-normal sm:tracking-wider flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all ${activeTab === "inquiry"
                     ? "bg-card text-jibb-orange"
                     : "text-muted-foreground hover:bg-muted/65 hover:text-foreground"
                   }`}
               >
-                <Server className="size-4" />
-                {t("inquiryTab")}
+                <Server className="size-3.5 sm:size-4 shrink-0" />
+                <span className="text-center">{t("inquiryTab")}</span>
                 {activeTab === "inquiry" && (
                   <motion.div
                     layoutId="activeTabIndicator"

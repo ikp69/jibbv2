@@ -11,7 +11,10 @@ import { TiltCard } from "@/components/ui/TiltCard";
 import { TestimonialCarousel } from "@/components/sections/TestimonialCarousel";
 import { NewsRoom } from "@/components/sections/NewsRoom";
 import { getAllPosts } from "@/lib/markdown";
+import { createClient } from "@supabase/supabase-js";
 import type { Metadata } from "next";
+
+export const revalidate = 86400; // revalidate homepage cache every 24 hours
 import {
   Compass, Handshake, Lightbulb, Globe, Cpu, Car, Factory, Pill, Sun, Building2,
   FlaskConical, Microscope, BookOpen, Users, Rocket, Sparkles, ArrowRight, GraduationCap, Landmark,
@@ -25,11 +28,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
-  
+
   const title = locale === "ja"
     ? "JIBB — 日印ビジネス機構 | 日本・インド間のビジネス協力と産業成長"
     : "JIBB — Japan India Business Bureau | Bilateral Growth & Innovation";
-  
+
   const description = locale === "ja"
     ? "日本とインドの企業・政府・スタートアップを結ぶ戦略的な橋渡し。市場参入支援、ビジネスマッチング、イノベーション協業で日印間の産業成長を推進します。"
     : "JIBB connects businesses, governments, and startups across Japan and India. We facilitate market entry, enable partnerships, and drive innovation collaboration for bilateral growth.";
@@ -163,7 +166,6 @@ export default async function HomePage({
     ]
   };
 
-  // Fetch Newsroom contents
   const blogPosts = await getAllPosts("blog", locale);
   const insightsPosts = await getAllPosts("insights", locale);
   const mediaPosts = [...blogPosts, ...insightsPosts].sort(
@@ -171,6 +173,29 @@ export default async function HomePage({
   );
   const caseStudies = await getAllPosts("blog", locale);
   const thoughtLeadership = await getAllPosts("thought-leadership", locale);
+
+  let linkedinPosts: { id: string; shareUrn: string }[] = [];
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (supabaseUrl && supabaseAnonKey) {
+      const supabase = createClient(supabaseUrl, supabaseAnonKey);
+      const { data: posts, error } = await supabase
+        .from("linkedin_posts")
+        .select("id, share_urn")
+        .order("created_at", { ascending: false })
+        .limit(4);
+
+      if (posts && !error) {
+        linkedinPosts = posts.map((post, idx) => ({
+          id: post.id || `l-${idx}`,
+          shareUrn: post.share_urn
+        }));
+      }
+    }
+  } catch (err) {
+    console.error("Failed to fetch LinkedIn posts from database:", err);
+  }
 
   // BreadcrumbList Schema for Homepage
   const breadcrumbSchema = {
@@ -193,7 +218,7 @@ export default async function HomePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
-      
+
       {/* BreadcrumbList Schema for Navigation */}
       <script
         type="application/ld+json"
@@ -369,13 +394,13 @@ export default async function HomePage({
                   className="group relative bg-card dark:bg-[#161f38]/60 p-6 text-center border border-border/50 hover:border-primary/50 shadow-sm hover:shadow-jibb transition-all duration-500 hover:-translate-y-1 cursor-pointer overflow-hidden rounded-2xl"
                 >
                   {/* Background Image that fades in on hover */}
-                  <div 
+                  <div
                     className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-transform duration-700 group-hover:scale-110 bg-cover bg-center"
                     style={{ backgroundImage: `url(${sector.bgImage})` }}
                   />
                   {/* Dark overlay to ensure text readability */}
                   <div className="absolute inset-0 z-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
+
                   <div className="relative z-10 mb-4 transition-all duration-500 group-hover:scale-110 flex justify-center p-3 rounded-xl bg-primary/5 group-hover:bg-white/20 w-fit mx-auto backdrop-blur-md border border-primary/10 group-hover:border-white/10 transition-colors">
                     <Icon className="size-6 text-primary group-hover:text-white transition-colors duration-300" />
                   </div>
@@ -611,47 +636,47 @@ export default async function HomePage({
             ].map((plan) => {
               const IconComponent = plan.icon;
               return (
-              <TiltCard
-                key={plan.tier}
-                tiltMaxAngle={8}
-                scale={1.05}
-                speed={0.6}
-              >
-                <div
-                  className={`relative rounded-3xl p-6 text-left border transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between min-h-[220px] ${plan.recommended
-                    ? "bg-card text-foreground border-amber-500 dark:border-amber-400 shadow-lg scale-105 z-10"
-                    : "bg-card text-foreground border-border/50 hover:shadow-lg backdrop-blur-sm"
-                    } ${plan.colorClass}`}
+                <TiltCard
+                  key={plan.tier}
+                  tiltMaxAngle={8}
+                  scale={1.05}
+                  speed={0.6}
                 >
-                  {plan.recommended && (
-                    <div className="absolute -top-3 left-6 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[11px] uppercase font-bold tracking-wider px-3.5 py-1 rounded-full shadow-sm whitespace-nowrap">
-                      Popular Choice
-                    </div>
-                  )}
-                  <div className="space-y-3 flex-grow">
-                    {/* Icon */}
-                    <div className="mb-3 p-2 rounded-lg bg-foreground/10 w-fit">
+                  <div
+                    className={`relative rounded-3xl p-6 text-left border transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between min-h-[220px] ${plan.recommended
+                      ? "bg-card text-foreground border-amber-500 dark:border-amber-400 shadow-lg scale-105 z-10"
+                      : "bg-card text-foreground border-border/50 hover:shadow-lg backdrop-blur-sm"
+                      } ${plan.colorClass}`}
+                  >
+                    {plan.recommended && (
+                      <div className="absolute -top-3 left-6 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[11px] uppercase font-bold tracking-wider px-3.5 py-1 rounded-full shadow-sm whitespace-nowrap">
+                        Popular Choice
+                      </div>
+                    )}
+                    <div className="space-y-3 flex-grow">
+                      {/* Icon */}
+                      {/* <div className="mb-3 p-2 rounded-lg bg-foreground/10 w-fit">
                       <IconComponent className="w-6 h-6 text-foreground" />
-                    </div>
-                    
-                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${plan.badge}`}>
-                      {plan.tier}
-                    </span>
-                    <p className="text-sm text-muted-foreground mt-2 font-semibold">
-                      {plan.desc}
-                    </p>
+                    </div> */}
 
-                    <ul className="mt-4 space-y-2 text-xs text-muted-foreground border-t border-border/30 pt-3">
-                      {plan.features.map((feat) => (
-                        <li key={feat} className="flex items-center gap-1.5 font-medium">
-                          <span className={`${plan.recommended ? "text-amber-500" : plan.tier.includes("Platinum") ? "text-slate-500 dark:text-slate-400" : plan.tier.includes("Silver") ? "text-slate-400 dark:text-slate-300" : "text-jibb-indigo"} font-bold`}>✓</span> {feat}
-                        </li>
-                      ))}
-                    </ul>
+                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${plan.badge}`}>
+                        {plan.tier}
+                      </span>
+                      <p className="text-sm text-muted-foreground mt-2 font-semibold">
+                        {plan.desc}
+                      </p>
+
+                      <ul className="mt-4 space-y-2 text-xs text-muted-foreground border-t border-border/30 pt-3">
+                        {plan.features.map((feat) => (
+                          <li key={feat} className="flex items-center gap-1.5 font-medium">
+                            <span className={`${plan.recommended ? "text-amber-500" : plan.tier.includes("Platinum") ? "text-slate-500 dark:text-slate-400" : plan.tier.includes("Silver") ? "text-slate-400 dark:text-slate-300" : "text-jibb-indigo"} font-bold`}>✓</span> {feat}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              </TiltCard>
-            );
+                </TiltCard>
+              );
             })}
           </ScrollReveal>
 
@@ -666,10 +691,11 @@ export default async function HomePage({
         </div>
       </section>
 
-      <NewsRoom 
+      <NewsRoom
         mediaPosts={mediaPosts}
         caseStudies={caseStudies}
         thoughtLeadership={thoughtLeadership}
+        linkedinPosts={linkedinPosts}
       />
     </main>
   );

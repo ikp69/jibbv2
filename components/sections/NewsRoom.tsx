@@ -1,20 +1,19 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import { Link } from "@/src/i18n/navigation";
+import React, { useRef, useState, useEffect } from "react";
+import { Link, useRouter } from "@/src/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
   ArrowLeft,
   Calendar,
   User,
-  FileText,
-  BookOpen,
-  Share2,
-  ThumbsUp,
-  MessageSquare
+  Globe,
+  Trash2,
+  RefreshCw
 } from "lucide-react";
 import { MarkdownPost } from "@/lib/markdown";
+import { deleteLinkedInPost } from "@/app/actions/linkedin";
 
 function LinkedinIcon({ className }: { className?: string }) {
   return (
@@ -39,52 +38,61 @@ interface NewsRoomProps {
   mediaPosts: MarkdownPost[];
   caseStudies: MarkdownPost[];
   thoughtLeadership: MarkdownPost[];
+  linkedinPosts?: { id: string; shareUrn: string }[];
 }
 
 type TabId = "media" | "cases" | "thought" | "social";
 
-const LINKEDIN_POSTS = [
-  {
-    id: "l1",
-    authorName: "Japan India Business Bureau (JIBB)",
-    authorHandle: "@npo-jibb",
-    timeAgo: "14 hours ago",
-    text: "📢 Registration is now open for the India-Japan Semiconductor & Cleanroom Tech Alliance 2026! Join us in Noida as we bring together 30+ Japanese equipment manufacturers and Indian tech partners. Build the next corridor of supply chain resilience.",
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80",
-    likes: 142,
-    comments: 28,
-  },
-  {
-    id: "l2",
-    authorName: "Japan India Business Bureau (JIBB)",
-    authorHandle: "@npo-jibb",
-    timeAgo: "2 days ago",
-    text: "🤝 Bilateral partnership in action! We are proud to have facilitated the Joint Venture agreement between a leading precision component manufacturer from Kyoto and an industrial assembler based in Noida. This JV marks a milestone in the Make in India initiative.",
-    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80",
-    likes: 312,
-    comments: 45,
-  },
-  {
-    id: "l3",
-    authorName: "Japan India Business Bureau (JIBB)",
-    authorHandle: "@npo-jibb",
-    timeAgo: "7 days ago",
-    text: "💡 How is the China+1 strategy shaping electronic manufacturing services in the Gujarat corridor? Read our latest advisory brief on NIIF-JBIC co-investment schemes for green technology startups. Download full report on our Portal.",
-    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80",
-    likes: 98,
-    comments: 12,
-  }
-];
-
-export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoomProps) {
+export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinPosts }: NewsRoomProps) {
   const [activeTab, setActiveTab] = useState<TabId>("media");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const activeLinkedInPosts = linkedinPosts || [];
+  const [adminPasscode, setAdminPasscode] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const getCookie = (name: string) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+        return null;
+      };
+      const stored = getCookie("jibb_admin_passcode") || sessionStorage.getItem("jibb_admin_passcode");
+      if (stored) {
+        setAdminPasscode(stored);
+      }
+    }
+  }, []);
+
+  const handleDeleteSocialPost = async (id: string) => {
+    if (!adminPasscode) return;
+    if (!confirm("Are you sure you want to delete this LinkedIn post from the home feed?")) {
+      return;
+    }
+    setIsDeleting(id);
+    try {
+      const result = await deleteLinkedInPost(id, adminPasscode);
+      if (result.success) {
+        router.refresh();
+      } else {
+        alert(result.error || "Failed to delete post.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred while deleting the post.");
+    } finally {
+      setIsDeleting(null);
+    }
+  };
 
   const tabs = [
     { id: "media", label: "Media & Insights", count: mediaPosts.length },
     { id: "cases", label: "Blog", count: caseStudies.length },
     { id: "thought", label: "Thought Leadership", count: thoughtLeadership.length },
-    { id: "social", label: "Social Feed (LinkedIn)", count: LINKEDIN_POSTS.length },
+    { id: "social", label: "Social Feed (LinkedIn)", count: activeLinkedInPosts.length },
   ] as const;
 
   const handleScroll = (direction: "left" | "right") => {
@@ -153,19 +161,10 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
           viewAllLink: "https://linkedin.com/company/japan-india-business-bureau",
           viewAllText: "View All",
           isExternal: true,
-          items: LINKEDIN_POSTS.map(post => ({
+          items: activeLinkedInPosts.map(post => ({
             id: post.id,
-            title: post.text,
-            desc: post.text,
-            date: post.timeAgo,
-            author: post.authorName,
-            image: post.image,
-            link: "https://linkedin.com/company/japan-india-business-bureau",
-            badge: "LinkedIn",
+            shareUrn: post.shareUrn,
             isSocial: true,
-            authorHandle: post.authorHandle,
-            likes: post.likes,
-            comments: post.comments
           }))
         };
     }
@@ -212,8 +211,8 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`relative py-4 px-1 text-sm md:text-base font-bold uppercase tracking-wider whitespace-nowrap transition-colors duration-300 ${isActive
-                      ? "text-primary dark:text-[#7b9fe0]"
-                      : "text-muted-foreground hover:text-foreground"
+                    ? "text-primary dark:text-[#7b9fe0]"
+                    : "text-muted-foreground hover:text-foreground"
                     }`}
                 >
                   <span>{tab.label}</span>
@@ -285,63 +284,50 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
             className="flex overflow-x-auto gap-6 pb-6 no-scrollbar snap-x snap-mandatory"
           >
             <AnimatePresence mode="popLayout">
-              {content.items.map((item: any, idx: number) => (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
-                  transition={{ duration: 0.3, delay: idx * 0.05 }}
-                  className="flex-shrink-0 w-[290px] sm:w-[340px] md:w-[380px] snap-start"
-                >
+              {content.items.length === 0 ? (
+                <div className="py-16 text-center text-muted-foreground w-full flex flex-col items-center justify-center border border-dashed border-border/40 rounded-3xl bg-card/20 backdrop-blur-sm animate-in fade-in duration-300">
+                  <Globe className="size-10 opacity-30 mb-3 text-jibb-orange animate-soft-pulse" />
+                  <p className="text-sm font-bold uppercase tracking-wider text-foreground">No Social Updates Active</p>
+                  <p className="text-xs opacity-75 mt-1">Please sync items in the Admin panel to populate the feed.</p>
+                </div>
+              ) : (
+                content.items.map((item: any, idx: number) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -15 }}
+                    transition={{ duration: 0.3, delay: idx * 0.05 }}
+                    className="flex-shrink-0 w-[290px] sm:w-[340px] md:w-[380px] snap-start"
+                  >
                   {item.isSocial ? (
-                    // LinkedIn Style Card
-                    <div className="bg-card dark:bg-[#161f38]/45 border border-border/50 hover:border-primary/30 rounded-2xl p-5 hover:shadow-jibb-md transition-all duration-300 flex flex-col h-[400px] justify-between">
-                      <div>
-                        {/* LinkedIn Post Header */}
-                        <div className="flex items-center justify-between gap-3 mb-4">
-                          <div className="flex items-center gap-2.5">
-                            <div className="size-9 rounded-full bg-jibb-indigo flex items-center justify-center text-white text-xs font-black shrink-0">
-                              JIBB
-                            </div>
-                            <div>
-                              <h4 className="text-xs font-extrabold text-foreground leading-tight">
-                                {item.author}
-                              </h4>
-                              <p className="text-[10px] text-muted-foreground mt-0.5">
-                                {item.authorHandle} • {item.date}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="text-[#0077b5] shrink-0">
-                            <LinkedinIcon className="size-4 fill-current" />
-                          </div>
-                        </div>
-
-                        {/* Text content */}
-                        <p className="text-xs text-foreground/90 leading-relaxed line-clamp-4 mb-4 whitespace-pre-line">
-                          {item.desc}
-                        </p>
-                      </div>
-
-                      {/* Image Banner */}
-                      <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden mb-4 border border-border/30 bg-muted shrink-0">
-                        <img
-                          src={item.image}
-                          alt="LinkedIn post visual"
-                          className="object-cover w-full h-full"
-                        />
-                      </div>
-
-                      {/* LinkedIn Likes/Comments */}
-                      <div className="flex items-center justify-between border-t border-border/30 pt-3 text-[11px] text-muted-foreground shrink-0 font-medium">
-                        <div className="flex items-center gap-1">
-                          <ThumbsUp className="size-3 text-jibb-orange" />
-                          <span>{item.likes} Likes</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span>{item.comments} Comments</span>
-                          <Share2 className="size-3 hover:text-foreground cursor-pointer" />
+                    // LinkedIn Embed Card
+                    <div className="relative bg-card dark:bg-[#161f38]/45 border border-border/50 hover:border-primary/30 rounded-2xl p-1.5 hover:shadow-jibb-md transition-all duration-300 flex flex-col h-[480px] overflow-hidden">
+                      {adminPasscode && (
+                        <button
+                          onClick={() => handleDeleteSocialPost(item.id)}
+                          disabled={isDeleting === item.id}
+                          className="absolute top-4 right-4 z-20 p-2 bg-red-500 hover:bg-red-600 disabled:bg-red-700 text-white rounded-full shadow-lg transition-all active:scale-95 flex items-center justify-center border border-white/10"
+                          title="Delete LinkedIn Post"
+                        >
+                          {isDeleting === item.id ? (
+                            <RefreshCw className="size-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="size-4" />
+                          )}
+                        </button>
+                      )}
+                      <div className="w-full h-full overflow-y-auto overflow-x-hidden sleek-scrollbar pr-3">
+                        <div className="w-[calc(100%+17px)] h-[670px]">
+                          <iframe
+                            src={`https://www.linkedin.com/embed/feed/update/${item.shareUrn}?collapsed=1`}
+                            height="100%"
+                            width="100%"
+                            style={{ border: 'none', borderRadius: '12px' }}
+                            allowFullScreen
+                            title="LinkedIn post"
+                            loading="lazy"
+                          />
                         </div>
                       </div>
                     </div>
@@ -400,7 +386,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership }: NewsRoo
                     </div>
                   )}
                 </motion.div>
-              ))}
+              )))}
             </AnimatePresence>
           </div>
         </div>
