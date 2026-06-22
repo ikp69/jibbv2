@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { motion, Variants } from "framer-motion";
 import { Settings, Cpu, Car, Wrench, Network } from "lucide-react";
 
@@ -12,6 +13,7 @@ interface PillarItem {
 }
 
 export function HighvalueEcosystem() {
+  const t = useTranslations("highvalueEcosystem");
   const [isMobile, setIsMobile] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -28,32 +30,32 @@ export function HighvalueEcosystem() {
   const pillars: PillarItem[] = [
     {
       id: 1,
-      title: "Advanced Manufacturing Technologies",
-      subtext: "(CNC, Precision Engineering, Automation)",
+      title: t("title1"),
+      subtext: t("sub1"),
       icon: <Settings className="size-12 text-[#102a43] stroke-[1.5]" />,
     },
     {
       id: 3,
-      title: "Semiconductor & Electronics",
-      subtext: "(Design, Fabrication, OSAT, ATMP, Materials, and Allied Industries)",
+      title: t("title2"),
+      subtext: t("sub2"),
       icon: <Cpu className="size-12 text-[#102a43] stroke-[1.5]" />,
     },
     {
       id: 4,
-      title: "Automotive Components Value Chain",
-      subtext: "(EVs, Connected Vehicles, ADAS, Components)",
+      title: t("title3"),
+      subtext: t("sub3"),
       icon: <Car className="size-12 text-[#102a43] stroke-[1.5]" />,
     },
     {
       id: 5,
-      title: "Industrial Equipment & Machinery",
-      subtext: "(Machine Tools, Robotics, Process Equipment)",
+      title: t("title4"),
+      subtext: t("sub4"),
       icon: <Wrench className="size-12 text-[#102a43] stroke-[1.5]" />,
     },
     {
       id: 6,
-      title: "Emerging Technologies",
-      subtext: "(AI, IoT Integration, Industry 4.0, 5.0, Sustainable Manufacturing)",
+      title: t("title5"),
+      subtext: t("sub5"),
       icon: <Network className="size-12 text-[#102a43] stroke-[1.5]" />,
     },
   ];
@@ -259,11 +261,11 @@ export function HighvalueEcosystem() {
           className="bg-[#0b2545] border-2 border-[#102a43] text-white p-6 md:p-8 rounded-none shadow-md text-center"
         >
           <p className="text-[13px] md:text-[14px] leading-relaxed font-bold tracking-wide">
-            <span className="text-[#f79256] uppercase">The China+1 Strategy, Atmanirbhar India, & Make in India:</span>{" "}
-            India’s semiconductor market is projected to reach{" "}
-            <span className="text-[#f79256]">$100+ Billion by 2030</span> with{" "}
-            <span className="underline decoration-[#f79256] decoration-2">16% CAGR</span>, whilst the automotive component
-            industry has crossed <span className="text-[#f79256]">$51.5 Bn</span>.
+            {t.rich("bannerText", {
+              orange: (chunks) => <span className="text-[#f79256] uppercase">{chunks}</span>,
+              orangeVal: (chunks) => <span className="text-[#f79256]">{chunks}</span>,
+              underline: (chunks) => <span className="underline decoration-[#f79256] decoration-2">{chunks}</span>
+            })}
           </p>
         </motion.div>
 

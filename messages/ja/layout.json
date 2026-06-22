@@ -39,10 +39,18 @@
     "partnershipDesc": "信頼できる現地パートナーとの戦略的マッチング",
     "coInnovation": "共同イノベーション提携",
     "coInnovationDesc": "日印企業間の共同研究開発プロジェクトおよびR&Dの促進",
+    "localization": "ローカリゼーション支援",
+    "localizationDesc": "ビジネス戦略を現地の文化に適応させます。",
     "investment": "投資支援＆合弁事業（JV）",
     "investmentDesc": "資本展開、投資インセンティブ、および高価値な合弁事業の組成",
+    "jointVentures": "合弁事業（JV）",
+    "jointVenturesDesc": "価値の高い二国間企業の構築",
+    "consulting": "イノベーションコンサルティング",
+    "consultingDesc": "企業イノベーションへの高度なサポート",
     "diaspora": "ディアスポラ・ネットワーキング",
-    "diasporaDesc": "インド系ディアスポラと日本の新たなビジネス機会を結ぶネットワーキング"
+    "diasporaDesc": "インド系ディアスポラと日本の新たなビジネス機会を結ぶネットワーキング",
+    "research": "調査＆インサイト",
+    "researchDesc": "オーダーメイドの商業情報および分析"
   },
   "hubMenu": {
     "coe": "共同開発センター（CoE）",
@@ -51,6 +59,8 @@
     "labsDesc": "共同研究のための高度なサンドボックス環境",
     "incubation": "スタートアップ育成",
     "incubationDesc": "二国間スタートアップのインキュベーション",
+    "research": "共同研究プログラム",
+    "researchDesc": "産学連携の共同研究プログラム",
     "partners": "パートナー機関",
     "partnersDesc": "日印の主要な大学・研究機関との連携",
     "challenges": "イノベーション挑戦",
@@ -113,5 +123,18 @@
     "back": "戻る",
     "loading": "読み込み中...",
     "comingSoon": "近日公開"
+  },
+  "highvalueEcosystem": {
+    "title1": "先進的製造技術",
+    "sub1": "(CNC、精密工学、自動化)",
+    "title2": "半導体＆エレクトロニクス",
+    "sub2": "(設計、製造、OSAT、ATMP、材料、および関連産業)",
+    "title3": "自動車部品バリューチェーン",
+    "sub3": "(EV、コネクテッドビークル、ADAS、部品)",
+    "title4": "産業用機器＆機械",
+    "sub4": "(工作機械、ロボティクス、プロセス機器)",
+    "title5": "新興技術",
+    "sub5": "(AI、IoT統合、インダストリー4.0、5.0、持続可能な製造)",
+    "bannerText": "<orange>チャイナ＋1戦略、アトマニルバル・インディア（自己完結型インド）、およびメイク・イン・インディア：</orange> インドの半導体市場は<underline>16%のCAGR</underline>で成長し、2030年までに<orangeVal>1,000億ドル以上</orangeVal>に達すると予測されており、自動車部品産業は<orangeVal>515億ドル</orangeVal>を突破しました。"
   }
 }

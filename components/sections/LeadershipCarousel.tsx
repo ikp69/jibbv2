@@ -64,7 +64,7 @@ export function LeadershipCarousel() {
       <div className="flex items-center justify-between">
         <Link href="/about/leadership">
           <button className="text-sm font-bold text-primary hover:text-jibb-orange flex items-center gap-1.5 group transition-colors">
-            <span>View All Core Leaders</span>
+            <span>{t("viewAllLeaders")}</span>
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
           </button>
         </Link>

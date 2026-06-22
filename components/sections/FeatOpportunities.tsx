@@ -56,7 +56,7 @@ export function FeatOpportunities() {
             hoverBorderColor: "hover:border-jibb-indigo/40 dark:hover:border-jibb-indigo-light/40",
             glowColor: "shadow-jibb-glow",
             link: "/membership",
-            actionLabel: "Become a Member",
+            actionLabel: t("labels.becomeMember") || "Become a Member",
           },
           {
             id: "p2",
@@ -75,7 +75,7 @@ export function FeatOpportunities() {
             hoverBorderColor: "hover:border-jibb-orange/40 dark:hover:border-jibb-orange-light/40",
             glowColor: "shadow-jibb-orange-glow",
             link: "/membership",
-            actionLabel: "Become a Member",
+            actionLabel: t("labels.becomeMember") || "Become a Member",
           },
           {
             id: "p3",
@@ -94,7 +94,7 @@ export function FeatOpportunities() {
             hoverBorderColor: "hover:border-jibb-sakura/40 dark:hover:border-jibb-sakura-light/40",
             glowColor: "shadow-jibb-sakura-glow",
             link: "/membership",
-            actionLabel: "Become a Member",
+            actionLabel: t("labels.becomeMember") || "Become a Member",
           },
         ];
       case "delegations":
@@ -426,12 +426,12 @@ export function FeatOpportunities() {
                             <span className="font-medium text-foreground/75 group-hover:text-white/90 flex items-center gap-1">
                               <Building2 className="size-3.5 text-jibb-indigo/60 group-hover:text-white/80 shrink-0 transition-colors" />
                               <span>
-                                Members Access Only.{" "}
+                                {t("labels.membersAccessOnly") || "Members Access Only."}{" "}
                                 <Link
                                   href="/membership"
                                   className="text-jibb-orange dark:text-jibb-orange-light group-hover:text-jibb-orange-light font-bold hover:underline transition-colors"
                                 >
-                                  Join now
+                                  {t("labels.joinNow") || "Join now"}
                                 </Link>
                               </span>
                             </span>

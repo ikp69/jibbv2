@@ -41,9 +41,16 @@
     "storyDesc": "Discover how JIBB connects Japanese manufacturing precision with Indian software innovation.",
     "ctaBody1": "Kenji and Aarav turned a complex cross-border challenge into a massive success story.",
     "ctaBody2": "You can do the same. When you become a member of the Japan India Business Bureau, you gain access to expert market entry support, trusted partnership networks, and world-class innovation labs.",
-    "ctaBody3": "Expand your reach. Innovate without borders. Join JIBB today and start building your own success story."
+    "ctaBody3": "Expand your reach. Innovate without borders. Join JIBB today and start building your own success story.",
+    "buildingBridges": "Building Bridges,",
+    "sparkingInnovation": "Sparking Innovation.",
+    "jibbStory": "A JIBB Story",
+    "scrollToBegin": "Scroll to begin",
+    "skipStory": "Skip Story",
+    "replay": "Replay"
   },
   "whatWeDo": {
+    "tagline": "Core Offerings",
     "sectionTitle": "What We Do",
     "sectionSubtitle": "We create pathways for businesses to collaborate, expand, and succeed across borders.",
     "marketEntry": {
@@ -120,7 +127,10 @@
       "type": "Type:",
       "details": "View Details",
       "apply": "Apply Now",
-      "learnMore": "Learn More"
+      "learnMore": "Learn More",
+      "membersAccessOnly": "Members Access Only.",
+      "joinNow": "Join now",
+      "becomeMember": "Become a Member"
     },
     "data": {
       "partnerships": {
@@ -201,8 +211,14 @@
     }
   },
   "sectors": {
+    "tagline": "Target Industries",
     "sectionTitle": "Key Sectors",
     "sectionSubtitle": "Driving collaboration across industries shaping the future of India–Japan partnership.",
+    "strategicFrameworks": "Strategic Frameworks",
+    "frameworkTitle": "China+1 Strategy, Atmanirbhar India, & Make in India",
+    "frameworkDesc": "India's semiconductor market is projected to reach <strong class=\"text-foreground font-bold\">$100+ Billion by 2030</strong> with a <strong class=\"text-foreground font-bold\">16% CAGR</strong>, while the automotive component industry has crossed <strong class=\"text-foreground font-bold\">$51.5 Billion</strong>.",
+    "semiconductorLabel": "Semiconductors (2030)",
+    "cagrLabel": "Projected CAGR",
     "semiconductor": "Electronics & Semiconductors",
     "ev": "Automotive & Electric Vehicles",
     "electronics": "Advanced Manufacturing",
@@ -246,7 +262,46 @@
     "government": "Government Partner",
     "individual": "Individual",
     "cta": "Become a Member",
-    "recommended": "Recommended"
+    "recommended": "Recommended",
+    "popularChoice": "Popular Choice",
+    "tiers": {
+      "associate": {
+        "title": "Associate Member",
+        "desc": "Entry level network access",
+        "features": [
+          "5% Business Matching",
+          "5% Training Programs",
+          "Standard Portal Access"
+        ]
+      },
+      "silver": {
+        "title": "Silver Member",
+        "desc": "Standard market growth",
+        "features": [
+          "10% Business Matching",
+          "2.5% Exhibition Support",
+          "Newsletter Intelligence"
+        ]
+      },
+      "gold": {
+        "title": "Gold Member",
+        "desc": "Professional co-innovation",
+        "features": [
+          "20% Business Matching",
+          "3 Free Training Programs",
+          "Japan Delegations Entry"
+        ]
+      },
+      "platinum": {
+        "title": "Platinum Member",
+        "desc": "Ultimate advocacy & scale",
+        "features": [
+          "30% Business Matching",
+          "7 Free Training Programs",
+          "Full Intelligence Access"
+        ]
+      }
+    }
   },
   "events": {
     "sectionTitle": "Upcoming Events",
@@ -256,6 +311,7 @@
   },
   "partners": {
     "sectionTitle": "Partners & Supporters",
+    "headline": "Supported by Bilateral Trade & Development Leaders",
     "sectionSubtitle": "Collaborating with governments, institutions, universities, and industry leaders."
   },
   "insights": {
@@ -310,14 +366,21 @@
     "teamValue": "50+",
     "teamLabel": "On Ground Team Members",
     "partnershipsValue": "30+",
-    "partnershipsLabel": "Strategic Government Partnerships"
+    "partnershipsLabel": "Strategic Government Partnerships",
+    "consultingCount": "6 Strategic Offerings",
+    "marketEntryCount": "6 Growth Offerings",
+    "backOfficeCount": "7 Support Offerings"
   },
   "sectorsPage": {
     "title": "Bilateral Focus Sectors",
     "subtitle": "Discover the high-growth industries driving economic synergy and joint ventures between Japan and India.",
+    "subtitleRich": "Discover the high-growth industries driving economic synergy and joint ventures between Japan and India. Our <servicesLink>integrated services</servicesLink> and flexible <membershipLink>membership tiers</membershipLink> support growth across all sectors.",
+    "listTitle": "JIBB's 8 Focus Industry Sectors",
     "ctaTitle": "Looking to Collaborate in a Focus Sector?",
     "ctaDesc": "Partner with JIBB to connect with pre-vetted corporate partners, academic institutions, and investment opportunities in your industry.",
+    "ctaDescRich": "Partner with JIBB to connect with pre-vetted corporate partners, academic institutions, and investment opportunities in your industry. Explore our <servicesLink>services</servicesLink> to learn how we support your sector.",
     "ctaButton": "Join the Bureau",
+    "discussSector": "Discuss Your Sector",
     "details": {
       "semiconductor": {
         "title": "Electronics & Semiconductors",
@@ -476,5 +539,91 @@
         "desc": "Celebrating successful years of partnership."
       }
     }
+  },
+  "eventNoticeBoard": {
+    "countdownTitle": "Countdown to Event",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds",
+    "upcomingEvent": "Upcoming Event",
+    "eventTitle": "India-Japan Manufacturing Collaboration 2026",
+    "eventDate": "July 3, 2026 • Ginza, Tokyo",
+    "registerNow": "Register Now",
+    "joinUs": "JOIN US AT",
+    "dontMissOut": "DON'T MISS OUT"
+  },
+  "strategicBridge": {
+    "tagline": "Strategic Alliance",
+    "title": "The Visionary Strategic Bridge",
+    "subtitle": "Integrating Industry, Experts, Academia, and Government to foster bilateral growth and innovation.",
+    "industry": {
+      "title": "Industry Integration",
+      "desc": "Bridging commercial markets through concrete technology transfer, active business matching, and training initiatives.",
+      "bullets": [
+        "Technology transfer & matching",
+        "Training & skill development",
+        "Value chain integration",
+        "Collaborated bilateral R&D"
+      ]
+    },
+    "experts": {
+      "title": "Expert Landscaping",
+      "desc": "Guided market research, foresighting, and opportunity execution roadmaps.",
+      "bullets": [
+        "Innovation foresighting",
+        "Risk navigation & mitigation",
+        "Strategy execution roadmaps"
+      ]
+    },
+    "academia": {
+      "title": "Academic Alliance",
+      "desc": "Developing cross-border human capital and collaborative research platforms.",
+      "bullets": [
+        "Human capital development",
+        "Japanese style training modules",
+        "Startups incubation & support"
+      ]
+    },
+    "government": {
+      "title": "Government & Policy",
+      "desc": "Advocating framework implementation, thought leadership, delegation logistics, and compliance alignments.",
+      "bullets": [
+        "Policy framework & implementation",
+        "Delegation & bilateral support",
+        "PLI navigation & compliance",
+        "Thought leadership & advocacy"
+      ]
+    }
+  },
+  "testimonials": {
+    "tagline": "Testimonial",
+    "title": "Our Partners Share Their Feedback",
+    "items": [
+      {
+        "quoteTitle": "India Semiconductor Mission",
+        "quote": "The Japan India Business Bureau (JIBB) is working on a futuristic initiative: Japan India Semiconductor Committee (JISC) where they are bridging the gap between Japanese companies and India’s growing semiconductor ecosystem. We look forward to working closely with JISC and its member companies to build meaningful partnerships, support technology transfers, and accelerate mutual growth. India is open for business, and we are excited to welcome innovative Japanese players through this dedicated platform.",
+        "author": "Dr. Manish Kumar Hooda",
+        "role": "Director, Technology – India Semiconductor Mission",
+        "location": "India"
+      }
+    ]
+  },
+  "newsroom": {
+    "title": "Newsroom",
+    "subtitle": "Discover what's going on at JIBB and across the bilateral microelectronics, advanced manufacturing, and deep-tech corridor.",
+    "visitNewsroom": "VISIT NEWSROOM",
+    "tabs": {
+      "media": "Media & Insights",
+      "blog": "Blog",
+      "thought": "Thought Leadership",
+      "social": "Social Feed (LinkedIn)"
+    },
+    "viewAllPosts": "VIEW ALL POSTS",
+    "viewAll": "View All",
+    "learnMore": "LEARN MORE",
+    "showMoreLinkedIn": "Show More on LinkedIn",
+    "noSocial": "No Social Updates Active",
+    "syncAdmin": "Please sync items in the Admin panel to populate the feed."
   }
 }

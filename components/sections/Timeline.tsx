@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Calendar, Award, Globe, Building, Flag, CheckCircle } from "lucide-react";
 
 interface Milestone {
+  key: string;
   year: string;
-  title: string;
-  description: string;
   icon: React.ComponentType<{ className?: string }>;
   color: string;
   align: "left" | "right";
@@ -16,41 +16,36 @@ interface Milestone {
 
 const MILESTONES: Milestone[] = [
   {
+    key: "m1",
     year: "2021",
-    title: "Bureau Conceived",
-    description: "Initial framework drafted in Tokyo to align Japanese precision manufacturing with Indian software talent. Secured support from key ministry and trade alliance partners.",
     icon: Flag,
     color: "text-jibb-orange",
     align: "left",
   },
   {
+    key: "m2",
     year: "2022",
-    title: "Tokyo Office Founded",
-    description: "Established our primary Tokyo Office in Chiyoda-ku. Enrolled our first 50 corporate members representing robotics and precision hardware fields.",
     icon: Building,
     color: "text-blue-400",
     align: "right",
   },
   {
+    key: "m3",
     year: "2023",
-    title: "Noida Hub Launch",
-    description: "Opened the Noida R&D Hub, introducing co-working spaces, specialized electronics laboratories, and bilateral incubation programs for startups.",
     icon: Globe,
     color: "text-jibb-sakura",
     align: "left",
   },
   {
+    key: "m4",
     year: "2024",
-    title: "Bilateral Corridor Deal Flow",
-    description: "Officially catalyzed high-impact programs in EV and Semiconductor sectors. Surpassed ₹850 Cr ($100M+) in facilitated co-innovation deals.",
     icon: Award,
     color: "text-emerald-400",
     align: "right",
   },
   {
+    key: "m5",
     year: "2025",
-    title: "500+ Corporate Network",
-    description: "Expanded our membership base globally to 500+ active innovators. Signed partnerships with 10+ premium universities and research institutions.",
     icon: CheckCircle,
     color: "text-purple-400",
     align: "left",
@@ -58,6 +53,7 @@ const MILESTONES: Milestone[] = [
 ];
 
 export function Timeline() {
+  const t = useTranslations("timeline");
   const containerRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
 
@@ -167,13 +163,13 @@ export function Timeline() {
         {/* Header */}
         <div className="text-center space-y-4 mb-16 md:mb-20">
           <span className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-jibb-orange">
-            Our Journey
+            {t("sectionTitle")}
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-            Bureau Milestones &amp; History
+            {t("title")}
           </h2>
           <p className="text-sm text-white/60 max-w-lg mx-auto">
-            Following the growth of our bilateral business corridor, bringing together industrial precision and tech innovation.
+            {t("subtitle")}
           </p>
         </div>
 
@@ -216,8 +212,8 @@ export function Timeline() {
                   {/* Card block */}
                   <div className={`w-full md:w-1/2 pl-16 pr-4 md:px-0 flex ${isLeft ? "md:justify-end md:pr-12 order-2 md:order-1" : "md:justify-start md:pl-12 order-2"}`}>
                     <div className="timeline-card w-full max-w-md p-6 rounded-3xl bg-white/5 border border-white/8 backdrop-blur-md shadow-jibb hover:border-white/12 transition-all duration-300">
-                      <h4 className="text-lg font-bold text-white mb-2">{m.title}</h4>
-                      <p className="text-xs text-white/60 leading-relaxed font-medium">{m.description}</p>
+                      <h4 className="text-lg font-bold text-white mb-2">{t(`milestones.${m.key}.title`)}</h4>
+                      <p className="text-xs text-white/60 leading-relaxed font-medium">{t(`milestones.${m.key}.description`)}</p>
                     </div>
                   </div>
                 </div>

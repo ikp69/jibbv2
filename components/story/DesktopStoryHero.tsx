@@ -438,17 +438,17 @@ export function DesktopStoryHero() {
                   </div>
 
                   <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl font-extrabold tracking-tight leading-[1.08]">
-                    <span className="text-foreground">Building Bridges,</span>
+                    <span className="text-foreground">{t("buildingBridges")}</span>
                     <br />
                     <span className="bg-gradient-to-r from-jibb-indigo via-jibb-orange to-jibb-sakura bg-clip-text text-transparent">
-                      Sparking Innovation.
+                      {t("sparkingInnovation")}
                     </span>
                   </h1>
 
                   <div className="mt-6 md:mt-8 flex items-center gap-3">
                     <div className="h-px w-8 bg-jibb-orange/40" />
                     <span className="text-sm md:text-base font-semibold tracking-[0.18em] uppercase text-jibb-indigo/50">
-                      A JIBB Story
+                      {t("jibbStory")}
                     </span>
                     <div className="h-px w-8 bg-jibb-orange/40" />
                   </div>
@@ -459,7 +459,7 @@ export function DesktopStoryHero() {
                         <span className="block w-1 h-1 bg-muted-foreground/40 rounded-full animate-bounce" />
                       </span>
                     </span>
-                    Scroll to begin
+                    {t("scrollToBegin")}
                   </p>
                 </div>
 
@@ -582,15 +582,15 @@ export function DesktopStoryHero() {
                   <div className="story-cta-content text-center max-w-3xl mx-auto space-y-4 md:space-y-5 bg-white/60 dark:bg-black/50 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/20 dark:border-white/10 shadow-2xl w-full">
 
                     <p className="cta-text-1 text-[15px] md:text-[19px] font-bold text-foreground">
-                      Kenji and Aarav turned a complex cross-border challenge into a massive success story.
+                      {t("ctaBody1")}
                     </p>
 
                     <p className="cta-text-2 text-sm md:text-[17px] text-foreground/80 font-medium leading-relaxed">
-                      You can do the same. When you become a member of the Japan India Business Bureau, you gain access to expert market entry support, trusted partnership networks, and world-class innovation labs.
+                      {t("ctaBody2")}
                     </p>
 
                     <p className="cta-text-3 text-[15px] md:text-[19px] font-bold text-foreground">
-                      Expand your reach. Innovate without borders. Join JIBB today and start building your own success story.
+                      {t("ctaBody3")}
                     </p>
 
                     <div className="cta-buttons flex flex-wrap items-center justify-center gap-3 md:gap-4 pt-2 md:pt-4">
@@ -638,7 +638,7 @@ export function DesktopStoryHero() {
                 className="text-[11px] md:text-xs font-medium text-muted-foreground/50 hover:text-foreground/80 transition-colors flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-black/[0.03] select-none"
                 id="story-skip"
               >
-                <span>Skip Story</span>
+                <span>{t("skipStory")}</span>
                 <span className="text-[10px]">⏭</span>
               </button>
 
@@ -672,7 +672,7 @@ export function DesktopStoryHero() {
                 id="story-replay"
               >
                 <span>↺</span>
-                <span>Replay</span>
+                <span>{t("replay")}</span>
               </button>
             </div>
           </div>

@@ -163,7 +163,18 @@ export default async function SectorsPage({
           </h1>
 
           <p className="text-sm md:text-base text-white/80 max-w-2xl leading-relaxed">
-            {t("sectorsPage.subtitle")} Our <Link href="/services" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">integrated services</Link> and flexible <Link href="/membership" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">membership tiers</Link> support growth across all sectors.
+            {t.rich("sectorsPage.subtitleRich", {
+              servicesLink: (chunks) => (
+                <Link href="/services" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">
+                  {chunks}
+                </Link>
+              ),
+              membershipLink: (chunks) => (
+                <Link href="/membership" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">
+                  {chunks}
+                </Link>
+              )
+            })}
           </p>
         </div>
       </PageHero>
@@ -173,16 +184,13 @@ export default async function SectorsPage({
         <div className="section-container max-w-6xl">
           {/* Featured Snippet Optimization — Sectors List */}
           <div className="mb-16 p-8 bg-card rounded-2xl border border-border/40">
-            <h3 className="text-lg md:text-xl font-bold text-foreground mb-4 tracking-tight">JIBB's 8 Focus Industry Sectors</h3>
+            <h3 className="text-lg md:text-xl font-bold text-foreground mb-4 tracking-tight">{t("sectorsPage.listTitle")}</h3>
             <ul className="grid sm:grid-cols-2 gap-3">
-              <li className="text-sm text-muted-foreground"><strong>Semiconductors</strong> — Advanced chips, manufacturing, and technology transfer</li>
-              <li className="text-sm text-muted-foreground"><strong>Electric Vehicles</strong> — EV manufacturing, components, and battery technology</li>
-              <li className="text-sm text-muted-foreground"><strong>Renewable Energy</strong> — Solar, wind, and sustainable energy solutions</li>
-              <li className="text-sm text-muted-foreground"><strong>Pharmaceuticals</strong> — Drug development, manufacturing, and biotech innovation</li>
-              <li className="text-sm text-muted-foreground"><strong>Infrastructure</strong> — Smart cities, transportation, and urban development</li>
-              <li className="text-sm text-muted-foreground"><strong>Chemicals</strong> — Specialty chemicals and advanced materials</li>
-              <li className="text-sm text-muted-foreground"><strong>Electronics</strong> — Consumer electronics and industrial equipment manufacturing</li>
-              <li className="text-sm text-muted-foreground"><strong>Emerging Technologies</strong> — AI, blockchain, IoT, and next-generation tech</li>
+              {sectors.map((sec) => (
+                <li key={sec.key} className="text-sm text-muted-foreground">
+                  <strong>{t(`sectorsPage.details.${sec.key}.title`)}</strong> — {t(`sectorsPage.details.${sec.key}.desc`)}
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -232,7 +240,13 @@ export default async function SectorsPage({
             {t("sectorsPage.ctaTitle")}
           </h2>
           <p className="text-sm md:text-base text-white/80 leading-relaxed max-w-xl mx-auto">
-            {t("sectorsPage.ctaDesc")} Explore our <Link href="/services" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">services</Link> to learn how we support your sector.
+            {t.rich("sectorsPage.ctaDescRich", {
+              servicesLink: (chunks) => (
+                <Link href="/services" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">
+                  {chunks}
+                </Link>
+              )
+            })}
           </p>
           <div className="pt-4 flex justify-center gap-4 flex-col sm:flex-row">
             <Link href="/membership">
@@ -242,7 +256,7 @@ export default async function SectorsPage({
             </Link>
             <Link href="/contact">
               <Button variant="outline" size="lg" className="font-bold gap-1.5 shadow-lg bg-white/10 border-white/30 hover:bg-white/20 text-white">
-                Discuss Your Sector <ArrowRight className="size-4" />
+                {t("sectorsPage.discussSector")} <ArrowRight className="size-4" />
               </Button>
             </Link>
           </div>

@@ -53,17 +53,17 @@ export default function NewsletterPage() {
     let isValid = true;
     
     if (!name.trim()) {
-      setNameError("Name is required");
+      setNameError(t("form.nameError"));
       isValid = false;
     } else {
       setNameError("");
     }
 
     if (!email.trim()) {
-      setEmailError("Email is required");
+      setEmailError(t("form.emailError"));
       isValid = false;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setEmailError("Invalid email format");
+      setEmailError(t("form.emailFormatError"));
       isValid = false;
     } else {
       setEmailError("");
@@ -111,12 +111,12 @@ export default function NewsletterPage() {
             </span>
           );
         } else {
-          setGeneralError(response.error || "Subscription failed. Please try again.");
+          setGeneralError(response.error || t("form.errorGeneric"));
         }
       }
     } catch (err) {
       console.error(err);
-      setGeneralError("Subscription error. Please check your internet connection.");
+      setGeneralError(t("form.errorConnection"));
     } finally {
       setIsSubmitting(false);
     }
@@ -209,7 +209,7 @@ export default function NewsletterPage() {
                       {t("form.successDesc")}
                     </p>
                     <AnimatedButton variant="outline" className="mt-6" onClick={() => setIsSuccess(false)}>
-                      Okay
+                      {t("form.okay")}
                     </AnimatedButton>
                   </div>
                 )}
@@ -225,7 +225,7 @@ export default function NewsletterPage() {
                       {t("form.alreadySubscribedDesc")}
                     </p>
                     <AnimatedButton variant="outline" className="mt-6" onClick={() => setAlreadySubscribed(false)}>
-                      Close
+                      {t("form.close")}
                     </AnimatedButton>
                   </div>
                 )}
@@ -258,7 +258,7 @@ export default function NewsletterPage() {
                     <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
                       <AlertCircle className="size-5 shrink-0 mt-0.5 text-red-500" />
                       <div className="space-y-1">
-                        <p className="font-semibold text-red-700 dark:text-red-400">Subscription Error</p>
+                        <p className="font-semibold text-red-700 dark:text-red-400">{t("form.errorTitle")}</p>
                         <div className="text-xs text-red-600/90 dark:text-red-400/95 leading-relaxed">
                           {generalError}
                         </div>
@@ -361,7 +361,7 @@ export default function NewsletterPage() {
                       size="sm"
                       className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl flex items-center justify-center gap-1.5 text-xs shadow-md"
                     >
-                      <span>Follow Us</span>
+                      <span>{t("form.followUs")}</span>
                       <ExternalLink className="size-3.5" />
                     </AnimatedButton>
                   </a>
@@ -500,7 +500,7 @@ export default function NewsletterPage() {
 
                 <div className="pt-4 mt-6 border-t border-border/40 flex items-center justify-between text-[11px] font-semibold">
                   <span className="text-primary flex items-center gap-1 group-hover:gap-1.5 transition-all">
-                    Preview Issue <ArrowRight className="size-3" />
+                    {t("form.previewIssue")} <ArrowRight className="size-3" />
                   </span>
                   <Library className="size-3.5 text-jibb-orange opacity-40 group-hover:opacity-100 transition-opacity" />
                 </div>

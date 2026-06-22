@@ -248,7 +248,7 @@ export default async function HomePage({
           <div className="text-center space-y-4 mb-16">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10 backdrop-blur-md">
               <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary dark:text-primary-foreground">
-                Core Offerings
+                {t("whatWeDo.tagline")}
               </span>
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight">
@@ -336,7 +336,7 @@ export default async function HomePage({
           <div className="text-center space-y-4 mb-16">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10 backdrop-blur-md">
               <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary dark:text-primary-foreground">
-                Target Industries
+                {t("sectors.tagline")}
               </span>
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight">
@@ -350,27 +350,28 @@ export default async function HomePage({
             <div className="mt-8 max-w-4xl mx-auto p-6 rounded-2xl bg-gradient-to-r from-jibb-orange/10 via-jibb-indigo/5 to-jibb-sakura/10 border border-border/40 backdrop-blur-sm text-left shadow-sm flex flex-col md:flex-row items-center gap-6">
               <div className="space-y-2 flex-grow">
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-jibb-orange/15 text-jibb-orange text-[10px] font-extrabold uppercase tracking-wider">
-                  Strategic Frameworks
+                  {t("sectors.strategicFrameworks")}
                 </span>
                 <h4 className="text-sm md:text-base font-extrabold text-foreground">
-                  China+1 Strategy, Atmanirbhar India, &amp; Make in India
+                  {t("sectors.frameworkTitle")}
                 </h4>
-                <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
-                  India's semiconductor market is projected to reach <strong className="text-foreground font-bold">$100+ Billion by 2030</strong> with a <strong className="text-foreground font-bold">16% CAGR</strong>, while the automotive component industry has crossed <strong className="text-foreground font-bold">$51.5 Billion</strong>.
-                </p>
+                <p 
+                  className="text-xs md:text-sm text-muted-foreground leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: t.raw("sectors.frameworkDesc") }}
+                />
               </div>
               <div className="flex md:flex-col gap-4 shrink-0 justify-center w-full md:w-auto text-center border-t md:border-t-0 md:border-l border-border/40 pt-4 md:pt-0 md:pl-6">
                 <div>
                   <div className="text-2xl font-black text-jibb-orange">
                     <AnimatedCounter value={100} prefix="$" suffix="B+" className="text-2xl font-black text-jibb-orange" />
                   </div>
-                  <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">Semiconductors (2030)</div>
+                  <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">{t("sectors.semiconductorLabel")}</div>
                 </div>
                 <div>
                   <div className="text-2xl font-black text-jibb-indigo">
                     <AnimatedCounter value={16} suffix="%" className="text-2xl font-black text-jibb-indigo" />
                   </div>
-                  <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">Projected CAGR</div>
+                  <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">{t("sectors.cagrLabel")}</div>
                 </div>
               </div>
             </div>
@@ -428,14 +429,14 @@ export default async function HomePage({
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10 backdrop-blur-md">
               <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
               <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary dark:text-primary-foreground">
-                Strategic Alliance
+                {t("strategicBridge.tagline")}
               </span>
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight">
-              The Visionary Strategic Bridge
+              {t("strategicBridge.title")}
             </h2>
             <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Integrating Industry, Experts, Academia, and Government to foster bilateral growth and innovation.
+              {t("strategicBridge.subtitle")}
             </p>
           </div>
 
@@ -448,23 +449,23 @@ export default async function HomePage({
                 <Building2 className="size-8 text-blue-600 dark:text-blue-400" />
               </div>
               <h3 className="text-2xl font-bold text-foreground mb-3 group-hover:text-jibb-orange tracking-tight transition-colors">
-                Industry Integration
+                {t("strategicBridge.industry.title")}
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                Bridging commercial markets through concrete technology transfer, active business matching, and training initiatives.
+                {t("strategicBridge.industry.desc")}
               </p>
               <ul className="grid sm:grid-cols-2 gap-3 text-xs text-foreground/80 font-medium">
                 <li className="flex items-center gap-2">
-                  <span className="text-blue-500 font-bold">✓</span> Technology transfer & matching
+                  <span className="text-blue-500 font-bold">✓</span> {t("strategicBridge.industry.bullets.0")}
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-blue-500 font-bold">✓</span> Training & skill development
+                  <span className="text-blue-500 font-bold">✓</span> {t("strategicBridge.industry.bullets.1")}
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-blue-500 font-bold">✓</span> Value chain integration
+                  <span className="text-blue-500 font-bold">✓</span> {t("strategicBridge.industry.bullets.2")}
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-blue-500 font-bold">✓</span> Collaborated bilateral R&D
+                  <span className="text-blue-500 font-bold">✓</span> {t("strategicBridge.industry.bullets.3")}
                 </li>
               </ul>
             </div>
@@ -475,20 +476,20 @@ export default async function HomePage({
                 <Compass className="size-8 text-orange-600 dark:text-orange-400" />
               </div>
               <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-jibb-orange tracking-tight transition-colors">
-                Expert Landscaping
+                {t("strategicBridge.experts.title")}
               </h3>
               <p className="text-xs text-muted-foreground leading-relaxed mb-6">
-                Guided market research, foresighting, and opportunity execution roadmaps.
+                {t("strategicBridge.experts.desc")}
               </p>
               <ul className="space-y-3 text-xs text-foreground/80 font-medium">
                 <li className="flex items-center gap-2">
-                  <span className="text-orange-500 font-bold">✓</span> Innovation foresighting
+                  <span className="text-orange-500 font-bold">✓</span> {t("strategicBridge.experts.bullets.0")}
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-orange-500 font-bold">✓</span> Risk navigation & mitigation
+                  <span className="text-orange-500 font-bold">✓</span> {t("strategicBridge.experts.bullets.1")}
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-orange-500 font-bold">✓</span> Strategy execution roadmaps
+                  <span className="text-orange-500 font-bold">✓</span> {t("strategicBridge.experts.bullets.2")}
                 </li>
               </ul>
             </div>
@@ -499,20 +500,20 @@ export default async function HomePage({
                 <GraduationCap className="size-8 text-indigo-600 dark:text-indigo-400" />
               </div>
               <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-jibb-orange tracking-tight transition-colors">
-                Academic Alliance
+                {t("strategicBridge.academia.title")}
               </h3>
               <p className="text-xs text-muted-foreground leading-relaxed mb-6">
-                Developing cross-border human capital and collaborative research platforms.
+                {t("strategicBridge.academia.desc")}
               </p>
               <ul className="space-y-3 text-xs text-foreground/80 font-medium">
                 <li className="flex items-center gap-2">
-                  <span className="text-indigo-500 font-bold">✓</span> Human capital development
+                  <span className="text-indigo-500 font-bold">✓</span> {t("strategicBridge.academia.bullets.0")}
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-indigo-500 font-bold">✓</span> Japanese style training modules
+                  <span className="text-indigo-500 font-bold">✓</span> {t("strategicBridge.academia.bullets.1")}
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-indigo-500 font-bold">✓</span> Startups incubation & support
+                  <span className="text-indigo-500 font-bold">✓</span> {t("strategicBridge.academia.bullets.2")}
                 </li>
               </ul>
             </div>
@@ -523,23 +524,23 @@ export default async function HomePage({
                 <Landmark className="size-8 text-emerald-600 dark:text-emerald-400" />
               </div>
               <h3 className="text-2xl font-bold text-foreground mb-3 group-hover:text-jibb-orange tracking-tight transition-colors">
-                Government &amp; Policy
+                {t("strategicBridge.government.title")}
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                Advocating framework implementation, thought leadership, delegation logistics, and compliance alignments.
+                {t("strategicBridge.government.desc")}
               </p>
               <ul className="grid sm:grid-cols-2 gap-3 text-xs text-foreground/80 font-medium">
                 <li className="flex items-center gap-2">
-                  <span className="text-emerald-500 font-bold">✓</span> Policy framework & implementation
+                  <span className="text-emerald-500 font-bold">✓</span> {t("strategicBridge.government.bullets.0")}
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-emerald-500 font-bold">✓</span> Delegation & bilateral support
+                  <span className="text-emerald-500 font-bold">✓</span> {t("strategicBridge.government.bullets.1")}
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-emerald-500 font-bold">✓</span> PLI navigation & compliance
+                  <span className="text-emerald-500 font-bold">✓</span> {t("strategicBridge.government.bullets.2")}
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-emerald-500 font-bold">✓</span> Thought leadership & advocacy
+                  <span className="text-emerald-500 font-bold">✓</span> {t("strategicBridge.government.bullets.3")}
                 </li>
               </ul>
             </div>
@@ -582,55 +583,55 @@ export default async function HomePage({
           <ScrollReveal staggerChildren={0.08} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                tier: "Associate Member",
-                desc: "Entry level network access",
+                tier: t("membership.tiers.associate.title"),
+                desc: t("membership.tiers.associate.desc"),
                 colorClass: "border-blue-500/20 hover:border-blue-500/30",
                 badge: "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300",
                 recommended: false,
                 icon: Zap,
                 features: [
-                  "5% Business Matching",
-                  "5% Training Programs",
-                  "Standard Portal Access",
+                  t("membership.tiers.associate.features.0"),
+                  t("membership.tiers.associate.features.1"),
+                  t("membership.tiers.associate.features.2"),
                 ],
               },
               {
-                tier: "Silver Member",
-                desc: "Standard market growth",
+                tier: t("membership.tiers.silver.title"),
+                desc: t("membership.tiers.silver.desc"),
                 colorClass: "border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600 bg-slate-500/[0.03]",
                 badge: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300",
                 recommended: false,
                 icon: Star,
                 features: [
-                  "10% Business Matching",
-                  "2.5% Exhibition Support",
-                  "Newsletter Intelligence",
+                  t("membership.tiers.silver.features.0"),
+                  t("membership.tiers.silver.features.1"),
+                  t("membership.tiers.silver.features.2"),
                 ],
               },
               {
-                tier: "Gold Member",
-                desc: "Professional co-innovation",
+                tier: t("membership.tiers.gold.title"),
+                desc: t("membership.tiers.gold.desc"),
                 colorClass: "border-amber-500/40 bg-amber-500/[0.04]",
                 badge: "bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400",
                 recommended: true,
                 icon: Crown,
                 features: [
-                  "20% Business Matching",
-                  "3 Free Training Programs",
-                  "Japan Delegations Entry",
+                  t("membership.tiers.gold.features.0"),
+                  t("membership.tiers.gold.features.1"),
+                  t("membership.tiers.gold.features.2"),
                 ],
               },
               {
-                tier: "Platinum Member",
-                desc: "Ultimate advocacy & scale",
+                tier: t("membership.tiers.platinum.title"),
+                desc: t("membership.tiers.platinum.desc"),
                 colorClass: "border-slate-400/80 dark:border-slate-500/80 bg-slate-500/[0.06] hover:shadow-lg border-2",
                 badge: "bg-slate-300 dark:bg-slate-700 text-slate-800 dark:text-slate-200",
                 recommended: false,
                 icon: Diamond,
                 features: [
-                  "30% Business Matching",
-                  "7 Free Training Programs",
-                  "Full Intelligence Access",
+                  t("membership.tiers.platinum.features.0"),
+                  t("membership.tiers.platinum.features.1"),
+                  t("membership.tiers.platinum.features.2"),
                 ],
               },
             ].map((plan) => {
@@ -650,7 +651,7 @@ export default async function HomePage({
                   >
                     {plan.recommended && (
                       <div className="absolute -top-3 left-6 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[11px] uppercase font-bold tracking-wider px-3.5 py-1 rounded-full shadow-sm whitespace-nowrap">
-                        Popular Choice
+                        {t("membership.popularChoice")}
                       </div>
                     )}
                     <div className="space-y-3 flex-grow">

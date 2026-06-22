@@ -214,8 +214,8 @@ export const eventsData: EventData[] = [
       mediaPartner: "",
       secretariat: ""
     },
-    posterEn: '/events/JIBB_Event_3_July_2026.jpg',
-    posterJa: '/events/JIBB_Event_3_July_2026.jpg',
+    posterEn: '/events/JIBB_Event_3_July_2026_square.jpg',
+    posterJa: '/events/JIBB_Event_3_July_2026_square.jpg',
     registrationUrl: 'https://forms.office.com/r/d7tMkBLaq8',
     mapUrl: 'https://maps.app.goo.gl/kAAERz983N4dShL77',
     flyerUrl: '/events/invest-india_seminar_invitation_jp.pdf'

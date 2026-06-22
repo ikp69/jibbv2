@@ -2,6 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { Link, useRouter } from "@/src/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
@@ -44,6 +45,7 @@ interface NewsRoomProps {
 type TabId = "media" | "cases" | "thought" | "social";
 
 export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinPosts }: NewsRoomProps) {
+  const t = useTranslations("newsroom");
   const [activeTab, setActiveTab] = useState<TabId>("media");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -89,10 +91,10 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
   };
 
   const tabs = [
-    { id: "media", label: "Media & Insights", count: mediaPosts.length },
-    { id: "cases", label: "Blog", count: caseStudies.length },
-    { id: "thought", label: "Thought Leadership", count: thoughtLeadership.length },
-    { id: "social", label: "Social Feed (LinkedIn)", count: activeLinkedInPosts.length },
+    { id: "media", label: t("tabs.media") || "Media & Insights", count: mediaPosts.length },
+    { id: "cases", label: t("tabs.blog") || "Blog", count: caseStudies.length },
+    { id: "thought", label: t("tabs.thought") || "Thought Leadership", count: thoughtLeadership.length },
+    { id: "social", label: t("tabs.social") || "Social Feed (LinkedIn)", count: activeLinkedInPosts.length },
   ] as const;
 
   const handleScroll = (direction: "left" | "right") => {
@@ -109,9 +111,9 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
     switch (activeTab) {
       case "media":
         return {
-          title: "Media & Insights",
+          title: t("tabs.media") || "Media & Insights",
           viewAllLink: "/insights",
-          viewAllText: "View All",
+          viewAllText: t("viewAll") || "View All",
           items: mediaPosts.map(post => ({
             id: post.slug,
             title: post.title,
@@ -125,9 +127,9 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
         };
       case "cases":
         return {
-          title: "Blog",
+          title: t("tabs.blog") || "Blog",
           viewAllLink: "/resources/blog",
-          viewAllText: "View All",
+          viewAllText: t("viewAll") || "View All",
           items: caseStudies.map(post => ({
             id: post.slug,
             title: post.title,
@@ -141,9 +143,9 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
         };
       case "thought":
         return {
-          title: "Thought Leadership",
+          title: t("tabs.thought") || "Thought Leadership",
           viewAllLink: "/thought-leadership",
-          viewAllText: "View All",
+          viewAllText: t("viewAll") || "View All",
           items: thoughtLeadership.map(post => ({
             id: post.slug,
             title: post.title,
@@ -157,9 +159,9 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
         };
       case "social":
         return {
-          title: "Social Feed",
+          title: t("tabs.social") || "Social Feed",
           viewAllLink: "https://linkedin.com/company/japan-india-business-bureau",
-          viewAllText: "View All",
+          viewAllText: t("viewAll") || "View All",
           isExternal: true,
           items: activeLinkedInPosts.map(post => ({
             id: post.id,
@@ -184,10 +186,10 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="space-y-3">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight uppercase">
-              Newsroom
+              {t("title")}
             </h2>
             <p className="text-sm md:text-base text-muted-foreground max-w-2xl leading-relaxed">
-              Discover what's going on at JIBB and across the bilateral microelectronics, advanced manufacturing, and deep-tech corridor.
+              {t("subtitle")}
             </p>
           </div>
           <div className="shrink-0">
@@ -195,7 +197,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
               href="/insights"
               className="inline-flex items-center gap-2 text-jibb-indigo dark:text-jibb-indigo-light font-bold hover:underline group"
             >
-              <span>VISIT NEWSROOM</span>
+              <span>{t("visitNewsroom")}</span>
               <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
           </div>
@@ -262,7 +264,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
                 rel="noopener noreferrer"
                 className="px-4 py-2 bg-jibb-indigo dark:bg-[#7b9fe0] text-white dark:text-[#0f1629] font-bold text-xs rounded-xl hover:bg-jibb-indigo-light dark:hover:bg-[#9ab5e8] active:scale-[0.98] transition-all shadow-md inline-flex items-center gap-1.5"
               >
-                <span>VIEW ALL POSTS</span>
+                <span>{t("viewAllPosts")}</span>
                 <ArrowRight className="size-3" />
               </a>
             ) : (
@@ -287,8 +289,8 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
               {content.items.length === 0 ? (
                 <div className="py-16 text-center text-muted-foreground w-full flex flex-col items-center justify-center border border-dashed border-border/40 rounded-3xl bg-card/20 backdrop-blur-sm animate-in fade-in duration-300">
                   <Globe className="size-10 opacity-30 mb-3 text-jibb-orange animate-soft-pulse" />
-                  <p className="text-sm font-bold uppercase tracking-wider text-foreground">No Social Updates Active</p>
-                  <p className="text-xs opacity-75 mt-1">Please sync items in the Admin panel to populate the feed.</p>
+                  <p className="text-sm font-bold uppercase tracking-wider text-foreground">{t("noSocial")}</p>
+                  <p className="text-xs opacity-75 mt-1">{t("syncAdmin")}</p>
                 </div>
               ) : (
                 content.items.map((item: any, idx: number) => (
@@ -320,7 +322,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
                       <div className="w-full h-full overflow-y-auto overflow-x-hidden sleek-scrollbar pr-3">
                         <div className="w-[calc(100%+17px)] h-[670px]">
                           <iframe
-                            src={`https://www.linkedin.com/embed/feed/update/${item.shareUrn}?collapsed=1`}
+                             src={`https://www.linkedin.com/embed/feed/update/${item.shareUrn}?collapsed=1`}
                             height="100%"
                             width="100%"
                             style={{ border: 'none', borderRadius: '12px' }}
@@ -378,7 +380,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
                             href={item.link}
                             className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-[#7b9fe0] hover:underline"
                           >
-                            <span>LEARN MORE</span>
+                            <span>{t("learnMore")}</span>
                             <ArrowRight className="size-3 transition-transform duration-300 group-hover:translate-x-0.5" />
                           </Link>
                         </div>
@@ -400,7 +402,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
               rel="noopener noreferrer"
               className="px-6 py-2.5 bg-background border border-border/60 hover:border-primary/50 text-foreground text-xs font-bold rounded-lg transition-all active:scale-[0.98] inline-flex items-center gap-2 hover:shadow-sm"
             >
-              <span>Show More on LinkedIn</span>
+              <span>{t("showMoreLinkedIn")}</span>
               <LinkedinIcon className="size-3.5 fill-[#0077b5] text-[#0077b5]" />
             </a>
           </div>

@@ -4,7 +4,7 @@
     "subtitle": "Connecting stakeholders, businesses, institutions, and governments to build a strategic industrial bridge between Japan and India.",
     "introHeadline": "A Strategic Bilateral Bridge",
     "introPara1": "The Japan India Business Bureau (JIBB) is a non-profit organization dedicated to strengthening economic, industrial, and cultural ties between Japan and India. Positioned as a strategic bridge, we enable collaboration by connecting businesses, institutions, and government stakeholders across both ecosystems.",
-    "introPara2": "With its headquarters in Tokyo, Japan, and an operational presence in Noida, India, JIBB actively facilitates cross-border partnerships, market entry, and long-term industrial cooperation. We support companies in navigating regulatory landscapes, identifying opportunities, and building sustainable business relationships in both countries.",
+    "introPara2": "With its headquarters in Tokyo, Japan, and an operational presence in Noida, India, JIBB actively facilitates cross-border partnerships, market entry, and long-term industrial cooperation. We support companies in navigating regulatory landscapes, identifying opportunities, and building sustainable business relationships in both countries through our <servicesLink>comprehensive service offerings</servicesLink>.",
     "whoWeAreTitle": "Who We Are",
     "whoWeAreDesc": "JIBB is a cross-border industry facilitation platform that brings together businesses, institutions, and government stakeholders from Japan and India. We are not just a network, but an enabler of meaningful partnerships built on trust, transparency, and long-term vision.\n\nWith a strong presence in both Tokyo and Noida, we operate at the intersection of two dynamic economies, helping organizations connect, collaborate, and grow beyond geographical and cultural boundaries. Our strength lies in understanding both ecosystems deeply and translating that understanding into actionable opportunities for our stakeholders.",
     "whatWeDoTitle": "What We Do",
@@ -17,22 +17,57 @@
     "whatWeBelieve3Title": "Budding Innovation",
     "whatWeBelieve3Desc": "We believe in innovation as a driver of growth, supporting ideas from their inception and enabling them to scale globally.",
     "whatWeBelieve4Title": "Creating Real Impact",
-    "whatWeBelieve4Desc": "Above all, we believe in creating impact—where collaboration leads to sustainable development, stronger industries, and a shared economic future for both nations."
+    "whatWeBelieve4Desc": "Above all, we believe in creating impact—where collaboration leads to sustainable development, stronger industries, and a shared economic future for both nations.",
+    "heroTitle": "Enabling the Next Global Manufacturing Shift",
+    "heroDesc": "We connect stakeholders, businesses, institutions, and governments to create a meaningful partnership, drive investments, and build long-term industrial growth between India and Japan.",
+    "tokyoNoidaAxis": "Tokyo — Noida Axis",
+    "ourStory": "Our Story",
+    "operationalPresence": "Operational Presence",
+    "dualHubs": "Dual Hubs — Two Ecosystems",
+    "japanHq": "Japan Headquarters",
+    "indiaHq": "India Headquarters",
+    "members": "Members",
+    "dealsFacilitated": "Deals Facilitated",
+    "guidingPrinciples": "Guiding Principles",
+    "corePrinciples": "JIBB Core Principles",
+    "corePrinciple1": "Bicultural Trust First",
+    "corePrinciple2": "Actionable Localization",
+    "corePrinciple3": "R&D Sandbox Access",
+    "corePrinciple4": "Regulatory Navigation",
+    "featuredLeadership": "Featured Leadership",
+    "featuredCoreTeam": "Featured Core Team",
+    "coreTeamDesc": "Meet our bilateral directors driving operations across the Tokyo-Noida axis.",
+    "joinBureau": "Join the Bureau",
+    "joinBureauDesc": "Expand your reach and innovate without borders. Partner with JIBB to access exclusive industry insights, dedicated support, and a powerful cross-cultural network.",
+    "becomeMember": "Become a Member",
+    "contactUs": "Contact Us"
   },
-  "visionPage": {
-    "title": "Vision & Mission",
-    "subtitle": "Fostering economic synergy, bridging cultural divides, and industrializing innovations from the ground up.",
-    "visionTitle": "Our Vision",
-    "visionDesc": "To create a collaborative future where Japan and India stand together as global leaders in technology, industry, and sustainable growth.",
-    "missionTitle": "Our Mission",
-    "missionDesc": "To drive meaningful partnerships and industrial progress by providing expert market entry support, fostering cross-border collaboration, and delivering world-class innovation incubation for businesses and governments.",
-    "pillarsTitle": "Bilateral Cooperation Pillars",
-    "pillar1Title": "Bilateral Co-Innovation",
-    "pillar1Desc": "Bud innovations from scratch and then facilitate them in global expansions.",
-    "pillar2Title": "Cultural Exchange & Unity",
-    "pillar2Desc": "Break the cultural differences between two nations to build trust.",
-    "pillar3Title": "Trade Promotion",
-    "pillar3Desc": "Promote trade, joint ventures, and localization opportunities between both ecosystems."
+  "timeline": {
+    "sectionTitle": "Our Journey",
+    "title": "Bureau Milestones & History",
+    "subtitle": "Following the growth of our bilateral business corridor, bringing together industrial precision and tech innovation.",
+    "milestones": {
+      "m1": {
+        "title": "Bureau Conceived",
+        "description": "Initial framework drafted in Tokyo to align Japanese precision manufacturing with Indian software talent. Secured support from key ministry and trade alliance partners."
+      },
+      "m2": {
+        "title": "Tokyo Office Founded",
+        "description": "Established our primary Tokyo Office in Chiyoda-ku. Enrolled our first 50 corporate members representing robotics and precision hardware fields."
+      },
+      "m3": {
+        "title": "Noida Hub Launch",
+        "description": "Opened the Noida R&D Hub, introducing co-working spaces, specialized electronics laboratories, and bilateral incubation programs for startups."
+      },
+      "m4": {
+        "title": "Bilateral Corridor Deal Flow",
+        "description": "Officially catalyzed high-impact programs in EV and Semiconductor sectors. Surpassed ₹850 Cr ($100M+) in facilitated co-innovation deals."
+      },
+      "m5": {
+        "title": "500+ Corporate Network",
+        "description": "Expanded our membership base globally to 500+ active innovators. Signed partnerships with 10+ premium universities and research institutions."
+      }
+    }
   },
   "careersPage": {
     "title": "Careers at JIBB",
@@ -123,10 +158,52 @@
       }
     }
   },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Learn more about how JIBB is structured, governed, and funded to serve the India-Japan bilateral corridor.",
+    "questions": {
+      "q1": {
+        "question": "How is JIBB governed and structured?",
+        "answer": "JIBB operates as an independent, non-profit organization with a dual-headquarters structure in Tokyo and Noida. Our operations are led by an executive Leadership Team and overseen by a distinguished Advisory Board comprising former government officials, academic leaders, and industry veterans from both nations."
+      },
+      "q2": {
+        "question": "Is JIBB officially affiliated with the Japanese or Indian governments?",
+        "answer": "While JIBB works closely with Indian governmental bodies like Invest India, Guidance Tamil Nadu, etc., In Japan we work closely with industry associations and small-medium enterprises. This autonomy allows us to act with agility and represent the best interests of our corporate and institutional members."
+      },
+      "q3": {
+        "question": "How are the Advisory Board members selected?",
+        "answer": "Advisory Board members are invited based on their extensive experience in bilateral trade, industrial innovation, or cross-border diplomacy. They serve on a voluntary basis to provide strategic direction and ensure that JIBB’s initiatives align with long-term macroeconomic goals of both countries."
+      },
+      "q4": {
+        "question": "How is funding and membership revenue utilized?",
+        "answer": "All revenues from memberships, sponsorships, and consulting services are reinvested into our core programs. This includes supporting cross-border delegations, education or training programs, organizing bilateral trade missions, conducting market research, and supporting early-stage cross-border startups."
+      },
+      "q5": {
+        "question": "What is JIBB's policy on data privacy and corporate confidentiality?",
+        "answer": "We strictly adhere to both Japanese (APPI) and Indian (DPDP) data protection regulations. Corporate strategies, proprietary technology details, and member data shared during partnership facilitation are protected under stringent Non-Disclosure Agreements (NDAs)."
+      }
+    }
+  },
+  "visionPage": {
+    "title": "Vision & Mission",
+    "subtitle": "Fostering economic synergy, bridging cultural divides, and industrializing innovations from the ground up.",
+    "visionTitle": "Our Vision",
+    "visionDesc": "To create a collaborative future where Japan and India stand together as global leaders in technology, industry, and sustainable growth.",
+    "missionTitle": "Our Mission",
+    "missionDesc": "To drive meaningful partnerships and industrial progress by providing expert <servicesLink>market entry support</servicesLink>, fostering cross-border collaboration across <sectorsLink>8 focus sectors</sectorsLink>, and delivering world-class innovation incubation for businesses and governments.",
+    "pillarsTitle": "Bilateral Cooperation Pillars",
+    "pillar1Title": "Bilateral Co-Innovation",
+    "pillar1Desc": "Bud innovations from scratch and then facilitate them in global expansions.",
+    "pillar2Title": "Cultural Exchange & Unity",
+    "pillar2Desc": "Break the cultural differences between two nations to build trust.",
+    "pillar3Title": "Trade Promotion",
+    "pillar3Desc": "Promote trade, joint ventures, and localization opportunities between both ecosystems."
+  },
   "leadershipPage": {
     "title": "JIBB Leadership & Core Team",
     "subtitle": "Experienced leaders from India and Japan driving bilateral synergy, policy alignment, and corporate growth.",
     "intro": "Meet the directors, advisors, and ground experts who steer the Tokyo-Noida corridor.",
+    "viewAllLeaders": "View All Core Leaders",
     "members": {
       "varun": {
         "name": "Varun Tyagi",

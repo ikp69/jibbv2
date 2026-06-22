@@ -266,24 +266,24 @@ export default async function AboutPage({
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <span className="flex h-2 w-2 rounded-full bg-jibb-orange animate-soft-pulse" />
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-white/90">
-              About JIBB
+              {t("aboutPage.title")}
             </span>
           </div>
 
           <AnimatedHeading
-            text="Enabling the Next Global Manufacturing Shift"
+            text={t("aboutPage.heroTitle")}
             className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight"
             immediate
           />
 
           <p className="text-base md:text-lg text-white/75 max-w-2xl mx-auto leading-relaxed">
-            We connect stakeholders, businesses, institutions, and governments to create a meaningful partnership, drive investments, and build long-term industrial growth between India and Japan.
+            {t("aboutPage.heroDesc")}
           </p>
 
           <div className="flex justify-center gap-3 pt-4">
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
             <span className="text-xs font-bold tracking-[0.2em] uppercase text-jibb-orange">
-              Tokyo — Noida Axis
+              {t("aboutPage.tokyoNoidaAxis")}
             </span>
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
           </div>
@@ -299,25 +299,23 @@ export default async function AboutPage({
             <ScrollReveal direction="left" className="md:col-span-7 space-y-6 text-left">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 backdrop-blur-md">
                 <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary">
-                  Our Story
+                  {t("aboutPage.ourStory")}
                 </span>
               </div>
               <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">
-                A Strategic Bilateral Bridge
+                {t("aboutPage.introHeadline")}
               </h2>
               <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-                Welcome to the Japan India Business Bureau (JIBB). We serve as a
-                strategic bridge connecting businesses, governments, and startups
-                across Japan and India. Our goal is to empower innovation and
-                facilitate cross-border collaborations that drive mutual growth.
+                {t("aboutPage.introPara1")}
               </p>
               <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-                Navigating a new market involves unique cultural and regulatory
-                landscapes. We understand these nuances. By bridging the gap between
-                Japanese and Indian industries, we help you overcome barriers and
-                connect seamlessly. Whether you want to expand your corporate
-                footprint, find reliable manufacturing partners, or scale a new
-                technology, we guide you through every step of the journey via our <Link href="/services" className="text-primary hover:text-jibb-orange-light font-semibold underline transition-colors">comprehensive service offerings</Link>.
+                {t.rich("aboutPage.introPara2", {
+                  servicesLink: (chunks) => (
+                    <Link href="/services" className="text-primary hover:text-jibb-orange-light font-semibold underline transition-colors">
+                      {chunks}
+                    </Link>
+                  )
+                })}
               </p>
             </ScrollReveal>
 
@@ -330,17 +328,17 @@ export default async function AboutPage({
                       <Building2 className="size-5" />
                     </div>
                     <div>
-                      <span className="text-xs font-bold text-muted-foreground block uppercase tracking-wider">Operational Presence</span>
-                      <span className="text-sm font-bold text-foreground">Dual Hubs — Two Ecosystems</span>
+                      <span className="text-xs font-bold text-muted-foreground block uppercase tracking-wider">{t("aboutPage.operationalPresence")}</span>
+                      <span className="text-sm font-bold text-foreground">{t("aboutPage.dualHubs")}</span>
                     </div>
                   </div>
                   <div className="space-y-3.5 border-t border-border/50 pt-4 text-left">
                     <div className="flex justify-between items-center">
-                      <span className="text-xs font-semibold text-foreground/80">Japan Headquarters</span>
+                      <span className="text-xs font-semibold text-foreground/80">{t("aboutPage.japanHq")}</span>
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-jibb-indigo/5 text-jibb-indigo border border-jibb-indigo/15 uppercase tracking-wide">Tokyo</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-xs font-semibold text-foreground/80">India Headquarters</span>
+                      <span className="text-xs font-semibold text-foreground/80">{t("aboutPage.indiaHq")}</span>
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-jibb-orange/5 text-jibb-orange border border-jibb-orange/15 uppercase tracking-wide">Noida</span>
                     </div>
                   </div>
@@ -352,7 +350,7 @@ export default async function AboutPage({
                         className="text-2xl font-black text-jibb-indigo block"
                         duration={2}
                       />
-                      <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Members</span>
+                      <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{t("aboutPage.members")}</span>
                     </div>
                     <div className="text-center">
                       <span className="text-2xl font-black text-jibb-orange block">$<AnimatedCounter 
@@ -361,7 +359,7 @@ export default async function AboutPage({
                         className="text-2xl font-black text-jibb-orange"
                         duration={2}
                       /></span>
-                      <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Deals Facilitated</span>
+                      <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{t("aboutPage.dealsFacilitated")}</span>
                     </div>
                   </div>
                 </div>
@@ -383,13 +381,13 @@ export default async function AboutPage({
         <div className="section-container">
           <div className="text-center space-y-4 mb-16">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 backdrop-blur-md mx-auto">
-              <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary">Guiding Principles</span>
+              <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary">{t("aboutPage.guidingPrinciples")}</span>
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight">
-              Vision &amp; Mission
+              {t("visionPage.title")}
             </h2>
           </div>
-
+ 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             <ScrollReveal direction="left">
               <div className="group relative rounded-3xl p-8 md:p-10 bg-card border border-border/50 hover:border-jibb-indigo/30 hover:shadow-xl transition-all duration-300 h-full overflow-hidden">
@@ -398,14 +396,14 @@ export default async function AboutPage({
                   <div className="p-3 rounded-2xl bg-jibb-indigo/5 inline-flex">
                     <Eye className="size-7 text-jibb-indigo" />
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">Our Vision</h3>
+                  <h3 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">{t("visionPage.visionTitle")}</h3>
                   <p className="text-base text-muted-foreground leading-relaxed">
-                    To create a collaborative future where Japan and India stand together as global leaders in technology, industry, and sustainable growth.
+                    {t("visionPage.visionDesc")}
                   </p>
                 </div>
               </div>
             </ScrollReveal>
-
+ 
             <ScrollReveal direction="right">
               <div className="group relative rounded-3xl p-8 md:p-10 bg-card border border-border/50 hover:border-jibb-orange/30 hover:shadow-xl transition-all duration-300 h-full overflow-hidden">
                 <div className="absolute top-0 right-0 w-40 h-40 bg-jibb-orange/3 rounded-full blur-3xl pointer-events-none group-hover:bg-jibb-orange/8 transition-colors duration-500" />
@@ -413,24 +411,35 @@ export default async function AboutPage({
                   <div className="p-3 rounded-2xl bg-jibb-orange/5 inline-flex">
                     <Target className="size-7 text-jibb-orange" />
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">Our Mission</h3>
+                  <h3 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">{t("visionPage.missionTitle")}</h3>
                   <p className="text-base text-muted-foreground leading-relaxed">
-                    To drive meaningful partnerships and industrial progress by providing expert <Link href="/services" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">market entry support</Link>, fostering cross-border collaboration across <Link href="/sectors" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">8 focus sectors</Link>, and delivering world-class innovation incubation for businesses and governments.
+                    {t.rich("visionPage.missionDesc", {
+                      servicesLink: (chunks) => (
+                        <Link href="/services" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">
+                          {chunks}
+                        </Link>
+                      ),
+                      sectorsLink: (chunks) => (
+                        <Link href="/sectors" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">
+                          {chunks}
+                        </Link>
+                      )
+                    })}
                   </p>
                 </div>
               </div>
             </ScrollReveal>
           </div>
-
+ 
           {/* Core beliefs grid */}
           <div className="mt-16">
-            <h3 className="text-xl md:text-2xl font-bold text-foreground text-center mb-10 tracking-tight">What We Believe</h3>
+            <h3 className="text-xl md:text-2xl font-bold text-foreground text-center mb-10 tracking-tight">{t("aboutPage.whatWeBelieveTitle")}</h3>
             <ScrollReveal staggerChildren={0.12} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: <ShieldCheck className="size-6 text-jibb-indigo" />, title: "Trust & Shared Value", desc: "Long-term partnerships built on mutual trust, transparency, and shared goals between two dynamic economies." },
-                { icon: <Globe className="size-6 text-jibb-indigo" />, title: "Bridging Cultures", desc: "True collaboration goes beyond transactions — we foster deeper cultural understanding and alignment." },
-                { icon: <Lightbulb className="size-6 text-jibb-indigo" />, title: "Budding Innovation", desc: "Innovation as a driver of growth, supporting ideas from inception and enabling them to scale globally." },
-                { icon: <HeartHandshake className="size-6 text-jibb-indigo" />, title: "Creating Real Impact", desc: "Collaboration leading to sustainable development, stronger industries, and a shared economic future." },
+                { icon: <ShieldCheck className="size-6 text-jibb-indigo" />, title: t("aboutPage.whatWeBelieve1Title"), desc: t("aboutPage.whatWeBelieve1Desc") },
+                { icon: <Globe className="size-6 text-jibb-indigo" />, title: t("aboutPage.whatWeBelieve2Title"), desc: t("aboutPage.whatWeBelieve2Desc") },
+                { icon: <Lightbulb className="size-6 text-jibb-indigo" />, title: t("aboutPage.whatWeBelieve3Title"), desc: t("aboutPage.whatWeBelieve3Desc") },
+                { icon: <HeartHandshake className="size-6 text-jibb-indigo" />, title: t("aboutPage.whatWeBelieve4Title"), desc: t("aboutPage.whatWeBelieve4Desc") },
               ].map((pillar, i) => (
                 <div key={i} className="group flex flex-col gap-4 p-6 bg-card rounded-2xl border border-border/50 hover:border-primary/20 hover:shadow-lg transition-all duration-300 text-left">
                   <div className="p-2.5 rounded-xl bg-primary/5 text-primary shrink-0 w-fit">{pillar.icon}</div>
@@ -509,13 +518,13 @@ export default async function AboutPage({
               <div className="relative w-full max-w-xs rounded-3xl p-6 bg-card border border-border/80 shadow-jibb flex flex-col gap-4 text-left overflow-hidden">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
                 <h3 className="text-xs font-bold text-foreground tracking-tight uppercase flex items-center gap-1.5">
-                  <Sparkles className="size-4 text-jibb-orange" /> JIBB Core Principles
+                  <Sparkles className="size-4 text-jibb-orange" /> {t("aboutPage.corePrinciples")}
                 </h3>
                 <ul className="space-y-3 text-xs text-muted-foreground font-semibold">
-                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold text-base">✓</span> Bicultural Trust First</li>
-                  <li className="flex items-center gap-2"><span className="text-jibb-indigo font-bold text-base">✓</span> Actionable Localization</li>
-                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold text-base">✓</span> R&D Sandbox Access</li>
-                  <li className="flex items-center gap-2"><span className="text-jibb-indigo font-bold text-base">✓</span> Regulatory Navigation</li>
+                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold text-base">✓</span> {t("aboutPage.corePrinciple1")}</li>
+                  <li className="flex items-center gap-2"><span className="text-jibb-indigo font-bold text-base">✓</span> {t("aboutPage.corePrinciple2")}</li>
+                  <li className="flex items-center gap-2"><span className="text-jibb-orange font-bold text-base">✓</span> {t("aboutPage.corePrinciple3")}</li>
+                  <li className="flex items-center gap-2"><span className="text-jibb-indigo font-bold text-base">✓</span> {t("aboutPage.corePrinciple4")}</li>
                 </ul>
               </div>
             </div>
@@ -555,11 +564,11 @@ export default async function AboutPage({
         <div className="section-container">
           <div className="text-center space-y-4 mb-16">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 backdrop-blur-md mx-auto">
-              <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary">Featured Leadership</span>
+              <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary">{t("aboutPage.featuredLeadership")}</span>
             </div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight">Featured Core Team</h2>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight">{t("aboutPage.featuredCoreTeam")}</h2>
             <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Meet our bilateral directors driving operations across the Tokyo-Noida axis.
+              {t("aboutPage.coreTeamDesc")}
             </p>
           </div>
           <LeadershipCarousel />
@@ -588,20 +597,20 @@ export default async function AboutPage({
         </Parallax>
 
         <div className="section-container relative z-10 text-center max-w-3xl space-y-6">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold">Join the Bureau</h2>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold">{t("aboutPage.joinBureau")}</h2>
           <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-xl mx-auto">
-            Expand your reach and innovate without borders. Partner with JIBB to access exclusive industry insights, dedicated support, and a powerful cross-cultural network.
+            {t("aboutPage.joinBureauDesc")}
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 pt-4">
             <Link href="/membership">
               <AnimatedButton variant="accent" size="lg" className="w-full sm:w-auto font-bold shadow-lg flex items-center justify-center gap-2">
-                <span>Become a Member</span>
+                <span>{t("aboutPage.becomeMember")}</span>
                 <ArrowRight className="size-4" />
               </AnimatedButton>
             </Link>
             <Link href="/contact">
               <AnimatedButton variant="glass" size="lg" className="w-full sm:w-auto font-semibold">
-                <span>Contact Us</span>
+                <span>{t("aboutPage.contactUs")}</span>
               </AnimatedButton>
             </Link>
           </div>

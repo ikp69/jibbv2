@@ -366,6 +366,56 @@ export default async function ServicesPage({
   setRequestLocale(locale);
   const t = await getTranslations({ locale });
 
+  const services = SERVICES.map((svc) => {
+    let key = "marketLandscaping";
+    if (svc.id === "opportunity-landscape") key = "opportunityLandscape";
+    else if (svc.id === "partner-identification") key = "partnerIdentification";
+    else if (svc.id === "due-diligence") key = "dueDiligence";
+    else if (svc.id === "go-to-market") key = "goToMarket";
+    else if (svc.id === "market-entry-execution") key = "marketEntryExecution";
+    else if (svc.id === "sales-marketing") key = "salesMarketing";
+    else if (svc.id === "back-office") key = "backOffice";
+
+    const item1HeadingMap: Record<string, string> = {
+      "market-landscaping": t("servicesList.whatWeCover"),
+      "opportunity-landscape": t("servicesList.ourDeliverables"),
+      "partner-identification": t("servicesList.whoWeMap"),
+      "due-diligence": t("servicesList.dueDiligenceCoverage"),
+      "go-to-market": t("servicesList.whatWeDefine"),
+      "market-entry-execution": t("servicesList.howWeEnableIt"),
+      "sales-marketing": t("servicesList.coreSupport"),
+      "back-office": t("servicesList.endToEndSupport"),
+    };
+
+    const item2HeadingMap: Record<string, string> = {
+      "market-landscaping": t("servicesList.whatThisEnables"),
+      "opportunity-landscape": t("servicesList.theOutcome"),
+      "partner-identification": t("servicesList.evaluationCriteria"),
+      "due-diligence": t("servicesList.dealSupport"),
+      "go-to-market": t("servicesList.theResult"),
+      "market-entry-execution": t("servicesList.whatThisEnsures"),
+      "sales-marketing": t("servicesList.demandGeneration"),
+      "back-office": t("servicesList.additionalServices"),
+    };
+
+    return {
+      ...svc,
+      title: t(`servicesList.${key}.title`),
+      tagline: t(`servicesList.${key}.tagline`),
+      intro: t(`servicesList.${key}.intro`),
+      sections: [
+        {
+          heading: item1HeadingMap[svc.id] || t("servicesList.whatWeCover"),
+          items: t.raw(`servicesList.${key}.items1`) as string[],
+        },
+        {
+          heading: item2HeadingMap[svc.id] || t("servicesList.whatThisEnables"),
+          items: t.raw(`servicesList.${key}.items2`) as string[],
+        },
+      ],
+    };
+  });
+
   // BreadcrumbList Schema for Services Page
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -395,7 +445,7 @@ export default async function ServicesPage({
       />
 
       {/* Service Schema for SEO */}
-      {SERVICES.map((service) => {
+      {services.map((service) => {
         const serviceSchema = {
           "@context": "https://schema.org",
           "@type": "Service",
@@ -435,18 +485,21 @@ export default async function ServicesPage({
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-white/90">
-              What We Do
+              {t("servicesList.whatWeDo")}
             </span>
           </div>
 
           <AnimatedHeading
-            text="End-to-End Bilateral Services"
+            text={t("servicesList.heroTitle")}
             className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight"
             immediate
           />
 
           <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
-            From initial market landscaping to full operational setup — eight integrated service lines that take Japan–India partnerships from ambition to execution. Our services align with <Link href="/sectors" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">our 8 focus sectors</Link> and <Link href="/membership" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">membership tiers</Link>.
+            {t.rich("servicesList.heroDesc", {
+              sectorsLink: (chunks) => <Link href="/sectors" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">{chunks}</Link>,
+              membershipLink: (chunks) => <Link href="/membership" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">{chunks}</Link>,
+            })}
           </p>
 
           <div className="flex justify-center gap-3 pt-4">
@@ -469,7 +522,7 @@ export default async function ServicesPage({
               staggerChildren={0.07}
               className="lg:col-span-7 grid sm:grid-cols-2 gap-4"
             >
-              {SERVICES.map((svc) => {
+              {services.map((svc) => {
                 const c = COLOR[svc.color];
                 const Icon = svc.icon;
                 return (
@@ -507,7 +560,7 @@ export default async function ServicesPage({
                 <div className="space-y-6">
                   <div className="space-y-2">
                     <h3 className="text-lg md:text-xl font-extrabold text-foreground tracking-tight">
-                      JIBB's 8 Core Business Services
+                      {t("servicesList.eightCoreServicesTitle")}
                     </h3>
                     <div className="h-1 w-10 bg-jibb-orange/60 rounded-full" />
                   </div>
@@ -516,57 +569,57 @@ export default async function ServicesPage({
                     <li className="flex gap-4">
                       <span className="text-jibb-orange font-black text-sm shrink-0 pt-0.5">01</span>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-foreground">Market Landscaping</p>
-                        <p className="text-xs text-muted-foreground mt-1">Deep market research and comprehensive environment analysis</p>
+                        <p className="text-sm font-semibold text-foreground">{t("servicesList.marketLandscaping.title")}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t("servicesList.marketLandscaping.tagline")}</p>
                       </div>
                     </li>
                     <li className="flex gap-4">
                       <span className="text-jibb-indigo font-black text-sm shrink-0 pt-0.5">02</span>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-foreground">Opportunity Landscape</p>
-                        <p className="text-xs text-muted-foreground mt-1">Quantified opportunities and prioritized revenue pathways</p>
+                        <p className="text-sm font-semibold text-foreground">{t("servicesList.opportunityLandscape.title")}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t("servicesList.opportunityLandscape.tagline")}</p>
                       </div>
                     </li>
                     <li className="flex gap-4">
                       <span className="text-jibb-sakura font-black text-sm shrink-0 pt-0.5">03</span>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-foreground">Partner Identification</p>
-                        <p className="text-xs text-muted-foreground mt-1">Strategic partner mapping and ecosystem building</p>
+                        <p className="text-sm font-semibold text-foreground">{t("servicesList.partnerIdentification.title")}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t("servicesList.partnerIdentification.tagline")}</p>
                       </div>
                     </li>
                     <li className="flex gap-4">
                       <span className="text-jibb-orange font-black text-sm shrink-0 pt-0.5">04</span>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-foreground">Due Diligence</p>
-                        <p className="text-xs text-muted-foreground mt-1">Comprehensive risk assessment and investment evaluation</p>
+                        <p className="text-sm font-semibold text-foreground">{t("servicesList.dueDiligence.title")}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t("servicesList.dueDiligence.tagline")}</p>
                       </div>
                     </li>
                     <li className="flex gap-4">
                       <span className="text-jibb-indigo font-black text-sm shrink-0 pt-0.5">05</span>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-foreground">Go-to-Market Strategy</p>
-                        <p className="text-xs text-muted-foreground mt-1">Launch and scaling roadmap for new markets</p>
+                        <p className="text-sm font-semibold text-foreground">{t("servicesList.goToMarket.title")}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t("servicesList.goToMarket.tagline")}</p>
                       </div>
                     </li>
                     <li className="flex gap-4">
                       <span className="text-jibb-sakura font-black text-sm shrink-0 pt-0.5">06</span>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-foreground">Sales & Marketing Support</p>
-                        <p className="text-xs text-muted-foreground mt-1">Growth enablement and market penetration strategies</p>
+                        <p className="text-sm font-semibold text-foreground">{t("servicesList.marketEntryExecution.title")}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t("servicesList.marketEntryExecution.tagline")}</p>
                       </div>
                     </li>
                     <li className="flex gap-4">
                       <span className="text-jibb-orange font-black text-sm shrink-0 pt-0.5">07</span>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-foreground">Back Office Support</p>
-                        <p className="text-xs text-muted-foreground mt-1">Operational excellence and administrative support</p>
+                        <p className="text-sm font-semibold text-foreground">{t("servicesList.salesMarketing.title")}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t("servicesList.salesMarketing.tagline")}</p>
                       </div>
                     </li>
                     <li className="flex gap-4">
                       <span className="text-jibb-indigo font-black text-sm shrink-0 pt-0.5">08</span>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-foreground">Regulatory Navigation</p>
-                        <p className="text-xs text-muted-foreground mt-1">Compliance guidance and legal framework support</p>
+                        <p className="text-sm font-semibold text-foreground">{t("servicesList.backOffice.title")}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t("servicesList.backOffice.tagline")}</p>
                       </div>
                     </li>
                   </ol>
@@ -579,7 +632,7 @@ export default async function ServicesPage({
       </section>
 
       {/* ── SERVICE DETAIL SECTIONS ──────────────────────── */}
-      {SERVICES.map((svc, idx) => {
+      {services.map((svc, idx) => {
         const c = COLOR[svc.color];
         const Icon = svc.icon;
         const isEven = idx % 2 === 0;
@@ -629,7 +682,7 @@ export default async function ServicesPage({
                   <div className="grid sm:grid-cols-2 gap-6">
                     {svc.sections.map((sec) => (
                       <div key={sec.heading} className="space-y-3">
-                        <div className="flex items-center gap-2">
+                         <div className="flex items-center gap-2">
                           <div className={`h-[2px] w-5 rounded-full ${c.bar}`} />
                           <h3 className="text-[11px] font-black uppercase tracking-widest text-foreground/70">
                             {sec.heading}
@@ -689,7 +742,7 @@ export default async function ServicesPage({
                           size="sm"
                           className="w-full font-semibold gap-1.5 text-xs"
                         >
-                          Enquire About This Service
+                          {t("servicesList.enquireBtn")}
                           <ArrowRight className="size-3.5" />
                         </AnimatedButton>
                       </Link>
@@ -709,20 +762,20 @@ export default async function ServicesPage({
           <ScrollReveal className="space-y-4">
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-[10px] font-bold tracking-widest uppercase text-white/90">
               <Sparkles className="size-3 text-jibb-orange" />
-              Ready to Begin?
+              {t("servicesList.readyToBegin")}
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-              Eight services. One unified corridor.
+              {t("servicesList.eightServicesBannerTitle")}
             </h2>
             <p className="text-white/75 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-              Whether you are entering India from Japan or Japan from India, our integrated service lines remove every barrier between ambition and execution. Explore how our services connect with <Link href="/sectors" className="text-jibb-orange hover:text-jibb-orange-light font-semibold">industry sectors</Link> and <Link href="/about" className="text-jibb-orange hover:text-jibb-orange-light font-semibold">our company mission</Link>.
+              {t("servicesList.eightServicesBannerDesc")}
             </p>
           </ScrollReveal>
 
           <ScrollReveal delay={0.15} className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
             <Link href="/contact">
               <AnimatedButton className="h-12 px-8 bg-jibb-orange hover:bg-jibb-orange/90 text-white font-bold rounded-xl border-none shadow-lg gap-2">
-                Start a Conversation
+                {t("servicesList.startConversation")}
                 <ArrowRight className="size-4" />
               </AnimatedButton>
             </Link>
@@ -731,7 +784,7 @@ export default async function ServicesPage({
                 variant="outline"
                 className="h-12 px-8 bg-transparent border-white/40 hover:bg-white/10 hover:border-white/60 text-white hover:text-white font-semibold rounded-xl gap-2"
               >
-                View Membership Plans
+                {t("servicesList.viewPlans")}
               </AnimatedButton>
             </Link>
           </ScrollReveal>

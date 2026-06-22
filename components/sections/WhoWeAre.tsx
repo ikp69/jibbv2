@@ -179,7 +179,7 @@ export function WhoWeAre() {
             <div className="space-y-5">
               <ServiceCard
                 title={t("consultingTitle") || "Consulting Services"}
-                countText="6 Strategic Offerings"
+                countText={t("consultingCount") || "6 Strategic Offerings"}
                 items={consultingItems}
                 icon={Briefcase}
                 bgIcon={Briefcase}
@@ -187,7 +187,7 @@ export function WhoWeAre() {
               />
               <ServiceCard
                 title={t("marketEntryTitle") || "Market Entry & Expansion"}
-                countText="6 Growth Offerings"
+                countText={t("marketEntryCount") || "6 Growth Offerings"}
                 items={marketEntryItems}
                 icon={Compass}
                 bgIcon={Compass}
@@ -195,7 +195,7 @@ export function WhoWeAre() {
               />
               <ServiceCard
                 title={t("backOfficeTitle") || "Back Office Support"}
-                countText="7 Support Offerings"
+                countText={t("backOfficeCount") || "7 Support Offerings"}
                 items={backOfficeItems}
                 icon={Building2}
                 bgIcon={Building2}

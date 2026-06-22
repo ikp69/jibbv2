@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface Testimonial {
   quoteTitle: string;
@@ -15,63 +16,24 @@ interface Testimonial {
   logoAlt?: string;
 }
 
-const TESTIMONIALS: Testimonial[] = [
-  {
-    quoteTitle: "India Semiconductor Mission",
-    quote: "The Japan India Business Bureau (JIBB) is working on a futuristic initiative: Japan India Semiconductor Committee (JISC) where they are bridging the gap between Japanese companies and India’s growing semiconductor ecosystem. We look forward to working closely with JISC and its member companies to build meaningful partnerships, support technology transfers, and accelerate mutual growth. India is open for business, and we are excited to welcome innovative Japanese players through this dedicated platform.",
-    author: "Dr. Manish Kumar Hooda",
-    role: "Director, Technology – India Semiconductor Mission",
-    location: "India",
-    avatarUrl: "/testimonials/manishhooda.jpeg",
-    logoUrl: "/logos/ism_header_logo.png",
-    logoAlt: "India Semiconductor Mission",
-  },
-  // {
-  //   quoteTitle: "Enhanced Learning Experience",
-  //   quote: "The innovative approach has revolutionized our study methods. Their AI-powered tools have saved us countless hours and allowed us to grasp complex concepts more effectively. We've seen a remarkable improvement in our overall academic performance.",
-  //   author: "Emmily Patel",
-  //   role: "AI Research Fellow",
-  //   location: "Noida, India",
-  //   avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&h=256&q=80",
-  // },
-  // {
-  //   quoteTitle: "Accelerated Market Entry",
-  //   quote: "JIBB did not just give us a market report. They gave us a step-by-step entry strategy, handled our local compliance, and aligned us with top tier Noida developers. Truly a bicultural accelerator that exceeded our expectations.",
-  //   author: "Kenji Sato",
-  //   role: "VP of Robotics Engineering",
-  //   location: "Tokyo, Japan",
-  //   avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=256&h=256&q=80",
-  // },
-  // {
-  //   quoteTitle: "Unmatched Matchmaking & R&D",
-  //   quote: "The co-innovation opportunities here are unmatched. We brought our battery management software, and within a month, JIBB matched us with a Japanese hardware manufacturing partner. Our time-to-market was cut in half.",
-  //   author: "Aarav Sharma",
-  //   role: "Founder & CEO, ElectroFlow",
-  //   location: "Noida, India",
-  //   avatarUrl: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=256&h=256&q=80",
-  // },
-  // {
-  //   quoteTitle: "Authentic Bilateral Trust",
-  //   quote: "Bilateral trade requires trust above all else. JIBB acts as a neutral, government-aligned facilitator that helps navigate complex compliance and build authentic corporate relationships between our nations.",
-  //   author: "Priyanka Sen",
-  //   role: "Strategic Partner, Invest India",
-  //   location: "New Delhi, India",
-  //   avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=256&h=256&q=80",
-  // },
-  // {
-  //   quoteTitle: "Catalyzing Hardware Innovation",
-  //   quote: "Having access to state-of-the-art incubation labs and shared test facilities in Noida was a massive catalyst for our IoT startup. We received Japanese expert mentorship that guided our hardware design from concept to production.",
-  //   author: "Hiroshi Tanaka",
-  //   role: "Director of R&D, IoT Solutions",
-  //   location: "Osaka, Japan",
-  //   avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=256&h=256&q=80",
-  // },
-];
-
 export function TestimonialCarousel() {
+  const t = useTranslations("testimonials");
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1); // 1: right to left (next), -1: left to right (prev)
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const testimonials: Testimonial[] = [
+    {
+      quoteTitle: t("items.0.quoteTitle"),
+      quote: t("items.0.quote"),
+      author: t("items.0.author"),
+      role: t("items.0.role"),
+      location: t("items.0.location"),
+      avatarUrl: "/testimonials/manishhooda.jpeg",
+      logoUrl: "/logos/ism_header_logo.png",
+      logoAlt: "India Semiconductor Mission",
+    },
+  ];
 
   const slideVariants = {
     enter: (dir: number) => ({
@@ -90,12 +52,12 @@ export function TestimonialCarousel() {
 
   const handleNext = () => {
     setDirection(1);
-    setIndex((prev) => (prev + 1) % TESTIMONIALS.length);
+    setIndex((prev) => (prev + 1) % testimonials.length);
   };
 
   const handlePrev = () => {
     setDirection(-1);
-    setIndex((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+    setIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
   const resetTimer = () => {
@@ -127,10 +89,10 @@ export function TestimonialCarousel() {
         {/* Header */}
         <div className="text-center space-y-2 mb-10">
           <span className="text-xs font-bold uppercase tracking-widest text-jibb-indigo dark:text-jibb-indigo-light">
-            Testimonial
+            {t("tagline")}
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">
-            Our Partners Share Their Feedback
+            {t("title")}
           </h2>
         </div>
 
@@ -146,7 +108,7 @@ export function TestimonialCarousel() {
 
           {/* Avatar Row */}
           <div className="flex items-center gap-3 md:gap-4">
-            {TESTIMONIALS.map((testimonial, idx) => {
+            {testimonials.map((testimonial, idx) => {
               const isActive = idx === index;
               return (
                 <button
@@ -201,8 +163,8 @@ export function TestimonialCarousel() {
               {/* Left Side: Large Student Photo */}
               <div className="w-28 h-28 md:w-44 md:h-44 rounded-xl md:rounded-2xl overflow-hidden flex-shrink-0 shadow-md mx-auto md:mx-0">
                 <img
-                  src={TESTIMONIALS[index].avatarUrl}
-                  alt={TESTIMONIALS[index].author}
+                  src={testimonials[index].avatarUrl}
+                  alt={testimonials[index].author}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -213,30 +175,30 @@ export function TestimonialCarousel() {
                   {/* Quote title + logo — stacked on mobile, inline on desktop */}
                   <div className="flex flex-col items-center gap-2 md:flex-row md:items-center md:justify-between md:gap-4">
                     <h3 className="text-lg md:text-xl font-bold text-foreground tracking-tight">
-                      &ldquo;{TESTIMONIALS[index].quoteTitle} &rdquo;
+                      &ldquo;{testimonials[index].quoteTitle} &rdquo;
                     </h3>
-                    {TESTIMONIALS[index].logoUrl && (
+                    {testimonials[index].logoUrl && (
                       <img
-                        src={TESTIMONIALS[index].logoUrl}
-                        alt={TESTIMONIALS[index].logoAlt || "Organization logo"}
+                        src={testimonials[index].logoUrl}
+                        alt={testimonials[index].logoAlt || "Organization logo"}
                         className="h-8 w-auto max-w-[130px] object-contain opacity-90 flex-shrink-0"
                       />
                     )}
                   </div>
                   <p className="text-sm md:text-base text-muted-foreground leading-relaxed mt-2 italic">
-                    {TESTIMONIALS[index].quote}
+                    {testimonials[index].quote}
                   </p>
                 </div>
 
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pt-4 border-t border-border/50">
                   <div className="space-y-0.5">
                     <h4 className="text-sm md:text-base font-bold text-foreground">
-                      {TESTIMONIALS[index].author}
+                      {testimonials[index].author}
                     </h4>
                     <p className="text-xs text-muted-foreground font-medium">
-                      {TESTIMONIALS[index].role} &middot;{" "}
+                      {testimonials[index].role} &middot;{" "}
                       <span className="text-jibb-indigo dark:text-jibb-indigo-light font-semibold">
-                        {TESTIMONIALS[index].location}
+                        {testimonials[index].location}
                       </span>
                     </p>
                   </div>

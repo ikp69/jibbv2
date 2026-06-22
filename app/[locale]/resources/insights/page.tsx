@@ -6,6 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowRight, Search, Tag, Sparkles } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
+import PastEventsCollage from "@/components/sections/PastEventsCollage";
+import LinkedInCarousel from "@/components/sections/LinkedInCarousel";
+import { createClient } from "@supabase/supabase-js";
 import type { Metadata } from "next";
 
 const SITE_URL = "https://npo-jibb.org";
@@ -68,6 +71,29 @@ export default async function InsightsPage({ params, searchParams }: PageProps) 
   const t = await getTranslations({ locale });
   const allInsights = await getAllPosts("insights", locale);
 
+  let linkedinPosts: { id: string; shareUrn: string }[] = [];
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (supabaseUrl && supabaseAnonKey) {
+      const supabase = createClient(supabaseUrl, supabaseAnonKey);
+      const { data: posts, error } = await supabase
+        .from("linkedin_posts")
+        .select("id, share_urn")
+        .order("created_at", { ascending: false })
+        .limit(6);
+
+      if (posts && !error) {
+        linkedinPosts = posts.map((post, idx) => ({
+          id: post.id || `l-${idx}`,
+          shareUrn: post.share_urn
+        }));
+      }
+    }
+  } catch (err) {
+    console.error("Failed to fetch LinkedIn posts from database:", err);
+  }
+
   // Filter posts by search query and selected tag
   const filteredInsights = allInsights.filter((post) => {
     const matchesSearch =
@@ -105,7 +131,7 @@ export default async function InsightsPage({ params, searchParams }: PageProps) 
           <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight">
             {t("resourcesMenu.insights")}
           </h1>
-          
+
           <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
             {t("resourcesMenu.insightsDesc")}
           </p>
@@ -120,7 +146,7 @@ export default async function InsightsPage({ params, searchParams }: PageProps) 
           {/* Tag Badges */}
           <div className="flex flex-wrap items-center gap-2">
             <Link href="/resources/insights">
-              <Badge 
+              <Badge
                 variant={selectedTag === "" ? "accent" : "outline"}
                 className="cursor-pointer font-medium text-xs py-1.5 px-3 rounded-full transition-all hover:scale-105"
               >
@@ -152,12 +178,26 @@ export default async function InsightsPage({ params, searchParams }: PageProps) 
             />
           </form>
         </div>
+
+        {/* Table of Contents Quick Navigation */}
+        <div className="section-container mt-6 pt-6 border-t border-border/20 flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <span className="text-foreground/60">{locale === "ja" ? "セクション移動:" : "Jump to:"}</span>
+          <a href="#insights-archive" className="px-3.5 py-1.5 rounded-full bg-secondary text-jibb-indigo hover:bg-jibb-indigo hover:text-jibb-sakura transition-all duration-300">
+            {locale === "ja" ? "レポート一覧" : "Insights Grid"}
+          </a>
+          <a href="#linkedin-updates" className="px-3.5 py-1.5 rounded-full bg-secondary text-jibb-indigo hover:bg-jibb-indigo hover:text-jibb-sakura transition-all duration-300">
+            {locale === "ja" ? "LinkedIn投稿" : "LinkedIn Updates"}
+          </a>
+          <a href="#past-events-gallery" className="px-3.5 py-1.5 rounded-full bg-secondary text-jibb-indigo hover:bg-jibb-indigo hover:text-jibb-sakura transition-all duration-300">
+            {locale === "ja" ? "イベントギャラリー" : "Past Highlights"}
+          </a>
+        </div>
       </section>
 
       {/* ============================================================
           INSIGHTS GRID
           ============================================================ */}
-      <section className="py-16 bg-jibb-gradient-subtle">
+      <section id="insights-archive" className="py-16 bg-jibb-gradient-subtle scroll-mt-20">
         <div className="section-container">
           {filteredInsights.length === 0 ? (
             <div className="text-center py-20 bg-card rounded-3xl border border-border/80 shadow-jibb p-8 space-y-4">
@@ -173,7 +213,7 @@ export default async function InsightsPage({ params, searchParams }: PageProps) 
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredInsights.map((post) => (
-                <article 
+                <article
                   key={post.slug}
                   className="group flex flex-col h-full bg-card border border-border/80 shadow-jibb hover:shadow-jibb-md rounded-2xl overflow-hidden transition-all duration-300"
                 >
@@ -228,6 +268,10 @@ export default async function InsightsPage({ params, searchParams }: PageProps) 
           )}
         </div>
       </section>
+
+      <LinkedInCarousel posts={linkedinPosts} />
+
+      <PastEventsCollage />
     </main>
   );
 }

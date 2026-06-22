@@ -41,9 +41,16 @@
     "storyDesc": "JIBBが日本のものづくりの精巧さとインドのソフトウェアイノベーションをどのようにつなぐかをご紹介します。",
     "ctaBody1": "ケンジとアーラヴは、複雑な国境を越えた課題を大きな成功ストーリーに変えました。",
     "ctaBody2": "あなたも同じことができます。日印ビジネスビューローの会員になると、専門的な市場参入支援、信頼できるパートナーシップネットワーク、および世界クラスのイノベーションラボへのアクセスが得られます。",
-    "ctaBody3": "あなたのリーチを拡大。国境なきイノベーション。JIBBに参加して、あなた自身の成功ストーリーを築き始めましょう。"
+    "ctaBody3": "あなたのリーチを拡大。国境なきイノベーション。JIBBに参加して、あなた自身の成功ストーリーを築き始めましょう。",
+    "buildingBridges": "架け橋を築き、",
+    "sparkingInnovation": "イノベーションを創出。",
+    "jibbStory": "JIBBストーリー",
+    "scrollToBegin": "スクロールして開始",
+    "skipStory": "ストーリーをスキップ",
+    "replay": "もう一度見る"
   },
   "whatWeDo": {
+    "tagline": "コアサービス",
     "sectionTitle": "私たちの活動",
     "sectionSubtitle": "企業が国境を越えて協力し、拡大し、成功するための道筋を創出します。",
     "marketEntry": {
@@ -120,7 +127,10 @@
       "type": "投資形態：",
       "details": "詳細を見る",
       "apply": "申し込む",
-      "learnMore": "詳細を見る"
+      "learnMore": "詳細を見る",
+      "membersAccessOnly": "会員限定アクセス。",
+      "joinNow": "今すぐ参加",
+      "becomeMember": "会員になる"
     },
     "data": {
       "partnerships": {
@@ -161,6 +171,15 @@
           "participants": "日本企業 40社",
           "direction": "日本 → インド",
           "benefits": "B2Bマッチング、工場視察、政府関係者とのネットワーキング"
+        },
+        "d2": {
+          "title": "インド政府の日本派遣ビジネスデレゲーション",
+          "date": "2026年開催予定",
+          "cities": "東京、大阪、名古屋",
+          "focus": "二国間貿易、高度製造業",
+          "participants": "インド政府高官・業界リーダー",
+          "direction": "インド → 日本",
+          "benefits": "G2B対話、投資ピッチング、技術移転"
         }
       },
       "tradeMissions": {
@@ -208,8 +227,14 @@
     }
   },
   "sectors": {
+    "tagline": "ターゲット分野",
     "sectionTitle": "主要セクター",
     "sectionSubtitle": "日印パートナーシップの未来を形作る産業全体での協力を推進。",
+    "strategicFrameworks": "戦略的枠組み",
+    "frameworkTitle": "China+1戦略、自己依存インド（Atmanirbhar India）、およびMake in India",
+    "frameworkDesc": "インドの半導体市場は2030年までに<strong class=\"text-foreground font-bold\">1,000億ドル以上</strong>に達し、<strong class=\"text-foreground font-bold\">16%のCAGR</strong>が見込まれており、自動車部品産業はすでに<strong class=\"text-foreground font-bold\">515億ドル</strong>を超えています。",
+    "semiconductorLabel": "半導体（2030年）",
+    "cagrLabel": "予測CAGR",
     "semiconductor": "エレクトロニクス・半導体",
     "ev": "自動車・電気自動車",
     "electronics": "先端製造業",
@@ -253,7 +278,46 @@
     "government": "政府パートナー",
     "individual": "個人",
     "cta": "会員になる",
-    "recommended": "おすすめ"
+    "recommended": "おすすめ",
+    "popularChoice": "おすすめのプラン",
+    "tiers": {
+      "associate": {
+        "title": "Associate Member",
+        "desc": "エントリーレベルのネットワークアクセス",
+        "features": [
+          "5% ビジネスマッチング手数料率",
+          "5% トレーニングプログラム割引",
+          "標準ポータルへのアクセス"
+        ]
+      },
+      "silver": {
+        "title": "Silver Member",
+        "desc": "標準的な市場参入・成長サポート",
+        "features": [
+          "10% ビジネスマッチング手数料率",
+          "2.5% 展示会出展サポート割引",
+          "インテリジェンスニュースレター"
+        ]
+      },
+      "gold": {
+        "title": "Gold Member",
+        "desc": "共同イノベーション向けプロプラン",
+        "features": [
+          "20% ビジネスマッチング手数料率",
+          "無料トレーニングプログラム3回",
+          "ビジネス訪印・訪日デレゲーション参加権"
+        ]
+      },
+      "platinum": {
+        "title": "Platinum Member",
+        "desc": "二国間アドボカシーと最大限の拡張",
+        "features": [
+          "30% ビジネスマッチング手数料率",
+          "無料トレーニングプログラム7回",
+          "すべての二国間インテリジェンスへのアクセス"
+        ]
+      }
+    }
   },
   "events": {
     "sectionTitle": "今後のイベント",
@@ -263,6 +327,7 @@
   },
   "partners": {
     "sectionTitle": "パートナー・支援者",
+    "headline": "日印の政府機関や産業界を牽引するパートナー陣による強力な支援",
     "sectionSubtitle": "政府、機関、大学、業界リーダーとの協力。"
   },
   "insights": {
@@ -317,14 +382,21 @@
     "teamValue": "50+",
     "teamLabel": "現地のチームメンバー",
     "partnershipsValue": "30+",
-    "partnershipsLabel": "戦略的政府パートナーシップ"
+    "partnershipsLabel": "戦略的政府パートナーシップ",
+    "consultingCount": "6つの戦略的サービス",
+    "marketEntryCount": "6つの事業拡大支援",
+    "backOfficeCount": "7つのバックオフィス支援"
   },
   "sectorsPage": {
     "title": "二国間重点セクター",
     "subtitle": "日印間の経済シナジーと合弁事業を牽引する、高成長分野の産業をご紹介します。",
+    "subtitleRich": "日印間の経済的相乗効果と合弁事業を推進する高成長産業をご紹介します。弊社の<servicesLink>統合サービス</servicesLink>と柔軟な<membershipLink>会員プラン</membershipLink>は、あらゆるセクターでの成長をサポートします。",
+    "listTitle": "JIBBの8つの主要産業セクター",
     "ctaTitle": "重点セクターでの協業をお考えですか？",
     "ctaDesc": "JIBBのパートナーとなり、業界における厳選された企業パートナー、学術機関、および投資機会とつながりましょう。",
+    "ctaDescRich": "JIBBのパートナーとなり、業界における厳選された企業パートナー、学術機関、および投資機会とつながりましょう。各セクターをどのようにサポートしているか、弊社の<servicesLink>サービス</servicesLink>をご覧ください。",
     "ctaButton": "JIBBに参加する",
+    "discussSector": "担当者と相談する",
     "details": {
       "semiconductor": {
         "title": "エレクトロニクス・半導体",
@@ -432,5 +504,91 @@
       "img16": { "title": "大臣主催の歓迎レセプション", "desc": "来日・来印した貿易使節団への温かい歓迎。" },
       "img17": { "title": "JIBB年次レセプション", "desc": "長年にわたるパートナーシップの成功を祝う会合。" }
     }
+  },
+  "eventNoticeBoard": {
+    "countdownTitle": "イベント開催まで",
+    "days": "日",
+    "hours": "時間",
+    "minutes": "分",
+    "seconds": "秒",
+    "upcomingEvent": "今後のイベント",
+    "eventTitle": "日印製造業連携セミナー 2026",
+    "eventDate": "2026年7月3日 • 東京、銀座",
+    "registerNow": "今すぐ登録する",
+    "joinUs": "参加登録はこちら",
+    "dontMissOut": "お見逃しなく"
+  },
+  "strategicBridge": {
+    "tagline": "戦略的アライアンス",
+    "title": "ビジョナリーな戦略的架け橋",
+    "subtitle": "産業界、専門家、学術界、政府を統合し、二国間の成長とイノベーションを促進します。",
+    "industry": {
+      "title": "産業の統合",
+      "desc": "具体的な技術移転、活発なビジネスマッチング、人材育成イニシアチブを通じて商業市場の橋渡しをします。",
+      "bullets": [
+        "技術移転とマッチング",
+        "トレーニングとスキル開発",
+        "バリューチェーンの統合",
+        "二国間共同研究開発（R&D）"
+      ]
+    },
+    "experts": {
+      "title": "専門家のランドスケーピング",
+      "desc": "的確な市場調査、未来予測、およびビジネス機会の実行ロードマップを提供します。",
+      "bullets": [
+        "イノベーションの未来予測",
+        "リスクの予測と回避",
+        "戦略実行ロードマップ"
+      ]
+    },
+    "academia": {
+      "title": "学術アライアンス",
+      "desc": "国境を越えた人的資源の育成と、共同研究プラットフォームを構築します。",
+      "bullets": [
+        "人材育成とスキル開発",
+        "日本式トレーニングモジュール",
+        "スタートアップのインキュベーション支援"
+      ]
+    },
+    "government": {
+      "title": "政府・政策",
+      "desc": "政策枠組みの実施、ソートリーダーシップ、デレゲーション（使節団）ロジスティクス、コンプライアンスの調整を推進します。",
+      "bullets": [
+        "政策枠組みと実施",
+        "デレゲーションと二国間支援",
+        "PLI（生産連動型インセンティブ）の活用とコンプライアンス",
+        "ソートリーダーシップと政策提言"
+      ]
+    }
+  },
+  "testimonials": {
+    "tagline": "お客様の声",
+    "title": "パートナーや会員からのメッセージ",
+    "items": [
+      {
+        "quoteTitle": "インド半導体ミッション（ISM）",
+        "quote": "日印ビジネスビューロー（JIBB）は、先進的な取り組みである日印半導体委員会（JISC）を通じて、日本企業とインドの急成長する半導体エコシステムとの架け橋となっています。JISCおよびその会員企業と緊密に連携し、有意義なパートナーシップの構築、技術移転の支援、そして相互の成長を加速させることを楽しみにしています。インドはビジネスに対して広く門戸を開いており、この専用プラットフォームを通じて革新的な日本企業の参入を心から歓迎します。",
+        "author": "マニッシュ・クマール・フーダ博士",
+        "role": "技術ディレクター – インド半導体ミッション（ISM）",
+        "location": "インド"
+      }
+    ]
+  },
+  "newsroom": {
+    "title": "ニュースルーム",
+    "subtitle": "JIBBの活動や、日印間のマイクロエレクトロニクス、先進製造業、ディープテック分野における最新動向をお伝えします。",
+    "visitNewsroom": "ニュースルームへ",
+    "tabs": {
+      "media": "メディア＆インサイト",
+      "blog": "ブログ",
+      "thought": "ソートリーダーシップ",
+      "social": "ソーシャルフィード（LinkedIn）"
+    },
+    "viewAllPosts": "すべての投稿を見る",
+    "viewAll": "すべて見る",
+    "learnMore": "詳しく見る",
+    "showMoreLinkedIn": "LinkedInでさらに表示する",
+    "noSocial": "ソーシャルの更新情報はありません",
+    "syncAdmin": "管理パネルで同期を行ってフィードを更新してください。"
   }
 }

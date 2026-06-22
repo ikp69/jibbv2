@@ -2,6 +2,7 @@
 
 import { Link } from "@/src/i18n/navigation";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 interface CountdownState {
   days: number;
@@ -11,6 +12,7 @@ interface CountdownState {
 }
 
 export function EventNoticeBoard() {
+  const t = useTranslations("eventNoticeBoard");
   const [countdown, setCountdown] = useState<CountdownState>({
     days: 0,
     hours: 0,
@@ -39,7 +41,7 @@ export function EventNoticeBoard() {
     return () => clearInterval(timer);
   }, []);
 
-  const eventDate = "July 3, 2026 • Ginza, Tokyo";
+  const eventDate = t("eventDate");
 
   return (
     <section className="py-12 md:py-16 bg-background relative overflow-hidden">
@@ -55,16 +57,16 @@ export function EventNoticeBoard() {
                 <div className="bg-gradient-to-br from-jibb-indigo via-jibb-indigo/90 to-jibb-orange rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">
                   <div className="text-center">
                     <h3 className="text-white font-black text-sm mb-6 tracking-tight">
-                      Countdown to Event
+                      {t("countdownTitle")}
                     </h3>
                     
                     {/* Countdown Display */}
                     <div className="grid grid-cols-4 gap-2 mb-6">
                       {[
-                        { value: countdown.days, label: "Days" },
-                        { value: countdown.hours, label: "Hours" },
-                        { value: countdown.minutes, label: "Minutes" },
-                        { value: countdown.seconds, label: "Seconds" },
+                        { value: countdown.days, label: t("days") },
+                        { value: countdown.hours, label: t("hours") },
+                        { value: countdown.minutes, label: t("minutes") },
+                        { value: countdown.seconds, label: t("seconds") },
                       ].map((item, idx) => (
                         <div key={idx} className="bg-white/10 rounded-2xl py-3 px-2 backdrop-blur-sm border border-white/20">
                           <div className="text-white font-black text-xl md:text-2xl leading-none">
@@ -79,7 +81,7 @@ export function EventNoticeBoard() {
 
                     {/* CTA Button */}
                     <button className="w-full bg-white text-jibb-indigo hover:bg-white/90 font-black py-3 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95 text-sm">
-                      Register Now
+                      {t("registerNow")}
                     </button>
                   </div>
                 </div>
@@ -90,7 +92,7 @@ export function EventNoticeBoard() {
                 <div className="relative rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 aspect-square">
                   <img
                     src="/events/JIBB_Event_3_July_2026_square.jpg"
-                    alt="India-Japan Manufacturing Collaboration 2026"
+                    alt={t("eventTitle")}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -102,7 +104,7 @@ export function EventNoticeBoard() {
                   {/* Animated text scroll */}
                   <div className="flex animate-scroll-infinite whitespace-nowrap">
                     <span className="text-white font-black text-lg px-8 inline-block">
-                      🎯 JOIN US AT {eventDate.toUpperCase()} • 🎯 JOIN US AT {eventDate.toUpperCase()} •
+                      🎯 {t("joinUs")} {eventDate.toUpperCase()} • 🎯 {t("joinUs")} {eventDate.toUpperCase()} •
                     </span>
                   </div>
                 </div>
@@ -122,7 +124,7 @@ export function EventNoticeBoard() {
                   <div className="relative rounded-[2rem] overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 aspect-square">
                     <img
                       src="/events/JIBB_Event_3_July_2026_square.jpg"
-                      alt="India-Japan Manufacturing Collaboration 2026"
+                      alt={t("eventTitle")}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover/hero:scale-110"
                     />
                     {/* Gradient Overlay */}
@@ -141,11 +143,11 @@ export function EventNoticeBoard() {
                       <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 bg-white/10 rounded-full backdrop-blur-sm">
                         <div className="w-2 h-2 rounded-full bg-jibb-orange animate-pulse" />
                         <span className="text-white/90 text-xs font-bold uppercase tracking-wider">
-                          Upcoming Event
+                          {t("upcomingEvent")}
                         </span>
                       </div>
                       <h3 className="text-white font-black text-3xl lg:text-4xl mb-3 tracking-tight leading-tight">
-                        India-Japan Manufacturing Collaboration
+                        {t("eventTitle")}
                       </h3>
                       <div className="flex items-center gap-3 text-white/80 text-sm font-semibold">
                         <span>📅 {eventDate}</span>
@@ -160,7 +162,7 @@ export function EventNoticeBoard() {
                           {String(countdown.days).padStart(2, "0")}
                         </div>
                         <div className="text-white/60 text-xs font-bold mt-2 uppercase tracking-wider">
-                          Days
+                          {t("days")}
                         </div>
                       </div>
 
@@ -170,7 +172,7 @@ export function EventNoticeBoard() {
                           {String(countdown.hours).padStart(2, "0")}
                         </div>
                         <div className="text-white/60 text-xs font-bold mt-2 uppercase tracking-wider">
-                          Hours
+                          {t("hours")}
                         </div>
                       </div>
 
@@ -180,7 +182,7 @@ export function EventNoticeBoard() {
                           {String(countdown.minutes).padStart(2, "0")}
                         </div>
                         <div className="text-white/60 text-xs font-bold mt-2 uppercase tracking-wider">
-                          Minutes
+                          {t("minutes")}
                         </div>
                       </div>
 
@@ -190,14 +192,14 @@ export function EventNoticeBoard() {
                           {String(countdown.seconds).padStart(2, "0")}
                         </div>
                         <div className="text-white/60 text-xs font-bold mt-2 uppercase tracking-wider">
-                          Seconds
+                          {t("seconds")}
                         </div>
                       </div>
                     </div>
 
                     {/* CTA Button */}
                     <button className="w-full bg-white text-jibb-indigo hover:bg-jibb-orange hover:text-white font-black py-4 px-8 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-105 active:scale-95 text-base group/btn flex items-center justify-center gap-2">
-                      <span>Register Now</span>
+                      <span>{t("registerNow")}</span>
                       <svg className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>
@@ -211,10 +213,10 @@ export function EventNoticeBoard() {
                     <div className="absolute inset-0 flex items-center overflow-hidden">
                       <div className="flex animate-scroll-infinite whitespace-nowrap">
                         <span className="text-white font-black text-2xl lg:text-3xl px-12 inline-block">
-                          🎯 JOIN US • {eventDate.toUpperCase()} • DON&apos;T MISS OUT •
+                          🎯 {t("joinUs")} • {eventDate.toUpperCase()} • {t("dontMissOut").toUpperCase()} •
                         </span>
                         <span className="text-white font-black text-2xl lg:text-3xl px-12 inline-block">
-                          🎯 JOIN US • {eventDate.toUpperCase()} • DON&apos;T MISS OUT •
+                          🎯 {t("joinUs")} • {eventDate.toUpperCase()} • {t("dontMissOut").toUpperCase()} •
                         </span>
                       </div>
                     </div>

@@ -61,7 +61,7 @@ export function LogoMarquee() {
             {t("partners.sectionTitle") || "Global Networks"}
           </span>
           <h2 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">
-            Supported by Bilateral Trade &amp; Development Leaders
+            {t("partners.headline") || "Supported by Bilateral Trade & Development Leaders"}
           </h2>
           <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
             {t("partners.sectionSubtitle") || "Facilitating seamless collaboration across governmental bodies, chambers, and academic institutions."}

@@ -51,10 +51,10 @@ export function LoginForm() {
     // Register-mode: validate required profile fields
     if (mode === "register") {
       if (!fullName.trim()) {
-        errs.fullName = "Full name is required";
+        errs.fullName = t("fullNameRequired");
       }
       if (password && password.length < 8) {
-        errs.password = "Password must be at least 8 characters";
+        errs.password = t("passwordMinLength");
       }
     }
 
@@ -163,9 +163,9 @@ export function LoginForm() {
             >
               <AlertCircle className="size-4 shrink-0 mt-0.5" />
               <div>
-                <p className="font-bold">🔧 Supabase Setup Required</p>
+                <p className="font-bold">{t("supabaseSetupRequired")}</p>
                 <p className="opacity-90 mt-0.5 leading-relaxed">
-                  Authentication keys are missing. Please add your credentials to the <code>.env.local</code> file in <code>my-app/</code> to enable logins.
+                  {t("supabaseSetupDesc")}
                 </p>
               </div>
             </motion.div>
@@ -226,7 +226,7 @@ export function LoginForm() {
             >
               <CheckCircle2 className="size-4 shrink-0 mt-0.5" />
               <div>
-                <p className="font-bold">Verification Pending</p>
+                <p className="font-bold">{t("verificationPending")}</p>
                 <p className="opacity-90 mt-0.5">{successMsg}</p>
               </div>
             </motion.div>

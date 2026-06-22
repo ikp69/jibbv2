@@ -125,5 +125,18 @@
     "back": "Back",
     "loading": "Loading...",
     "comingSoon": "Coming Soon"
+  },
+  "highvalueEcosystem": {
+    "title1": "Advanced Manufacturing Technologies",
+    "sub1": "(CNC, Precision Engineering, Automation)",
+    "title2": "Semiconductor & Electronics",
+    "sub2": "(Design, Fabrication, OSAT, ATMP, Materials, and Allied Industries)",
+    "title3": "Automotive Components Value Chain",
+    "sub3": "(EVs, Connected Vehicles, ADAS, Components)",
+    "title4": "Industrial Equipment & Machinery",
+    "sub4": "(Machine Tools, Robotics, Process Equipment)",
+    "title5": "Emerging Technologies",
+    "sub5": "(AI, IoT Integration, Industry 4.0, 5.0, Sustainable Manufacturing)",
+    "bannerText": "<orange>The China+1 Strategy, Atmanirbhar India, & Make in India:</orange> India’s semiconductor market is projected to reach <orangeVal>$100+ Billion by 2030</orangeVal> with <underline>16% CAGR</underline>, whilst the automotive component industry has crossed <orangeVal>$51.5 Bn</orangeVal>."
   }
 }

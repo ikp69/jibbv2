@@ -7,29 +7,15 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { useTranslations } from "next-intl";
 
 const FAQS = [
-  {
-    question: "How is JIBB governed and structured?",
-    answer: "JIBB operates as an independent, non-profit organization with a dual-headquarters structure in Tokyo and Noida. Our operations are led by an executive Leadership Team and overseen by a distinguished Advisory Board comprising former government officials, academic leaders, and industry veterans from both nations."
-  },
-  {
-    question: "Is JIBB officially affiliated with the Japanese or Indian governments?",
-    answer: "While JIBB works closely with Indian governmental bodies like Invest India, Guidance Tamil Nadu, etc., In Japan we work closely with industry associations and small-medium enterprises. This autonomy allows us to act with agility and represent the best interests of our corporate and institutional members."
-  },
-  {
-    question: "How are the Advisory Board members selected?",
-    answer: "Advisory Board members are invited based on their extensive experience in bilateral trade, industrial innovation, or cross-border diplomacy. They serve on a voluntary basis to provide strategic direction and ensure that JIBB’s initiatives align with long-term macroeconomic goals of both countries."
-  },
-  {
-    question: "How is funding and membership revenue utilized?",
-    answer: "All revenues from memberships, sponsorships, and consulting services are reinvested into our core programs. This includes supporting cross-border delegations, education or training programs, organizing bilateral trade missions, conducting market research, and supporting early-stage cross-border startups."
-  },
-  {
-    question: "What is JIBB's policy on data privacy and corporate confidentiality?",
-    answer: "We strictly adhere to both Japanese (APPI) and Indian (DPDP) data protection regulations. Corporate strategies, proprietary technology details, and member data shared during partnership facilitation are protected under stringent Non-Disclosure Agreements (NDAs)."
-  }
+  { key: "q1" },
+  { key: "q2" },
+  { key: "q3" },
+  { key: "q4" },
+  { key: "q5" }
 ];
 
 export function AboutFAQ() {
+  const t = useTranslations("faq");
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggleOpen = (index: number) => {
@@ -40,16 +26,11 @@ export function AboutFAQ() {
     <section className="py-20 md:py-28 bg-jibb-gradient-subtle border-t border-border/20">
       <div className="section-container max-w-4xl">
         <div className="text-center space-y-4 mb-16">
-          {/* <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 backdrop-blur-md mx-auto">
-            <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary">
-              Governance & Transparency
-            </span>
-          </div> */}
           <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">
-            Frequently Asked Questions
+            {t("title")}
           </h2>
           <p className="text-sm md:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Learn more about how JIBB is structured, governed, and funded to serve the India-Japan bilateral corridor.
+            {t("subtitle")}
           </p>
         </div>
 
@@ -81,7 +62,7 @@ export function AboutFAQ() {
                         className={`font-semibold text-sm md:text-base transition-colors ${isOpen ? "text-primary" : "text-foreground"
                           }`}
                       >
-                        {faq.question}
+                        {t(`questions.${faq.key}.question`)}
                       </span>
                     </div>
                     <div
@@ -103,7 +84,7 @@ export function AboutFAQ() {
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                       >
                         <div className="px-6 pb-6 pt-0 text-sm md:text-base text-muted-foreground leading-relaxed ml-10">
-                          {faq.answer}
+                          {t(`questions.${faq.key}.answer`)}
                         </div>
                       </motion.div>
                     )}

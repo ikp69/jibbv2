@@ -59,7 +59,7 @@ export function WorkProcess() {
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10 backdrop-blur-md">
             <Play className="size-3 text-jibb-orange fill-jibb-orange animate-soft-pulse" />
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary dark:text-primary-foreground">
-              Our Methodology
+              {t("ourMethodology") || "Our Methodology"}
             </span>
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight">
@@ -117,7 +117,7 @@ export function WorkProcess() {
                 <div className="flex items-center gap-2">
                   <div className={`h-2.5 w-2.5 rounded-full ${phases[activeTab].accent}`} />
                   <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-primary/80">
-                    Phase Details
+                    {t("phaseDetails") || "Phase Details"}
                   </span>
                 </div>
 
