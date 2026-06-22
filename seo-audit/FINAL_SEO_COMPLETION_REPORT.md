@@ -57,7 +57,7 @@
 - Keyword-rich (under 60 chars)
 - Organization name included
 - Examples:
-  - EN: "JIBB — Japan India Business Bureau | Bilateral Growth & Innovation"
+  - EN: "JIBB - Japan India Business Bureau | Bilateral Growth & Innovation"
   - JA: "JIBB — 日印ビジネス機構 | 日本・インド間のビジネス協力と産業成長"
 
 ### 2. Meta Descriptions (12/12 pages) ✅
@@ -193,14 +193,14 @@ Total Improvement:         +54-56 points (129-133%)
 ## 🔍 What Each Page Has
 
 ### Homepage (`/`)
-- ✅ Title: "JIBB — Japan India Business Bureau | Bilateral Growth & Innovation"
+- ✅ Title: "JIBB - Japan India Business Bureau | Bilateral Growth & Innovation"
 - ✅ Keywords: 15 (market entry, business matching, semiconductor, EV, etc.)
 - ✅ Schema: Organization (LocalBusiness), BreadcrumbList
 - ✅ OG Image: home-og.jpg (1200×630)
 - ✅ Bilingual: EN/JA complete
 
 ### About (`/about`)
-- ✅ Title: "About Us — Japan India Business Bureau"
+- ✅ Title: "About Us - Japan India Business Bureau"
 - ✅ Keywords: 10 (JIBB about, collaboration, bilateral, Tokyo Noida axis, etc.)
 - ✅ Schema: AboutPage, Organization, FAQPage (5 questions), BreadcrumbList
 - ✅ OG Image: about-og.jpg
@@ -256,14 +256,14 @@ Total Improvement:         +54-56 points (129-133%)
 - ✅ Bilingual: EN/JA complete
 
 ### Privacy Policy (`/privacy`)
-- ✅ Title: "Privacy Policy — Japan India Business Bureau"
+- ✅ Title: "Privacy Policy - Japan India Business Bureau"
 - ✅ Keywords: 14 (privacy, data protection, GDPR, security, etc.)
 - ✅ OG Image: privacy-og.jpg (NEW)
 - ✅ Twitter Cards: YES (NEW)
 - ✅ Bilingual: EN/JA complete
 
 ### Terms of Service (`/terms`)
-- ✅ Title: "Terms of Service — Japan India Business Bureau"
+- ✅ Title: "Terms of Service - Japan India Business Bureau"
 - ✅ Keywords: 14 (terms, agreement, legal, membership, etc.)
 - ✅ OG Image: terms-og.jpg (NEW)
 - ✅ Twitter Cards: YES (NEW)

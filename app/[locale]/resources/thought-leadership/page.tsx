@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = isJa
     ? "リーダーシップ論考 | 日印ビジネスビューロー"
-    : "Thought Leadership | JIBB — Japan India Business Bureau";
+    : "Thought Leadership | JIBB - Japan India Business Bureau";
   const description = isJa
     ? "JIBBの共同創設者および経営陣による、日印ビジネス・産業協力に関するビジョンと戦略的見解。"
     : "Vision, strategy, and perspectives from JIBB's co-founders and leadership on India-Japan industrial co-innovation.";

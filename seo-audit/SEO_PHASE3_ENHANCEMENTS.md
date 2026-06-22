@@ -249,7 +249,7 @@ alt="Semiconductor research laboratory equipment at JIBB Innovation Hub"
    - Alt: "[Person name], [title] at JIBB"
 
 5. **Logo/Branding**
-   - Alt: "JIBB — Japan India Business Bureau logo"
+   - Alt: "JIBB - Japan India Business Bureau logo"
 
 #### Step 3.4: Implementation
 

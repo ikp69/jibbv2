@@ -57,7 +57,7 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org"),
   title: {
-    default: "JIBB — Japan India Business Bureau",
+    default: "JIBB - Japan India Business Bureau",
     template: "%s",
   },
   description:
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     alternateLocale: "ja_JP",
-    siteName: "JIBB — Japan India Business Bureau",
+    siteName: "JIBB - Japan India Business Bureau",
   },
 };
 

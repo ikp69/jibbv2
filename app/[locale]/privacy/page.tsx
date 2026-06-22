@@ -28,7 +28,7 @@ export async function generateMetadata({
   const title =
     locale === "ja"
       ? "プライバシーポリシー | 日印ビジネス機構"
-      : "Privacy Policy — Japan India Business Bureau";
+      : "Privacy Policy - Japan India Business Bureau";
   const description =
     locale === "ja"
       ? "JIBBはお客様の個人情報を責任を持って取り扱います。本プライバシーポリシーでは、データの収集・利用・保護方針をご説明します。"
@@ -58,7 +58,7 @@ export async function generateMetadata({
       description,
       type: "website",
       url: `${baseUrl}/${locale}/privacy`,
-      siteName: "JIBB — Japan India Business Bureau",
+      siteName: "JIBB - Japan India Business Bureau",
       locale: locale === "en" ? "en_US" : "ja_JP",
       alternateLocale: locale === "en" ? "ja_JP" : "en_US",
       images: [
@@ -292,7 +292,7 @@ export default async function PrivacyPage({
           </h1>
 
           <p className="text-base md:text-lg text-white/75 max-w-2xl mx-auto leading-relaxed">
-            At JIBB, your privacy is not an afterthought — it is a commitment. 
+            At JIBB, your privacy is not an afterthought — it is a commitment.
             This policy explains what data we collect, why we collect it, and how we protect it.
           </p>
 

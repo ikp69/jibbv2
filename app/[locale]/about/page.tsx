@@ -41,7 +41,7 @@ export async function generateMetadata({
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
   const title = locale === "ja"
     ? "JIBBについて | 日印ビジネス機構"
-    : "About Us — Japan India Business Bureau";
+    : "About Us - Japan India Business Bureau";
   const description = locale === "ja"
     ? "日印ビジネス機構（JIBB）は、日本とインドの企業・政府・スタートアップを結ぶ戦略的な橋渡し役。クロスボーダー協力と産業成長を推進します。"
     : "JIBB is a strategic bridge connecting businesses, governments, and startups across Japan and India. We empower innovation and facilitate cross-border collaborations for mutual growth.";
@@ -66,7 +66,7 @@ export async function generateMetadata({
       description,
       type: "website",
       url: `${baseUrl}/${locale}/about`,
-      siteName: "JIBB — Japan India Business Bureau",
+      siteName: "JIBB - Japan India Business Bureau",
       locale: locale === "en" ? "en_US" : "ja_JP",
       alternateLocale: locale === "en" ? "ja_JP" : "en_US",
       images: [
@@ -134,7 +134,7 @@ export default async function AboutPage({
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "AboutPage",
-            "name": "About JIBB — Japan India Business Bureau",
+            "name": "About JIBB - Japan India Business Bureau",
             "url": `https://npo-jibb.org/${locale}/about`,
             "organization": {
               "@type": "Organization",
@@ -344,18 +344,18 @@ export default async function AboutPage({
                   </div>
                   <div className="grid grid-cols-2 gap-3 border-t border-border/50 pt-4">
                     <div className="text-center">
-                      <AnimatedCounter 
-                        value={500} 
-                        suffix="+" 
+                      <AnimatedCounter
+                        value={500}
+                        suffix="+"
                         className="text-2xl font-black text-jibb-indigo block"
                         duration={2}
                       />
                       <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{t("aboutPage.members")}</span>
                     </div>
                     <div className="text-center">
-                      <span className="text-2xl font-black text-jibb-orange block">$<AnimatedCounter 
-                        value={100} 
-                        suffix="M+" 
+                      <span className="text-2xl font-black text-jibb-orange block">$<AnimatedCounter
+                        value={100}
+                        suffix="M+"
                         className="text-2xl font-black text-jibb-orange"
                         duration={2}
                       /></span>
@@ -387,7 +387,7 @@ export default async function AboutPage({
               {t("visionPage.title")}
             </h2>
           </div>
- 
+
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             <ScrollReveal direction="left">
               <div className="group relative rounded-3xl p-8 md:p-10 bg-card border border-border/50 hover:border-jibb-indigo/30 hover:shadow-xl transition-all duration-300 h-full overflow-hidden">
@@ -403,7 +403,7 @@ export default async function AboutPage({
                 </div>
               </div>
             </ScrollReveal>
- 
+
             <ScrollReveal direction="right">
               <div className="group relative rounded-3xl p-8 md:p-10 bg-card border border-border/50 hover:border-jibb-orange/30 hover:shadow-xl transition-all duration-300 h-full overflow-hidden">
                 <div className="absolute top-0 right-0 w-40 h-40 bg-jibb-orange/3 rounded-full blur-3xl pointer-events-none group-hover:bg-jibb-orange/8 transition-colors duration-500" />
@@ -430,7 +430,7 @@ export default async function AboutPage({
               </div>
             </ScrollReveal>
           </div>
- 
+
           {/* Core beliefs grid */}
           <div className="mt-16">
             <h3 className="text-xl md:text-2xl font-bold text-foreground text-center mb-10 tracking-tight">{t("aboutPage.whatWeBelieveTitle")}</h3>

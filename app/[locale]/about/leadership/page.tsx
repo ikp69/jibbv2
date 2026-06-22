@@ -11,7 +11,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
   return {
-    title: "Leadership & Core Team — Japan India Business Bureau",
+    title: "Leadership & Core Team - Japan India Business Bureau",
     description: t("description"),
   };
 }

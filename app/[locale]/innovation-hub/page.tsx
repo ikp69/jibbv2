@@ -26,7 +26,7 @@ export async function generateMetadata({
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
   const title = locale === "ja"
     ? "イノベーションハブ | JIBB — 日印ビジネス機構"
-    : "Innovation Hub | JIBB — Japan India Business Bureau";
+    : "Innovation Hub | JIBB - Japan India Business Bureau";
   const description = locale === "ja"
     ? "日印の革新的なビジネスハブ。卓越センター、イノベーションチャレンジ、研究施設、パートナー機関、スタートアップインキュベーションで協創を推進。"
     : "Japan-India innovation hub for research, technology transfer, and collaborative development. Centers of Excellence, innovation challenges, laboratories, and startup incubation.";
@@ -53,7 +53,7 @@ export async function generateMetadata({
       description,
       type: "website",
       url: `${baseUrl}/${locale}/innovation-hub`,
-      siteName: "JIBB — Japan India Business Bureau",
+      siteName: "JIBB - Japan India Business Bureau",
       locale: locale === "en" ? "en_US" : "ja_JP",
       alternateLocale: locale === "en" ? "ja_JP" : "en_US",
       images: [

@@ -28,7 +28,7 @@ export async function generateMetadata({
   const title =
     locale === "ja"
       ? "利用規約 | 日印ビジネス機構"
-      : "Terms of Service — Japan India Business Bureau";
+      : "Terms of Service - Japan India Business Bureau";
   const description =
     locale === "ja"
       ? "JIBBのウェブサイトおよびサービスをご利用いただく前に、本利用規約をお読みください。"
@@ -58,7 +58,7 @@ export async function generateMetadata({
       description,
       type: "website",
       url: `${baseUrl}/${locale}/terms`,
-      siteName: "JIBB — Japan India Business Bureau",
+      siteName: "JIBB - Japan India Business Bureau",
       locale: locale === "en" ? "en_US" : "ja_JP",
       alternateLocale: locale === "en" ? "ja_JP" : "en_US",
       images: [
@@ -313,7 +313,7 @@ export default async function TermsPage({
           </h1>
 
           <p className="text-base md:text-lg text-white/75 max-w-2xl mx-auto leading-relaxed">
-            These terms govern your access to and use of JIBB's website, membership, and services. 
+            These terms govern your access to and use of JIBB's website, membership, and services.
             Please read them carefully before engaging with us.
           </p>
 

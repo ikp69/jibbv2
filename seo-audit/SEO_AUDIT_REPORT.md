@@ -49,7 +49,7 @@
 #### SEO Elements Found
 ```typescript
 // From layout.tsx only:
-Title: "JIBB — Japan India Business Bureau"
+Title: "JIBB - Japan India Business Bureau"
 Description: "A cross-border innovation and industrial collaboration ecosystem..."
 Keywords: Japan India, business bureau, semiconductor, EV, market entry, JIBB
 OpenGraph: Basic (type, locale, siteName) - No image
@@ -98,7 +98,7 @@ OpenGraph: Basic (type, locale, siteName) - No image
 
 **Current State:**
 - ✅ Has generateMetadata function
-- ✅ Title: "About Us — Japan India Business Bureau"
+- ✅ Title: "About Us - Japan India Business Bureau"
 - ❌ No description
 - ❌ No OpenGraph tags
 - ❌ No Twitter card
@@ -138,7 +138,7 @@ export async function generateMetadata({ params }) {
 
 #### `/about/leadership`
 **Status:** ⚠️ Incomplete
-- ✅ Title: "Leadership & Core Team — Japan India Business Bureau"
+- ✅ Title: "Leadership & Core Team - Japan India Business Bureau"
 - ❌ Missing: description, OpenGraph, Twitter, ProfilePage schema
 
 #### `/about/vision-mission`
@@ -478,7 +478,7 @@ Add ItemList schema:
 **Status:** ✅ Good Implementation (Partial)
 
 **Current State:**
-- ✅ Bilingual title: "Resources | JIBB — Japan India Business Bureau"
+- ✅ Bilingual title: "Resources | JIBB - Japan India Business Bureau"
 - ✅ Bilingual description
 - ✅ OpenGraph: title, description, type, url, images
 - ✅ Canonical URL

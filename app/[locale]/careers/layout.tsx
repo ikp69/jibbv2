@@ -12,7 +12,7 @@ export async function generateMetadata({
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
   const title = locale === "ja"
     ? "採用情報・キャリア | JIBB — 日印ビジネス機構"
-    : "Careers & Job Openings | JIBB — Japan India Business Bureau";
+    : "Careers & Job Openings | JIBB - Japan India Business Bureau";
   const description = locale === "ja"
     ? "JIBBで日印ビジネスのキャリアを築こう。バイリンガルコンサルタント、翻訳コーディネーター、ビジネス開発職など募集中。東京・Noida拠点勤務。"
     : "Build your career at JIBB connecting Japan and India. Open positions: Bilateral Business Consultant, Translator/Coordinator, Business Development Executive. Tokyo and Noida offices.";
@@ -38,7 +38,7 @@ export async function generateMetadata({
       description,
       type: "website",
       url: `${baseUrl}/${locale}/careers`,
-      siteName: "JIBB — Japan India Business Bureau",
+      siteName: "JIBB - Japan India Business Bureau",
       locale: locale === "en" ? "en_US" : "ja_JP",
       alternateLocale: locale === "en" ? "ja_JP" : "en_US",
       images: [

@@ -55,7 +55,7 @@
 
 #### SEO Elements Present
 ✅ **Title Tag**
-- EN: "JIBB — Japan India Business Bureau"
+- EN: "JIBB - Japan India Business Bureau"
 - JA: "JIBB — 日印ビジネス機構"
 - Dynamic template: "%s | JIBB" for sub-pages
 
@@ -71,7 +71,7 @@
 ```
 type: website
 locale: en_US (with ja_JP alternate)
-siteName: "JIBB — Japan India Business Bureau"
+siteName: "JIBB - Japan India Business Bureau"
 ```
 
 ✅ **Schema Markup** - Organization Schema
@@ -138,7 +138,7 @@ x-default: https://npo-jibb.org/en
 
 #### SEO Elements Present
 ✅ **Title Tag** (Bilingual)
-- EN: "Membership Tiers & Benefits | JIBB — Japan India Business Bureau"
+- EN: "Membership Tiers & Benefits | JIBB - Japan India Business Bureau"
 - JA: "会員プラン・特典 | JIBB — 日印ビジネス機構"
 
 ✅ **Meta Description** (160 chars - optimal)
@@ -150,11 +150,11 @@ x-default: https://npo-jibb.org/en
 
 ✅ **OpenGraph Tags**
 ```
-title: "Membership Tiers & Benefits | JIBB — Japan India Business Bureau"
+title: "Membership Tiers & Benefits | JIBB - Japan India Business Bureau"
 description: "Join JIBB with 4 membership tiers..."
 type: website
 url: https://npo-jibb.org/[locale]/membership
-siteName: "JIBB — Japan India Business Bureau"
+siteName: "JIBB - Japan India Business Bureau"
 image: https://npo-jibb.org/images/og/membership-og.jpg (1200x630)
 locale: en_US / ja_JP with alternates
 ```
@@ -365,7 +365,7 @@ ja: https://npo-jibb.org/ja/membership
 
 #### SEO Elements Present
 ✅ **Title Tag** (Bilingual)
-- EN: "Business Services | JIBB — Japan India Business Bureau"
+- EN: "Business Services | JIBB - Japan India Business Bureau"
 - JA: "ビジネスサービス | JIBB — 日印ビジネス機構"
 
 ✅ **Meta Description** (155 chars - optimal)
@@ -377,7 +377,7 @@ ja: https://npo-jibb.org/ja/membership
 
 ✅ **OpenGraph Tags**
 ```
-title: "Business Services | JIBB — Japan India Business Bureau"
+title: "Business Services | JIBB - Japan India Business Bureau"
 description: "Eight integrated service lines..."
 type: website
 url: https://npo-jibb.org/[locale]/services
@@ -428,7 +428,7 @@ image: https://npo-jibb.org/images/og/services-og.jpg
 
 #### SEO Elements Present
 ✅ **Title Tag** (Bilingual)
-- EN: "About Us — Japan India Business Bureau"
+- EN: "About Us - Japan India Business Bureau"
 - JA: "JIBBについて | 日印ビジネス機構"
 
 ✅ **Meta Description** (158 chars - optimal)
@@ -489,7 +489,7 @@ image: https://npo-jibb.org/images/og/about-og.jpg
 
 #### SEO Elements Present
 ✅ **Title Tag** (Bilingual)
-- EN: "Upcoming Events & Seminars | JIBB — Japan India Business Bureau"
+- EN: "Upcoming Events & Seminars | JIBB - Japan India Business Bureau"
 - JA: "開催予定イベント・セミナー | JIBB — 日印ビジネス機構"
 
 ✅ **Meta Description** (160 chars - optimal)
@@ -572,7 +572,7 @@ image: https://npo-jibb.org/images/og/about-og.jpg
 ✅ **Canonical URL** & **Language Alternates**
 
 #### SEO Elements - Blog Listing Page
-✅ **Title:** "Blog | JIBB — Japan India Business Bureau"  
+✅ **Title:** "Blog | JIBB - Japan India Business Bureau"  
 ✅ **Description:** "Latest articles, updates and industry insights from JIBB"  
 ✅ **Keywords:** Target keywords for content discovery  
 ✅ **OpenGraph & Twitter** (configured)  

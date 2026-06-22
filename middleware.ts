@@ -12,6 +12,14 @@ export default async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const locale = pathname.split("/")[1] || "en";
 
+  // TEMPORARY: Redirect /ja routes to /en (Japanese translations being verified)
+  if (pathname.startsWith("/ja")) {
+    const enPath = pathname.replace(/^\/ja/, "/en");
+    const url = request.nextUrl.clone();
+    url.pathname = enPath;
+    return NextResponse.redirect(url);
+  }
+
   // Check if target is a dashboard subpage
   const isDashboard = pathname.match(/^\/(en|ja)\/dashboard(\/.*)?$/);
   // Check if target is login page

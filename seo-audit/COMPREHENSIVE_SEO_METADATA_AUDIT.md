@@ -32,7 +32,7 @@ All pages on the JIBB website now have comprehensive SEO metadata including:
 
 | Element | Status | Details |
 |---------|--------|---------|
-| **Title** | ✅ | JIBB — Japan India Business Bureau \| Bilateral Growth & Innovation (EN); JIBB — 日印ビジネス機構 \| 日本・インド間のビジネス協力と産業成長 (JA) |
+| **Title** | ✅ | JIBB - Japan India Business Bureau \| Bilateral Growth & Innovation (EN); JIBB — 日印ビジネス機構 \| 日本・インド間のビジネス協力と産業成長 (JA) |
 | **Meta Description** | ✅ | EN: "JIBB connects businesses, governments, and startups across Japan and India. We facilitate market entry, enable partnerships, and drive innovation collaboration for bilateral growth." JA version provided |
 | **Keywords** | ✅ | 15 keywords: Japan India business, bilateral collaboration, market entry, business matching, cross-border business, innovation collaboration, semiconductor, EV, + Japanese terms |
 | **Canonical URL** | ✅ | `${baseUrl}/${locale}` with EN/JA language alternates |
@@ -49,7 +49,7 @@ All pages on the JIBB website now have comprehensive SEO metadata including:
 
 | Element | Status | Details |
 |---------|--------|---------|
-| **Title** | ✅ | "About Us — Japan India Business Bureau" / "JIBBについて \| 日印ビジネス機構" |
+| **Title** | ✅ | "About Us - Japan India Business Bureau" / "JIBBについて \| 日印ビジネス機構" |
 | **Meta Description** | ✅ | Bilingual descriptions about JIBB's strategic role connecting businesses across Japan-India |
 | **Keywords** | ✅ | 10 keywords: JIBB about, Japan India Business Bureau, collaboration, bilateral organization, cross-border innovation, Tokyo Noida axis, + Japanese terms |
 | **Canonical URL** | ✅ | `${baseUrl}/${locale}/about` with alternates |
@@ -185,7 +185,7 @@ All pages on the JIBB website now have comprehensive SEO metadata including:
 
 | Element | Status | Details |
 |---------|--------|---------|
-| **Title** | ✅ | "Privacy Policy — Japan India Business Bureau" / "プライバシーポリシー \| 日印ビジネス機構" |
+| **Title** | ✅ | "Privacy Policy - Japan India Business Bureau" / "プライバシーポリシー \| 日印ビジネス機構" |
 | **Meta Description** | ✅ | Explains data collection and protection practices |
 | **Keywords** | ✅ | 14 keywords: privacy policy, data protection, GDPR, information security, cookie policy, + Japanese equivalents |
 | **Canonical URL** | ✅ | Configured with alternates |
@@ -202,7 +202,7 @@ All pages on the JIBB website now have comprehensive SEO metadata including:
 
 | Element | Status | Details |
 |---------|--------|---------|
-| **Title** | ✅ | "Terms of Service — Japan India Business Bureau" / "利用規約 \| 日印ビジネス機構" |
+| **Title** | ✅ | "Terms of Service - Japan India Business Bureau" / "利用規約 \| 日印ビジネス機構" |
 | **Meta Description** | ✅ | Explains user agreement and service terms |
 | **Keywords** | ✅ | 14 keywords: terms of service, user agreement, membership terms, legal agreement, + Japanese terms |
 | **Canonical URL** | ✅ | Configured with alternates |
@@ -269,7 +269,7 @@ All pages on the JIBB website now have comprehensive SEO metadata including:
 
 **Example:**
 ```
-EN: JIBB — Japan India Business Bureau | Bilateral Growth & Innovation
+EN: JIBB - Japan India Business Bureau | Bilateral Growth & Innovation
 JA: JIBB — 日印ビジネス機構 | 日本・インド間のビジネス協力と産業成長
 ```
 
@@ -546,7 +546,7 @@ PAGES GENERATED: 65/65 ✅
 - Bilingual keywords
 
 ### 2. Brand Consistency ✅
-- "JIBB — Japan India Business Bureau" in titles
+- "JIBB - Japan India Business Bureau" in titles
 - Consistent og:siteName
 - Bilingual taglines
 

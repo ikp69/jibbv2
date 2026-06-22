@@ -146,7 +146,7 @@
 │    ✓ Bilateral Offices (Tokyo & Noida)                │
 │    ✓ 100+ Organizations Connected                     │
 │                                                         │
-│         About JIBB — Japan India Business Bureau       │
+│         About JIBB - Japan India Business Bureau       │
 │                                                         │
 └─────────────────────────────────────────────────────────┘
 ```

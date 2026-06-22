@@ -19,7 +19,7 @@ export async function generateMetadata({
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
   const title = locale === "ja"
     ? "対象産業セクター | JIBB — 日印ビジネス機構"
-    : "Industry Sectors | JIBB — Japan India Business Bureau";
+    : "Industry Sectors | JIBB - Japan India Business Bureau";
   const description = locale === "ja"
     ? "半導体、EV、再生可能エネルギー、医薬品、インフラ、化学、電子機器、新興技術など、日印間の8つの重点産業セクター。"
     : "Eight focus industry sectors for Japan-India collaboration: Semiconductors, Electric Vehicles, Renewable Energy, Pharmaceuticals, Infrastructure, Chemicals, Electronics, and Emerging Technologies.";
@@ -44,7 +44,7 @@ export async function generateMetadata({
       description,
       type: "website",
       url: `${baseUrl}/${locale}/sectors`,
-      siteName: "JIBB — Japan India Business Bureau",
+      siteName: "JIBB - Japan India Business Bureau",
       locale: locale === "en" ? "en_US" : "ja_JP",
       alternateLocale: locale === "en" ? "ja_JP" : "en_US",
       images: [

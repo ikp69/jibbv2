@@ -8,6 +8,7 @@ import { Calendar, ArrowRight, Search, Tag, Sparkles } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 import PastEventsCollage from "@/components/sections/PastEventsCollage";
 import LinkedInCarousel from "@/components/sections/LinkedInCarousel";
+import { PressReleasesSection } from "@/components/sections/PressReleasesSection";
 import { createClient } from "@supabase/supabase-js";
 import type { Metadata } from "next";
 
@@ -31,7 +32,7 @@ export async function generateMetadata({
 
   const title = isJa
     ? "マーケットインサイト | 日印ビジネスビューロー"
-    : "Market Insights | JIBB — Japan India Business Bureau";
+    : "Media & Insights | JIBB - Japan India Business Bureau";
   const description = isJa
     ? "日印クロスボーダートレンド、政策変更、二国間市場に関する深い分析レポート。"
     : "In-depth analyses of cross-border trends, policy shifts, and bilateral market opportunities between Japan and India.";
@@ -182,13 +183,16 @@ export default async function InsightsPage({ params, searchParams }: PageProps) 
         {/* Table of Contents Quick Navigation */}
         <div className="section-container mt-6 pt-6 border-t border-border/20 flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           <span className="text-foreground/60">{locale === "ja" ? "セクション移動:" : "Jump to:"}</span>
-          <a href="#insights-archive" className="px-3.5 py-1.5 rounded-full bg-secondary text-jibb-indigo hover:bg-jibb-indigo hover:text-jibb-sakura transition-all duration-300">
+          <a href="#insights-archive" className="px-3.5 py-1.5 rounded-full bg-secondary text-jibb-indigo hover:bg-jibb-indigo hover:text-white transition-all duration-300">
             {locale === "ja" ? "レポート一覧" : "Insights Grid"}
           </a>
-          <a href="#linkedin-updates" className="px-3.5 py-1.5 rounded-full bg-secondary text-jibb-indigo hover:bg-jibb-indigo hover:text-jibb-sakura transition-all duration-300">
+          <a href="#press-releases" className="px-3.5 py-1.5 rounded-full bg-secondary text-jibb-indigo hover:bg-jibb-indigo hover:text-white transition-all duration-300">
+            {locale === "ja" ? "プレスリリース" : "Press Releases"}
+          </a>
+          <a href="#linkedin-updates" className="px-3.5 py-1.5 rounded-full bg-secondary text-jibb-indigo hover:bg-jibb-indigo hover:text-white transition-all duration-300">
             {locale === "ja" ? "LinkedIn投稿" : "LinkedIn Updates"}
           </a>
-          <a href="#past-events-gallery" className="px-3.5 py-1.5 rounded-full bg-secondary text-jibb-indigo hover:bg-jibb-indigo hover:text-jibb-sakura transition-all duration-300">
+          <a href="#past-events-gallery" className="px-3.5 py-1.5 rounded-full bg-secondary text-jibb-indigo hover:bg-jibb-indigo hover:text-white transition-all duration-300">
             {locale === "ja" ? "イベントギャラリー" : "Past Highlights"}
           </a>
         </div>
@@ -268,6 +272,8 @@ export default async function InsightsPage({ params, searchParams }: PageProps) 
           )}
         </div>
       </section>
+
+      <PressReleasesSection locale={locale} />
 
       <LinkedInCarousel posts={linkedinPosts} />
 

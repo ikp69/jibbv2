@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = isJa
     ? "リソース | 日印ビジネスビューロー"
-    : "Resources | JIBB — Japan India Business Bureau";
+    : "Resources | JIBB - Japan India Business Bureau";
   const description = isJa
     ? "JIBBのリソースライブラリ。市場インサイト、事例紹介、リーダーシップ論考、ニュースレターをご覧ください。"
     : "Access JIBB's knowledge library — market insights, case studies, thought leadership, and newsletters.";

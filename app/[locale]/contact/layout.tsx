@@ -12,7 +12,7 @@ export async function generateMetadata({
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
   const title = locale === "ja"
     ? "お問い合わせ | JIBB — 日印ビジネス機構"
-    : "Contact Us | JIBB — Japan India Business Bureau";
+    : "Contact Us | JIBB - Japan India Business Bureau";
   const description = locale === "ja"
     ? "日印ビジネス機構（JIBB）へのお問い合わせ。東京・Noida拠点からビジネス協力、市場参入支援、パートナーシップに関するご相談を承ります。"
     : "Contact JIBB for Japan-India business inquiries. Reach our Tokyo and Noida offices for bilateral collaboration, market entry support, and partnership opportunities.";
@@ -37,7 +37,7 @@ export async function generateMetadata({
       description,
       type: "website",
       url: `${baseUrl}/${locale}/contact`,
-      siteName: "JIBB — Japan India Business Bureau",
+      siteName: "JIBB - Japan India Business Bureau",
       locale: locale === "en" ? "en_US" : "ja_JP",
       alternateLocale: locale === "en" ? "ja_JP" : "en_US",
       images: [

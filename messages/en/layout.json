@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "JIBB — Japan India Business Bureau",
+    "title": "JIBB - Japan India Business Bureau",
     "description": "A cross-border innovation and industrial collaboration ecosystem connecting Japan and India through partnerships, trade, manufacturing, and technology."
   },
   "nav": {
@@ -73,8 +73,8 @@
     "blogDesc": "Latest articles, updates and industry insights",
     "media": "Media & Press",
     "mediaDesc": "Press releases and media resources",
-    "caseStudies": "Case Studies",
-    "caseStudiesDesc": "Real success stories from JIBB members",
+    "caseStudies": "Blog",
+    "caseStudiesDesc": "Latest articles, updates and industry insights",
     "newsletter": "Newsletter",
     "newsletterDesc": "Weekly news directly to your inbox",
     "leadership": "Thought Leadership",

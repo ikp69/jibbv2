@@ -28,7 +28,7 @@ export async function generateMetadata({
 
   const title = isJa
     ? "ブログ | 日印ビジネスビューロー"
-    : "Blog | JIBB — Japan India Business Bureau";
+    : "Blog | JIBB - Japan India Business Bureau";
   const description = isJa
     ? "JIBBの最新記事、お知らせ、業界インサイトをご覧ください。"
     : "Latest articles, updates and industry insights from Japan India Business Bureau.";
@@ -84,7 +84,7 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
     "@type": "CollectionPage",
     "@id": `${SITE_URL}/${locale}/resources/blog`,
     name: locale === "ja" ? "ブログ | 日印ビジネスビューロー" : "Blog | JIBB",
-    description: locale === "ja" 
+    description: locale === "ja"
       ? "JIBBの最新記事、お知らせ、業界インサイトをご覧ください。"
       : "Latest articles, updates and industry insights from Japan India Business Bureau.",
     url: `${SITE_URL}/${locale}/resources/blog`,
@@ -113,19 +113,19 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
       {/* ============================================================
           CINEMATIC BANNER
           ============================================================ */}
-      <PageHero className="py-20" bgText="CASES">
+      <PageHero className="py-20" bgText="BLOG">
         <div className="section-container relative z-10 text-center max-w-4xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-white/90">
-              {locale === "ja" ? "ケーススタディ" : "Case Studies"}
+              {locale === "ja" ? "ケーススタディ" : "Blog"}
             </span>
           </div>
 
           <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight">
             {t("resourcesMenu.caseStudies")}
           </h1>
-          
+
           <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
             {t("resourcesMenu.caseStudiesDesc")}
           </p>
@@ -138,9 +138,9 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
       <section className="py-8 bg-card border-b border-border/40">
         <div className="section-container flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div className="text-sm text-muted-foreground font-medium">
-            {locale === "ja" 
-              ? `${filteredCaseStudies.length} 件の成功事例を表示中` 
-              : `Showing ${filteredCaseStudies.length} success stories`}
+            {locale === "ja"
+              ? `${filteredCaseStudies.length} 件の成功事例を表示中`
+              : `Showing ${filteredCaseStudies.length} articles`}
           </div>
 
           {/* Search Form */}
@@ -165,7 +165,7 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
           {filteredCaseStudies.length === 0 ? (
             <div className="text-center py-20 bg-card rounded-3xl border border-border/80 shadow-jibb p-8 space-y-4">
               <p className="text-lg text-muted-foreground">
-                {locale === "ja" ? "事例が見つかりませんでした。" : "No case studies found matching your criteria."}
+                {locale === "ja" ? "事例が見つかりませんでした。" : "No blog found matching your criteria."}
               </p>
               <Link href="/resources/blog">
                 <Button variant="outline" className="font-semibold">
@@ -176,7 +176,7 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
               {filteredCaseStudies.map((post) => (
-                <article 
+                <article
                   key={post.slug}
                   className="group relative flex flex-col bg-card border border-border/80 shadow-jibb hover:shadow-jibb-lg rounded-3xl overflow-hidden transition-all duration-300"
                 >
@@ -189,7 +189,7 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    
+
                     {/* Corridor Badge */}
                     {post.corridor && (
                       <div className="absolute bottom-6 left-6 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-semibold">

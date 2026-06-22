@@ -355,7 +355,8 @@ function MobileDrawer({
             {/* Bottom Actions */}
             <div className="p-4 border-t border-border bg-muted/30">
   <div className="flex flex-col items-center gap-3">
-    <LanguageSwitcher triggerClassName="justify-center bg-card border border-border" />
+    {/* Language Switcher — TEMPORARILY HIDDEN (Japanese translations being verified) */}
+    {/* <LanguageSwitcher triggerClassName="justify-center bg-card border border-border" /> */}
 
     {/* Member Login — temporarily hidden per management */}
     {/* <Link href="/auth/login" onClick={onClose}>
@@ -536,14 +537,14 @@ export function Navbar() {
             {/* Right Side Actions */}
             <div className="flex items-center gap-2 shrink-0">
 
-              {/* Language Selector (Desktop) */}
-              <div className="hidden lg:block">
+              {/* Language Selector (Desktop) — TEMPORARILY HIDDEN (Japanese translations being verified) */}
+              {/* <div className="hidden lg:block">
                 <LanguageSwitcher
                   triggerClassName={cn(
                     "text-foreground hover:bg-muted"
                   )}
                 />
-              </div>
+              </div> */}
 
               {/* Login Button (Desktop) — temporarily hidden per management */}
               {/* <Link href="/auth/login" className="hidden lg:block">

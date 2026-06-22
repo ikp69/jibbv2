@@ -10,9 +10,9 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "membershipPage" });
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
-  const title = locale === "ja" 
-    ? "会員プラン・特典 | JIBB — 日印ビジネス機構" 
-    : "Membership Tiers & Benefits | JIBB — Japan India Business Bureau";
+  const title = locale === "ja"
+    ? "会員プラン・特典 | JIBB — 日印ビジネス機構"
+    : "Membership Tiers & Benefits | JIBB - Japan India Business Bureau";
   const description = locale === "ja"
     ? "JIBBの4つの会員プラン（アソシエイト・シルバー・ゴールド・プラチナ）で日印ビジネスネットワークに参加。ビジネスマッチング割引、トレーニングプログラム、日本代表団アクセスなど特典多数。"
     : "Join JIBB with Associate, Silver, Gold, or Platinum membership to access Japan-India business network. Enjoy exclusive benefits including business matching discounts, training programs, and Japan delegation access.";
@@ -37,7 +37,7 @@ export async function generateMetadata({
       description,
       type: "website",
       url: `${baseUrl}/${locale}/membership`,
-      siteName: "JIBB — Japan India Business Bureau",
+      siteName: "JIBB - Japan India Business Bureau",
       locale: locale === "en" ? "en_US" : "ja_JP",
       alternateLocale: locale === "en" ? "ja_JP" : "en_US",
       images: [

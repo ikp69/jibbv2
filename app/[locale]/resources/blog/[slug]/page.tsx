@@ -111,7 +111,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
     description: post.description,
     articleBody: post.contentHtml ? post.contentHtml.replace(/<[^>]*>/g, '') : "",
     keywords: post.tags.join(", "),
-    articleSection: locale === "ja" ? "ケーススタディ" : "Case Studies",
+    articleSection: locale === "ja" ? "ケーススタディ" : "Blog",
     inLanguage: locale === "ja" ? "ja-JP" : "en-US",
     isAccessibleForFree: true,
     ...(post.client && { 
