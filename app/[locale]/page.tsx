@@ -213,6 +213,9 @@ export default async function HomePage({
 
   return (
     <main className="flex-1">
+      {/* H1 Tag for SEO - Homepage Title */}
+      <h1 className="sr-only">Japan India Business Bureau | 日印ビジネス局</h1>
+
       {/* Schema.org JSON-LD for Organization */}
       <script
         type="application/ld+json"

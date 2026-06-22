@@ -82,175 +82,74 @@ export function HighvalueEcosystem() {
     },
   };
 
+  // Always render desktop grid to prevent hydration mismatch
+  // Mobile carousel will be handled via CSS media queries
+  const renderPillars = () => (
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      className="grid grid-cols-3 lg:grid-cols-5 gap-4 items-stretch mb-6 overflow-x-auto md:overflow-visible"
+    >
+      {pillars.map((pillar) => (
+        <motion.div
+          key={pillar.id}
+          variants={pillarVariants}
+          whileHover={{ y: -6, transition: { duration: 0.2 } }}
+          className="relative flex flex-col pt-12 select-none group"
+        >
+          {/* Left and Right Borders */}
+          <div className="absolute bottom-6 top-12 border-l-2 border-r-2 border-[#102a43] pointer-events-none left-3 right-3" />
+
+          {/* Broken Top Border */}
+          <div className="absolute top-12 left-3 w-[calc(50%-40px)] h-[2px] bg-[#102a43]" />
+          <div className="absolute top-12 right-3 w-[calc(50%-40px)] h-[2px] bg-[#102a43]" />
+
+          {/* Centered Icon in the gap */}
+          <div className="absolute top-12 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-2 z-10 flex items-center justify-center">
+            {pillar.icon}
+          </div>
+
+          {/* Main Column Body */}
+          <div className="flex-1 bg-white px-5 pt-8 pb-4 text-center flex flex-col justify-center min-h-[260px]">
+            {/* Orange Horizontal Line inside the body below the icon gap */}
+            <div className="w-20 h-1.5 bg-[#e25c22] mx-auto mb-6 rounded-full" />
+
+            <h4 className="text-[14px] md:text-[15px] font-bold text-[#e25c22] leading-snug tracking-tight mb-2 uppercase">
+              {pillar.title}
+            </h4>
+            <p className="text-[12px] md:text-[13px] text-[#e25c22] opacity-90 leading-relaxed font-semibold">
+              {pillar.subtext}
+            </p>
+          </div>
+
+          {/* Stacked Pedestal Base Blocks */}
+          <div className="relative z-10 w-full mt-auto">
+            {/* Horizontal line above steps */}
+            {/* <div className="h-[2px] bg-[#102a43] mx-3" /> */}
+            {/* Base Step 1 - Top step (narrower) */}
+            <div className="h-4 border-l-2 border-r-2 border-t-2 border-[#102a43] bg-white mx-1" />
+            {/* Base Step 2 - Bottom step (wider, extends more) */}
+            <div className="h-4 border-l-2 border-r-2 border-t-2 border-b-2 border-[#102a43] bg-white mx-0" />
+          </div>
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+
   return (
     <section className="py-20 bg-white border-t border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Main Heading */}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight mb-2">
+            Strategic Convergence Across High-Value Ecosystems
+          </h2>
+        </div>
 
-        {/* Dynamic Column Grid - Grid on desktop, Carousel on mobile */}
-        {isHydrated ? (
-          isMobile ? (
-            // Mobile Carousel
-            <div className="overflow-x-auto scrollbar-hide mb-6 -mx-4 px-4">
-              <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                className="flex gap-4 pb-4"
-              >
-                {pillars.map((pillar) => (
-                  <motion.div
-                    key={pillar.id}
-                    variants={pillarVariants}
-                    whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                    className="relative flex flex-col pt-12 select-none group flex-shrink-0 w-48"
-                  >
-                    {/* Left and Right Borders */}
-                    <div className="absolute bottom-6 top-12 border-l-2 border-r-2 border-[#102a43] pointer-events-none left-3 right-3" />
-
-                    {/* Broken Top Border */}
-                    <div className="absolute top-12 left-3 w-[calc(50%-40px)] h-[2px] bg-[#102a43]" />
-                    <div className="absolute top-12 right-3 w-[calc(50%-40px)] h-[2px] bg-[#102a43]" />
-
-                    {/* Centered Icon in the gap */}
-                    <div className="absolute top-12 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-2 z-10 flex items-center justify-center">
-                      {pillar.icon}
-                    </div>
-
-                    {/* Main Column Body */}
-                    <div className="flex-1 bg-white px-5 pt-8 pb-4 text-center flex flex-col justify-center min-h-[260px]">
-                      {/* Orange Horizontal Line inside the body below the icon gap */}
-                      <div className="w-20 h-1.5 bg-[#e25c22] mx-auto mb-6 rounded-full" />
-
-                      <h4 className="text-[14px] md:text-[15px] font-bold text-[#e25c22] leading-snug tracking-tight mb-2 uppercase">
-                        {pillar.title}
-                      </h4>
-                      <p className="text-[12px] md:text-[13px] text-[#e25c22] opacity-90 leading-relaxed font-semibold">
-                        {pillar.subtext}
-                      </p>
-                    </div>
-
-                    {/* Stacked Pedestal Base Blocks */}
-                    <div className="relative z-10 w-full mt-auto">
-                      {/* Horizontal line above steps */}
-                      <div className="h-[2px] bg-[#102a43] mx-3" />
-                      {/* Base Step 1 - Top step (narrower) */}
-                      <div className="h-4 border-l-2 border-r-2 border-[#102a43] bg-white mx-3" />
-                      {/* Base Step 2 - Bottom step (wider, extends more) */}
-                      <div className="h-4 border-l-2 border-r-2 border-t-2 border-b-2 border-[#102a43] bg-white mx-0" />
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          ) : (
-            // Desktop Grid
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              className="grid grid-cols-3 lg:grid-cols-5 gap-4 items-stretch mb-6"
-            >
-              {pillars.map((pillar) => (
-                <motion.div
-                  key={pillar.id}
-                  variants={pillarVariants}
-                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                  className="relative flex flex-col pt-12 select-none group"
-                >
-                  {/* Left and Right Borders */}
-                  <div className="absolute bottom-6 top-12 border-l-2 border-r-2 border-[#102a43] pointer-events-none left-3 right-3" />
-
-                  {/* Broken Top Border */}
-                  <div className="absolute top-12 left-3 w-[calc(50%-40px)] h-[2px] bg-[#102a43]" />
-                  <div className="absolute top-12 right-3 w-[calc(50%-40px)] h-[2px] bg-[#102a43]" />
-
-                  {/* Centered Icon in the gap */}
-                  <div className="absolute top-12 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-2 z-10 flex items-center justify-center">
-                    {pillar.icon}
-                  </div>
-
-                  {/* Main Column Body */}
-                  <div className="flex-1 bg-white px-5 pt-8 pb-4 text-center flex flex-col justify-center min-h-[260px]">
-                    {/* Orange Horizontal Line inside the body below the icon gap */}
-                    <div className="w-20 h-1.5 bg-[#e25c22] mx-auto mb-6 rounded-full" />
-
-                    <h4 className="text-[14px] md:text-[15px] font-bold text-[#e25c22] leading-snug tracking-tight mb-2 uppercase">
-                      {pillar.title}
-                    </h4>
-                    <p className="text-[12px] md:text-[13px] text-[#e25c22] opacity-90 leading-relaxed font-semibold">
-                      {pillar.subtext}
-                    </p>
-                  </div>
-
-                  {/* Stacked Pedestal Base Blocks */}
-                  <div className="relative z-10 w-full mt-auto">
-                    {/* Horizontal line above steps */}
-                    {/* <div className="h-[2px] bg-[#102a43] mx-3" /> */}
-                    {/* Base Step 1 - Top step (narrower) */}
-                    <div className="h-4 border-l-2 border-r-2 border-t-2 border-[#102a43] bg-white mx-1" />
-                    {/* Base Step 2 - Bottom step (wider, extends more) */}
-                    <div className="h-4 border-l-2 border-r-2 border-t-2 border-b-2 border-[#102a43] bg-white mx-0" />
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          )
-        ) : (
-          // Server-side render - default to desktop for consistency
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            className="grid grid-cols-3 lg:grid-cols-5 gap-4 items-stretch mb-6"
-          >
-            {pillars.map((pillar) => (
-              <motion.div
-                key={pillar.id}
-                variants={pillarVariants}
-                whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                className="relative flex flex-col pt-12 select-none group"
-              >
-                {/* Left and Right Borders */}
-                <div className="absolute bottom-6 top-12 border-l-2 border-r-2 border-[#102a43] pointer-events-none left-3 right-3" />
-
-                {/* Broken Top Border */}
-                <div className="absolute top-12 left-3 w-[calc(50%-40px)] h-[2px] bg-[#102a43]" />
-                <div className="absolute top-12 right-3 w-[calc(50%-40px)] h-[2px] bg-[#102a43]" />
-
-                {/* Centered Icon in the gap */}
-                <div className="absolute top-12 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-2 z-10 flex items-center justify-center">
-                  {pillar.icon}
-                </div>
-
-                {/* Main Column Body */}
-                <div className="flex-1 bg-white px-5 pt-8 pb-4 text-center flex flex-col justify-center min-h-[260px]">
-                  {/* Orange Horizontal Line inside the body below the icon gap */}
-                  <div className="w-20 h-1.5 bg-[#e25c22] mx-auto mb-6 rounded-full" />
-
-                  <h4 className="text-[14px] md:text-[15px] font-bold text-[#e25c22] leading-snug tracking-tight mb-2 uppercase">
-                    {pillar.title}
-                  </h4>
-                  <p className="text-[12px] md:text-[13px] text-[#e25c22] opacity-90 leading-relaxed font-semibold">
-                    {pillar.subtext}
-                  </p>
-                </div>
-
-                {/* Stacked Pedestal Base Blocks */}
-                <div className="relative z-10 w-full mt-auto">
-                  {/* Horizontal line above steps */}
-                  {/* <div className="h-[2px] bg-[#102a43] mx-3" /> */}
-                  {/* Base Step 1 - Top step (narrower) */}
-                  <div className="h-4 border-l-2 border-r-2 border-t-2 border-[#102a43] bg-white mx-1" />
-                  {/* Base Step 2 - Bottom step (wider, extends more) */}
-                  <div className="h-4 border-l-2 border-r-2 border-t-2 border-b-2 border-[#102a43] bg-white mx-0" />
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
+        {/* Dynamic Column Grid */}
+        {renderPillars()}
 
         {/* Navy Pedestal Base Banner */}
         <motion.div

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar, ArrowLeft, MapPin, Building2, Trophy, Sparkles } from "lucide-react";
 import type { Metadata } from "next";
 import { TableOfContents } from "@/components/ui/TableOfContents";
+import { AuthorBox } from "@/components/ui/AuthorBox";
 
 const SITE_URL = "https://npo-jibb.org";
 const PUBLISHER = {
@@ -196,61 +197,29 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
             <div className="space-y-6 lg:sticky lg:top-24 self-start">
               <TableOfContents />
 
-              <div className="rounded-3xl p-6 bg-card border border-border/80 shadow-jibb relative overflow-hidden space-y-6">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
-                
-                <h3 className="text-lg font-bold text-foreground tracking-tight border-b border-border/50 pb-3">
-                  {locale === "ja" ? "プロジェクト概要" : "Project Summary"}
-                </h3>
+              {post.takeaways && post.takeaways.length > 0 && (
+                <div className="rounded-3xl p-6 bg-card border border-border/80 shadow-jibb relative overflow-hidden space-y-4">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
+                  
+                  <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider border-b border-border/50 pb-3">
+                    {locale === "ja" ? "主要な要点" : "Key Takeaways"}
+                  </h3>
 
-                <div className="space-y-5">
-                  {post.client && (
-                    <div className="flex items-start gap-3">
-                      <Building2 className="size-5 text-jibb-orange shrink-0 mt-0.5" />
-                      <div className="space-y-0.5">
-                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-                          {locale === "ja" ? "クライアント" : "Client"}
-                        </span>
-                        <span className="text-sm font-semibold text-foreground">{post.client}</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {post.corridor && (
-                    <div className="flex items-start gap-3">
-                      <MapPin className="size-5 text-jibb-orange shrink-0 mt-0.5" />
-                      <div className="space-y-0.5">
-                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-                          {locale === "ja" ? "活動エリア" : "Corridor Axis"}
-                        </span>
-                        <span className="text-sm font-semibold text-foreground">{post.corridor}</span>
-                      </div>
-                    </div>
-                  )}
-
-                    <div className="flex items-start gap-3">
-                      <Calendar className="size-5 text-jibb-orange shrink-0 mt-0.5" />
-                      <div className="space-y-0.5">
-                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-                          {locale === "ja" ? "公開日" : "Published"}
-                        </span>
-                        <time dateTime={post.date} className="text-sm font-semibold text-foreground">{post.date}</time>
-                    </div>
-                  </div>
-
-                  {post.impact && (
-                    <div className="flex items-start gap-3 pt-4 border-t border-border/50">
-                      <Trophy className="size-5 text-jibb-orange shrink-0 mt-0.5" />
-                      <div className="space-y-0.5">
-                        <span className="text-[10px] font-bold text-primary uppercase tracking-wider block">
-                          {locale === "ja" ? "主要成果" : "Key Impact"}
-                        </span>
-                        <span className="text-sm font-bold text-foreground leading-snug">{post.impact}</span>
-                      </div>
-                    </div>
-                  )}
+                  <ul className="space-y-3.5">
+                    {post.takeaways.map((takeaway, idx) => (
+                      <li key={idx} className="flex gap-2.5 text-xs text-muted-foreground leading-relaxed">
+                        <span className="text-jibb-orange font-bold mt-0.5">•</span>
+                        <span>{takeaway}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
+              )}
+
+              {/* Author Box - EEAT Enhancement */}
+              {post.author && (
+                <AuthorBox author={post.author} isJa={locale === "ja"} />
+              )}
 
               {/* Sidebar CTA */}
               <div className="rounded-3xl p-6 bg-jibb-gradient text-white space-y-4 shadow-jibb-lg">

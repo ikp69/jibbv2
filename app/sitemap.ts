@@ -4,99 +4,92 @@ import { getAllSlugs, PostType } from "@/lib/markdown";
 const SITE_URL = "https://npo-jibb.org";
 const LOCALES = ["en", "ja"] as const;
 
-// Page priority mapping (0.0 - 1.0)
-// Higher values = more important for crawling/indexing
-const PAGE_PRIORITY: Record<string, number> = {
-  "/": 1.0, // Homepage - highest priority
-  "/about": 0.9, // About - important for context
-  "/services": 0.95, // Services - core business
-  "/innovation-hub": 0.85, // Innovation hub - important offering
-  "/sectors": 0.85, // Sectors - business focus
-  "/membership": 0.8, // Membership - business development
-  "/events": 0.7, // Events - frequently updated
-  "/careers": 0.75, // Careers - important for recruitment
-  "/contact": 0.8, // Contact - conversion page
-  "/resources/blog": 0.8, // Blog listing
-  "/resources/insights": 0.75, // Insights listing
-  "/resources/thought-leadership": 0.75, // Thought leadership listing
-  "/privacy": 0.4, // Legal - lower priority
-  "/terms": 0.4, // Legal - lower priority
+// Page priority and change frequency configuration
+interface PageConfig {
+  priority: number;
+  changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"];
+}
+
+const PAGE_CONFIG: Record<string, PageConfig> = {
+  // Homepage & Core Pages
+  "/": { priority: 1.0, changeFrequency: "weekly" },
+
+  // Primary Business Pages
+  "/about": { priority: 0.95, changeFrequency: "monthly" },
+  "/about/leadership": { priority: 0.9, changeFrequency: "monthly" },
+
+  // Services & Sectors
+  "/services": { priority: 0.95, changeFrequency: "monthly" },
+  "/sectors": { priority: 0.9, changeFrequency: "monthly" },
+
+  // Membership & Operations
+  "/membership": { priority: 0.85, changeFrequency: "monthly" },
+  "/innovation-hub": { priority: 0.85, changeFrequency: "weekly" },
+
+  // Events & Careers
+  "/events": { priority: 0.8, changeFrequency: "weekly" },
+  "/careers": { priority: 0.8, changeFrequency: "weekly" },
+
+  // Resources Hub
+  "/resources": { priority: 0.8, changeFrequency: "weekly" },
+  "/resources/blog": { priority: 0.8, changeFrequency: "weekly" },
+  "/resources/insights": { priority: 0.75, changeFrequency: "weekly" },
+  "/resources/newsletter": { priority: 0.7, changeFrequency: "weekly" },
+  "/resources/thought-leadership": { priority: 0.8, changeFrequency: "monthly" },
+
+  // Contact & Engagement
+  "/contact": { priority: 0.75, changeFrequency: "yearly" },
+
+  // Legal & Policy
+  "/privacy": { priority: 0.4, changeFrequency: "yearly" },
+  "/terms": { priority: 0.4, changeFrequency: "yearly" },
 };
 
-// Change frequency mapping (how often content typically changes)
-// Valid values: always | never | hourly | daily | weekly | monthly | yearly
-const PAGE_CHANGEFREQ: Record<string, MetadataRoute.Sitemap[number]["changeFrequency"]> = {
-  "/": "weekly", // Homepage changes weekly (news, featured content)
-  "/about": "monthly", // About page rarely changes
-  "/services": "monthly", // Services change infrequently (monthly is closest to quarterly)
-  "/innovation-hub": "weekly", // Hub content updates regularly
-  "/sectors": "monthly", // Sectors definition change infrequently (monthly is closest to quarterly)
-  "/membership": "monthly", // Membership tiers may change
-  "/events": "weekly", // Events frequently updated
-  "/careers": "weekly", // Job listings frequently updated
-  "/contact": "yearly", // Contact rarely changes
-  "/resources/blog": "weekly", // Blog frequently updated
-  "/resources/insights": "weekly", // Insights frequently updated
-  "/resources/thought-leadership": "monthly", // Thought leadership less frequent
-  "/privacy": "yearly", // Legal pages rarely change
-  "/terms": "yearly", // Legal pages rarely change
+// Content type configuration
+const CONTENT_CONFIG: Record<PostType, { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"] }> = {
+  "thought-leadership": {
+    path: "thought-leadership",
+    priority: 0.8,
+    changeFrequency: "monthly",
+  },
+  blog: {
+    path: "blog",
+    priority: 0.75,
+    changeFrequency: "weekly",
+  },
+  insights: {
+    path: "insights",
+    priority: 0.7,
+    changeFrequency: "weekly",
+  },
 };
 
-// Static pages that always exist
-const STATIC_PAGES = [
-  "/",
-  "/about",
-  "/services",
-  "/innovation-hub",
-  "/sectors",
-  "/membership",
-  "/events",
-  "/contact",
-  "/careers",
-  "/privacy",
-  "/terms",
-  "/resources/blog",
-  "/resources/insights",
-  "/resources/thought-leadership",
-];
-
-// Content types with markdown files
-const CONTENT_TYPES: PostType[] = [
-  "blog",
-  "insights",
-  "thought-leadership",
-];
-
-// Maps PostType to its URL segment
-const TYPE_TO_PATH: Record<PostType, string> = {
-  blog: "blog",
-  insights: "insights",
-  "thought-leadership": "thought-leadership",
-};
+// Static pages list
+const STATIC_PAGES = Object.keys(PAGE_CONFIG);
 
 /**
- * Sitemap Generation for JIBB
- * 
- * Generates XML sitemap with:
- * - Dynamic priority values based on page importance
- * - Change frequency optimized per page type
- * - Last modified dates (current date for dynamic content)
- * - Hreflang alternates for bilingual support (EN/JA)
- * - Up to 50,000 URLs per file (split if needed)
- * 
- * Supports Google's sitemap protocol 0.9
- * Improves crawl efficiency and indexing
+ * XML Sitemap Generator for JIBB
+ *
+ * Features:
+ * - Hierarchical page organization with semantic prioritization
+ * - Optimized crawl budget allocation
+ * - Bilingual support (EN/JA) with hreflang alternates
+ * - Dynamic content pages (blog, insights, thought-leadership)
+ * - Last modified timestamps for recency signals
+ * - Proper XML structure for all search engines
+ *
+ * Complies with XML Sitemap Protocol 0.9
+ * Improves SEO crawl efficiency and indexing
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
-  const lastModified = new Date();
+  const now = new Date();
 
-  // 1. Root redirect (locale-less root)
-  // Serves as entry point for all locales
+  // 1. Homepage (canonical entry with hreflang alternates)
   entries.push({
     url: SITE_URL,
-    lastModified,
-    changeFrequency: "weekly",
+    lastModified: now,
+    changeFrequency: "weekly" as const,
     priority: 1.0,
     alternates: {
       languages: Object.fromEntries(
@@ -105,16 +98,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   });
 
-  // 2. Static pages — one entry per locale with optimized priority/changefreq
-  for (const page of STATIC_PAGES) {
-    const priority = PAGE_PRIORITY[page] || 0.5; // Default 0.5 if not specified
-    const changeFrequency = PAGE_CHANGEFREQ[page] || "monthly"; // Default monthly if not specified
+  // 2. Static pages (all except homepage which is handled above)
+  for (const page of STATIC_PAGES.filter((p) => p !== "/")) {
+    const config = PAGE_CONFIG[page] || { priority: 0.5, changeFrequency: "monthly" as const };
 
     entries.push({
       url: `${SITE_URL}/en${page}`,
-      lastModified,
-      changeFrequency,
-      priority,
+      lastModified: now,
+      changeFrequency: config.changeFrequency,
+      priority: config.priority,
       alternates: {
         languages: Object.fromEntries(
           LOCALES.map((locale) => [locale, `${SITE_URL}/${locale}${page}`])
@@ -123,27 +115,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
-  // 3. Dynamic content pages — one entry per slug × locale
-  // Article/blog pages with editorial content
-  for (const type of CONTENT_TYPES) {
-    const slugs = await getAllSlugs(type);
-    const pathPrefix = TYPE_TO_PATH[type];
-    
-    // Dynamic content priority is slightly lower than main pages
-    const contentPriority = 0.75;
-    const contentChangeFreq: MetadataRoute.Sitemap[number]["changeFrequency"] = "monthly";
+  // 3. Dynamic content pages (blog, insights, thought-leadership)
+  for (const [contentType, config] of Object.entries(CONTENT_CONFIG)) {
+    const slugs = await getAllSlugs(contentType as PostType);
 
     for (const slug of slugs) {
       entries.push({
-        url: `${SITE_URL}/en/resources/${pathPrefix}/${slug}`,
-        lastModified,
-        changeFrequency: contentChangeFreq,
-        priority: contentPriority,
+        url: `${SITE_URL}/en/resources/${config.path}/${slug}`,
+        lastModified: now,
+        changeFrequency: config.changeFrequency,
+        priority: config.priority,
         alternates: {
           languages: Object.fromEntries(
             LOCALES.map((locale) => [
               locale,
-              `${SITE_URL}/${locale}/resources/${pathPrefix}/${slug}`,
+              `${SITE_URL}/${locale}/resources/${config.path}/${slug}`,
             ])
           ),
         },
@@ -151,6 +137,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Return sitemap entries (Next.js auto-generates XML)
   return entries;
 }

@@ -2,9 +2,11 @@ import { notFound } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/src/i18n/navigation";
 import { getPostBySlug, getAllSlugs } from "@/lib/markdown";
+import { getAuthorLinkedIn } from "@/lib/authors";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, User, ArrowLeft, Mail, Sparkles, Quote } from "lucide-react";
+import { AuthorBox } from "@/components/ui/AuthorBox";
+import { Calendar, User, ArrowLeft, Sparkles, Quote } from "lucide-react";
 import { TableOfContents } from "@/components/ui/TableOfContents";
 import type { Metadata } from "next";
 
@@ -101,7 +103,11 @@ export default async function LeadershipThoughtDetailPage({ params }: PageProps)
     image: post.image || undefined,
     datePublished: post.date,
     dateModified: post.date,
-    author: { "@type": "Person", name: post.author },
+    author: {
+      "@type": "Person",
+      name: post.author,
+      url: getAuthorLinkedIn(post.author) || undefined,
+    },
     publisher: PUBLISHER,
     mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
     keywords: post.tags.join(", "),
@@ -160,67 +166,98 @@ export default async function LeadershipThoughtDetailPage({ params }: PageProps)
               </div>
               <div className="flex items-center gap-1.5">
                 <User className="size-4 text-jibb-orange" />
-                <span>{post.author}</span>
+                {getAuthorLinkedIn(post.author) ? (
+                  <a
+                    href={getAuthorLinkedIn(post.author) || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-jibb-orange hover:underline transition-all"
+                  >
+                    {post.author}
+                  </a>
+                ) : (
+                  <span className="font-semibold">{post.author}</span>
+                )}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CONTENT */}
+      {/* CONTENT WITH SIDEBAR */}
       <section className="py-12 bg-card">
-        <div className="section-container space-y-12">
-          {/* Featured Image */}
-          <div className="relative rounded-3xl overflow-hidden max-h-[70vh] flex justify-center bg-transparent">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={post.image} alt={post.title} className="w-full h-auto object-contain max-h-[70vh] rounded-3xl" />
-          </div>
+        <div className="section-container max-w-5xl">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            {/* Main Content Area */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Featured Image */}
+              <div className="relative rounded-3xl overflow-hidden max-h-[70vh] flex justify-center bg-transparent">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="w-full h-auto object-contain max-h-[70vh] rounded-3xl"
+                />
+              </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-            {/* Table of Contents Sidebar */}
-            <aside className="lg:col-span-3 lg:sticky lg:top-24 hidden lg:block self-start">
+              {/* Article content */}
+              <article
+                className="jibb-prose"
+                dangerouslySetInnerHTML={{ __html: post.contentHtml }}
+              />
+            </div>
+
+            {/* Sidebar Container */}
+            <div className="space-y-6 lg:sticky lg:top-24 self-start">
               <TableOfContents />
-            </aside>
 
-            {/* Article content */}
-            <div className="lg:col-span-9">
-              <article className="jibb-prose mx-auto" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+              {/* Key Takeaways */}
+              {post.takeaways && post.takeaways.length > 0 && (
+                <div className="rounded-3xl p-6 bg-card border border-border/80 shadow-jibb relative overflow-hidden space-y-4">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
+                  
+                  <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider border-b border-border/50 pb-3">
+                    {isJa ? "主要な要点" : "Key Takeaways"}
+                  </h3>
+
+                  <ul className="space-y-3.5">
+                    {post.takeaways.map((takeaway, idx) => (
+                      <li key={idx} className="flex gap-2.5 text-xs text-muted-foreground leading-relaxed">
+                        <span className="text-jibb-orange font-bold mt-0.5">•</span>
+                        <span>{takeaway}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Author Box - EEAT Enhancement */}
+              <AuthorBox author={post.author} isJa={isJa} />
+
+              {/* Contact Box */}
+              <div className="rounded-3xl p-6 bg-jibb-gradient text-white space-y-4 shadow-jibb-lg">
+                <h4 className="text-md font-bold tracking-tight">
+                  {isJa ? "リーダーシップと相談" : "Engage Leadership"}
+                </h4>
+                <p className="text-xs text-white/80 leading-relaxed">
+                  {isJa
+                    ? "対話セッション、講演依頼、アドバイザリーについてお気軽にお問い合わせください。"
+                    : "Speaking engagements, dialogue sessions, or advisory inquiries."}
+                </p>
+                <Link href="/contact" className="block w-full">
+                  <Button variant="accent" className="w-full font-bold text-xs gap-1.5 shadow-md">
+                    {isJa ? "お問い合わせ" : "Contact"} <Sparkles className="size-3.5" />
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
 
-          {/* Contact Box */}
-          <div className="rounded-3xl p-8 bg-jibb-gradient-subtle border border-border/80 shadow-jibb text-center max-w-2xl mx-auto space-y-6">
-            <div className="p-3 bg-primary/5 text-primary rounded-full inline-block">
-              <Mail className="size-6 text-jibb-orange" />
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-xl font-bold text-foreground">
-                {isJa ? "リーダーシップとの対話" : "Engage with Leadership"}
-              </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {isJa
-                  ? "JIBBの共同創設者や経営陣との対話セッション、講演依頼は以下よりお問い合わせください。"
-                  : "For speaking engagements, dialogue sessions, or advisory inquiries with JIBB's leadership team, reach out below."}
-              </p>
-            </div>
-            <div>
-              <a href="mailto:vc@npo-jibb.org">
-                <Button variant="accent" className="font-bold gap-1.5 shadow-md">
-                  {isJa ? "リーダーシップへメール" : "Email Leadership"} <Sparkles className="size-4" />
-                </Button>
-              </a>
-            </div>
-          </div>
-
-          <div className="border-t border-border/80 pt-8 flex items-center justify-between">
+          {/* Footer Back Button */}
+          <div className="border-t border-border/80 mt-12 pt-8">
             <Link href="/resources/thought-leadership">
               <Button variant="outline" className="font-semibold gap-1.5">
-                <ArrowLeft className="size-4" /> {isJa ? "論考一覧へ" : "Back to Thoughts"}
-              </Button>
-            </Link>
-            <Link href="/contact">
-              <Button variant="accent" className="font-bold gap-1.5 shadow-md">
-                {isJa ? "お問い合わせ" : "Inquire Advisory"} <Sparkles className="size-4" />
+                <ArrowLeft className="size-4" /> {isJa ? "論考一覧へ戻る" : "Back to Thought Leadership"}
               </Button>
             </Link>
           </div>

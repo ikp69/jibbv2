@@ -6,6 +6,10 @@ author: "Vardaan Chaudhary"
 image: "/images/thought-leadership/india-semiconductor-growth-corridor.png"
 tags: ["Semiconductors", "Bilateral Policy", "Supply Chain", "Workforce"]
 featured: false
+takeaways:
+  - "JIBB acts as an essential catalyst, translating bilateral government policies into actual factories and commercial revenue."
+  - "Combining central (ISM 2.0) and state incentives can cover up to 70% of project capital expenditures."
+  - "JIBB constructs supplier consortia and builds bidirectional talent bridges to resolve Japan's labor shortages and India's process engineering needs."
 ---
 
 The India–Japan semiconductor corridor has all the ingredients of a transformative partnership—world-class Japanese materials and equipment, a massive and policy-supported Indian market, a growing design-talent pool, and high-level political alignment.

@@ -6,6 +6,10 @@ author: "Varun Tyagi"
 image: "https://images.unsplash.com/photo-1591453089816-0fbb971b454c?auto=format&fit=crop&w=1200&q=80"
 tags: ["Semiconductors", "Bilateral Investments", "ISM 2.0", "Industrial Townships"]
 featured: false
+takeaways:
+  - "ISM 2.0 shifts the focus from attracting standalone fabs to building a robust manufacturing ecosystem, including equipment and materials."
+  - "Recent SEZ rule changes and state incentives make setting up semiconductor facilities in India highly cost-effective (up to 70% fiscal support)."
+  - "Over 40 Japanese component and chemical makers are actively establishing local bases to feed India's rising manufacturing hubs."
 ---
 
 India's semiconductor story has moved from aspiration to execution. In the industrial corridor of Sanand, Gujarat, commercial chip packaging has begun. Three more pilot lines are running. A total of eleven semiconductor units stand approved, with investment commitments touching ₹1.6 trillion (approximately \$17.3 billion). And in the Union Budget 2026‑27, the government launched the India Semiconductor Mission (ISM) 2.0 — not just an extension of an incentive programme, but a calibrated pivot from attracting individual fabs to cultivating an entire manufacturing ecosystem. For Japan, a global heavyweight in semiconductor materials, equipment, and precision manufacturing, this is a structured invitation that spans geography, policy, and time.

@@ -1,6 +1,7 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/src/i18n/navigation";
 import { getAllPosts } from "@/lib/markdown";
+import { getAuthorLinkedIn } from "@/lib/authors";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowRight, User, Sparkles, Quote, ArrowLeft } from "lucide-react";
@@ -151,10 +152,21 @@ export default async function LeadershipThoughtsPage({ params }: PageProps) {
                           <Calendar className="size-3" />
                           {post.date}
                         </span>
-                        <span className="flex items-center gap-0.5">
+                        <div className="flex items-center gap-0.5">
                           <User className="size-3" />
-                          {post.author}
-                        </span>
+                          {getAuthorLinkedIn(post.author) ? (
+                            <a
+                              href={getAuthorLinkedIn(post.author) || "#"}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-semibold text-jibb-orange hover:underline transition-all"
+                            >
+                              {post.author}
+                            </a>
+                          ) : (
+                            <span className="font-semibold">{post.author}</span>
+                          )}
+                        </div>
                       </div>
 
                       <Link href={`/resources/thought-leadership/${post.slug}`}>

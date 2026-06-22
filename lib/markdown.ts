@@ -18,6 +18,7 @@ export interface MarkdownPost {
   corridor?: string;
   client?: string;
   impact?: string;
+  takeaways?: string[];
 }
 
 export type PostType = "blog" | "insights" | "thought-leadership";
@@ -92,6 +93,7 @@ export async function getPostBySlug(
       corridor: data.corridor,
       client: data.client,
       impact: data.impact,
+      takeaways: data.takeaways || [],
     };
   } catch (error) {
     console.error(`Error parsing markdown post for ${type}/${slug} in locale ${locale}:`, error);
