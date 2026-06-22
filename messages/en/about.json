@@ -202,92 +202,85 @@
   "leadershipPage": {
     "title": "JIBB Leadership & Core Team",
     "subtitle": "Experienced leaders from India and Japan driving bilateral synergy, policy alignment, and corporate growth.",
-    "intro": "Meet the directors, advisors, and ground experts who steer the Tokyo-Noida corridor.",
+    "intro": "Meet the co-founders, advisors, and ground experts who steer the Tokyo-Noida corridor.",
     "viewAllLeaders": "View All Core Leaders",
     "members": {
       "varun": {
         "name": "Varun Tyagi",
         "role": "Co-Founder",
-        "bio": "Experienced leader driving cross-border venture capital, strategic JVs, and high-value industrial deals.",
-        "location": "Noida, India"
+        "bio": "Investor and supply chain strategist promoting global growth in the sectors of minerals, energy, and infrastructure.",
+        "location": "Noida, India",
+        "linkedin": "https://www.linkedin.com/in/varuntyagi/"
       },
       "ujjawal": {
         "name": "Ujjawal Dahiya",
         "role": "Co-Founder",
-        "bio": "Specializes in market entry strategy, localization blueprints, and multi-sector corporate alliances.",
-        "location": "Noida, India"
+        "bio": "Infrastructure developer for data centers and AI ecosystems with a focus on regulatory requirements and digital transformations.",
+        "location": "Noida, India",
+        "linkedin": "https://www.linkedin.com/in/ujjawal-dahiya-b8aa98178/"
       },
       "pratiksha": {
         "name": "Pratiksha Pandey",
         "role": "Co-Founder",
-        "bio": "Facilitates trust-based matches, stakeholder alignment, and bicultural communications for enterprises.",
-        "location": "Noida, India"
+        "bio": "Professional in finance and management with a focus on financial processes, corporate strategy, and organizational development.",
+        "location": "Noida, India",
+        "linkedin": "https://www.linkedin.com/in/dr-pratiksha-pandey-217549318/"
       },
       "gyanendra": {
         "name": "Gyanendra Yadav",
         "role": "Co-Founder",
-        "bio": "Expert in precision engineering, CNC automation, and supply chain localization.",
-        "location": "Noida, India"
+        "bio": "Engineer with expertise in railway electrification systems, engineering systems and semiconductor technology.",
+        "location": "Noida, India",
+        "linkedin": ""
       },
       "akash": {
         "name": "Akash Pandey",
         "role": "Co-Founder",
-        "bio": "Navigates cross-border taxation, M&As, financial due diligence, and capital transfer routes.",
-        "location": "Noida, India"
+        "bio": "Government relations expert helping in stakeholder engagement and cooperation with other institutions.",
+        "location": "Noida, India",
+        "linkedin": ""
       },
       "vardaan": {
         "name": "Vardaan Chaudhary",
         "role": "Co-Founder",
-        "bio": "Focuses on semiconductor value chain alliances, electronics, and global tech programs.",
-        "location": "Noida, India"
+        "bio": "Businessman and ecosystem builder creating connections between global businesses via infrastructure, technology, and international collaboration programs.",
+        "location": "Noida, India",
+        "linkedin": "https://www.linkedin.com/in/vardaan-chaudhary-a968431ba/"
       },
       "shigemaro": {
         "name": "Shigemaro Yasui",
         "role": "Co-Founder",
-        "bio": "Guarantees policy alignment, government coordination, and SME entry support in Tokyo.",
-        "location": "Tokyo, Japan"
+        "bio": "Expert on Japanese-Indian trading activities with special focus on semiconductors, automotive industry, machinery, and foreign business collaborations.",
+        "location": "Tokyo, Japan",
+        "linkedin": "https://www.linkedin.com/in/shigemaro-yasui/"
       },
       "nobuchika": {
         "name": "Nobuchika Akiya",
         "role": "Semiconductor Expert",
-        "bio": "Guides manufacturers on EV adaptation, ADAS integration, and Japanese partner sourcing.",
-        "location": "Tokyo, Japan"
+        "bio": "Semiconductor industry expert with significant experience in technology, production processes, and industrial development strategies.",
+        "location": "Tokyo, Japan",
+        "linkedin": ""
       },
       "mai": {
         "name": "Mai Hashikura",
-        "role": "Operations Lead – Japan Office",
-        "bio": "Manages bicultural working alignment, translation services, and executive business summits.",
-        "location": "Tokyo, Japan"
+        "role": "Operations Manager - Japan Office",
+        "bio": "Operations manager responsible for Japanese activities, stakeholder coordination, and international business execution.",
+        "location": "Tokyo, Japan",
+        "linkedin": "https://www.linkedin.com/in/mai-hashikura-5b505b265/"
       },
       "aya": {
         "name": "Aya Saito",
-        "role": "Public Relations & Events Coordinator",
-        "bio": "Coordinates trade delegations, G2B meetings, and bilateral marketing campaigns.",
-        "location": "Tokyo, Japan"
+        "role": "Public Relations & Events Manager",
+        "bio": "Public relations and events manager improving stakeholder engagement and international networking.",
+        "location": "Tokyo, Japan",
+        "linkedin": ""
       },
       "hitesh": {
         "name": "Hitesh Gupta",
-        "role": "Founder & Director",
-        "bio": "Visionary leader with deep expertise in Japan-India bilateral trade and industrial policy.",
-        "location": "Tokyo, Japan"
-      },
-      "takeshi": {
-        "name": "Takeshi Nakamura",
-        "role": "Co-Director - Japan Operations",
-        "bio": "Seasoned industry strategist specializing in Japanese manufacturing ecosystems.",
-        "location": "Tokyo, Japan"
-      },
-      "priya": {
-        "name": "Priya Deshmukh",
-        "role": "Head of Innovation Hub",
-        "bio": "Technology entrepreneur driving startup incubation and co-innovation labs.",
-        "location": "Noida, India"
-      },
-      "kenji": {
-        "name": "Kenji Watanabe",
-        "role": "Head of Corporate Relations",
-        "bio": "Expert in corporate relations between Japanese companies and Indian enterprises.",
-        "location": "Tokyo, Japan"
+        "role": "Principal Consultant",
+        "bio": "Innovator and strategist who specializes in market entry and business growth initiatives.",
+        "location": "Noida, India",
+        "linkedin": "https://www.linkedin.com/in/hiteshgupttaa/"
       }
     }
   },

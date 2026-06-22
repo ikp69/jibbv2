@@ -21,6 +21,7 @@ const MEMBERS: Member[] = [
   { key: "gyanendra", img: "/leaders/gyanendra-yadav.png" },
   { key: "akash", img: "/leaders/akash-pandey.png" },
   { key: "vardaan", img: "/leaders/vardaan-chaudhary.png" },
+  { key: "hitesh", img: "/leaders/hitesh-gupttaa.png" },
 ];
 
 export function LeadershipCarousel() {
@@ -99,6 +100,9 @@ export function LeadershipCarousel() {
           const role = t(`members.${member.key}.role`);
           const location = t(`members.${member.key}.location`);
           const bio = t(`members.${member.key}.bio`);
+          
+          // Safe name extraction that handles fallback keys
+          const safeName = typeof name === 'string' && !name.startsWith('members.') ? name : member.key;
 
           return (
             <div
@@ -116,7 +120,7 @@ export function LeadershipCarousel() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={member.img}
-                alt={name}
+                alt={safeName}
                 className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-700 pointer-events-none select-none ${
                   isActive 
                     ? "grayscale-0 scale-100 opacity-95" 
@@ -137,7 +141,7 @@ export function LeadershipCarousel() {
                   <div className="w-1.5 h-1.5 rounded-full bg-foreground/30 group-hover:bg-foreground/60 transition-colors" />
                   <div className="w-1.5 h-1.5 rounded-full bg-foreground/30 group-hover:bg-foreground/60 transition-colors mt-1.5" />
                   <span className="text-[10px] font-bold tracking-widest text-foreground/40 uppercase rotate-90 origin-center whitespace-nowrap mt-8">
-                    {name.split(" ")[0]}
+                    {safeName.split(" ")[0]}
                   </span>
                 </div>
               )}
@@ -151,7 +155,7 @@ export function LeadershipCarousel() {
                       {role}
                     </span>
                     <h3 className="text-xl md:text-3xl font-black tracking-tight drop-shadow-sm">
-                      {name}
+                      {safeName}
                     </h3>
                   </div>
 

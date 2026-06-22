@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
-import { MapPin, Users } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import Image from "next/image";
 
@@ -33,7 +33,7 @@ export function LeadershipGrid() {
   // Render only the 11 leaders who have local portrait files in public/leaders
   const allKeys = [
     "varun", "shigemaro", "nobuchika", "ujjawal", "pratiksha",
-    "gyanendra", "akash", "vardaan", "mai", "aya"
+    "gyanendra", "akash", "vardaan", "mai", "aya", "hitesh"
   ];
 
   const imageMap: Record<string, string> = {
@@ -46,7 +46,8 @@ export function LeadershipGrid() {
     akash: "/leaders/akash-pandey.png",
     vardaan: "/leaders/vardaan-chaudhary.png",
     mai: "/leaders/mai-hashikura.png",
-    aya: "/leaders/aya-saito.png"
+    aya: "/leaders/aya-saito.png",
+    hitesh: "/leaders/hitesh-gupttaa.png"
   };
 
   const cardThemes = [
@@ -60,6 +61,21 @@ export function LeadershipGrid() {
 
   const members = allKeys.map((key, index) => {
     const isJapan = t(`members.${key}.location`).toLowerCase().includes("tokyo") || t(`members.${key}.location`).toLowerCase().includes("japan");
+    
+    // For LinkedIn, we need to check if it exists first to avoid errors
+    // If the key doesn't exist in translations, default to "#"
+    let linkedinValue = "#";
+    try {
+      const tempValue = t(`members.${key}.linkedin`);
+      // If we got a value that's not the key path, use it
+      if (tempValue && !tempValue.includes("members.")) {
+        linkedinValue = tempValue;
+      }
+    } catch (e) {
+      // If there's any error, just use "#"
+      linkedinValue = "#";
+    }
+    
     return {
       key,
       name: t(`members.${key}.name`),
@@ -68,7 +84,8 @@ export function LeadershipGrid() {
       bio: t(`members.${key}.bio`),
       country: isJapan ? "japan" : "india",
       image: imageMap[key],
-      theme: cardThemes[index % cardThemes.length]
+      theme: cardThemes[index % cardThemes.length],
+      linkedin: linkedinValue
     };
   });
 
@@ -168,8 +185,15 @@ export function LeadershipGrid() {
 
                       <div className="pt-1.5 sm:pt-2 border-t border-white/10 flex items-center justify-between">
                         <a
-                          href="#"
-                          onClick={(e) => e.stopPropagation()}
+                          href={person.linkedin && person.linkedin !== "#" ? person.linkedin : "#"}
+                          target={person.linkedin && person.linkedin !== "#" ? "_blank" : undefined}
+                          rel={person.linkedin && person.linkedin !== "#" ? "noopener noreferrer" : undefined}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (!person.linkedin || person.linkedin === "#") {
+                              e.preventDefault();
+                            }
+                          }}
                           className="inline-flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-xs font-extrabold text-white bg-white/10 hover:bg-white/20 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg sm:rounded-xl transition-all duration-300 border border-white/10"
                         >
                           <LinkedinIcon className="size-3 sm:size-3.5 text-sky-400" />
