@@ -243,10 +243,6 @@ export default function EventsLandingPage() {
     'semicon-2025': {
       name: { en: 'SEMICON 2025', ja: 'SEMICON 2025' },
       images: [
-        { src: '/events/event-gallery/SEMICON 2025/WhatsApp Image 2026-03-20 at 5.51.35 PM.jpeg', alt: locale === 'ja' ? 'イベント会場 of 2025' : 'Event venue of 2025 atmosphere' },
-        { src: '/events/event-gallery/SEMICON 2025/WhatsApp Image 2026-03-20 at 5.51.35 PM (1).jpeg', alt: locale === 'ja' ? 'セミナー会場' : 'Seminar hall' },
-        { src: '/events/event-gallery/SEMICON 2025/WhatsApp Image 2026-03-20 at 5.51.35 PM (2).jpeg', alt: locale === 'ja' ? '参加者の様子' : 'Event participants' },
-        { src: '/events/event-gallery/SEMICON 2025/WhatsApp Image 2026-03-20 at 5.51.35 PM (3).jpeg', alt: locale === 'ja' ? 'プレゼンテーション' : 'Presentation' },
         { src: '/events/event-gallery/SEMICON 2025/WhatsApp Image 2026-03-20 at 6.32.40 PM.jpeg', alt: locale === 'ja' ? 'ネットワーキングセッション' : 'Networking session' },
         { src: '/events/event-gallery/SEMICON 2025/WhatsApp Image 2026-03-20 at 6.32.41 PM (1).jpeg', alt: locale === 'ja' ? '講演の様子' : 'Speaking session' },
         { src: '/events/event-gallery/SEMICON 2025/WhatsApp Image 2026-03-20 at 6.32.41 PM.jpeg', alt: locale === 'ja' ? 'セミナー講演の様子' : 'Seminar presentation' },
