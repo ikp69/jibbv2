@@ -601,12 +601,6 @@ export function DesktopStoryHero() {
                         {t("ctaJoin")}
                         <span className="text-white/80">→</span>
                       </Link>
-                      <Link
-                        href="/jisc"
-                        className="inline-flex items-center justify-center px-7 py-3.5 md:px-8 md:py-4 bg-white/60 dark:bg-white/10 backdrop-blur-md text-jibb-indigo dark:text-white font-semibold rounded-xl border border-jibb-indigo/10 dark:border-white/20 hover:bg-white dark:hover:bg-white/20 transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] text-sm md:text-base"
-                      >
-                        {t("ctaExplore")}
-                      </Link>
                     </div>
                   </div>
                 </div>

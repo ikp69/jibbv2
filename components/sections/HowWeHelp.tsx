@@ -53,7 +53,7 @@ export function HowWeHelp() {
           iconBg: "bg-jibb-sakura/10 dark:bg-jibb-sakura/20",
         },
       ],
-      link: "/services/market-entry",
+      link: "/services#market-entry-execution",
     },
     {
       id: "indian",
@@ -84,7 +84,7 @@ export function HowWeHelp() {
           iconBg: "bg-jibb-sakura/10 dark:bg-jibb-sakura/20",
         },
       ],
-      link: "/services/partnership-facilitation",
+      link: "/services#partner-identification",
     },
     {
       id: "researchers",
@@ -115,7 +115,7 @@ export function HowWeHelp() {
           iconBg: "bg-jibb-sakura/10 dark:bg-jibb-sakura/20",
         },
       ],
-      link: "/innovation-hub",
+      link: "/services#opportunity-landscape",
     },
   ];
 

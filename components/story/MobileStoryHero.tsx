@@ -184,19 +184,14 @@ export function MobileStoryHero() {
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6">
               {t("ctaBody2")}
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link href="/membership" className="w-full sm:w-auto">
-                <Button variant="accent" size="lg" className="w-full gap-2 font-bold">
-                  {t("ctaJoin")}
-                  <ArrowRight className="size-4" />
-                </Button>
-              </Link>
-              <Link href="/innovation-hub" className="w-full sm:w-auto">
-                <Button variant="outline" size="lg" className="w-full gap-2 font-semibold">
-                  {t("ctaExplore")}
-                </Button>
-              </Link>
-            </div>
+             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+               <Link href="/membership" className="w-full sm:w-auto">
+                 <Button variant="accent" size="lg" className="w-full gap-2 font-bold">
+                   {t("ctaJoin")}
+                   <ArrowRight className="size-4" />
+                 </Button>
+               </Link>
+             </div>
           </div>
         </div>
       </div>

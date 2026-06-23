@@ -306,16 +306,9 @@ export default async function HomePage({
                   <h3 className="text-xl font-bold text-foreground mb-3 tracking-tight">
                     {pillar.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     {pillar.desc}
                   </p>
-                </div>
-
-                <div className="pt-2">
-                  <span className="text-primary font-medium text-sm group-hover:text-accent transition-colors flex items-center gap-1.5 w-fit">
-                    <span>{t("whatWeDo.learnMore")}</span>
-                    <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </span>
                 </div>
               </div>
             ))}

@@ -142,15 +142,6 @@ export function Hero() {
                 <ArrowRight className="size-5" />
               </Button>
             </Link>
-            <Link href="/innovation-hub">
-              <Button
-                variant="glass"
-                size="xl"
-                className="gap-2 text-white border-white/20 hover:bg-white/15"
-              >
-                {t("hero.ctaExplore")}
-              </Button>
-            </Link>
           </motion.div>
         </motion.div>
 

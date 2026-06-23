@@ -281,13 +281,13 @@ export default function EventsLandingPage() {
     'electronica': {
       name: { en: 'ELECTRONICA 2026', ja: 'ELECTRONICA 2026' },
       images: [
-        { src: '/events/event-gallery/ELECTRONICA 2026/DSC_8760.JPG', alt: locale === 'ja' ? 'ELECTRONICA 2026 展示会' : 'ELECTRONICA 2026 Exhibition' },
-        { src: '/events/event-gallery/ELECTRONICA 2026/DSC_8770.JPG', alt: locale === 'ja' ? 'ブース交流' : 'Booth interaction' },
-        { src: '/events/event-gallery/ELECTRONICA 2026/DSC_8961.JPG', alt: locale === 'ja' ? '出展社ブース' : 'Exhibitor booth' },
-        { src: '/events/event-gallery/ELECTRONICA 2026/DSC_8974.JPG', alt: locale === 'ja' ? '商談の様子' : 'Business meeting' },
+        { src: '/events/event-gallery/ELECTRONICA 2026/DSC_8760.jpg', alt: locale === 'ja' ? 'ELECTRONICA 2026 展示会' : 'ELECTRONICA 2026 Exhibition' },
+        { src: '/events/event-gallery/ELECTRONICA 2026/DSC_8770.jpg', alt: locale === 'ja' ? 'ブース交流' : 'Booth interaction' },
+        { src: '/events/event-gallery/ELECTRONICA 2026/DSC_8961.jpg', alt: locale === 'ja' ? '出展社ブース' : 'Exhibitor booth' },
+        { src: '/events/event-gallery/ELECTRONICA 2026/DSC_8974.jpg', alt: locale === 'ja' ? '商談の様子' : 'Business meeting' },
         { src: '/events/event-gallery/ELECTRONICA 2026/DSC_9032.jpg', alt: locale === 'ja' ? 'イベント来場者' : 'Event attendees' },
-        { src: '/events/event-gallery/ELECTRONICA 2026/DSC_9033.JPG', alt: locale === 'ja' ? '対話セッション' : 'Dialogue session' },
-        { src: '/events/event-gallery/ELECTRONICA 2026/DSC_9044.JPG', alt: locale === 'ja' ? 'ネットワーキング' : 'Networking' }
+        { src: '/events/event-gallery/ELECTRONICA 2026/DSC_9033.jpg', alt: locale === 'ja' ? '対話セッション' : 'Dialogue session' },
+        { src: '/events/event-gallery/ELECTRONICA 2026/DSC_9044.jpg', alt: locale === 'ja' ? 'ネットワーキング' : 'Networking' }
       ]
     }
   }), [locale])
