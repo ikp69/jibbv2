@@ -75,24 +75,24 @@ export default function LinkedInCarousel({ posts }: LinkedInCarouselProps) {
         {/* Header Block */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div className="space-y-2">
-            <span 
+            <span
               className="text-xs font-black uppercase tracking-widest text-primary/80 dark:text-primary-foreground/80"
               style={fontHeading}
             >
               {locale === "ja" ? "ソーシャルフィード" : "Social Feed"}
             </span>
-            <h2 
+            <h2
               className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-foreground tracking-tight leading-tight"
               style={fontHeading}
             >
               {locale === "ja" ? "LinkedIn のアップデート" : "Latest LinkedIn Updates"}
             </h2>
-            <p 
+            <p
               className="text-sm text-muted-foreground max-w-2xl leading-relaxed"
               style={fontSans}
             >
-              {locale === "ja" 
-                ? "日印間のパートナーシップ、業界動向、そして私たちの活動に関する最新のソーシャルメディア更新情報。" 
+              {locale === "ja"
+                ? "日印間のパートナーシップ、業界動向、そして私たちの活動に関する最新のソーシャルメディア更新情報。"
                 : "Real-time insights, collaboration updates, and milestones from the Japan-India business corridor."}
             </p>
           </div>
@@ -124,7 +124,7 @@ export default function LinkedInCarousel({ posts }: LinkedInCarouselProps) {
               rel="noopener noreferrer"
               className="px-4 py-2 bg-jibb-indigo dark:bg-[#7b9fe0] text-white dark:text-[#0f1629] font-bold text-xs rounded-xl hover:bg-jibb-indigo-light dark:hover:bg-[#9ab5e8] active:scale-[0.98] transition-all shadow-md inline-flex items-center gap-1.5"
             >
-              <span>{locale === "ja" ? "すべての投稿を表示" : "VIEW ALL POSTS"}</span>
+              <span>{locale === "ja" ? "すべての投稿を表示" : "VIEW ALL"}</span>
               <ArrowRight className="size-3" />
             </a>
           </div>
@@ -154,8 +154,8 @@ export default function LinkedInCarousel({ posts }: LinkedInCarouselProps) {
                     className="flex-shrink-0 w-[290px] sm:w-[340px] md:w-[380px] snap-start"
                   >
                     <div className="relative bg-card dark:bg-[#161f38]/45 border border-border/50 hover:border-primary/30 rounded-2xl p-1.5 hover:shadow-jibb-md transition-all duration-300 flex flex-col h-[480px] overflow-hidden">
-                      <div className="w-full h-full overflow-y-auto overflow-x-hidden sleek-scrollbar pr-3">
-                        <div className="w-[calc(100%+17px)] h-[670px]">
+                      <div className="w-full h-full overflow-y-auto overflow-x-hidden sleek-scrollbar pr-1 rounded-xl">
+                        <div className="w-full h-[800px]">
                           <iframe
                             src={`https://www.linkedin.com/embed/feed/update/${post.shareUrn}?collapsed=1`}
                             height="100%"
@@ -164,6 +164,7 @@ export default function LinkedInCarousel({ posts }: LinkedInCarouselProps) {
                             allowFullScreen
                             title="LinkedIn post"
                             loading="lazy"
+                            scrolling="no"
                           />
                         </div>
                       </div>
