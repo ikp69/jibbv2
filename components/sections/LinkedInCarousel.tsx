@@ -155,7 +155,7 @@ export default function LinkedInCarousel({ posts }: LinkedInCarouselProps) {
                   >
                     <div className="relative bg-card dark:bg-[#161f38]/45 border border-border/50 hover:border-primary/30 rounded-2xl p-1.5 hover:shadow-jibb-md transition-all duration-300 flex flex-col h-[480px] overflow-hidden">
                       <div className="w-full h-full overflow-y-auto overflow-x-hidden sleek-scrollbar pr-1 rounded-xl">
-                        <div className="w-full h-[800px]">
+                        <div className="w-[calc(100%+17px)] h-[800px]">
                           <iframe
                             src={`https://www.linkedin.com/embed/feed/update/${post.shareUrn}?collapsed=1`}
                             height="100%"

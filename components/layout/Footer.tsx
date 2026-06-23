@@ -1,17 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/src/i18n/navigation";
-import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import {
-  Mail,
   ExternalLink,
 } from "lucide-react";
-import { subscribeToNewsletter } from "@/app/actions/newsletter";
 
 function LinkedInIcon({ className }: { className?: string }) {
   return (
@@ -128,42 +123,8 @@ export function Footer() {
   const t = useTranslations();
   const currentYear = new Date().getFullYear();
 
-  const [email, setEmail] = useState("");
-  const [honeypot, setHoneypot] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [status, setStatus] = useState<"idle" | "success" | "already" | "error">("idle");
-
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      alert("Please enter a valid email address.");
-      return;
-    }
-
-    setIsSubmitting(true);
-    setStatus("idle");
-    try {
-      const response = await subscribeToNewsletter({ email, source: "footer", honeypot });
-      if (response.success) {
-        if (response.alreadySubscribed) {
-          setStatus("already");
-        } else {
-          setStatus("success");
-          setEmail("");
-        }
-      } else {
-        setStatus("error");
-      }
-    } catch (err) {
-      console.error(err);
-      setStatus("error");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
-    <footer className="relative bg-primary text-primary-foreground border-t border-white/10 overflow-hidden">
+    <footer id="footer" className="relative bg-primary text-primary-foreground border-t border-white/10 overflow-hidden">
       {/* Single decorative glow */}
       <div aria-hidden="true" className="absolute -top-40 -right-40 w-96 h-96 bg-jibb-orange/5 rounded-full blur-3xl" />
 
@@ -285,11 +246,11 @@ export function Footer() {
                   {t("resourcesMenu.insights")}
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/resources/newsletter" className="text-white/60 hover:text-white transition-colors block py-0.5">
                   {t("resourcesMenu.newsletter")}
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
 
@@ -352,66 +313,31 @@ export function Footer() {
             </Link>
           </ScrollReveal>
 
-          {/* Newsletter Form Column (col span 4) */}
-          <ScrollReveal direction="up" className="lg:col-span-4 md:col-span-2 text-left space-y-4">
-            <div className="space-y-1.5">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
-                {t("footer.newsletter.title")}
-              </h4>
-              <p className="text-white/60 text-xs leading-relaxed">
-                {t("footer.newsletter.desc")}
-              </p>
-            </div>
-
-            <form
-               onSubmit={handleSubscribe}
-               className="flex flex-col gap-2 w-full"
-             >
-               {/* Honeypot field (hidden from users, visible to bots) */}
-               <div className="absolute opacity-0 pointer-events-none -z-10 h-0 w-0 overflow-hidden">
-                 <label htmlFor="footer-website-url">Leave this field blank</label>
-                 <input
-                   id="footer-website-url"
-                   type="text"
-                   name="honeypot"
-                   tabIndex={-1}
-                   value={honeypot}
-                   onChange={(e) => setHoneypot(e.target.value)}
-                   autoComplete="off"
-                 />
-               </div>
-
-               <div className="flex flex-col sm:flex-row gap-3 w-full">
-                 <div className="relative flex-1">
-                   <Input
-                     type="email"
-                     value={email}
-                     onChange={(e) => setEmail(e.target.value)}
-                     placeholder={t("footer.newsletter.placeholder")}
-                     className="w-full bg-white/5 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-jibb-orange pl-10 h-11 text-xs rounded-xl"
-                   />
-                   <Mail className="absolute left-3.5 top-3.5 size-4 text-white/40" />
-                 </div>
-                 <AnimatedButton
-                   type="submit"
-                   variant="accent"
-                   disabled={isSubmitting}
-                   className="h-11 px-6 font-bold shadow-lg rounded-xl shrink-0 text-xs bg-jibb-orange hover:bg-jibb-orange/90 text-white border-none"
-                 >
-                   {isSubmitting ? "..." : t("footer.newsletter.button")}
-                 </AnimatedButton>
-               </div>
-               
-               {status === "success" && (
-                 <p className="text-[10px] text-emerald-400 font-bold mt-1">✓ Thank you for subscribing!</p>
-               )}
-               {status === "already" && (
-                 <p className="text-[10px] text-amber-400 font-bold mt-1">✓ You are already subscribed!</p>
-               )}
-               {status === "error" && (
-                 <p className="text-[10px] text-red-400 font-bold mt-1">✗ Subscription failed. Please try again.</p>
-               )}
-             </form>
+          {/* LinkedIn Follow Column (col span 4) */}
+          <ScrollReveal direction="right" className="lg:col-span-4 md:col-span-2 lg:col-span-4">
+            <a
+              href="https://linkedin.com/company/japan-india-business-bureau"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 h-full"
+            >
+              <div className="size-14 rounded-full border border-[#0A66C2]/20 bg-[#0A66C2]/10 flex items-center justify-center shrink-0 group-hover:border-[#0A66C2]/40 group-hover:bg-[#0A66C2]/20 transition-all duration-300">
+                <img
+                  src="/jibb-logo.svg"
+                  alt="JIBB Symbol"
+                  className="w-8 h-auto object-contain brightness-0 invert opacity-80 group-hover:opacity-100 transition-opacity"
+                />
+              </div>
+              <div className="space-y-1.5 text-left">
+                <span className="text-xs font-bold text-white uppercase tracking-wider block flex items-center gap-1.5">
+                  {t("footer.linkedin.title")}
+                  <ExternalLink className="size-3 text-white/40 group-hover:text-white/80 transition-colors" />
+                </span>
+                <span className="text-white/60 text-xs leading-relaxed block group-hover:text-white/90 transition-colors">
+                  {t("footer.linkedin.desc")}
+                </span>
+              </div>
+            </a>
           </ScrollReveal>
 
         </div>

@@ -83,7 +83,7 @@ const navItems: NavItem[] = [
       { labelKey: "resourcesMenu.insights", href: "/resources/insights", descKey: "resourcesMenu.insightsDesc", icon: TrendingUp },
       { labelKey: "resourcesMenu.blog", href: "/resources/blog", descKey: "resourcesMenu.blogDesc", icon: BookMarked },
       { labelKey: "resourcesMenu.leadership", href: "/resources/thought-leadership", descKey: "resourcesMenu.leadershipDesc", icon: Quote },
-      { labelKey: "resourcesMenu.newsletter", href: "/resources/newsletter", descKey: "resourcesMenu.newsletterDesc", icon: Mail },
+      // { labelKey: "resourcesMenu.newsletter", href: "/resources/newsletter", descKey: "resourcesMenu.newsletterDesc", icon: Mail },
     ],
   },
   { labelKey: "nav.contact", href: "/contact" },

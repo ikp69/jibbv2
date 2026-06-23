@@ -9,8 +9,11 @@ export default async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const locale = pathname.split("/")[1] || "en";
 
-  // Redirect /innovation-hub to homepage (temporary)
-  if (pathname.match(/^\/(?:en|ja)?\/?innovation-hub(?:\/.*)?$/)) {
+  // Redirect /innovation-hub and /newsletter / /resources/newsletter to homepage (temporary)
+  if (
+    pathname.match(/^\/(?:en|ja)?\/?innovation-hub(?:\/.*)?$/) ||
+    pathname.match(/^\/(?:en|ja)?\/?(?:resources\/)?newsletter(?:\/.*)?$/)
+  ) {
     const url = request.nextUrl.clone();
     url.pathname = `/${locale}`;
     return NextResponse.redirect(url, 307);

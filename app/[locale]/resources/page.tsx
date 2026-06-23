@@ -118,14 +118,14 @@ export default async function ResourcesPage({ params }: PageProps) {
       href: "/resources/thought-leadership",
       cta: isJa ? "論考を読む" : "Read Thoughts",
     },
-    {
-      icon: <Mail className="size-7 text-white" />,
-      color: "from-jibb-orange to-jibb-orange-light",
-      title: t("resourcesMenu.newsletter"),
-      desc: t("resourcesMenu.newsletterDesc"),
-      href: "/resources/newsletter",
-      cta: isJa ? "ニュースレター" : "Newsletter",
-    },
+    // {
+    //   icon: <Mail className="size-7 text-white" />,
+    //   color: "from-jibb-orange to-jibb-orange-light",
+    //   title: t("resourcesMenu.newsletter"),
+    //   desc: t("resourcesMenu.newsletterDesc"),
+    //   href: "/resources/newsletter",
+    //   cta: isJa ? "ニュースレター" : "Newsletter",
+    // },
   ];
 
   return (
@@ -213,7 +213,7 @@ export default async function ResourcesPage({ params }: PageProps) {
               : "Subscribe to JIBB's weekly newsletter for the latest bilateral market trends, policy updates, and event invitations."}
           </p>
           <div className="pt-4 flex justify-center gap-4">
-            <Link href="/resources/newsletter">
+            <Link href="#footer">
               <Button variant="accent" size="lg" className="font-bold gap-1.5 shadow-lg">
                 {isJa ? "ニュースレター登録" : "Subscribe Now"} <Mail className="size-4" />
               </Button>
