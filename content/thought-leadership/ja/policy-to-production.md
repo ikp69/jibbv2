@@ -3,7 +3,7 @@ title: "政策から生産へ：日印ビジネスビューローが半導体の
 description: "日印の半導体コリドーを分析し、政策枠組みと商業的実行のギャップを埋めて強靭なエレクトロニクスエコシステムを構築するJIBBの役割についての考察。"
 date: "2026-06-03"
 author: "ヴァルダーン・チョードリー"
-image: "/images/thought-leadership/india-semiconductor-growth-corridor.png"
+image: "/images/thought-leadership/from-policy-to-production.jpg"
 tags: ["半導体", "二国間政策", "サプライチェーン", "人材育成"]
 featured: false
 takeaways:

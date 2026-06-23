@@ -27,7 +27,7 @@ const PARTNERS: Partner[] = [
   //{ name: "JBIC", href: "https://www.jbic.go.jp/en/", type: "Agency", logo: "/logos/jbic-logo.png" },
   { name: "Toho Koki Seisakusho", href: "https://tohokoki.jp/", type: "Partner", logo: "/logos/toho-logo.jpg" },
   { name: "Kuraray", href: "https://www.kuraray.com/in-en/", type: "Partner", logo: "/logos/kuraray-logo.png" },
-  { name: "Indobox", href: "https://indobox.co.jp/", type: "Partner", logo: "/logos/indobox-logo.png" },
+  { name: "Indobox", href: "https://indobox.co.jp/", type: "Partner", logo: "/logos/indobox-logo.jpg" },
   { name: "Lith-On", href: "https://lith-on.com/", type: "Partner", logo: "/logos/lithon-logo.png" }
 ];
 

@@ -3,7 +3,7 @@ title: "インドの半導体ルネサンス：政策主導のエコシステム
 description: "インドの半導体戦略、ISM 2.0、SEZ改革、そしてこのエコシステムを後押しする日本の産業団地と投資の重要性について深く考察します。"
 date: "2026-06-15"
 author: "ヴァルン・チャウダリー"
-image: "https://images.unsplash.com/photo-1591453089816-0fbb971b454c?auto=format&fit=crop&w=1200&q=80"
+image: "/images/thought-leadership/india-semiconductor-renaissance.jpg"
 tags: ["半導体", "二国間投資", "ISM 2.0", "産業団地"]
 featured: false
 takeaways:

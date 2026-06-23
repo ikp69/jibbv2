@@ -3,7 +3,7 @@ title: "精度、純度、そしてパートナーシップ：自立した日印
 description: "日本の超高純度化学品メーカーや精密機器メーカーがどのようにインドへ軸足を移し、現地の優秀な人材と連携しながらサプライチェーンの強靭化を推進しているかを分析します。"
 date: "2026-06-15"
 author: "ウジャワル・ダヒヤ"
-image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1200&q=80"
+image: "/images/thought-leadership/precision-purity-partnership.jpg"
 tags: ["サプライチェーン", "半導体材料", "化学産業のシフト", "日印シナジー"]
 featured: false
 takeaways:

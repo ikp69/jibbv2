@@ -108,12 +108,12 @@ export default async function LeadershipThoughtsPage({ params }: PageProps) {
                   className="group flex flex-col h-full bg-card border border-border/80 shadow-jibb hover:shadow-jibb-md rounded-2xl overflow-hidden transition-all duration-300"
                 >
                   {/* Image */}
-                  <div className="relative h-52 overflow-hidden">
+                  <div className="relative aspect-[17/8] w-full overflow-hidden bg-[#0a0f1d]">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={post.image}
                       alt={post.title}
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
                     />
                     {post.featured && (
                       <div className="absolute top-3 left-3 z-10">

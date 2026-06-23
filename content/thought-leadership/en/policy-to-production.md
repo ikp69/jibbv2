@@ -3,7 +3,7 @@ title: "From Policy to Production: How the Japan India Business Bureau Turns Sem
 description: "An analysis of the India-Japan semiconductor corridor and how JIBB bridges policy frameworks and commercial execution to build a resilient electronics ecosystem."
 date: "2026-06-03"
 author: "Vardaan Chaudhary"
-image: "/images/thought-leadership/india-semiconductor-growth-corridor.png"
+image: "/images/thought-leadership/from-policy-to-production.jpg"
 tags: ["Semiconductors", "Bilateral Policy", "Supply Chain", "Workforce"]
 featured: false
 takeaways:

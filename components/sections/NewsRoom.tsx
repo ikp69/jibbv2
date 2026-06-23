@@ -2,7 +2,8 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { Link, useRouter } from "@/src/i18n/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { PRESS_RELEASES_DATA } from "./PressReleasesSection";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
@@ -42,11 +43,12 @@ interface NewsRoomProps {
   linkedinPosts?: { id: string; shareUrn: string }[];
 }
 
-type TabId = "media" | "cases" | "thought" | "social";
+type TabId = "media" | "thought" | "social";
 
 export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinPosts }: NewsRoomProps) {
   const t = useTranslations("newsroom");
-  const [activeTab, setActiveTab] = useState<TabId>("media");
+  const locale = useLocale();
+  const [activeTab, setActiveTab] = useState<TabId>("social");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const activeLinkedInPosts = linkedinPosts || [];
@@ -91,10 +93,9 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
   };
 
   const tabs = [
-    { id: "media", label: t("tabs.media") || "Media & Insights", count: mediaPosts.length },
-    { id: "cases", label: t("tabs.blog") || "Blog", count: caseStudies.length },
-    { id: "thought", label: t("tabs.thought") || "Thought Leadership", count: thoughtLeadership.length },
     { id: "social", label: t("tabs.social") || "Social Feed (LinkedIn)", count: activeLinkedInPosts.length },
+    { id: "thought", label: t("tabs.thought") || "Thought Leadership", count: thoughtLeadership.length },
+    { id: "media", label: t("tabs.media") || "Media & Insights", count: mediaPosts.length },
   ] as const;
 
   const handleScroll = (direction: "left" | "right") => {
@@ -109,36 +110,16 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
 
   const getActiveContent = () => {
     switch (activeTab) {
-      case "media":
+      case "social":
         return {
-          title: t("tabs.media") || "Media & Insights",
-          viewAllLink: "/resources/insights",
+          title: t("tabs.social") || "Social Feed",
+          viewAllLink: "https://linkedin.com/company/japan-india-business-bureau",
           viewAllText: t("viewAll") || "View All",
-          items: mediaPosts.map(post => ({
-            id: post.slug,
-            title: post.title,
-            desc: post.description,
-            date: post.date,
-            author: post.author,
-            image: post.image,
-            link: (post as any).type === "blog" ? `/resources/blog/${post.slug}` : `/resources/insights/${post.slug}`,
-            badge: (post as any).type === "blog" ? "Blog" : "Insight"
-          }))
-        };
-      case "cases":
-        return {
-          title: t("tabs.blog") || "Blog",
-          viewAllLink: "/resources/blog",
-          viewAllText: t("viewAll") || "View All",
-          items: caseStudies.map(post => ({
-            id: post.slug,
-            title: post.title,
-            desc: post.description,
-            date: post.date,
-            author: post.author,
-            image: post.image,
-            link: `/resources/blog/${post.slug}`,
-            badge: "Blog"
+          isExternal: true,
+          items: activeLinkedInPosts.map(post => ({
+            id: post.id,
+            shareUrn: post.shareUrn,
+            isSocial: true,
           }))
         };
       case "thought":
@@ -157,16 +138,19 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
             badge: "Thought Leadership"
           }))
         };
-      case "social":
+      case "media":
         return {
-          title: t("tabs.social") || "Social Feed",
-          viewAllLink: "https://linkedin.com/company/japan-india-business-bureau",
+          title: t("tabs.media") || "Media & Insights",
+          viewAllLink: "/resources/insights",
           viewAllText: t("viewAll") || "View All",
-          isExternal: true,
-          items: activeLinkedInPosts.map(post => ({
-            id: post.id,
-            shareUrn: post.shareUrn,
-            isSocial: true,
+          items: PRESS_RELEASES_DATA.map(pr => ({
+            id: pr.id,
+            title: locale === "ja" ? pr.title.ja : pr.title.en,
+            desc: locale === "ja" ? pr.snippet.ja : pr.snippet.en,
+            date: pr.date,
+            author: pr.publisher,
+            link: pr.url,
+            badge: "Press Release"
           }))
         };
     }
@@ -335,22 +319,30 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
                     </div>
                   ) : (
                     // Standard Newsroom Card
-                    <div className="bg-card dark:bg-[#161f38]/45 border border-border/50 hover:border-primary/30 rounded-2xl overflow-hidden hover:shadow-jibb-md transition-all duration-300 flex flex-col h-[400px] justify-between group">
+                    <div className={`bg-card dark:bg-[#161f38]/45 border border-border/50 hover:border-primary/30 rounded-2xl overflow-hidden hover:shadow-jibb-md transition-all duration-300 flex flex-col justify-between group ${item.image ? "h-[400px]" : "h-[250px]"}`}>
                       {/* Image at Top */}
-                      <div className="relative aspect-[16/10] w-full bg-muted overflow-hidden">
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
-                        />
-                        <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-background/90 dark:bg-black/80 backdrop-blur-sm border border-border/40 text-[9px] font-bold uppercase tracking-wider text-primary dark:text-[#7b9fe0]">
-                          {item.badge}
+                      {item.image ? (
+                        <div className="relative aspect-[17/8] w-full bg-[#0a0f1d] overflow-hidden">
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-[1.02]"
+                          />
+                          <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-background/90 dark:bg-black/80 backdrop-blur-sm border border-border/40 text-[9px] font-bold uppercase tracking-wider text-primary dark:text-[#7b9fe0]">
+                            {item.badge}
+                          </div>
                         </div>
-                      </div>
+                      ) : null}
 
                       {/* Info & Content */}
                       <div className="p-5 flex-grow flex flex-col justify-between">
-                        <div className="space-y-2.5">
+                        <div className="space-y-2">
+                          {!item.image && (
+                            <span className="inline-block px-2 py-0.5 rounded-md bg-primary/5 dark:bg-[#161f38] border border-border/40 text-[9px] font-bold uppercase tracking-wider text-primary dark:text-[#7b9fe0]">
+                              {item.badge}
+                            </span>
+                          )}
+
                           {/* Date and Author */}
                           <div className="flex items-center gap-3 text-[10px] text-muted-foreground font-semibold">
                             <span className="flex items-center gap-1">
@@ -364,7 +356,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
                           </div>
 
                           {/* Title */}
-                          <h4 className="text-sm md:text-base font-extrabold text-foreground tracking-tight leading-snug line-clamp-2 group-hover:text-jibb-indigo dark:group-hover:text-jibb-indigo-light transition-colors">
+                          <h4 className="text-sm font-extrabold text-foreground tracking-tight leading-snug line-clamp-2 group-hover:text-jibb-indigo dark:group-hover:text-jibb-indigo-light transition-colors">
                             {item.title}
                           </h4>
 
@@ -375,14 +367,26 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
                         </div>
 
                         {/* Learn More link */}
-                        <div className="pt-4 border-t border-border/30">
-                          <Link
-                            href={item.link}
-                            className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-[#7b9fe0] hover:underline"
-                          >
-                            <span>{t("learnMore")}</span>
-                            <ArrowRight className="size-3 transition-transform duration-300 group-hover:translate-x-0.5" />
-                          </Link>
+                        <div className="pt-3 border-t border-border/30">
+                          {item.link.startsWith("http") ? (
+                            <a
+                              href={item.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-[#7b9fe0] hover:underline"
+                            >
+                              <span>{t("learnMore")}</span>
+                              <ArrowRight className="size-3 transition-transform duration-300 group-hover:translate-x-0.5" />
+                            </a>
+                          ) : (
+                            <Link
+                              href={item.link}
+                              className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-[#7b9fe0] hover:underline"
+                            >
+                              <span>{t("learnMore")}</span>
+                              <ArrowRight className="size-3 transition-transform duration-300 group-hover:translate-x-0.5" />
+                            </Link>
+                          )}
                         </div>
                       </div>
                     </div>

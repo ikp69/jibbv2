@@ -3,7 +3,7 @@ title: "Precision, Purity, and Partnership: Crafting a Self‑Reliant India‑Ja
 description: "How Japanese high-purity chemical manufacturers and precision equipment makers are pivoting to India, collaborating with local talents, and driving supply chain resilience."
 date: "2026-06-15"
 author: "Ujjawal Dahiya"
-image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1200&q=80"
+image: "/images/thought-leadership/precision-purity-partnership.jpg"
 tags: ["Supply Chain", "Semiconductor Materials", "Chemical Pivot", "Bilateral Synergy"]
 featured: false
 takeaways:

@@ -5,7 +5,7 @@ import { ExternalLink, Calendar, Search, SlidersHorizontal } from "lucide-react"
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-interface PressRelease {
+export interface PressRelease {
   id: string;
   title: {
     en: string;
@@ -26,7 +26,7 @@ interface PressRelease {
   language: "en" | "ja" | "both";
 }
 
-const PRESS_RELEASES_DATA: PressRelease[] = [
+export const PRESS_RELEASES_DATA: PressRelease[] = [
   {
     id: "pr-1",
     title: {

@@ -3,7 +3,7 @@ title: "India's Semiconductor Renaissance: A Policy-Led Ecosystem and the 11 Jap
 description: "An in-depth look at India's semiconductor strategy, ISM 2.0, SEZ reforms, and the key role of Japanese industrial townships and investments in powering this ecosystem."
 date: "2026-06-15"
 author: "Varun Tyagi"
-image: "https://images.unsplash.com/photo-1591453089816-0fbb971b454c?auto=format&fit=crop&w=1200&q=80"
+image: "/images/thought-leadership/india-semiconductor-renaissance.jpg"
 tags: ["Semiconductors", "Bilateral Investments", "ISM 2.0", "Industrial Townships"]
 featured: false
 takeaways:
