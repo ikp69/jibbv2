@@ -186,6 +186,30 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                 />
               </div>
 
+              {/* Mobile-only Table of Contents and Key Takeaways */}
+              <div className="block lg:hidden space-y-6">
+                {post.takeaways && post.takeaways.length > 0 && (
+                  <div className="rounded-3xl p-6 bg-card border border-border/80 shadow-jibb relative overflow-hidden space-y-4">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
+                    
+                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider border-b border-border/50 pb-3">
+                      {locale === "ja" ? "主要な要点" : "Key Takeaways"}
+                    </h3>
+
+                    <ul className="space-y-3.5">
+                      {post.takeaways.map((takeaway, idx) => (
+                        <li key={idx} className="flex gap-2.5 text-xs text-muted-foreground leading-relaxed">
+                          <span className="text-jibb-orange font-bold mt-0.5">•</span>
+                          <span>{takeaway}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <TableOfContents />
+              </div>
+
               {/* Rendered HTML Markdown Body */}
               <article 
                 className="jibb-prose"
@@ -195,26 +219,29 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
 
             {/* Metrics Sidebar */}
             <div className="space-y-6 lg:sticky lg:top-24 self-start">
-              <TableOfContents />
+              {/* Desktop-only Table of Contents and Key Takeaways */}
+              <div className="hidden lg:block space-y-6">
+                <TableOfContents />
 
-              {post.takeaways && post.takeaways.length > 0 && (
-                <div className="rounded-3xl p-6 bg-card border border-border/80 shadow-jibb relative overflow-hidden space-y-4">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
-                  
-                  <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider border-b border-border/50 pb-3">
-                    {locale === "ja" ? "主要な要点" : "Key Takeaways"}
-                  </h3>
+                {post.takeaways && post.takeaways.length > 0 && (
+                  <div className="rounded-3xl p-6 bg-card border border-border/80 shadow-jibb relative overflow-hidden space-y-4">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
+                    
+                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider border-b border-border/50 pb-3">
+                      {locale === "ja" ? "主要な要点" : "Key Takeaways"}
+                    </h3>
 
-                  <ul className="space-y-3.5">
-                    {post.takeaways.map((takeaway, idx) => (
-                      <li key={idx} className="flex gap-2.5 text-xs text-muted-foreground leading-relaxed">
-                        <span className="text-jibb-orange font-bold mt-0.5">•</span>
-                        <span>{takeaway}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                    <ul className="space-y-3.5">
+                      {post.takeaways.map((takeaway, idx) => (
+                        <li key={idx} className="flex gap-2.5 text-xs text-muted-foreground leading-relaxed">
+                          <span className="text-jibb-orange font-bold mt-0.5">•</span>
+                          <span>{takeaway}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
 
               {/* Author Box - EEAT Enhancement */}
               {post.author && (

@@ -112,7 +112,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
       case "media":
         return {
           title: t("tabs.media") || "Media & Insights",
-          viewAllLink: "/insights",
+          viewAllLink: "/resources/insights",
           viewAllText: t("viewAll") || "View All",
           items: mediaPosts.map(post => ({
             id: post.slug,
@@ -121,8 +121,8 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
             date: post.date,
             author: post.author,
             image: post.image,
-            link: `/insights/${post.slug}`,
-            badge: "Insight"
+            link: (post as any).type === "blog" ? `/resources/blog/${post.slug}` : `/resources/insights/${post.slug}`,
+            badge: (post as any).type === "blog" ? "Blog" : "Insight"
           }))
         };
       case "cases":
@@ -144,7 +144,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
       case "thought":
         return {
           title: t("tabs.thought") || "Thought Leadership",
-          viewAllLink: "/thought-leadership",
+          viewAllLink: "/resources/thought-leadership",
           viewAllText: t("viewAll") || "View All",
           items: thoughtLeadership.map(post => ({
             id: post.slug,
@@ -153,7 +153,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
             date: post.date,
             author: post.author,
             image: post.image,
-            link: `/thought-leadership/${post.slug}`,
+            link: `/resources/thought-leadership/${post.slug}`,
             badge: "Thought Leadership"
           }))
         };
@@ -194,7 +194,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
           </div>
           <div className="shrink-0">
             <Link
-              href="/insights"
+              href="/resources/insights"
               className="inline-flex items-center gap-2 text-jibb-indigo dark:text-jibb-indigo-light font-bold hover:underline group"
             >
               <span>{t("visitNewsroom")}</span>

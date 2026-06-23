@@ -166,8 +166,8 @@ export default async function HomePage({
     ]
   };
 
-  const blogPosts = await getAllPosts("blog", locale);
-  const insightsPosts = await getAllPosts("insights", locale);
+  const blogPosts = (await getAllPosts("blog", locale)).map(p => ({ ...p, type: "blog" }));
+  const insightsPosts = (await getAllPosts("insights", locale)).map(p => ({ ...p, type: "insights" }));
   const mediaPosts = [...blogPosts, ...insightsPosts].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );

@@ -201,77 +201,79 @@ export default async function InsightsPage({ params, searchParams }: PageProps) 
       {/* ============================================================
           INSIGHTS GRID
           ============================================================ */}
-      <section id="insights-archive" className="py-16 bg-jibb-gradient-subtle scroll-mt-20">
-        <div className="section-container">
-          {filteredInsights.length === 0 ? (
-            <div className="text-center py-20 bg-card rounded-3xl border border-border/80 shadow-jibb p-8 space-y-4">
-              <p className="text-lg text-muted-foreground">
-                {locale === "ja" ? "インサイトが見つかりませんでした。" : "No insights found matching your criteria."}
-              </p>
-              <Link href="/resources/insights">
-                <Button variant="outline" className="font-semibold">
-                  {locale === "ja" ? "クリア" : "Clear Filters"}
-                </Button>
-              </Link>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredInsights.map((post) => (
-                <article
-                  key={post.slug}
-                  className="group flex flex-col h-full bg-card border border-border/80 shadow-jibb hover:shadow-jibb-md rounded-2xl overflow-hidden transition-all duration-300"
-                >
-                  <div className="relative h-48 overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
+      {(filteredInsights.length > 0 || search || selectedTag) && (
+        <section id="insights-archive" className="py-16 bg-jibb-gradient-subtle scroll-mt-20">
+          <div className="section-container">
+            {filteredInsights.length === 0 ? (
+              <div className="text-center py-20 bg-card rounded-3xl border border-border/80 shadow-jibb p-8 space-y-4">
+                <p className="text-lg text-muted-foreground">
+                  {locale === "ja" ? "インサイトが見つかりませんでした。" : "No insights found matching your criteria."}
+                </p>
+                <Link href="/resources/insights">
+                  <Button variant="outline" className="font-semibold">
+                    {locale === "ja" ? "クリア" : "Clear Filters"}
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredInsights.map((post) => (
+                  <article
+                    key={post.slug}
+                    className="group flex flex-col h-full bg-card border border-border/80 shadow-jibb hover:shadow-jibb-md rounded-2xl overflow-hidden transition-all duration-300"
+                  >
+                    <div className="relative h-48 overflow-hidden">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
 
-                  <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                    <div className="space-y-3">
-                      <div className="flex flex-wrap gap-1.5">
-                        {post.tags.map((tag) => (
-                          <Badge key={tag} variant="secondary" className="text-[10px] py-0 px-2">
-                            {tag}
-                          </Badge>
-                        ))}
+                    <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                      <div className="space-y-3">
+                        <div className="flex flex-wrap gap-1.5">
+                          {post.tags.map((tag) => (
+                            <Badge key={tag} variant="secondary" className="text-[10px] py-0 px-2">
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+
+                        <h3 className="text-lg font-bold text-foreground tracking-tight leading-snug group-hover:text-jibb-orange transition-colors line-clamp-2">
+                          <Link href={`/resources/insights/${post.slug}`}>
+                            {post.title}
+                          </Link>
+                        </h3>
+
+                        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
+                          {post.description}
+                        </p>
                       </div>
 
-                      <h3 className="text-lg font-bold text-foreground tracking-tight leading-snug group-hover:text-jibb-orange transition-colors line-clamp-2">
+                      <div className="border-t border-border/50 pt-4 flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                          <span className="flex items-center gap-0.5">
+                            <Calendar className="size-3" />
+                            {post.date}
+                          </span>
+                        </div>
+
                         <Link href={`/resources/insights/${post.slug}`}>
-                          {post.title}
+                          <Button variant="link" className="text-jibb-orange text-xs p-0 font-bold gap-1 group-hover:gap-1.5 transition-all">
+                            {locale === "ja" ? "レポートを読む" : "Read Report"} <ArrowRight className="size-3.5" />
+                          </Button>
                         </Link>
-                      </h3>
-
-                      <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
-                        {post.description}
-                      </p>
-                    </div>
-
-                    <div className="border-t border-border/50 pt-4 flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                        <span className="flex items-center gap-0.5">
-                          <Calendar className="size-3" />
-                          {post.date}
-                        </span>
                       </div>
-
-                      <Link href={`/resources/insights/${post.slug}`}>
-                        <Button variant="link" className="text-jibb-orange text-xs p-0 font-bold gap-1 group-hover:gap-1.5 transition-all">
-                          {locale === "ja" ? "レポートを読む" : "Read Report"} <ArrowRight className="size-3.5" />
-                        </Button>
-                      </Link>
                     </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+                  </article>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       <PressReleasesSection locale={locale} />
 

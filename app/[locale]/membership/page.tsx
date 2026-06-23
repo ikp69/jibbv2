@@ -240,50 +240,7 @@ export default function MembershipPage() {
             <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
           </div>
 
-          {/* Featured Snippet Optimization — Comparison Table */}
-          <div className="overflow-x-auto mb-8">
-            <table className="w-full text-sm text-left text-muted-foreground border border-border/40 rounded-lg overflow-hidden">
-              <thead className="bg-jibb-gradient-subtle text-foreground font-bold">
-                <tr>
-                  <th className="px-4 py-3 text-left">Membership Tier</th>
-                  <th className="px-4 py-3 text-center">Business Matching</th>
-                  <th className="px-4 py-3 text-center">Training Programs</th>
-                  <th className="px-4 py-3 text-center">Intelligence Access</th>
-                  <th className="px-4 py-3 text-center">Best For</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/20">
-                <tr className="bg-blue-500/5 hover:bg-blue-500/10">
-                  <td className="px-4 py-3 font-semibold">Associate</td>
-                  <td className="px-4 py-3 text-center">5%</td>
-                  <td className="px-4 py-3 text-center">5% Discount</td>
-                  <td className="px-4 py-3 text-center">Standard</td>
-                  <td className="px-4 py-3">Early-stage startups</td>
-                </tr>
-                <tr className="bg-slate-500/5 hover:bg-slate-500/10">
-                  <td className="px-4 py-3 font-semibold">Silver</td>
-                  <td className="px-4 py-3 text-center">10%</td>
-                  <td className="px-4 py-3 text-center">Newsletter</td>
-                  <td className="px-4 py-3 text-center">Basic</td>
-                  <td className="px-4 py-3">SMEs and research</td>
-                </tr>
-                <tr className="bg-amber-500/5 hover:bg-amber-500/10">
-                  <td className="px-4 py-3 font-semibold">Gold</td>
-                  <td className="px-4 py-3 text-center">20%</td>
-                  <td className="px-4 py-3 text-center">3 Free</td>
-                  <td className="px-4 py-3 text-center">Limited</td>
-                  <td className="px-4 py-3">Growing organizations</td>
-                </tr>
-                <tr className="bg-slate-400/5 hover:bg-slate-400/10">
-                  <td className="px-4 py-3 font-semibold">Platinum</td>
-                  <td className="px-4 py-3 text-center">30%</td>
-                  <td className="px-4 py-3 text-center">7 Free</td>
-                  <td className="px-4 py-3 text-center">Full</td>
-                  <td className="px-4 py-3">Large enterprises</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+
 
           <ScrollReveal staggerChildren={0.12} className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Associate Member */}

@@ -15,8 +15,6 @@ takeaways:
   - "Knowledge-exchange bodies (such as JIBB/JIBS) facilitate joint startup ventures and cross-border tech transfers."
 ---
 
-# Why Japan and India Are Stronger Together: Building the Future of Manufacturing, Technology, and Innovation
-
 ## Introduction
 
 The partnership between Japan and India is entering a new phase, shaped less by diplomacy and more by structural economic needs and industrial priorities. Japan, known for its precision manufacturing and technological leadership, is facing long-term demographic challenges, including a shrinking workforce and rising production costs. India, on the other hand, is rapidly expanding its industrial capacity, supported by a young workforce, improving infrastructure, and strong policy support.

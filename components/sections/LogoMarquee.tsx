@@ -13,9 +13,9 @@ interface Partner {
 
 const PARTNERS: Partner[] = [
   //{ name: "METI Japan", href: "https://www.meti.go.jp/english/", type: "Government", logo: "/logos/meti-logo.jpeg" },
-  { name: "Guidance Tamil Nadu", href: "https://investingintamilnadu.com", type: "Agency", logo: "/logos/gui-logo-black.png" },
+  // { name: "Guidance Tamil Nadu", href: "https://investingintamilnadu.com", type: "Agency", logo: "/logos/gui-logo-black.png" },
   //{ name: "JETRO", href: "https://www.jetro.go.jp/en/", type: "Agency", logo: "/logos/jetro-logo.png" },
-  { name: "Invest India", href: "https://www.investindia.gov.in", type: "Agency", logo: "/logos/invest-india-logo.png" },
+  // { name: "Invest India", href: "https://www.investindia.gov.in", type: "Agency", logo: "/logos/invest-india-logo.png" },
   { name: "CII", href: "https://www.cii.in", type: "Chamber", logo: "/logos/cii-logo.png" },
   //{ name: "FICCI", href: "https://ficci.in", type: "Chamber", logo: "/logos/ficci-logo.png" },
   //{ name: "JICA", href: "https://www.jica.go.jp/english/", type: "Agency", logo: "/logos/jica-logo.png" },
@@ -23,8 +23,12 @@ const PARTNERS: Partner[] = [
   { name: "AMTTF", href: "http://www.amttf.in", type: "Agency", logo: "/logos/amttf-logo.png" },
   { name: "Japan India Semiconductor Committee", href: "#", type: "Committee", logo: "/logos/JISC Png.png" },
   { name: "India Semiconductor Mission", href: "https://ism.gov.in", type: "Government", logo: "/logos/ism_header_logo.png" },
-  { name: "World Development Council", href: "https://www.worlddevelopment.org", type: "Council", logo: "/logos/wdc-logo.png" },
-  //{ name: "JBIC", href: "https://www.jbic.go.jp/en/", type: "Agency", logo: "/logos/jbic-logo.png" }
+  // { name: "World Development Council", href: "https://www.worlddevelopment.org", type: "Council", logo: "/logos/wdc-logo.png" },
+  //{ name: "JBIC", href: "https://www.jbic.go.jp/en/", type: "Agency", logo: "/logos/jbic-logo.png" },
+  { name: "Toho Koki Seisakusho", href: "https://tohokoki.jp/", type: "Partner", logo: "/logos/toho-logo.jpg" },
+  { name: "Kuraray", href: "https://www.kuraray.com/in-en/", type: "Partner", logo: "/logos/kuraray-logo.png" },
+  { name: "Indobox", href: "https://indobox.co.jp/", type: "Partner", logo: "/logos/indobox-logo.png" },
+  { name: "Lith-On", href: "https://lith-on.com/", type: "Partner", logo: "/logos/lithon-logo.png" }
 ];
 
 export function LogoMarquee() {

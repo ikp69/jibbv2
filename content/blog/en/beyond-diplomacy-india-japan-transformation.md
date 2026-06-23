@@ -15,8 +15,6 @@ takeaways:
   - "Human capital and talent mobility will drive the next decade of bilateral economic success."
 ---
 
-# Beyond Diplomacy: The Era of Transformation for the India-Japan Relationship
-
 For ages, the Indian-Japanese relationship has been defined in terms of companionship, diplomacy, and shared values. However, today, we are entering into a new era of business and strategic partnership that will change the future of the Indo-Pacific region in an unprecedented way.
 
 Building a structure for the future of the Indo-Pacific region based on industrial ecosystems, business relations, high-tech manufacturing, technology transfer, talent mobility, digital innovations, and other factors, we are creating a whole new growth architecture for Asia.

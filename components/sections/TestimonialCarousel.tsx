@@ -33,6 +33,26 @@ export function TestimonialCarousel() {
       logoUrl: "/logos/ism_header_logo.png",
       logoAlt: "India Semiconductor Mission",
     },
+    {
+      quoteTitle: t("items.1.quoteTitle"),
+      quote: t("items.1.quote"),
+      author: t("items.1.author"),
+      role: t("items.1.role"),
+      location: t("items.1.location"),
+      avatarUrl: "/testimonials/anand-kashyap.png",
+      logoUrl: "/logos/Deloitte-logo.jpg",
+      logoAlt: "Deloitte",
+    },
+    {
+      quoteTitle: t("items.2.quoteTitle"),
+      quote: t("items.2.quote"),
+      author: t("items.2.author"),
+      role: t("items.2.role"),
+      location: t("items.2.location"),
+      avatarUrl: "/testimonials/tatsujoshi-suzuki.png",
+      logoUrl: "/logos/toho-logo.jpg",
+      logoAlt: "Toho Koki Seisakusho",
+    },
   ];
 
   const slideVariants = {
@@ -108,25 +128,25 @@ export function TestimonialCarousel() {
 
           {/* Avatar Row */}
           <div className="flex items-center gap-3 md:gap-4">
-            {testimonials.map((testimonial, idx) => {
-              const isActive = idx === index;
-              return (
-                <button
-                  key={idx}
-                  onClick={() => selectTestimonial(idx)}
-                  className={`relative overflow-hidden transition-all duration-300 rounded-xl size-12 md:size-16 focus:outline-none ${isActive
-                      ? "ring-4 ring-jibb-indigo dark:ring-jibb-indigo-light ring-offset-2 ring-offset-background scale-110 opacity-100"
-                      : "opacity-40 hover:opacity-75 scale-95 grayscale hover:grayscale-0"
-                    }`}
-                >
-                  <img
-                    src={testimonial.avatarUrl}
-                    alt={testimonial.author}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              );
-            })}
+            <div className="relative overflow-hidden transition-all duration-300 rounded-lg w-48 h-24 md:w-64 md:h-32 bg-white flex items-center justify-center p-1 shadow-sm">
+              {testimonials[index].logoUrl ? (
+                <img
+                  src={testimonials[index].logoUrl}
+                  alt={testimonials[index].logoAlt || testimonials[index].author}
+                  className="w-full h-full object-contain p-2"
+                />
+              ) : testimonials[index].logoAlt === "Deloitte" ? (
+                <span className="text-xl md:text-2xl font-black text-black tracking-tight font-sans selection:bg-transparent">
+                  Deloitte<span className="text-[#86BC25] font-bold">.</span>
+                </span>
+              ) : (
+                <img
+                  src={testimonials[index].avatarUrl}
+                  alt={testimonials[index].author}
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </div>
           </div>
 
           <button
@@ -177,13 +197,17 @@ export function TestimonialCarousel() {
                     <h3 className="text-lg md:text-xl font-bold text-foreground tracking-tight">
                       &ldquo;{testimonials[index].quoteTitle} &rdquo;
                     </h3>
-                    {testimonials[index].logoUrl && (
+                    {testimonials[index].logoUrl ? (
                       <img
                         src={testimonials[index].logoUrl}
                         alt={testimonials[index].logoAlt || "Organization logo"}
                         className="h-8 w-auto max-w-[130px] object-contain opacity-90 flex-shrink-0"
                       />
-                    )}
+                    ) : testimonials[index].logoAlt === "Deloitte" ? (
+                      <span className="text-xl md:text-2xl font-black text-foreground tracking-tight font-sans selection:bg-transparent">
+                        Deloitte<span className="text-[#86BC25] font-bold">.</span>
+                      </span>
+                    ) : null}
                   </div>
                   <p className="text-sm md:text-base text-muted-foreground leading-relaxed mt-2 italic">
                     {testimonials[index].quote}
