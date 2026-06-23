@@ -31,7 +31,7 @@ export async function generateMetadata({
 
   const title = locale === "ja"
     ? "JIBB - 日印ビジネス機構 | 日本・インド間のビジネス協力と産業成長"
-    : "JIBB - Japan India Business Bureau | Bilateral Growth & Innovation";
+    : "JIBB - Japan India Business Bureau | 日印ビジネス局";
 
   const description = locale === "ja"
     ? "日本とインドの企業・政府・スタートアップを結ぶ戦略的な橋渡し。市場参入支援、ビジネスマッチング、イノベーション協業で日印間の産業成長を推進します。"
@@ -84,7 +84,8 @@ export async function generateMetadata({
     alternates: {
       canonical: `${baseUrl}/${locale}`,
       languages: {
-        en: `${baseUrl}/en`,      },
+        en: `${baseUrl}/en`,
+      },
     },
   };
 }
