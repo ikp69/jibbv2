@@ -30,7 +30,7 @@ export async function generateMetadata({
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
 
   const title = locale === "ja"
-    ? "JIBB — 日印ビジネス機構 | 日本・インド間のビジネス協力と産業成長"
+    ? "JIBB - 日印ビジネス機構 | 日本・インド間のビジネス協力と産業成長"
     : "JIBB - Japan India Business Bureau | Bilateral Growth & Innovation";
 
   const description = locale === "ja"
@@ -67,11 +67,11 @@ export async function generateMetadata({
       alternateLocale: locale === "en" ? "ja_JP" : "en_US",
       images: [
         {
-          url: `${baseUrl}/images/og/home-og.jpg`,
+          url: `${baseUrl}/JIBB_LandingPage_Illustration_Final.webp`,
           width: 1200,
           height: 630,
-          alt: "JIBB — Connecting Japan & India for Bilateral Growth & Innovation",
-          type: "image/jpeg",
+          alt: "JIBB - Connecting Japan & India for Bilateral Growth & Innovation",
+          type: "image/webp",
         },
       ],
     },
@@ -79,14 +79,12 @@ export async function generateMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: [`${baseUrl}/images/og/home-og.jpg`],
+      images: [`${baseUrl}/JIBB_LandingPage_Illustration_Final.webp`],
     },
     alternates: {
       canonical: `${baseUrl}/${locale}`,
       languages: {
-        en: `${baseUrl}/en`,
-        ja: `${baseUrl}/ja`,
-      },
+        en: `${baseUrl}/en`,      },
     },
   };
 }

@@ -5,37 +5,54 @@ const BASE = 'https://npo-jibb.org'
 const SLUG = 'semicon-india-2026'
 const OG_IMAGE = `${BASE}/events/semicon-india-2026-en.png`
 
-export const metadata: Metadata = {
-  title: "Semicon India 2026 Exhibition Briefing & Semiconductor Market Seminar | JIBB Tokyo",
-  description: "Exclusive briefing on India's semiconductor market and the Japan Pavilion exhibition opportunity at Semicon India 2026 (Sep 17–19, New Delhi). Held April 28, 2026 at Plaza F, Tokyo. Hybrid format. Organized by IESA & JIBB.",
-  keywords: [
-    'Semicon India 2026', 'Japan Pavilion Semicon India', 'India semiconductor market',
-    'IESA JIBB seminar', 'Japan India semiconductor', 'CMP committee',
-    'インド半導体市場', 'セミコンインディア2026', 'ジャパンパビリオン'
-  ],
-  alternates: {
-    canonical: `${BASE}/events/${SLUG}`,
-    languages: {
-      'en': `${BASE}/events/${SLUG}`,
-      'ja': `${BASE}/events/${SLUG}`,
-      'x-default': `${BASE}/events/${SLUG}`,
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+
+  const title = locale === "ja"
+    ? "セミコンインディア2026出展説明会・半導体市場セミナー | JIBB 東京"
+    : "Semicon India 2026 Exhibition Briefing & Semiconductor Market Seminar | JIBB Tokyo";
+
+  const description = locale === "ja"
+    ? "インド半導体市場およびセミコンインディア2026でのジャパンパビリオン出展機会に関する特別説明会（9月17〜19日、ニューデリー）。2026年4月28日、東京・プラザエフにて開催。ハイブリッド形式。IESAおよびJIBB主催。"
+    : "Exclusive briefing on India's semiconductor market and the Japan Pavilion exhibition opportunity at Semicon India 2026 (Sep 17–19, New Delhi). Held April 28, 2026 at Plaza F, Tokyo. Hybrid format. Organized by IESA & JIBB.";
+
+  return {
+    title,
+    description,
+    keywords: [
+      'Semicon India 2026', 'Japan Pavilion Semicon India', 'India semiconductor market',
+      'IESA JIBB seminar', 'Japan India semiconductor', 'CMP committee',
+      'インド半導体市場', 'セミコンインディア2026', 'ジャパンパビリオン'
+    ],
+    alternates: {
+      canonical: `${baseUrl}/${locale}/events/${SLUG}`,
+      languages: {
+        en: `${baseUrl}/en/events/${SLUG}`,
+        "x-default": `${baseUrl}/en/events/${SLUG}`,
+      }
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${baseUrl}/${locale}/events/${SLUG}`,
+      siteName: 'JIBB',
+      locale: locale === 'en' ? 'en_US' : 'ja_JP',
+      alternateLocale: locale === 'en' ? 'ja_JP' : 'en_US',
+      type: 'website',
+      images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: 'Semicon India 2026 Seminar | セミコンインデイ2026セミナー' }]
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [OG_IMAGE]
     }
-  },
-  openGraph: {
-    title: "Semicon India 2026 — Semiconductor Market Outlook Seminar | JIBB | セミコンインデイ2026",
-    description: "1st Exhibition Briefing & Semiconductor Market Outlook Seminar — April 28, 2026 · Plaza F, Tokyo. Hybrid event by IESA & JIBB. インド半導体市場セミナー・ジャパンパビリオン出展説明会。",
-    url: `${BASE}/events/${SLUG}`,
-    siteName: 'JIBB',
-    locale: 'ja_JP',
-    type: 'website',
-    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: 'Semicon India 2026 Seminar | セミコンインデイ2026セミナー' }]
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: "Semicon India 2026 Exhibition Briefing | JIBB",
-    description: "April 28, 2026 · Plaza F, Tokyo. India semiconductor market outlook and Japan Pavilion briefing. インド半導体市場・ジャパンパビリオン出展説明。",
-    images: [OG_IMAGE]
-  }
+  };
 }
 
 const jsonLd = {

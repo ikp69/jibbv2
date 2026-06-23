@@ -6,11 +6,18 @@ import { updateSession } from "@/lib/supabase/middleware";
 const handleI18nRouting = createMiddleware(routing);
 
 export default async function middleware(request: NextRequest) {
-  // 1. Update/refresh the Supabase session and get the user
-  const { supabaseResponse, user } = await updateSession(request);
-
   const pathname = request.nextUrl.pathname;
   const locale = pathname.split("/")[1] || "en";
+
+  // Redirect /innovation-hub to homepage (temporary)
+  if (pathname.match(/^\/(?:en|ja)?\/?innovation-hub(?:\/.*)?$/)) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${locale}`;
+    return NextResponse.redirect(url, 307);
+  }
+
+  // 1. Update/refresh the Supabase session and get the user
+  const { supabaseResponse, user } = await updateSession(request);
 
   // TEMPORARY: Redirect /ja routes to /en (Japanese translations being verified)
   if (pathname.startsWith("/ja")) {

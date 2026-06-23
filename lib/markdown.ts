@@ -19,6 +19,7 @@ export interface MarkdownPost {
   client?: string;
   impact?: string;
   takeaways?: string[];
+  updatedAt?: string;
 }
 
 export type PostType = "blog" | "insights" | "thought-leadership";
@@ -94,6 +95,7 @@ export async function getPostBySlug(
       client: data.client,
       impact: data.impact,
       takeaways: data.takeaways || [],
+      updatedAt: data.updatedAt || data.date || "",
     };
   } catch (error) {
     console.error(`Error parsing markdown post for ${type}/${slug} in locale ${locale}:`, error);
