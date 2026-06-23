@@ -236,7 +236,7 @@ export default function EventsLandingPage() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   // State for active gallery selection
-  const galleryKeys = ['semicon-2025', 'semicon-2026', 'acma', 'electronica'] as const
+  const galleryKeys = ['semicon-2025', 'semicon-2026', 'acma', 'electronica', 'embassy-meet'] as const
   const [activeGalleryId, setActiveGalleryId] = useState<typeof galleryKeys[number]>('semicon-2025')
 
   const galleries = useMemo(() => ({
@@ -288,6 +288,15 @@ export default function EventsLandingPage() {
         { src: '/events/event-gallery/ELECTRONICA 2026/DSC_9032.jpg', alt: locale === 'ja' ? 'イベント来場者' : 'Event attendees' },
         { src: '/events/event-gallery/ELECTRONICA 2026/DSC_9033.jpg', alt: locale === 'ja' ? '対話セッション' : 'Dialogue session' },
         { src: '/events/event-gallery/ELECTRONICA 2026/DSC_9044.jpg', alt: locale === 'ja' ? 'ネットワーキング' : 'Networking' }
+      ]
+    },
+    'embassy-meet': {
+      name: { en: 'Japan Embassy Meet', ja: '在日大使館での会合' },
+      images: [
+        { src: '/events/event-gallery/Japan Embassy Meet/WhatsApp Image 2026-03-20 at 5.51.35 PM.jpeg', alt: locale === 'ja' ? '在日大使館での会合' : 'Japan Embassy Meet' },
+        { src: '/events/event-gallery/Japan Embassy Meet/WhatsApp Image 2026-03-20 at 5.51.35 PM (1).jpeg', alt: locale === 'ja' ? '会合の様子' : 'Embassy Meet discussion' },
+        { src: '/events/event-gallery/Japan Embassy Meet/WhatsApp Image 2026-03-20 at 5.51.35 PM (2).jpeg', alt: locale === 'ja' ? '日印代表者' : 'Japan-India representatives' },
+        { src: '/events/event-gallery/Japan Embassy Meet/WhatsApp Image 2026-03-20 at 5.51.35 PM (3).jpeg', alt: locale === 'ja' ? '大使館でのネットワーキング' : 'Networking at the Embassy' }
       ]
     }
   }), [locale])
@@ -392,440 +401,440 @@ export default function EventsLandingPage() {
   }, [showAllImages, allGalleryImages])
 
   return (
-      <main className="evl-main">
-        {/* ─── Hero ─── */}
-        <section className="evl-hero">
-          <div className="evl-hero-bg"></div>
-          <motion.div
-            className="evl-hero-content"
-            initial="hidden"
-            animate="visible"
-            variants={stagger}
-          >
-            <motion.div className="evl-hero-tag" variants={fadeInUp}>
-              <span className="evl-hero-tag-line"></span>
-              <span className="evl-hero-tag-text" style={jpFont}>{l.pageTag}</span>
-            </motion.div>
-            <motion.h1 className="evl-hero-title" variants={fadeInUp} style={jpFont}>
-              {l.pageTitle}<br />
-              <em>{l.pageTitleHighlight}</em>
-            </motion.h1>
-            <motion.p className="evl-hero-subtitle" variants={fadeInUp} style={jpFont}>
-              {l.pageSubtitle}
-            </motion.p>
+    <main className="evl-main">
+      {/* ─── Hero ─── */}
+      <section className="evl-hero">
+        <div className="evl-hero-bg"></div>
+        <motion.div
+          className="evl-hero-content"
+          initial="hidden"
+          animate="visible"
+          variants={stagger}
+        >
+          <motion.div className="evl-hero-tag" variants={fadeInUp}>
+            <span className="evl-hero-tag-line"></span>
+            <span className="evl-hero-tag-text" style={jpFont}>{l.pageTag}</span>
           </motion.div>
-        </section>
+          <motion.h1 className="evl-hero-title" variants={fadeInUp} style={jpFont}>
+            {l.pageTitle}<br />
+            <em>{l.pageTitleHighlight}</em>
+          </motion.h1>
+          <motion.p className="evl-hero-subtitle" variants={fadeInUp} style={jpFont}>
+            {l.pageSubtitle}
+          </motion.p>
+        </motion.div>
+      </section>
 
-        {/* ─── Interactive Events Section ─── */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
-          
-          {/* Tabs Navigation */}
-          <div className="evl-tabs-container mb-8" style={jpFont}>
-            <button 
-              className={`evl-tab-btn ${activeTab === 'upcoming' ? 'active' : ''}`}
-              onClick={() => setActiveTab('upcoming')}
-            >
-              <span className="evl-tab-box">
-                {l.upcomingBox}
-              </span>
-              <span className="evl-tab-italic">
-                {l.upcomingItalic}
-              </span>
-            </button>
+      {/* ─── Interactive Events Section ─── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
 
-            <button 
-              className={`evl-tab-btn ${activeTab === 'past' ? 'active' : ''}`}
-              onClick={() => setActiveTab('past')}
-            >
-              <span className="evl-tab-box">
-                {l.pastBox}
-              </span>
-              <span className="evl-tab-italic">
-                {l.pastItalic}
-              </span>
-            </button>
-          </div>
+        {/* Tabs Navigation */}
+        <div className="evl-tabs-container mb-8" style={jpFont}>
+          <button
+            className={`evl-tab-btn ${activeTab === 'upcoming' ? 'active' : ''}`}
+            onClick={() => setActiveTab('upcoming')}
+          >
+            <span className="evl-tab-box">
+              {l.upcomingBox}
+            </span>
+            <span className="evl-tab-italic">
+              {l.upcomingItalic}
+            </span>
+          </button>
 
-          <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 items-start">
-            {/* Left Column: 70% */}
-            <div className="lg:col-span-7 flex flex-col gap-8">
-              
-              {/* Mobile Countdown (Only for upcoming events and if countdown is not expired) */}
-              {activeTab === 'upcoming' && selectedEvent && (
-                <div className="block lg:hidden">
-                  <EventCountdown
-                    targetDate={selectedEvent.startDate}
-                    startTime={selectedEvent.time}
-                    eventTitle={selectedEvent.title}
-                    venueCity={selectedEvent.city}
-                    organizer={selectedEvent.organizer}
-                    locale={locale}
-                  />
-                </div>
-              )}
+          <button
+            className={`evl-tab-btn ${activeTab === 'past' ? 'active' : ''}`}
+            onClick={() => setActiveTab('past')}
+          >
+            <span className="evl-tab-box">
+              {l.pastBox}
+            </span>
+            <span className="evl-tab-italic">
+              {l.pastItalic}
+            </span>
+          </button>
+        </div>
 
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeTab}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  {filteredEvents.length === 0 ? (
-                    <div className="text-center py-16 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
-                      <span className="material-symbols-outlined text-slate-300 text-5xl">event_busy</span>
-                      <p className="text-slate-500 mt-4 font-medium" style={jpFont}>
-                        {tabLabels[locale as 'en' | 'ja'].noEvents}
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col gap-8">
-                      {/* Prominent Selected Card */}
-                      {selectedEvent && (
-                        <motion.div
-                          key={selectedEvent.id}
-                          className="evl-banner-card overflow-hidden flex flex-col"
-                          initial="hidden"
-                          animate="visible"
-                          variants={scaleIn}
+        <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 items-start">
+          {/* Left Column: 70% */}
+          <div className="lg:col-span-7 flex flex-col gap-8">
+
+            {/* Mobile Countdown (Only for upcoming events and if countdown is not expired) */}
+            {activeTab === 'upcoming' && selectedEvent && (
+              <div className="block lg:hidden">
+                <EventCountdown
+                  targetDate={selectedEvent.startDate}
+                  startTime={selectedEvent.time}
+                  eventTitle={selectedEvent.title}
+                  venueCity={selectedEvent.city}
+                  organizer={selectedEvent.organizer}
+                  locale={locale}
+                />
+              </div>
+            )}
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.4 }}
+              >
+                {filteredEvents.length === 0 ? (
+                  <div className="text-center py-16 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
+                    <span className="material-symbols-outlined text-slate-300 text-5xl">event_busy</span>
+                    <p className="text-slate-500 mt-4 font-medium" style={jpFont}>
+                      {tabLabels[locale as 'en' | 'ja'].noEvents}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-8">
+                    {/* Prominent Selected Card */}
+                    {selectedEvent && (
+                      <motion.div
+                        key={selectedEvent.id}
+                        className="evl-banner-card overflow-hidden flex flex-col"
+                        initial="hidden"
+                        animate="visible"
+                        variants={scaleIn}
+                      >
+                        <Link
+                          href={`/events/${selectedEvent.slug}`}
+                          className="evl-banner-link"
                         >
-                          <Link 
-                            href={`/events/${selectedEvent.slug}`} 
-                            className="evl-banner-link"
-                          >
-                            <Image
-                              src={selectedEvent.image}
-                              alt={selectedEvent.title}
-                              width={1200}
-                              height={630}
-                              style={{ width: '100%', height: 'auto', display: 'block' }}
-                              className="evl-banner-img transition-transform duration-500 hover:scale-[1.02]"
-                              priority
-                            />
-                          </Link>
+                          <Image
+                            src={selectedEvent.image}
+                            alt={selectedEvent.title}
+                            width={1200}
+                            height={630}
+                            style={{ width: '100%', height: 'auto', display: 'block' }}
+                            className="evl-banner-img transition-transform duration-500 hover:scale-[1.02]"
+                            priority
+                          />
+                        </Link>
 
-                          {/* Event Actions Panel */}
-                          <div className="p-5 border-t border-slate-100 flex flex-col sm:flex-row gap-4 items-center justify-between bg-slate-50/50">
-                            <div className="flex flex-col gap-1 text-left w-full sm:w-auto">
-                              <h4 className="font-bold text-slate-800 text-sm md:text-base line-clamp-1 leading-snug">
-                                {selectedEvent.title}
-                              </h4>
-                              <p className="text-xs text-slate-500 flex items-center gap-1.5">
-                                <span className="material-symbols-outlined text-sm">location_on</span>
-                                {selectedEvent.venue} ({selectedEvent.city})
-                              </p>
-                            </div>
+                        {/* Event Actions Panel */}
+                        <div className="p-5 border-t border-slate-100 flex flex-col sm:flex-row gap-4 items-center justify-between bg-slate-50/50">
+                          <div className="flex flex-col gap-1 text-left w-full sm:w-auto">
+                            <h4 className="font-bold text-slate-800 text-sm md:text-base line-clamp-1 leading-snug">
+                              {selectedEvent.title}
+                            </h4>
+                            <p className="text-xs text-slate-500 flex items-center gap-1.5">
+                              <span className="material-symbols-outlined text-sm">location_on</span>
+                              {selectedEvent.venue} ({selectedEvent.city})
+                            </p>
+                          </div>
 
-                            <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-                              <Link
-                                href={`/events/${selectedEvent.slug}`}
-                                className="px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold text-xs md:text-sm transition-all hover:bg-slate-50 hover:border-slate-300 text-center w-full sm:w-auto"
+                          <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+                            <Link
+                              href={`/events/${selectedEvent.slug}`}
+                              className="px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold text-xs md:text-sm transition-all hover:bg-slate-50 hover:border-slate-300 text-center w-full sm:w-auto"
+                              style={jpFont}
+                            >
+                              {locale === 'ja' ? '詳細を見る' : 'View more details'}
+                            </Link>
+
+                            {selectedEvent.status === 'upcoming' && (
+                              <a
+                                href={selectedEvent.registrationUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-6 py-2.5 rounded-xl bg-[#F58220] hover:bg-[#e07216] text-white font-bold text-xs md:text-sm shadow-md shadow-[#F58220]/25 transition-all text-center w-full sm:w-auto relative overflow-hidden group btn-pulsate"
                                 style={jpFont}
                               >
-                                {locale === 'ja' ? '詳細を見る' : 'View more details'}
-                              </Link>
-
-                              {selectedEvent.status === 'upcoming' && (
-                                <a
-                                  href={selectedEvent.registrationUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="px-6 py-2.5 rounded-xl bg-[#F58220] hover:bg-[#e07216] text-white font-bold text-xs md:text-sm shadow-md shadow-[#F58220]/25 transition-all text-center w-full sm:w-auto relative overflow-hidden group btn-pulsate"
-                                  style={jpFont}
-                                >
-                                  <span className="relative z-10 flex items-center justify-center gap-1.5">
-                                    <span className="material-symbols-outlined text-xs md:text-sm">local_activity</span>
-                                    {locale === 'ja' ? '今すぐ登録する' : 'Register Now'}
-                                  </span>
-                                </a>
-                              )}
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-
-                      {/* Smaller Cards List (Other Events in this category) */}
-                      {otherEvents.length > 0 && (
-                        <div className="mt-4">
-                          <h4 className="text-slate-800 text-sm font-semibold tracking-wider uppercase mb-4">
-                            {tabLabels[locale as 'en' | 'ja'].otherEvents}
-                          </h4>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {otherEvents.map((ev) => (
-                              <div
-                                key={ev.id}
-                                onClick={() => setSelectedEventId(ev.id)}
-                                className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-md group"
-                              >
-                                <div className="relative h-40 w-full overflow-hidden bg-slate-50">
-                                  <Image
-                                    src={ev.image}
-                                    alt={ev.title}
-                                    fill
-                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                    sizes="(max-width: 768px) 100vw, 25vw"
-                                  />
-                                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-[#162D6B] text-[10px] font-bold px-2.5 py-1 rounded-lg border border-slate-100">
-                                    {formatBadgeDate(ev.startDate)}
-                                  </div>
-                                </div>
-                                <div className="p-5 flex-1 flex flex-col justify-between">
-                                  <div>
-                                    <h5 className="font-bold text-slate-800 text-sm line-clamp-2 mb-2 group-hover:text-[#162D6B] transition-colors leading-snug">
-                                      {ev.title}
-                                    </h5>
-                                    <p className="text-slate-500 text-xs line-clamp-2 leading-relaxed">
-                                      {ev.description}
-                                    </p>
-                                  </div>
-                                  <div className="mt-4 pt-3 border-t border-slate-50 flex items-center justify-between text-[11px] text-slate-400 font-semibold uppercase">
-                                    <span className="flex items-center gap-1">
-                                      <span className="material-symbols-outlined text-xs">location_on</span>
-                                      {ev.city}
-                                    </span>
-                                    <span className="text-[#F58220] flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
-                                      {tabLabels[locale as 'en' | 'ja'].detailsButton}
-                                      <span className="material-symbols-outlined text-xs font-bold">chevron_right</span>
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
+                                <span className="relative z-10 flex items-center justify-center gap-1.5">
+                                  <span className="material-symbols-outlined text-xs md:text-sm">local_activity</span>
+                                  {locale === 'ja' ? '今すぐ登録する' : 'Register Now'}
+                                </span>
+                              </a>
+                            )}
                           </div>
                         </div>
-                      )}
-                    </div>
-                  )}
+                      </motion.div>
+                    )}
+
+                    {/* Smaller Cards List (Other Events in this category) */}
+                    {otherEvents.length > 0 && (
+                      <div className="mt-4">
+                        <h4 className="text-slate-800 text-sm font-semibold tracking-wider uppercase mb-4">
+                          {tabLabels[locale as 'en' | 'ja'].otherEvents}
+                        </h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {otherEvents.map((ev) => (
+                            <div
+                              key={ev.id}
+                              onClick={() => setSelectedEventId(ev.id)}
+                              className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-md group"
+                            >
+                              <div className="relative h-40 w-full overflow-hidden bg-slate-50">
+                                <Image
+                                  src={ev.image}
+                                  alt={ev.title}
+                                  fill
+                                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                  sizes="(max-width: 768px) 100vw, 25vw"
+                                />
+                                <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-[#162D6B] text-[10px] font-bold px-2.5 py-1 rounded-lg border border-slate-100">
+                                  {formatBadgeDate(ev.startDate)}
+                                </div>
+                              </div>
+                              <div className="p-5 flex-1 flex flex-col justify-between">
+                                <div>
+                                  <h5 className="font-bold text-slate-800 text-sm line-clamp-2 mb-2 group-hover:text-[#162D6B] transition-colors leading-snug">
+                                    {ev.title}
+                                  </h5>
+                                  <p className="text-slate-500 text-xs line-clamp-2 leading-relaxed">
+                                    {ev.description}
+                                  </p>
+                                </div>
+                                <div className="mt-4 pt-3 border-t border-slate-50 flex items-center justify-between text-[11px] text-slate-400 font-semibold uppercase">
+                                  <span className="flex items-center gap-1">
+                                    <span className="material-symbols-outlined text-xs">location_on</span>
+                                    {ev.city}
+                                  </span>
+                                  <span className="text-[#F58220] flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
+                                    {tabLabels[locale as 'en' | 'ja'].detailsButton}
+                                    <span className="material-symbols-outlined text-xs font-bold">chevron_right</span>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Right Column: 30% */}
+          <div className="lg:col-span-3 lg:sticky lg:top-[120px] flex flex-col gap-6">
+
+            {/* Desktop Countdown (Only for upcoming events) */}
+            {selectedEvent && selectedEvent.status === 'upcoming' && (
+              <div className="hidden lg:block">
+                <EventCountdown
+                  targetDate={selectedEvent.startDate}
+                  startTime={selectedEvent.time}
+                  eventTitle={selectedEvent.title}
+                  venueCity={selectedEvent.city}
+                  organizer={selectedEvent.organizer}
+                  locale={locale}
+                />
+              </div>
+            )}
+
+            {/* Event Calendar Widget */}
+            <EventCalendar
+              events={allEvents}
+              selectedEventId={selectedEventId}
+              onSelectEvent={(id) => {
+                setSelectedEventId(id)
+                // Switch tab based on event status
+                const selected = allEvents.find(e => e.id === id)
+                if (selected) {
+                  setActiveTab(selected.status)
+                }
+              }}
+              locale={locale}
+            />
+
+            {/* Event Details Summary Widget */}
+            {selectedEvent && (
+              <EventDetailsSummary
+                event={selectedEvent}
+                locale={locale}
+              />
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Past Highlights Collage ─── */}
+      <section className="evl-collage-section">
+        <motion.div
+          className="evl-collage-header"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={stagger}
+        >
+          <div className="evl-collage-header-left">
+            <motion.p className="evl-collage-tag" variants={fadeInUp} style={jpFont}>
+              {locale === 'ja' ? '記録' : 'Gallery'}
+            </motion.p>
+            <motion.h2 className="evl-collage-title" variants={fadeInUp} style={jpFont}>
+              {l.collageTitle}
+            </motion.h2>
+            <motion.p className="evl-collage-subtitle" variants={fadeInUp} style={jpFont}>
+              {l.collageSubtitle}
+            </motion.p>
+          </div>
+
+          <motion.div className="evl-gallery-carousel-selector" variants={fadeInUp}>
+            <button onClick={handlePrevGallery} className="evl-gallery-carousel-arrow" aria-label="Previous gallery">
+              <span className="material-symbols-outlined">west</span>
+            </button>
+            <span className="evl-gallery-carousel-name" style={jpFont}>
+              {activeGallery.name[locale as 'en' | 'ja']}
+            </span>
+            <button onClick={handleNextGallery} className="evl-gallery-carousel-arrow" aria-label="Next gallery">
+              <span className="material-symbols-outlined">east</span>
+            </button>
+          </motion.div>
+        </motion.div>
+
+        <div className="evl-collage-grid-wrapper">
+          {allGalleryImages.length === 0 ? (
+            <motion.div
+              className="evl-collage-empty-state"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeIn}
+            >
+              <span className="material-symbols-outlined">photo_library</span>
+              <p style={jpFont}>
+                {locale === 'ja' ? '画像は近日中に追加されます。' : 'Images will be added soon.'}
+              </p>
+            </motion.div>
+          ) : (
+            <div className={`evl-collage-grid-container ${showAllImages ? 'expanded' : ''}`}>
+              <AnimatePresence mode="sync">
+                <motion.div
+                  key={`${activeGalleryId}-${displayedImages.map(img => img.src).join('-')}`}
+                  className="evl-collage-grid"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  {displayedImages.map((img, i) => (
+                    <motion.div
+                      key={`${img.src}-${i}`}
+                      className="evl-collage-item"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: i * 0.08, duration: 0.4 }}
+                      onClick={() => {
+                        const fullIndex = allGalleryImages.findIndex(g => g.src === img.src)
+                        if (fullIndex !== -1) {
+                          setLightboxIndex(fullIndex)
+                        }
+                      }}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <Image
+                        src={img.src}
+                        alt={img.alt}
+                        fill
+                        className="evl-collage-img"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                      <div className="evl-collage-overlay">
+                        <span style={jpFont}>{img.alt}</span>
+                      </div>
+                    </motion.div>
+                  ))}
                 </motion.div>
               </AnimatePresence>
             </div>
+          )}
 
-            {/* Right Column: 30% */}
-            <div className="lg:col-span-3 lg:sticky lg:top-[120px] flex flex-col gap-6">
-              
-              {/* Desktop Countdown (Only for upcoming events) */}
-              {selectedEvent && selectedEvent.status === 'upcoming' && (
-                <div className="hidden lg:block">
-                  <EventCountdown
-                    targetDate={selectedEvent.startDate}
-                    startTime={selectedEvent.time}
-                    eventTitle={selectedEvent.title}
-                    venueCity={selectedEvent.city}
-                    organizer={selectedEvent.organizer}
-                    locale={locale}
-                  />
-                </div>
-              )}
-
-              {/* Event Calendar Widget */}
-              <EventCalendar
-                events={allEvents}
-                selectedEventId={selectedEventId}
-                onSelectEvent={(id) => {
-                  setSelectedEventId(id)
-                  // Switch tab based on event status
-                  const selected = allEvents.find(e => e.id === id)
-                  if (selected) {
-                    setActiveTab(selected.status)
-                  }
-                }}
-                locale={locale}
-              />
-
-              {/* Event Details Summary Widget */}
-              {selectedEvent && (
-                <EventDetailsSummary
-                  event={selectedEvent}
-                  locale={locale}
-                />
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* ─── Past Highlights Collage ─── */}
-        <section className="evl-collage-section">
-          <motion.div
-            className="evl-collage-header"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={stagger}
-          >
-            <div className="evl-collage-header-left">
-              <motion.p className="evl-collage-tag" variants={fadeInUp} style={jpFont}>
-                {locale === 'ja' ? '記録' : 'Gallery'}
-              </motion.p>
-              <motion.h2 className="evl-collage-title" variants={fadeInUp} style={jpFont}>
-                {l.collageTitle}
-              </motion.h2>
-              <motion.p className="evl-collage-subtitle" variants={fadeInUp} style={jpFont}>
-                {l.collageSubtitle}
-              </motion.p>
-            </div>
-
-            <motion.div className="evl-gallery-carousel-selector" variants={fadeInUp}>
-              <button onClick={handlePrevGallery} className="evl-gallery-carousel-arrow" aria-label="Previous gallery">
-                <span className="material-symbols-outlined">west</span>
-              </button>
-              <span className="evl-gallery-carousel-name" style={jpFont}>
-                {activeGallery.name[locale as 'en' | 'ja']}
-              </span>
-              <button onClick={handleNextGallery} className="evl-gallery-carousel-arrow" aria-label="Next gallery">
-                <span className="material-symbols-outlined">east</span>
-              </button>
-            </motion.div>
-          </motion.div>
-
-          <div className="evl-collage-grid-wrapper">
-            {allGalleryImages.length === 0 ? (
-              <motion.div 
-                className="evl-collage-empty-state"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeIn}
-              >
-                <span className="material-symbols-outlined">photo_library</span>
-                <p style={jpFont}>
-                  {locale === 'ja' ? '画像は近日中に追加されます。' : 'Images will be added soon.'}
-                </p>
-              </motion.div>
-            ) : (
-              <div className={`evl-collage-grid-container ${showAllImages ? 'expanded' : ''}`}>
-                <AnimatePresence mode="sync">
-                  <motion.div
-                    key={`${activeGalleryId}-${displayedImages.map(img => img.src).join('-')}`}
-                    className="evl-collage-grid"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.6 }}
-                  >
-                    {displayedImages.map((img, i) => (
-                      <motion.div
-                        key={`${img.src}-${i}`}
-                        className="evl-collage-item"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: i * 0.08, duration: 0.4 }}
-                        onClick={() => {
-                          const fullIndex = allGalleryImages.findIndex(g => g.src === img.src)
-                          if (fullIndex !== -1) {
-                            setLightboxIndex(fullIndex)
-                          }
-                        }}
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <Image
-                          src={img.src}
-                          alt={img.alt}
-                          fill
-                          className="evl-collage-img"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        />
-                        <div className="evl-collage-overlay">
-                          <span style={jpFont}>{img.alt}</span>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            )}
-
-            {/* View More Button */}
-            {allGalleryImages.length > 0 && (showAllImages || allGalleryImages.length > displayedImages.length) && (
-              <motion.div 
-                className="evl-gallery-action"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeInUp}
-              >
-                <button 
-                  className="evl-btn-view-gallery"
-                  onClick={() => setShowAllImages(!showAllImages)}
-                  style={jpFont}
-                >
-                  <span className="material-symbols-outlined">
-                    {showAllImages ? 'expand_less' : 'photo_library'}
-                  </span>
-                  <span>{showAllImages ? l.viewLess : l.viewMore}</span>
-                  <span className="evl-gallery-count">
-                    ({displayedImages.length} / {allGalleryImages.length})
-                  </span>
-                </button>
-              </motion.div>
-            )}
-          </div>
-        </section>
-
-        {/* ─── Lightbox Modal ─── */}
-        <AnimatePresence>
-          {lightboxIndex !== null && (
+          {/* View More Button */}
+          {allGalleryImages.length > 0 && (showAllImages || allGalleryImages.length > displayedImages.length) && (
             <motion.div
-              className="evl-lightbox-overlay"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              onClick={() => setLightboxIndex(null)}
+              className="evl-gallery-action"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
             >
               <button
-                className="evl-lightbox-close"
-                onClick={() => setLightboxIndex(null)}
-                aria-label="Close Lightbox"
+                className="evl-btn-view-gallery"
+                onClick={() => setShowAllImages(!showAllImages)}
+                style={jpFont}
               >
-                <span className="material-symbols-outlined">close</span>
-              </button>
-
-              <button
-                className="evl-lightbox-nav-btn left"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setLightboxIndex((prev) => (prev !== null ? (prev - 1 + allGalleryImages.length) % allGalleryImages.length : null))
-                }}
-                aria-label="Previous image"
-              >
-                <span className="material-symbols-outlined">chevron_left</span>
-              </button>
-
-              <div className="evl-lightbox-content" onClick={(e) => e.stopPropagation()}>
-                <div className="evl-lightbox-img-wrapper">
-                  <Image
-                    src={allGalleryImages[lightboxIndex].src}
-                    alt={allGalleryImages[lightboxIndex].alt}
-                    width={1600}
-                    height={1200}
-                    className="evl-lightbox-img"
-                    priority
-                  />
-                </div>
-                <div className="evl-lightbox-caption" style={jpFont}>
-                  <span className="evl-lightbox-counter">
-                    {lightboxIndex + 1} / {allGalleryImages.length}
-                  </span>
-                  <p className="evl-lightbox-desc">
-                    {allGalleryImages[lightboxIndex].alt}
-                  </p>
-                </div>
-              </div>
-
-              <button
-                className="evl-lightbox-nav-btn right"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setLightboxIndex((prev) => (prev !== null ? (prev + 1) % allGalleryImages.length : null))
-                }}
-                aria-label="Next image"
-              >
-                <span className="material-symbols-outlined">chevron_right</span>
+                <span className="material-symbols-outlined">
+                  {showAllImages ? 'expand_less' : 'photo_library'}
+                </span>
+                <span>{showAllImages ? l.viewLess : l.viewMore}</span>
+                <span className="evl-gallery-count">
+                  ({displayedImages.length} / {allGalleryImages.length})
+                </span>
               </button>
             </motion.div>
           )}
-        </AnimatePresence>
-      </main>
+        </div>
+      </section>
+
+      {/* ─── Lightbox Modal ─── */}
+      <AnimatePresence>
+        {lightboxIndex !== null && (
+          <motion.div
+            className="evl-lightbox-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={() => setLightboxIndex(null)}
+          >
+            <button
+              className="evl-lightbox-close"
+              onClick={() => setLightboxIndex(null)}
+              aria-label="Close Lightbox"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+
+            <button
+              className="evl-lightbox-nav-btn left"
+              onClick={(e) => {
+                e.stopPropagation()
+                setLightboxIndex((prev) => (prev !== null ? (prev - 1 + allGalleryImages.length) % allGalleryImages.length : null))
+              }}
+              aria-label="Previous image"
+            >
+              <span className="material-symbols-outlined">chevron_left</span>
+            </button>
+
+            <div className="evl-lightbox-content" onClick={(e) => e.stopPropagation()}>
+              <div className="evl-lightbox-img-wrapper">
+                <Image
+                  src={allGalleryImages[lightboxIndex].src}
+                  alt={allGalleryImages[lightboxIndex].alt}
+                  width={1600}
+                  height={1200}
+                  className="evl-lightbox-img"
+                  priority
+                />
+              </div>
+              <div className="evl-lightbox-caption" style={jpFont}>
+                <span className="evl-lightbox-counter">
+                  {lightboxIndex + 1} / {allGalleryImages.length}
+                </span>
+                <p className="evl-lightbox-desc">
+                  {allGalleryImages[lightboxIndex].alt}
+                </p>
+              </div>
+            </div>
+
+            <button
+              className="evl-lightbox-nav-btn right"
+              onClick={(e) => {
+                e.stopPropagation()
+                setLightboxIndex((prev) => (prev !== null ? (prev + 1) % allGalleryImages.length : null))
+              }}
+              aria-label="Next image"
+            >
+              <span className="material-symbols-outlined">chevron_right</span>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </main>
   )
 }

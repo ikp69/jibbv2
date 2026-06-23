@@ -126,14 +126,14 @@ export function LeadershipGrid() {
         </div>
 
         {/* Responsive Grid */}
-        <ScrollReveal staggerChildren={0.05} className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <ScrollReveal staggerChildren={0.05} className="flex flex-wrap justify-center gap-8">
           {filteredMembers.map((person) => {
             const isSelected = activeKey === person.key;
             return (
               <div
                 key={person.key}
                 onClick={() => setActiveKey(isSelected ? null : person.key)}
-                className={`group relative rounded-2xl bg-gradient-to-b ${person.theme.bg} border ${person.theme.border} transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl ${person.theme.shadow} flex flex-col justify-between overflow-hidden aspect-[4/5] cursor-pointer`}
+                className={`group relative rounded-2xl bg-gradient-to-b ${person.theme.bg} border ${person.theme.border} transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl ${person.theme.shadow} flex flex-col justify-between overflow-hidden aspect-[4/5] cursor-pointer w-[calc(50%-16px)] lg:w-[calc(25%-24px)]`}
               >
                 {/* Profile Portrait Image */}
                 <div className="relative w-full h-full overflow-hidden flex items-end justify-center">

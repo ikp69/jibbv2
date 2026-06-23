@@ -55,7 +55,7 @@ export default function PastEventsCollage() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   // State for active gallery selection
-  const galleryKeys = ["semicon-2025", "semicon-2026", "acma", "electronica"] as const;
+  const galleryKeys = ["semicon-2025", "semicon-2026", "acma", "electronica", "embassy-meet"] as const;
   const [activeGalleryId, setActiveGalleryId] = useState<typeof galleryKeys[number]>("semicon-2025");
 
   const galleries = useMemo(() => ({
@@ -107,6 +107,15 @@ export default function PastEventsCollage() {
         { src: "/events/event-gallery/ELECTRONICA 2026/DSC_9032.jpg", alt: locale === "ja" ? "イベント来場者" : "Event attendees" },
         { src: "/events/event-gallery/ELECTRONICA 2026/DSC_9033.jpg", alt: locale === "ja" ? "対話セッション" : "Dialogue session" },
         { src: "/events/event-gallery/ELECTRONICA 2026/DSC_9044.jpg", alt: locale === "ja" ? "ネットワーキング" : "Networking" }
+      ]
+    },
+    "embassy-meet": {
+      name: { en: "Japan Embassy Meet", ja: "在日大使館での会合" },
+      images: [
+        { src: "/events/event-gallery/Japan Embassy Meet/WhatsApp Image 2026-03-20 at 5.51.35 PM.jpeg", alt: locale === "ja" ? "在日大使館での会合" : "Japan Embassy Meet" },
+        { src: "/events/event-gallery/Japan Embassy Meet/WhatsApp Image 2026-03-20 at 5.51.35 PM (1).jpeg", alt: locale === "ja" ? "会合の様子" : "Embassy Meet discussion" },
+        { src: "/events/event-gallery/Japan Embassy Meet/WhatsApp Image 2026-03-20 at 5.51.35 PM (2).jpeg", alt: locale === "ja" ? "日印代表者" : "Japan-India representatives" },
+        { src: "/events/event-gallery/Japan Embassy Meet/WhatsApp Image 2026-03-20 at 5.51.35 PM (3).jpeg", alt: locale === "ja" ? "大使館でのネットワーキング" : "Networking at the Embassy" }
       ]
     }
   }), [locale]);
