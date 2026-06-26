@@ -80,6 +80,19 @@ const jsonLd = {
     { '@type': 'Organization', name: 'Automotive Component Manufacturers Association of India (ACMA)', url: 'https://www.acma.in' },
     { '@type': 'Organization', name: 'NPO Japan India Business Bureau (JIBB)', url: 'https://npo-jibb.org' }
   ],
+  performer: [
+    { '@type': 'Organization', name: 'Automotive Component Manufacturers Association of India (ACMA)' },
+    { '@type': 'Organization', name: 'NPO Japan India Business Bureau (JIBB)' }
+  ],
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'JPY',
+    availability: 'https://schema.org/InStock',
+    url: 'https://npo-jibb.org/events/bharat-mobility-2026',
+    validFrom: '2026-04-01T00:00:00+09:00',
+    validThrough: '2026-05-11T23:59:59+09:00'
+  },
   image: OG_IMAGE,
   url: `${BASE}/events/${SLUG}`,
   inLanguage: ['en', 'ja'],

@@ -99,8 +99,8 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
     headline: post.title,
     alternativeHeadline: post.description,
     image: post.image ? [post.image] : undefined,
-    datePublished: post.date,
-    dateModified: post.date,
+    datePublished: post.date.includes('T') ? post.date : `${post.date}T00:00:00+00:00`,
+    dateModified: post.date.includes('T') ? post.date : `${post.date}T00:00:00+00:00`,
     author: post.author ? 
       { "@type": "Person", name: post.author, affiliation: PUBLISHER } 
       : PUBLISHER,

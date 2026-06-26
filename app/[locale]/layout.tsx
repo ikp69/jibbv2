@@ -5,6 +5,7 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/src/i18n/routing";
 import { ClientProviders } from "@/components/providers/ClientProviders";
+import Script from "next/script";
 
 // ============================================================
 // FONTS — all loaded via next/font (no external CDN requests)
@@ -124,6 +125,19 @@ export default async function LocaleLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap"
           rel="stylesheet"
         />
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-7FCZTKK51X"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-7FCZTKK51X');
+          `}
+        </Script>
       </head>
       <body className="min-h-screen flex flex-col bg-background text-foreground relative overflow-x-hidden">
         <ClientProviders messages={messages} locale={locale}>

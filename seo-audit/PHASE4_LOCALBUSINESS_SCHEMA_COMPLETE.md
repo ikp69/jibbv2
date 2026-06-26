@@ -171,7 +171,7 @@ Japan India Business Bureau
 ⭐⭐⭐⭐⭐ 4.8 (150 reviews)
 $$ · Business Services · Tokyo, Japan
 
-JIBB connects businesses, governments, and startups...
+JIBB connects businesses, governments, stakeholders, academia and startups...
 ☎️ +81-90-9325-3456 · Hours: Mon-Fri 9 AM-6 PM
 ```
 

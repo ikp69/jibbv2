@@ -51,6 +51,7 @@ export default function ContactPage() {
         "@type": "PostalAddress",
         "streetAddress": "Tameike Suzuki Building 3F, 1-2-13 Akasaka, Minato-ku",
         "addressLocality": "Tokyo",
+        "postalCode": "107-6190",
         "addressCountry": "JP"
       },
       {
@@ -58,6 +59,7 @@ export default function ContactPage() {
         "streetAddress": "6th Floor, 162, Sector 136, Arihant Business Centre",
         "addressLocality": "Noida",
         "addressRegion": "Uttar Pradesh",
+        "postalCode": "201304",
         "addressCountry": "IN"
       }
     ],

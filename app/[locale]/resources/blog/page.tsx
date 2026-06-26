@@ -101,7 +101,7 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
       headline: post.title,
       description: post.description,
       image: post.image,
-      datePublished: post.date,
+      datePublished: post.date.includes('T') ? post.date : `${post.date}T00:00:00+00:00`,
       url: `${SITE_URL}/${locale}/resources/blog/${post.slug}`,
       author: post.author ? { "@type": "Person", name: post.author } : undefined,
     })),

@@ -80,6 +80,19 @@ const jsonLd = {
     { '@type': 'Organization', name: 'India Electronics & Semiconductor Association (IESA)', url: 'https://www.iesa.org.in' },
     { '@type': 'Organization', name: 'NPO Japan India Business Bureau (JIBB)', url: 'https://npo-jibb.org' }
   ],
+  performer: [
+    { '@type': 'Organization', name: 'India Electronics & Semiconductor Association (IESA)' },
+    { '@type': 'Organization', name: 'NPO Japan India Business Bureau (JIBB)' }
+  ],
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'JPY',
+    availability: 'https://schema.org/InStock',
+    url: 'https://npo-jibb.org/events/semicon-india-2026',
+    validFrom: '2026-03-01T00:00:00+09:00',
+    validThrough: '2026-04-28T23:59:59+09:00'
+  },
   image: OG_IMAGE,
   url: `${BASE}/events/${SLUG}`,
   inLanguage: ['en', 'ja'],

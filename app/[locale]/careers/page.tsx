@@ -48,6 +48,7 @@ export default function CareersPage() {
           "streetAddress": "6th Floor, 162, Sector 136, Arihant Business Centre",
           "addressLocality": "Noida",
           "addressRegion": "Uttar Pradesh",
+          "postalCode": "201304",
           "addressCountry": "IN"
         }
       },
@@ -89,6 +90,7 @@ export default function CareersPage() {
           "streetAddress": "6th Floor, 162, Sector 136, Arihant Business Centre",
           "addressLocality": "Noida",
           "addressRegion": "Uttar Pradesh",
+          "postalCode": "201304",
           "addressCountry": "IN"
         }
       },
@@ -130,6 +132,7 @@ export default function CareersPage() {
           "streetAddress": "6th Floor, 162, Sector 136, Arihant Business Centre",
           "addressLocality": "Noida",
           "addressRegion": "Uttar Pradesh",
+          "postalCode": "201304",
           "addressCountry": "IN"
         }
       },

@@ -66,7 +66,7 @@
 - 120-160 characters (optimal)
 - Compelling CTAs
 - Examples:
-  - EN: "JIBB connects businesses, governments, and startups across Japan and India. We facilitate market entry, enable partnerships, and drive innovation collaboration for bilateral growth."
+  - EN: "JIBB connects businesses, governments, stakeholders, academia and startups across Japan and India. We facilitate market entry, enable partnerships, and drive innovation collaboration for bilateral growth."
   - JA: [Japanese equivalent]
 
 ### 3. Keywords (12/12 pages) ✅

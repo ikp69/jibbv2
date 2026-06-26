@@ -35,7 +35,7 @@ export async function generateMetadata({
 
   const description = locale === "ja"
     ? "日本とインドの企業・政府・スタートアップを結ぶ戦略的な橋渡し。市場参入支援、ビジネスマッチング、イノベーション協業で日印間の産業成長を推進します。"
-    : "JIBB connects businesses, governments, and startups across Japan and India. We facilitate market entry, enable partnerships, and drive innovation collaboration for bilateral growth.";
+    : "JIBB connects businesses, governments, stakeholders, academia and startups across Japan and India. We facilitate market entry, enable partnerships, and drive innovation collaboration for bilateral growth.";
 
   return {
     title,
@@ -114,6 +114,7 @@ export default async function HomePage({
         "@type": "PostalAddress",
         "streetAddress": "Tameike Suzuki Building 3F, 1-2-13 Akasaka, Minato-ku",
         "addressLocality": "Tokyo",
+        "postalCode": "107-6190",
         "addressCountry": "JP"
       },
       {
@@ -121,6 +122,7 @@ export default async function HomePage({
         "streetAddress": "6th Floor, 162, Sector 136, Arihant Business Centre",
         "addressLocality": "Noida",
         "addressRegion": "Uttar Pradesh",
+        "postalCode": "201304",
         "addressCountry": "IN"
       }
     ],
