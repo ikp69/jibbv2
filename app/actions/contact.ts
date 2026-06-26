@@ -15,6 +15,16 @@ export async function submitContactForm(data: ContactInput) {
 
     const { inquiryType, name, email, phone, message, honeypot } = parsed.data;
 
+    // Map inquiry type values to full labels
+    const inquiryTypeMap: Record<string, string> = {
+      membership: "Membership Application",
+      trade: "Trade & Partner Matching Support",
+      hub: "Innovation Hub & Lab Inquiries",
+      general: "General Partnership & Events",
+    };
+
+    const inquiryTypeLabel = inquiryTypeMap[inquiryType] || inquiryType;
+
     // 2. Honeypot check for spam bots
     if (honeypot) {
       console.warn("Spam detected via honeypot field. Suppressing submission.");
@@ -26,7 +36,7 @@ export async function submitContactForm(data: ContactInput) {
     const { error: dbError } = await supabase
       .from("contact_inquiries")
       .insert({
-        inquiry_type: inquiryType,
+        inquiry_type: inquiryTypeLabel,
         name,
         email,
         phone: phone || null,
@@ -40,10 +50,10 @@ export async function submitContactForm(data: ContactInput) {
     }
 
     // 4. Send Email Notification to Admin
-    const emailHtml = getContactNotificationEmail({ inquiryType, name, email, phone, message });
+    const emailHtml = getContactNotificationEmail({ inquiryType: inquiryTypeLabel, name, email, phone, message });
     const emailResult = await sendEmail({
       to: "hitesh@npo-jibb.org",
-      subject: `[Contact Form] ${inquiryType.toUpperCase()} - ${name}`,
+      subject: `[Contact Form] ${inquiryTypeLabel.toUpperCase()} - ${name}`,
       html: emailHtml,
       replyTo: email,
     });

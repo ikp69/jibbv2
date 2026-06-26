@@ -33,7 +33,7 @@ export function getContactNotificationEmail(data: { inquiryType: string; name: s
       <div class="header"><h1>New Contact Inquiry</h1></div>
       <div class="content">
         <div class="section-title">Submission Details</div>
-        <div class="field-group"><div class="field-label">Inquiry Type</div><div class="field-value" style="text-transform: capitalize;">${escapeHtml(data.inquiryType)}</div></div>
+        <div class="field-group"><div class="field-label">Inquiry Type</div><div class="field-value">${escapeHtml(data.inquiryType)}</div></div>
         <div class="field-group"><div class="field-label">Full Name</div><div class="field-value">${escapeHtml(data.name)}</div></div>
         <div class="field-group"><div class="field-label">Email Address</div><div class="field-value"><a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a></div></div>
         <div class="field-group"><div class="field-label">Phone Number</div><div class="field-value">${escapeHtml(data.phone) || "N/A"}</div></div>
@@ -65,7 +65,7 @@ export function getMembershipNotificationEmail(data: { membershipTier: string; c
 export function getMembershipConfirmationEmail(data: { contactPerson: string; membershipTier: string; }) {
   return `<!DOCTYPE html><html><head><style>${emailStyles}</style></head><body>
     <div class="container">
-      <div class="header"><h1>Welcome to NPO JIBB</h1></div>
+      <div class="header"><h1>Welcome to Japan-India Business Bureau (JIBB)</h1></div>
       <div class="content" style="text-align: left;">
         <h2 style="margin-top: 0; color: #0f172a;">Dear ${escapeHtml(data.contactPerson)},</h2>
         <p style="font-size: 15px; line-height: 1.6; color: #334155;">Thank you for applying for a <strong>${escapeHtml(data.membershipTier.toUpperCase())}</strong> membership with the Japan-India Business Bureau (JIBB) Association.</p>

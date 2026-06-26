@@ -49,7 +49,7 @@ export async function sendEmail({
   if (resend) {
     try {
       const { data, error } = await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || "NPO JIBB <noreply@npo-jibb.org>",
+        from: process.env.RESEND_FROM_EMAIL || "Japan-India Business Bureau - JIBB (NPO) <noreply@npo-jibb.org>",
         to,
         subject,
         html,

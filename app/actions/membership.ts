@@ -80,7 +80,7 @@ export async function submitMembershipApplication(data: MembershipInput) {
     });
     await sendEmail({
       to: email,
-      subject: `Your NPO JIBB Membership Application [${membershipTier.toUpperCase()}]`,
+      subject: `Your Japan-India Business Bureau (JIBB) Membership Application [${membershipTier.toUpperCase()}]`,
       html: candidateEmailHtml,
     });
 
