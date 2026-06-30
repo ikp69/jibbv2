@@ -24,7 +24,13 @@ export async function updateSession(request: NextRequest) {
     {
       cookies: {
         getAll() {
-          return request.cookies.getAll();
+          const allCookies = request.cookies.getAll();
+          const seen = new Set<string>();
+          return allCookies.filter((c) => {
+            if (seen.has(c.name)) return false;
+            seen.add(c.name);
+            return true;
+          });
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
@@ -54,5 +60,5 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  return { supabaseResponse, user };
+  return { supabaseResponse, user, supabase };
 }

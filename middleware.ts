@@ -29,7 +29,7 @@ export default async function middleware(request: NextRequest) {
   }
 
   // 1. Update/refresh the Supabase session and get the user
-  const { supabaseResponse, user } = await updateSession(request);
+  const { supabaseResponse, user, supabase } = await updateSession(request);
 
   // TEMPORARY: Redirect /ja routes to /en (Japanese translations being verified)
   if (pathname.startsWith("/ja")) {
@@ -39,22 +39,41 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Check if target is a dashboard subpage
-  const isDashboard = pathname.match(/^\/(en|ja)\/dashboard(\/.*)?$/);
-  // Check if target is login page
-  const isLogin = pathname.match(/^\/(en|ja)\/auth\/login(\/.*)?$/);
+  // Check routes
+  const isLogin = pathname.match(/^\/(en|ja)\/login(\/.*)?$/);
+  const isAdminRoute = pathname.match(/^\/(en|ja)\/admin(\/.*)?$/);
+  const isPortalRoute = pathname.match(/^\/(en|ja)\/portal(\/.*)?$/);
 
   // 2. Perform route protection / redirects
-  if (isDashboard && !user) {
+  if ((isAdminRoute || isPortalRoute) && !user) {
     const url = request.nextUrl.clone();
-    url.pathname = `/${locale}/auth/login`;
+    url.pathname = `/${locale}/login`;
     return NextResponse.redirect(url);
   }
 
-  if (isLogin && user) {
-    const url = request.nextUrl.clone();
-    url.pathname = `/${locale}/dashboard`;
-    return NextResponse.redirect(url);
+  if (user && (isLogin || isAdminRoute || isPortalRoute)) {
+    // Retrieve role from profiles table
+    const { data: profile, error } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    const role = profile?.role;
+    console.log("MIDDLEWARE CHECK:", { userId: user.id, role, error });
+
+    if (isLogin) {
+      const url = request.nextUrl.clone();
+      url.pathname = role === "admin" ? `/${locale}/admin/dashboard` : `/${locale}/portal/dashboard`;
+      return NextResponse.redirect(url);
+    }
+
+    if (isAdminRoute && role !== "admin") {
+      // Forbidden: Redirect normal members to their portal dashboard instead of 403 to avoid exposing admin route
+      const url = request.nextUrl.clone();
+      url.pathname = `/${locale}/portal/dashboard`;
+      return NextResponse.redirect(url);
+    }
   }
 
   // 3. Process localization routing
@@ -62,6 +81,7 @@ export default async function middleware(request: NextRequest) {
 
   // 4. Copy cookie updates from Supabase token refresh into final localized response
   supabaseResponse.cookies.getAll().forEach((cookie) => {
+    response.cookies.delete(cookie.name);
     response.cookies.set(cookie.name, cookie.value, {
       path: cookie.path,
       domain: cookie.domain,

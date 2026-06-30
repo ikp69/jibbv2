@@ -7,6 +7,8 @@ import { Footer } from "@/components/layout/Footer";
 import { EventTicker } from "@/components/ui/EventTicker";
 import { TickerProvider } from "./TickerContext";
 
+import { usePathname } from "next/navigation";
+
 interface ClientProvidersProps {
   messages: Record<string, unknown>;
   locale: string;
@@ -14,6 +16,24 @@ interface ClientProvidersProps {
 }
 
 export function ClientProviders({ messages, locale, children }: ClientProvidersProps) {
+  const pathname = usePathname();
+  
+  // Detect if current route belongs to Member Portal or Admin CMS
+  const cleanPath = pathname.replace(/^\/(en|ja)/, "");
+  const isCmsRoute = cleanPath.startsWith("/admin") || cleanPath.startsWith("/portal") || cleanPath.startsWith("/login");
+
+  if (isCmsRoute) {
+    return (
+      <NextIntlClientProvider messages={messages} locale={locale} timeZone="Asia/Kolkata">
+        <TickerProvider>
+          <SmoothScrollProvider>
+            {children}
+          </SmoothScrollProvider>
+        </TickerProvider>
+      </NextIntlClientProvider>
+    );
+  }
+
   return (
     <NextIntlClientProvider messages={messages} locale={locale} timeZone="Asia/Kolkata">
       <TickerProvider>
