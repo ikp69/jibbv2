@@ -12,15 +12,15 @@ interface Member {
 
 const MEMBERS: Member[] = [
   { key: "varun", img: "/leaders/varun-tyagi.png" },
-  { key: "ujjawal", img: "/leaders/ujjawal-dahiya.png" },
-  { key: "pratiksha", img: "/leaders/pratiksha-pandey.png" },
   { key: "shigemaro", img: "/leaders/shigemaro-yasui.png" },
+  { key: "ujjawal", img: "/leaders/ujjawal-dahiya.png" },
+  { key: "vardaan", img: "/leaders/vardaan-chaudhary.png" },
   { key: "nobuchika", img: "/leaders/nobichuka-akiya.png" },
   { key: "mai", img: "/leaders/mai-hashikura.png" },
   { key: "aya", img: "/leaders/aya-saito.png" },
   { key: "gyanendra", img: "/leaders/gyanendra-yadav.png" },
   { key: "akash", img: "/leaders/akash-pandey.png" },
-  { key: "vardaan", img: "/leaders/vardaan-chaudhary.png" },
+  { key: "pratiksha", img: "/leaders/pratiksha-pandey.png" },
   { key: "hitesh", img: "/leaders/hitesh-gupttaa.png" },
 ];
 

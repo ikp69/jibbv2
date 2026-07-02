@@ -32,21 +32,21 @@ export function LeadershipGrid() {
 
   // Render only the 11 leaders who have local portrait files in public/leaders
   const allKeys = [
-    "varun", "shigemaro", "nobuchika", "ujjawal", "pratiksha",
-    "gyanendra", "akash", "vardaan", "mai", "aya", "hitesh"
+    "varun", "shigemaro", "ujjawal", "vardaan", "akash",
+    "pratiksha", "nobuchika", "mai", "aya", "gyanendra", "hitesh"
   ];
 
   const imageMap: Record<string, string> = {
     varun: "/leaders/varun-tyagi.png",
     shigemaro: "/leaders/shigemaro-yasui.png",
-    nobuchika: "/leaders/nobichuka-akiya.png",
     ujjawal: "/leaders/ujjawal-dahiya.png",
-    pratiksha: "/leaders/pratiksha-pandey.png",
-    gyanendra: "/leaders/gyanendra-yadav.png",
-    akash: "/leaders/akash-pandey.png",
     vardaan: "/leaders/vardaan-chaudhary.png",
+    akash: "/leaders/akash-pandey.png",
+    pratiksha: "/leaders/pratiksha-pandey.png",
+    nobuchika: "/leaders/nobichuka-akiya.png",
     mai: "/leaders/mai-hashikura.png",
     aya: "/leaders/aya-saito.png",
+    gyanendra: "/leaders/gyanendra-yadav.png",
     hitesh: "/leaders/hitesh-gupttaa.png"
   };
 
