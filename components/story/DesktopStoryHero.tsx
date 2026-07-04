@@ -299,6 +299,76 @@ export function DesktopStoryHero() {
     return () => ctx.revert();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  /* ---- Overlap-aware bubble positioning for tablet breakpoint ---- */
+  useEffect(() => {
+    const MIN_GAP = 20; // px minimum gap between overlapping bubbles
+    const MQ = "(min-width: 768px) and (max-width: 1200px)";
+
+    const adjustOverlaps = () => {
+      const inRange = window.matchMedia(MQ).matches;
+
+      for (let i = 0; i < 4; i++) {
+        const pair = sectionRef.current?.querySelector(
+          `.story-convo-pair-${i}`
+        );
+        if (!pair) continue;
+
+        const kBubble = pair.querySelector(
+          ".story-bubble-kenji"
+        ) as HTMLElement | null;
+        const aBubble = pair.querySelector(
+          ".story-bubble-aarav"
+        ) as HTMLElement | null;
+        if (!kBubble || !aBubble) continue;
+
+        // Reset to CSS-defined base position before measuring
+        aBubble.style.removeProperty("top");
+
+        if (!inRange) continue;
+
+        // Force reflow so measurements reflect the reset
+        void aBubble.offsetHeight;
+
+        // Use offset* properties — immune to GSAP transform animations
+        const kRight = kBubble.offsetLeft + kBubble.offsetWidth;
+        const kBottom = kBubble.offsetTop + kBubble.offsetHeight;
+        const aLeft = aBubble.offsetLeft;
+        const aTop = aBubble.offsetTop;
+        const aBottom = aTop + aBubble.offsetHeight;
+
+        const overlapsH = kRight > aLeft;
+        const overlapsV = kBottom > aTop && kBubble.offsetTop < aBottom;
+
+        if (overlapsH && overlapsV) {
+          const shift = kBottom - aTop + MIN_GAP;
+          const cssTop = parseFloat(getComputedStyle(aBubble).top) || 0;
+          aBubble.style.setProperty(
+            "top",
+            `${cssTop + shift}px`,
+            "important"
+          );
+        }
+      }
+    };
+
+    let debounceTimer: ReturnType<typeof setTimeout>;
+    const onResize = () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(adjustOverlaps, 150);
+    };
+
+    // Run after layout + GSAP settle, and again after fonts load
+    const initTimer = setTimeout(adjustOverlaps, 300);
+    window.addEventListener("resize", onResize);
+    document.fonts?.ready?.then(() => setTimeout(adjustOverlaps, 100));
+
+    return () => {
+      clearTimeout(initTimer);
+      clearTimeout(debounceTimer);
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
+
   /* ============================================================
      RENDER
      ============================================================ */

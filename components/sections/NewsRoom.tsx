@@ -43,7 +43,7 @@ interface NewsRoomProps {
   linkedinPosts?: { id: string; shareUrn: string }[];
 }
 
-type TabId = "media" | "thought" | "social";
+type TabId = "media" | "thought" | "blog" | "social";
 
 export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinPosts }: NewsRoomProps) {
   const t = useTranslations("newsroom");
@@ -94,6 +94,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
 
   const tabs = [
     { id: "social", label: t("tabs.social") || "Social Feed (LinkedIn)", count: activeLinkedInPosts.length },
+    { id: "blog", label: t("tabs.blog") || "Blog", count: caseStudies.length },
     { id: "thought", label: t("tabs.thought") || "Thought Leadership", count: thoughtLeadership.length },
     { id: "media", label: t("tabs.media") || "Media & Insights", count: mediaPosts.length },
   ] as const;
@@ -122,6 +123,21 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
             isSocial: true,
           }))
         };
+      case "blog":
+        return {
+          title: t("tabs.blog") || "Blog",
+          viewAllLink: "/resources/blog",
+          viewAllText: t("viewAll") || "View All",
+          items: caseStudies.map(post => ({
+            id: post.slug,
+            title: post.title,
+            desc: post.description,
+            date: post.date,
+            author: post.author,
+            image: post.image,
+            link: `/resources/blog/${post.slug}`
+          }))
+        };
       case "thought":
         return {
           title: t("tabs.thought") || "Thought Leadership",
@@ -134,8 +150,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
             date: post.date,
             author: post.author,
             image: post.image,
-            link: `/resources/thought-leadership/${post.slug}`,
-            badge: "Thought Leadership"
+            link: `/resources/thought-leadership/${post.slug}`
           }))
         };
       case "media":
@@ -286,113 +301,131 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
                     transition={{ duration: 0.3, delay: idx * 0.05 }}
                     className="flex-shrink-0 w-[290px] sm:w-[340px] md:w-[380px] snap-start"
                   >
-                  {item.isSocial ? (
-                    // LinkedIn Embed Card
-                    <div className="relative bg-card dark:bg-[#161f38]/45 border border-border/50 hover:border-primary/30 rounded-2xl p-1.5 hover:shadow-jibb-md transition-all duration-300 flex flex-col h-[480px] overflow-hidden">
-                      {adminPasscode && (
-                        <button
-                          onClick={() => handleDeleteSocialPost(item.id)}
-                          disabled={isDeleting === item.id}
-                          className="absolute top-4 right-4 z-20 p-2 bg-red-500 hover:bg-red-600 disabled:bg-red-700 text-white rounded-full shadow-lg transition-all active:scale-95 flex items-center justify-center border border-white/10"
-                          title="Delete LinkedIn Post"
-                        >
-                          {isDeleting === item.id ? (
-                            <RefreshCw className="size-4 animate-spin" />
-                          ) : (
-                            <Trash2 className="size-4" />
-                          )}
-                        </button>
-                      )}
-                      <div className="w-full h-full overflow-y-auto overflow-x-hidden sleek-scrollbar pr-3">
-                        <div className="w-[calc(100%+17px)] h-[670px]">
-                          <iframe
-                             src={`https://www.linkedin.com/embed/feed/update/${item.shareUrn}?collapsed=1`}
-                            height="100%"
-                            width="100%"
-                            style={{ border: 'none', borderRadius: '12px' }}
-                            allowFullScreen
-                            title="LinkedIn post"
-                            loading="lazy"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    // Standard Newsroom Card
-                    <div className={`bg-card dark:bg-[#161f38]/45 border border-border/50 hover:border-primary/30 rounded-2xl overflow-hidden hover:shadow-jibb-md transition-all duration-300 flex flex-col justify-between group ${item.image ? "h-[400px]" : "h-[250px]"}`}>
-                      {/* Image at Top */}
-                      {item.image ? (
-                        <div className="relative aspect-[17/8] w-full bg-[#0a0f1d] overflow-hidden">
-                          <img
-                            src={item.image}
-                            alt={item.title}
-                            className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-[1.02]"
-                          />
-                          <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-background/90 dark:bg-black/80 backdrop-blur-sm border border-border/40 text-[9px] font-bold uppercase tracking-wider text-primary dark:text-[#7b9fe0]">
-                            {item.badge}
+                    {item.isSocial ? (
+                      // LinkedIn Embed Card
+                      <div className="relative bg-card dark:bg-[#161f38]/45 border border-border/50 hover:border-primary/30 rounded-2xl p-1.5 hover:shadow-jibb-md transition-all duration-300 flex flex-col h-[480px] overflow-hidden">
+                        {adminPasscode && (
+                          <button
+                            onClick={() => handleDeleteSocialPost(item.id)}
+                            disabled={isDeleting === item.id}
+                            className="absolute top-4 right-4 z-20 p-2 bg-red-500 hover:bg-red-600 disabled:bg-red-700 text-white rounded-full shadow-lg transition-all active:scale-95 flex items-center justify-center border border-white/10"
+                            title="Delete LinkedIn Post"
+                          >
+                            {isDeleting === item.id ? (
+                              <RefreshCw className="size-4 animate-spin" />
+                            ) : (
+                              <Trash2 className="size-4" />
+                            )}
+                          </button>
+                        )}
+                        <div className="w-full h-full overflow-y-auto overflow-x-hidden sleek-scrollbar pr-3">
+                          <div className="w-[calc(100%+17px)] h-[670px]">
+                            <iframe
+                              src={`https://www.linkedin.com/embed/feed/update/${item.shareUrn}?collapsed=1`}
+                              height="100%"
+                              width="100%"
+                              style={{ border: 'none', borderRadius: '12px' }}
+                              allowFullScreen
+                              title="LinkedIn post"
+                              loading="lazy"
+                            />
                           </div>
                         </div>
-                      ) : null}
+                      </div>
+                    ) : (
+                      // Standard Newsroom Card
+                      <div className={`bg-card dark:bg-[#161f38]/45 border border-border/50 hover:border-primary/30 rounded-2xl overflow-hidden hover:shadow-jibb-md transition-all duration-300 flex flex-col justify-between group ${item.image ? "h-[400px]" : "h-[250px]"}`}>
+                        {/* Image at Top */}
+                        {item.image ? (
+                          <div className="relative aspect-[17/8] w-full bg-[#0a0f1d] overflow-hidden">
+                            <img
+                              src={item.image}
+                              alt={item.title}
+                              className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-[1.02]"
+                            />
+                            {item.badge && (
+                              <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-background/90 dark:bg-black/80 backdrop-blur-sm border border-border/40 text-[9px] font-bold uppercase tracking-wider text-primary dark:text-[#7b9fe0]">
+                                {item.badge}
+                              </div>
+                            )}
+                          </div>
+                        ) : null}
 
-                      {/* Info & Content */}
-                      <div className="p-5 flex-grow flex flex-col justify-between">
-                        <div className="space-y-2">
-                          {!item.image && (
-                            <span className="inline-block px-2 py-0.5 rounded-md bg-primary/5 dark:bg-[#161f38] border border-border/40 text-[9px] font-bold uppercase tracking-wider text-primary dark:text-[#7b9fe0]">
-                              {item.badge}
-                            </span>
-                          )}
+                        {/* Info & Content */}
+                        <div className="p-5 flex-grow flex flex-col justify-between">
+                          <div className="space-y-2">
+                            {item.badge && !item.image && (
+                              <span className="inline-block px-2 py-0.5 rounded-md bg-primary/5 dark:bg-[#161f38] border border-border/40 text-[9px] font-bold uppercase tracking-wider text-primary dark:text-[#7b9fe0]">
+                                {item.badge}
+                              </span>
+                            )}
 
-                          {/* Date and Author */}
-                          <div className="flex items-center gap-3 text-[10px] text-muted-foreground font-semibold">
-                            <span className="flex items-center gap-1">
-                              <Calendar className="size-3 text-jibb-orange/80" />
-                              {item.date}
-                            </span>
-                            <span className="flex items-center gap-1 line-clamp-1">
-                              <User className="size-3 text-jibb-orange/80" />
-                              {item.author}
-                            </span>
+                            {/* Date and Author */}
+                            <div className="flex items-center gap-3 text-[10px] text-muted-foreground font-semibold">
+                              <span className="flex items-center gap-1">
+                                <Calendar className="size-3 text-jibb-orange/80" />
+                                {item.date}
+                              </span>
+                              <span className="flex items-center gap-1 line-clamp-1">
+                                <User className="size-3 text-jibb-orange/80" />
+                                {item.author}
+                              </span>
+                            </div>
+
+                            {/* Title */}
+                            <h4 className="text-sm font-extrabold text-foreground tracking-tight leading-snug line-clamp-2 group-hover:text-jibb-indigo dark:group-hover:text-jibb-indigo-light transition-colors">
+                              {item.link.startsWith("http") ? (
+                                <a
+                                  href={item.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="cursor-pointer hover:underline"
+                                >
+                                  {item.title}
+                                </a>
+                              ) : (
+                                <Link
+                                  href={item.link}
+                                  className="cursor-pointer hover:underline"
+                                >
+                                  {item.title}
+                                </Link>
+                              )}
+                            </h4>
+
+                            {/* Description */}
+                            <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                              {item.desc}
+                            </p>
                           </div>
 
-                          {/* Title */}
-                          <h4 className="text-sm font-extrabold text-foreground tracking-tight leading-snug line-clamp-2 group-hover:text-jibb-indigo dark:group-hover:text-jibb-indigo-light transition-colors">
-                            {item.title}
-                          </h4>
-
-                          {/* Description */}
-                          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
-                            {item.desc}
-                          </p>
-                        </div>
-
-                        {/* Learn More link */}
-                        <div className="pt-3 border-t border-border/30">
-                          {item.link.startsWith("http") ? (
-                            <a
-                              href={item.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-[#7b9fe0] hover:underline"
-                            >
-                              <span>{t("learnMore")}</span>
-                              <ArrowRight className="size-3 transition-transform duration-300 group-hover:translate-x-0.5" />
-                            </a>
-                          ) : (
-                            <Link
-                              href={item.link}
-                              className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-[#7b9fe0] hover:underline"
-                            >
-                              <span>{t("learnMore")}</span>
-                              <ArrowRight className="size-3 transition-transform duration-300 group-hover:translate-x-0.5" />
-                            </Link>
-                          )}
+                          {/* Learn More link */}
+                          <div className="pt-3 border-t border-border/30">
+                            {item.link.startsWith("http") ? (
+                              <a
+                                href={item.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-[#7b9fe0] hover:underline"
+                              >
+                                <span>{t("learnMore")}</span>
+                                <ArrowRight className="size-3 transition-transform duration-300 group-hover:translate-x-0.5" />
+                              </a>
+                            ) : (
+                              <Link
+                                href={item.link}
+                                className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-[#7b9fe0] hover:underline"
+                              >
+                                <span>{t("learnMore")}</span>
+                                <ArrowRight className="size-3 transition-transform duration-300 group-hover:translate-x-0.5" />
+                              </Link>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </motion.div>
-              )))}
+                    )}
+                  </motion.div>
+                )))}
             </AnimatePresence>
           </div>
         </div>

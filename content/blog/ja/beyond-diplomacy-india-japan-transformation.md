@@ -3,7 +3,7 @@ title: "外交を超えて：インド・日本関係の変革の時代"
 description: "産業エコシステム、技術移転、人材流動性を通じた、インドと日本の新しい事業戦略的パートナーシップの構築を探る。"
 date: "2025-06-22"
 author: "Varun Tyagi"
-image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&h=630&q=80"
+image: "/images/blog/beyond-diplomacy-india-japan-transformation-cover-image.jpg"
 tags: ["インド・日本", "産業エコシステム", "サプライチェーン", "イノベーション", "パートナーシップ"]
 featured: true
 corridor: "India-Japan"

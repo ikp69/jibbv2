@@ -3,7 +3,7 @@ title: "Beyond Diplomacy: The Era of Transformation for the India-Japan Relation
 description: "Exploring how India and Japan are building a new era of business and strategic partnership through industrial ecosystems, technology transfer, and talent mobility."
 date: "2025-06-22"
 author: "Varun Tyagi"
-image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&h=630&q=80"
+image: "/images/blog/beyond-diplomacy-india-japan-transformation-cover-image.jpg"
 tags: ["India-Japan", "Industrial Ecosystems", "Supply Chain", "Innovation", "Partnership"]
 featured: true
 corridor: "India-Japan"

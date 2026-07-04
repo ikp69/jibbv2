@@ -3,7 +3,7 @@ title: "Why Japan and India Are Stronger Together: Building the Future of Manufa
 description: "Exploring the India-Japan strategic industrial alliance and how complementary strengths in manufacturing and technology are reshaping global supply chains."
 date: "2025-06-18"
 author: "JIBB Editorial"
-image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&h=630&q=80"
+image: "/images/blog/india-japan-manufacturing-partnership-cover-image.jpg"
 tags: ["Manufacturing", "India-Japan", "Supply Chain", "Semiconductors", "Innovation"]
 featured: true
 corridor: "India-Japan"

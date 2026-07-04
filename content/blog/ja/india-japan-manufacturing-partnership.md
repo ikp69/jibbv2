@@ -3,7 +3,7 @@ title: "日本とインドが一緒なら強い：製造業、テクノロジー
 description: "日印戦略的産業同盟の探索と、製造業およびテクノロジーにおける相互補完的な強みがいかにグローバルサプライチェーンを再構成しているかについて。"
 date: "2025-06-18"
 author: "JIBB Editorial"
-image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&h=630&q=80"
+image: "/images/blog/india-japan-manufacturing-partnership-cover-image.jpg"
 tags: ["製造業", "日本インド", "サプライチェーン", "半導体", "イノベーション"]
 featured: true
 corridor: "India-Japan"
