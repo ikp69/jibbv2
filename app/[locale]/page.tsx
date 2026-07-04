@@ -3,7 +3,7 @@ import { Link } from "@/src/i18n/navigation";
 import { StoryHero } from "@/components/story/StoryHero";
 import { HowWeHelp } from "@/components/sections/HowWeHelp";
 import { WhoWeAre } from "@/components/sections/WhoWeAre";
-import { EventNoticeBoard } from "@/components/sections/EventNoticeBoard";
+// import { EventNoticeBoard } from "@/components/sections/EventNoticeBoard";
 import { FeatOpportunities } from "@/components/sections/FeatOpportunities";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
@@ -231,8 +231,7 @@ export default async function HomePage({
 
       <StoryHero />
 
-      {/* Event Notice Board */}
-      <EventNoticeBoard />
+
 
       {/* <LogoMarquee /> */}
 

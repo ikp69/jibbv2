@@ -10,6 +10,13 @@ export function EventTicker() {
   const { isTickerVisible, setIsTickerVisible } = useTickerContext();
   const t = useTranslations("eventNoticeBoard");
 
+  // Signal to the Navbar that the ticker is present and should offset itself
+  useEffect(() => {
+    setIsTickerVisible(true);
+    return () => setIsTickerVisible(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Add/remove body class based on ticker visibility
   useEffect(() => {
     if (isTickerVisible) {

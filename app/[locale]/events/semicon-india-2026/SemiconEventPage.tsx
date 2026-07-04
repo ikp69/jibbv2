@@ -3,9 +3,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
 import { useLocale } from 'next-intl'
 import EventsProgramTable from '@/components/events/EventsProgramTable'
-import { getEventBySlug } from '@/lib/eventsData'
+import { getEventBySlug, isPastEvent } from '@/lib/eventsData'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -60,6 +61,11 @@ export default function SemiconEventPage() {
   const jpFont = locale === 'ja' ? { fontFamily: 'var(--font-noto-sans-jp)' } : {}
 
   const eventData = getEventBySlug('semicon-india-2026')!
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  const isPast = mounted ? isPastEvent(eventData.eventDate, eventData.timeZone) : false
   const t = eventData[locale as 'en' | 'ja']
 
   const names = [t.organizer, ...(t.coOrganizers || []), t.specialSupport || '', ...(t.supporters || []), t.specialCooperation || ''].filter(Boolean)
@@ -86,12 +92,14 @@ export default function SemiconEventPage() {
         </Link>
 
       {/* Past event banner */}
-      <div className="event-concluded-banner">
-        <span className="material-symbols-outlined">event_busy</span>
-        <span style={jpFont}>
-          {locale === 'ja' ? 'このイベントは終了しました（2026年4月28日）' : 'This event has concluded — April 28, 2026'}
-        </span>
-      </div>
+      {isPast && (
+        <div className="event-concluded-banner">
+          <span className="material-symbols-outlined">event_busy</span>
+          <span style={jpFont}>
+            {locale === 'ja' ? 'このイベントは終了しました（2026年4月28日）' : 'This event has concluded — April 28, 2026'}
+          </span>
+        </div>
+      )}
 
       {/* Poster Hero */}
       <div className="event-detail-poster-hero">
@@ -119,6 +127,12 @@ export default function SemiconEventPage() {
           </h1>
           <p className="events-hero-subtitle" style={jpFont}>{t.subtitle}</p>
           <div className="events-hero-buttons">
+            {!isPast && (
+              <a href={eventData.registrationUrl} target="_blank" rel="noopener noreferrer" className="events-btn events-btn-register">
+                <span className="material-symbols-outlined">edit_note</span>
+                {lb.register}
+              </a>
+            )}
             <a href="#program" className="events-btn events-btn-secondary">
               <span className="material-symbols-outlined">schedule</span>
               {lb.viewProgram}
@@ -129,9 +143,11 @@ export default function SemiconEventPage() {
           <div className="events-badges">
             <span className="events-badge events-badge-date">{t.date}</span>
             <span className="events-badge events-badge-format">{t.format}</span>
-            <span className="events-badge" style={{ background: '#e2e8f0', color: '#64748b' }}>
-              {locale === 'ja' ? '終了' : 'Concluded'}
-            </span>
+            {isPast && (
+              <span className="events-badge" style={{ background: '#e2e8f0', color: '#64748b' }}>
+                {locale === 'ja' ? '終了' : 'Concluded'}
+              </span>
+            )}
           </div>
           <div className="events-details">
             <div className="events-detail-item">

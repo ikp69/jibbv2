@@ -43,7 +43,7 @@ export interface EventData {
   id: string
   slug: string
   eventDate: string // ISO date string of the actual event
-  isPast: boolean
+  timeZone: "Asia/Tokyo" | "Asia/Kolkata"
   en: EventLocaleData
   ja: EventLocaleData
   posterEn: string
@@ -54,11 +54,25 @@ export interface EventData {
   icon: string // material symbol name
 }
 
-// Current date for upcoming/past comparison
-const TODAY = new Date('2026-06-11')
-
-function isPastEvent(dateStr: string) {
-  return new Date(dateStr) < TODAY
+/**
+ * Determines if an event has concluded based on the calendar date (YYYY-MM-DD)
+ * in the host event's local timezone.
+ * Using the event's timezone (instead of the viewer's timezone) ensures that 
+ * the event turns "past" at exactly 00:00 local time in its host country, 
+ * regardless of where the viewer is located.
+ */
+export function isPastEvent(
+  eventDate: string,
+  timeZone: "Asia/Tokyo" | "Asia/Kolkata"
+): boolean {
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  })
+  const todayStr = formatter.format(new Date()) // Returns 'YYYY-MM-DD' in that timezone
+  return eventDate < todayStr
 }
 
 export const eventsData: EventData[] = [
@@ -66,7 +80,7 @@ export const eventsData: EventData[] = [
     id: 'manufacturing',
     slug: 'india-japan-manufacturing-collaboration-2026',
     eventDate: '2026-07-03',
-    isPast: isPastEvent('2026-07-03'),
+    timeZone: 'Asia/Tokyo',
     icon: 'precision_manufacturing',
     en: {
       tagline: "Unlocking India's Manufacturing Growth Story (3 July 2026)",
@@ -224,7 +238,7 @@ export const eventsData: EventData[] = [
     id: 'semicon',
     slug: 'semicon-india-2026',
     eventDate: '2026-04-28',
-    isPast: isPastEvent('2026-04-28'),
+    timeZone: 'Asia/Tokyo',
     icon: 'memory',
     en: {
       tagline: 'Semicon India 2026 (Sep 17-19, 2026)',
@@ -314,7 +328,7 @@ export const eventsData: EventData[] = [
     id: 'mobility',
     slug: 'bharat-mobility-2026',
     eventDate: '2026-05-11',
-    isPast: isPastEvent('2026-05-11'),
+    timeZone: 'Asia/Tokyo',
     icon: 'directions_car',
     en: {
       tagline: 'Bharat Mobility 2027 (Feb 4-7, 2027)',
@@ -400,5 +414,5 @@ export function getEventBySlug(slug: string): EventData | undefined {
   return eventsData.find(e => e.slug === slug)
 }
 
-export const upcomingEvents = eventsData.filter(e => !e.isPast)
-export const pastEvents = eventsData.filter(e => e.isPast)
+export const upcomingEvents = eventsData.filter(e => !isPastEvent(e.eventDate, e.timeZone))
+export const pastEvents = eventsData.filter(e => isPastEvent(e.eventDate, e.timeZone))

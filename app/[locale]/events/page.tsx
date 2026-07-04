@@ -9,6 +9,25 @@ import { upcomingEvents, pastEvents } from '@/lib/eventsData'
 import { EventCountdown, EventCalendar, EventDetailsSummary } from '@/components/events'
 import { Event } from '@/components/events/EventDetailsSummary'
 
+function LinkedInIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  )
+}
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.33, 1, 0.68, 1] as const } }
@@ -117,7 +136,12 @@ export default function EventsLandingPage() {
       venue: 'VENUE',
       time: 'TIME',
       date: 'DATE',
-      backToUpcoming: 'Back to Upcoming Events'
+      backToUpcoming: 'Back to Upcoming Events',
+      newEventsComing: 'New Events Coming Soon',
+      newEventsComingDesc: 'We are currently organizing our upcoming schedule of bilateral business bureaus, industry seminars, and investment forums.',
+      getUpdatesTitle: 'Stay Updated & Collaborate',
+      followLinkedIn: 'Follow us on LinkedIn for live updates',
+      contactUsToOrganize: 'To organize or co-host events, please contact us.'
     },
     ja: {
       upcomingEvents: '今後のイベント',
@@ -134,7 +158,12 @@ export default function EventsLandingPage() {
       venue: '会場',
       time: '時間',
       date: '日程',
-      backToUpcoming: '今後のイベントに戻る'
+      backToUpcoming: '今後のイベントに戻る',
+      newEventsComing: '新しいイベントが間もなく登場します',
+      newEventsComingDesc: '現在、日印間のビジネスフォーラム、業界セミナー、投資説明会などの次回スケジュールを企画・調整しております。',
+      getUpdatesTitle: '最新情報と共同開催のご案内',
+      followLinkedIn: 'LinkedInをフォローして最新情報を受け取る',
+      contactUsToOrganize: 'イベントの共催や企画については、お問い合わせください。'
     }
   }
 
@@ -451,9 +480,9 @@ export default function EventsLandingPage() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 items-start">
-          {/* Left Column: 70% */}
-          <div className="lg:col-span-7 flex flex-col gap-8">
+        <div className={`grid grid-cols-1 ${filteredEvents.length > 0 ? 'lg:grid-cols-10' : ''} gap-8 items-start`}>
+          {/* Left Column: full width when no events, 70% otherwise */}
+          <div className={`${filteredEvents.length > 0 ? 'lg:col-span-7' : ''} flex flex-col gap-8`}>
 
             {/* Mobile Countdown (Only for upcoming events and if countdown is not expired) */}
             {activeTab === 'upcoming' && selectedEvent && (
@@ -478,11 +507,46 @@ export default function EventsLandingPage() {
                 transition={{ duration: 0.4 }}
               >
                 {filteredEvents.length === 0 ? (
-                  <div className="text-center py-16 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
-                    <span className="material-symbols-outlined text-slate-300 text-5xl">event_busy</span>
-                    <p className="text-slate-500 mt-4 font-medium" style={jpFont}>
-                      {tabLabels[locale as 'en' | 'ja'].noEvents}
+                  <div className="relative overflow-hidden bg-gradient-to-br from-white to-[#f8fafc] dark:from-[#131b2e] dark:to-[#0f172a] rounded-3xl border border-slate-100 dark:border-slate-800 shadow-xl p-8 md:p-12 text-center flex flex-col items-center max-w-3xl mx-auto">
+                    {/* Soft background glow circles */}
+                    <div className="absolute top-0 left-0 w-32 h-32 bg-jibb-indigo/5 rounded-full blur-2xl pointer-events-none" />
+                    <div className="absolute bottom-0 right-0 w-32 h-32 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
+
+                    <div className="relative z-10 w-10 h-10 bg-[#162D6B]/5 dark:bg-white/5 rounded-2xl flex items-center justify-center mb-6 text-[#162D6B] dark:text-[#f8fafc] animate-pulse">
+                      <span className="material-symbols-outlined text-8xl">campaign</span>
+                    </div>
+
+                    <h3 className="relative z-10 text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-white tracking-tight mb-4" style={jpFont}>
+                      {tabLabels[locale as 'en' | 'ja'].newEventsComing}
+                    </h3>
+                    <p className="relative z-10 text-slate-600 dark:text-slate-300 text-sm md:text-base leading-relaxed mb-8 max-w-xl mx-auto" style={jpFont}>
+                      {tabLabels[locale as 'en' | 'ja'].newEventsComingDesc}
                     </p>
+
+                    <div className="relative z-10 flex flex-wrap gap-4 justify-center items-center">
+                      <motion.a
+                        href="https://linkedin.com/company/japan-india-business-bureau"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.05, y: -1 }}
+                        whileTap={{ scale: 0.97 }}
+                        transition={{ type: "spring", stiffness: 450, damping: 12 }}
+                        className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#0A66C2] hover:bg-[#004182] text-white transition-all duration-200 shadow-md shadow-[#0A66C2]/25 hover:shadow-lg text-sm font-bold"
+                        style={jpFont}
+                      >
+                        <LinkedInIcon className="w-5 h-5 shrink-0 fill-white" />
+                        <span>{locale === 'ja' ? 'LinkedIn でフォロー' : 'Follow us on LinkedIn'}</span>
+                      </motion.a>
+
+                      <Link
+                        href="/contact"
+                        className="px-6 py-3.5 bg-white border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50 font-bold rounded-xl transition-all active:scale-95 flex items-center gap-2 text-sm"
+                        style={jpFont}
+                      >
+                        <span className="material-symbols-outlined text-base">mail</span>
+                        {locale === 'ja' ? 'お問い合わせ' : 'Contact Us'}
+                      </Link>
+                    </div>
                   </div>
                 ) : (
                   <div className="flex flex-col gap-8">
@@ -606,46 +670,48 @@ export default function EventsLandingPage() {
             </AnimatePresence>
           </div>
 
-          {/* Right Column: 30% */}
-          <div className="lg:col-span-3 lg:sticky lg:top-[120px] flex flex-col gap-6">
+          {/* Right Column: 30% — Only shown when there are events to display */}
+          {filteredEvents.length > 0 && (
+            <div className="lg:col-span-3 lg:sticky lg:top-[120px] flex flex-col gap-6">
 
-            {/* Desktop Countdown (Only for upcoming events) */}
-            {selectedEvent && selectedEvent.status === 'upcoming' && (
-              <div className="hidden lg:block">
-                <EventCountdown
-                  targetDate={selectedEvent.startDate}
-                  startTime={selectedEvent.time}
-                  eventTitle={selectedEvent.title}
-                  venueCity={selectedEvent.city}
-                  organizer={selectedEvent.organizer}
-                  locale={locale}
-                />
-              </div>
-            )}
+              {/* Desktop Countdown (Only for upcoming events) */}
+              {selectedEvent && selectedEvent.status === 'upcoming' && (
+                <div className="hidden lg:block">
+                  <EventCountdown
+                    targetDate={selectedEvent.startDate}
+                    startTime={selectedEvent.time}
+                    eventTitle={selectedEvent.title}
+                    venueCity={selectedEvent.city}
+                    organizer={selectedEvent.organizer}
+                    locale={locale}
+                  />
+                </div>
+              )}
 
-            {/* Event Calendar Widget */}
-            <EventCalendar
-              events={allEvents}
-              selectedEventId={selectedEventId}
-              onSelectEvent={(id) => {
-                setSelectedEventId(id)
-                // Switch tab based on event status
-                const selected = allEvents.find(e => e.id === id)
-                if (selected) {
-                  setActiveTab(selected.status)
-                }
-              }}
-              locale={locale}
-            />
-
-            {/* Event Details Summary Widget */}
-            {selectedEvent && (
-              <EventDetailsSummary
-                event={selectedEvent}
+              {/* Event Calendar Widget */}
+              <EventCalendar
+                events={allEvents}
+                selectedEventId={selectedEventId}
+                onSelectEvent={(id) => {
+                  setSelectedEventId(id)
+                  // Switch tab based on event status
+                  const selected = allEvents.find(e => e.id === id)
+                  if (selected) {
+                    setActiveTab(selected.status)
+                  }
+                }}
                 locale={locale}
               />
-            )}
-          </div>
+
+              {/* Event Details Summary Widget */}
+              {selectedEvent && (
+                <EventDetailsSummary
+                  event={selectedEvent}
+                  locale={locale}
+                />
+              )}
+            </div>
+          )}
         </div>
       </section>
 
