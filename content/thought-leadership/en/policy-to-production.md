@@ -32,7 +32,7 @@ India’s semiconductor incentive architecture, while generous, is complex. A ty
 The central government provides:
 - Up to **50% capital expenditure support** for ATMP/OSAT and compound-semiconductor projects.
 - A **Design-Linked Incentive (DLI)** covering up to 50% of design costs.
-- New equipment and materials support under **ISM 2.0**.
+- New equipment and materials support under the [India Semiconductor Mission 2.0](/en/resources/thought-leadership/semiconductor-renaissance).
 
 State governments further enhance support through:
 - Capital subsidies
@@ -89,7 +89,7 @@ By combining sector expertise with extensive industry networks, JIBB accelerates
   <span class="caption">Figure 2: Supplier clusters and industrial ecosystem coordination.</span>
 </div>
 
-Semiconductor manufacturing is a collective enterprise. Tata’s Dholera fab alone will eventually consume thousands of tonnes of chemicals, gases, and substrates annually, requiring a ring of suppliers located within a 30-minute radius to ensure just-in-time delivery of ultra-high-purity materials.
+Semiconductor manufacturing is a collective enterprise. Tata’s Dholera fab alone will eventually consume thousands of tonnes of chemicals, gases, and substrates annually, requiring a ring of suppliers located within a 30-minute radius to ensure just-in-time delivery of ultra-high-purity materials. This co-production strategy aligns with the broader [India-Japan manufacturing partnership](/en/resources/blog/india-japan-manufacturing-partnership) focusing on supply-chain resilience.
 
 JIBB actively forms supplier consortia that can offer integrated packages. For example, a consortium may include companies specializing in high-purity gases, wet chemicals, CMP slurry, photoresist strippers, and quartzware. These groups can jointly negotiate with anchor customers and share infrastructure such as gas pipelines, deionised water plants, and hazardous-waste treatment facilities.
 
