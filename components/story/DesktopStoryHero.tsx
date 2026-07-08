@@ -53,10 +53,20 @@ export function DesktopStoryHero() {
 
   /* ---- Navigation handlers ---- */
   const handleSkip = useCallback(() => {
-    if (!sectionRef.current) return;
-    const bottom =
-      sectionRef.current.offsetTop + sectionRef.current.offsetHeight;
-    window.scrollTo({ top: bottom + 1, behavior: "smooth" });
+    const whoWeAreSection = document.getElementById("who-we-are");
+    if (whoWeAreSection) {
+      whoWeAreSection.scrollIntoView({ behavior: "smooth" });
+    } else {
+      const triggers = ScrollTrigger.getAll();
+      const storyTrigger = triggers.find((t) => t.trigger === sectionRef.current);
+      if (storyTrigger) {
+        window.scrollTo({ top: storyTrigger.end + 5, behavior: "smooth" });
+      } else if (sectionRef.current) {
+        const bottom =
+          sectionRef.current.offsetTop + sectionRef.current.offsetHeight;
+        window.scrollTo({ top: bottom + 5, behavior: "smooth" });
+      }
+    }
   }, []);
 
   const handleReplay = useCallback(() => {
@@ -696,14 +706,17 @@ export function DesktopStoryHero() {
 
             {/* ═══════════ BOTTOM CONTROLS ═══════════ */}
             <div className="relative z-20 px-4 md:px-8 pb-5 md:pb-6 flex items-center justify-between">
-              {/* Skip button */}
+              {/* Replay button */}
               <button
-                onClick={handleSkip}
-                className="text-[11px] md:text-xs font-medium text-muted-foreground/50 hover:text-foreground/80 transition-colors flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-black/[0.03] select-none"
-                id="story-skip"
+                onClick={handleReplay}
+                className={`text-sm md:text-base font-semibold text-muted-foreground hover:text-foreground transition-all flex items-center gap-2 px-5 py-2.5 rounded-full border border-input bg-background/60 hover:bg-accent hover:text-accent-foreground shadow-sm backdrop-blur-sm select-none relative -translate-y-3 md:-translate-y-4 ${canReplay
+                  ? "opacity-100"
+                  : "opacity-0 pointer-events-none"
+                  }`}
+                id="story-replay"
               >
-                <span>{t("skipStory")}</span>
-                <span className="text-[10px]">⏭</span>
+                <span>↺</span>
+                <span>{t("replay")}</span>
               </button>
 
               {/* Chapter progress indicator */}
@@ -726,17 +739,14 @@ export function DesktopStoryHero() {
                 ))}
               </div>
 
-              {/* Replay button */}
+              {/* Skip button */}
               <button
-                onClick={handleReplay}
-                className={`text-[11px] md:text-xs font-medium text-muted-foreground/50 hover:text-foreground/80 transition-all flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-black/[0.03] select-none ${canReplay
-                  ? "opacity-100"
-                  : "opacity-0 pointer-events-none"
-                  }`}
-                id="story-replay"
+                onClick={handleSkip}
+                className="text-sm md:text-base font-semibold text-muted-foreground hover:text-foreground transition-all flex items-center gap-2 px-5 py-2.5 rounded-full border border-input bg-background/60 hover:bg-accent hover:text-accent-foreground shadow-sm backdrop-blur-sm select-none relative -translate-y-3 md:-translate-y-4"
+                id="story-skip"
               >
-                <span>↺</span>
-                <span>{t("replay")}</span>
+                <span>{t("skipStory")}</span>
+                <span className="text-xs md:text-sm">⏭</span>
               </button>
             </div>
           </div>
