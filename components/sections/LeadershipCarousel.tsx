@@ -90,7 +90,7 @@ export function LeadershipCarousel() {
       </div>
 
       {/* Accordion Carousel Row */}
-      <div 
+      <div
         ref={scrollContainerRef}
         className="flex flex-row overflow-x-auto no-scrollbar gap-3 md:gap-4 pb-4 w-full cursor-grab active:cursor-grabbing select-none"
       >
@@ -100,7 +100,7 @@ export function LeadershipCarousel() {
           const role = t(`members.${member.key}.role`);
           const location = t(`members.${member.key}.location`);
           const bio = t(`members.${member.key}.bio`);
-          
+
           // Safe name extraction that handles fallback keys
           const safeName = typeof name === 'string' && !name.startsWith('members.') ? name : member.key;
 
@@ -110,29 +110,26 @@ export function LeadershipCarousel() {
               onClick={() => {
                 setActiveIndex(i);
               }}
-              className={`relative shrink-0 h-[500px] md:h-[620px] rounded-3xl overflow-hidden border border-border/50 transition-all duration-500 ease-in-out cursor-pointer group shadow-jibb-sm hover:shadow-jibb-md ${
-                isActive 
-                  ? "w-[290px] md:w-[460px] bg-gradient-to-tr from-jibb-indigo/10 to-jibb-orange/10 border-jibb-indigo/30" 
+              className={`relative shrink-0 h-[500px] md:h-[620px] rounded-3xl overflow-hidden border border-border/50 transition-all duration-500 ease-in-out cursor-pointer group shadow-jibb-sm hover:shadow-jibb-md ${isActive
+                  ? "w-[290px] md:w-[460px] bg-gradient-to-tr from-jibb-indigo/10 to-jibb-orange/10 border-jibb-indigo/30"
                   : "w-20 md:w-28 bg-muted/40 hover:bg-muted/70"
-              }`}
+                }`}
             >
               {/* Profile Image with Greyscale/Color Toggle */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={member.img}
                 alt={safeName}
-                className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-700 pointer-events-none select-none ${
-                  isActive 
-                    ? "grayscale-0 scale-100 opacity-95" 
+                className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-700 pointer-events-none select-none ${isActive
+                    ? "grayscale-0 scale-100 opacity-95"
                     : "grayscale opacity-60 group-hover:opacity-85 scale-105"
-                }`}
+                  }`}
               />
 
               {/* Gradient Backdrop Overlays for readability */}
-              <div 
-                className={`absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70 transition-opacity duration-500 ${
-                  isActive ? "opacity-100" : "opacity-0 group-hover:opacity-30"
-                }`}
+              <div
+                className={`absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70 transition-opacity duration-500 ${isActive ? "opacity-100" : "opacity-0 group-hover:opacity-30"
+                  }`}
               />
 
               {/* Collapsed view indicator (displays initials or vertically stacked thin dots) */}
@@ -162,7 +159,7 @@ export function LeadershipCarousel() {
                   {/* Bottom Left: Bio & Location */}
                   <div className="space-y-3 text-left max-w-sm md:max-w-md animate-in fade-in slide-in-from-bottom-3 duration-500">
                     <p className="text-xs md:text-sm text-white/80 leading-relaxed font-medium line-clamp-3">
-                      "{bio}"
+                      {bio}
                     </p>
                     <div className="flex items-center gap-1.5 text-[10px] md:text-xs font-semibold text-white/70">
                       <MapPin className="size-3.5 text-jibb-orange-light" />

@@ -337,7 +337,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
                       <div className={`bg-card dark:bg-[#161f38]/45 border border-border/50 hover:border-primary/30 rounded-2xl overflow-hidden hover:shadow-jibb-md transition-all duration-300 flex flex-col justify-between group ${item.image ? "h-[360px] sm:h-[400px]" : "h-[220px] sm:h-[250px]"}`}>
                         {/* Image at Top */}
                         {item.image ? (
-                          <div className="relative w-full overflow-hidden" style={{ aspectRatio: "1200 / 630" }}>
+                          <div className="relative w-full overflow-hidden" style={{ aspectRatio: "1700 / 800" }}>
                             <img
                               src={item.image}
                               alt={item.title}

@@ -1,5 +1,5 @@
 ---
-title: "Beyond Diplomacy: The Era of Transformation for the India-Japan Relationship"
+title: "Beyond Diplomacy: The Era of Transformation for the Japan-India Relationship"
 description: "Exploring how India and Japan are building a new era of business and strategic partnership through industrial ecosystems, technology transfer, and talent mobility."
 date: "2025-06-22"
 author: "Varun Tyagi"
