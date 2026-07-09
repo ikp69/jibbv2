@@ -37,17 +37,15 @@ export default function LoginPage() {
     setErrors({});
     startTransition(async () => {
       try {
-        // login() performs a server-side redirect on success (never returns)
-        await login({ email, password });
-        // If we reach here, login failed
-        setErrors({ general: "Authentication failed" });
-      } catch (err) {
-        // Server-side redirect throws a TypeError, which is expected and handled by Next.js
-        // The browser will navigate to the dashboard automatically
-        if (err instanceof TypeError && err.message.includes("redirect")) {
-          // This is expected - the server redirected us
-          return;
+        const result = await login({ email, password });
+        if (result.success && result.redirectUrl) {
+          // Auth is now established - use router.replace to navigate
+          // This ensures the redirect happens with the auth session already set
+          router.replace(result.redirectUrl);
+        } else {
+          setErrors({ general: result.error || "Authentication failed" });
         }
+      } catch (err) {
         setErrors({ general: "A network error occurred. Please try again." });
       }
     });
@@ -59,16 +57,14 @@ export default function LoginPage() {
     setErrors({});
     startTransition(async () => {
       try {
-        // login() performs a server-side redirect on success (never returns)
-        await login({ email: roleEmail, password: "password123" });
-        // If we reach here, login failed
-        setErrors({ general: "Authentication failed" });
-      } catch (err) {
-        // Server-side redirect throws a TypeError, which is expected and handled by Next.js
-        if (err instanceof TypeError && err.message.includes("redirect")) {
-          // This is expected - the server redirected us
-          return;
+        const result = await login({ email: roleEmail, password: "password123" });
+        if (result.success && result.redirectUrl) {
+          // Auth is now established - use router.replace to navigate
+          router.replace(result.redirectUrl);
+        } else {
+          setErrors({ general: result.error || "Authentication failed" });
         }
+      } catch (err) {
         setErrors({ general: "A network error occurred. Please try again." });
       }
     });

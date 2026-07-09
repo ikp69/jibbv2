@@ -4,12 +4,12 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { loginSchema, type LoginInput } from "../schemas/login-schema";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 
 export type LoginResult = {
   success: boolean;
   error?: string;
   role?: "admin" | "member";
+  redirectUrl?: string;
 };
 
 export async function login(input: LoginInput): Promise<LoginResult> {
@@ -82,9 +82,14 @@ export async function login(input: LoginInput): Promise<LoginResult> {
     new_values: { email, role: profile.role },
   });
 
-  // 4. Perform server-side redirect based on role
-  // This ensures the redirect happens AFTER the session is established on the server
-  // Note: redirect() throws an error that Next.js catches, so this function never actually returns
+  // 4. Return success with redirect URL (client will handle the navigation)
+  // At this point, the auth cookie is set in the response, and the session is fully established
   const role = profile.role as "admin" | "member";
-  redirect(role === "admin" ? "/en/admin/dashboard" : "/en/portal/dashboard");
+  const redirectUrl = role === "admin" ? "/en/admin/dashboard" : "/en/portal/dashboard";
+
+  return {
+    success: true,
+    role,
+    redirectUrl,
+  };
 }
