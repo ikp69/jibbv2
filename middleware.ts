@@ -19,15 +19,6 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 307);
   }
 
-  // Redirect /blog and /resources/blog to /resources/thought-leadership
-  const blogMatch = pathname.match(/^\/(?:en|ja)?\/?(?:resources\/)?blog(\/.*)?$/);
-  if (blogMatch) {
-    const subpath = blogMatch[1] || "";
-    const url = request.nextUrl.clone();
-    url.pathname = `/${locale}/resources/thought-leadership${subpath}`;
-    return NextResponse.redirect(url, 301);
-  }
-
   // 1. Update/refresh the Supabase session and get the user
   const { supabaseResponse, user, supabase } = await updateSession(request);
 

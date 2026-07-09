@@ -4,7 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { SmoothScrollProvider } from "./SmoothScrollProvider";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { EventTicker } from "@/components/ui/EventTicker";
+// import { EventTicker } from "@/components/ui/EventTicker";
 import { TickerProvider } from "./TickerContext";
 
 import { usePathname } from "next/navigation";
@@ -38,7 +38,7 @@ export function ClientProviders({ messages, locale, children }: ClientProvidersP
     <NextIntlClientProvider messages={messages} locale={locale} timeZone="Asia/Kolkata">
       <TickerProvider>
         <SmoothScrollProvider>
-          <EventTicker />
+          {/* <EventTicker /> */}
           <Navbar />
           {children}
           <Footer />

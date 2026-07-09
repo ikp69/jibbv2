@@ -10,7 +10,9 @@ interface TickerContextType {
 const TickerContext = createContext<TickerContextType | undefined>(undefined);
 
 export function TickerProvider({ children }: { children: ReactNode }) {
-  const [isTickerVisible, setIsTickerVisible] = useState(true);
+  // Default to false — EventTicker sets this to true when it mounts.
+  // When EventTicker is commented out, the navbar sits flush at top-0.
+  const [isTickerVisible, setIsTickerVisible] = useState(false);
 
   return (
     <TickerContext.Provider value={{ isTickerVisible, setIsTickerVisible }}>

@@ -3,9 +3,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
 import { useLocale } from 'next-intl'
 import EventsProgramTable from '@/components/events/EventsProgramTable'
-import { getEventBySlug } from '@/lib/eventsData'
+import { getEventBySlug, isPastEvent } from '@/lib/eventsData'
 
 const fadeInUp = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.33, 1, 0.68, 1] as const } } }
 const staggerContainer = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } }
@@ -27,6 +28,11 @@ export default function MobilityEventPage() {
   const jpFont = locale === 'ja' ? { fontFamily: 'var(--font-noto-sans-jp)' } : {}
 
   const eventData = getEventBySlug('bharat-mobility-2026')!
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  const isPast = mounted ? isPastEvent(eventData.eventDate, eventData.timeZone) : false
   const t = eventData[locale as 'en' | 'ja']
 
   const names = [t.organizer, ...(t.coOrganizers || []), t.specialSupport || '', ...(t.supporters || [])].filter(Boolean)
@@ -39,8 +45,8 @@ export default function MobilityEventPage() {
   const marqueeItems = uniqueLogos.length > 0 ? Array(Math.ceil(15 / uniqueLogos.length)).fill(uniqueLogos).flat() : []
 
   const labels = {
-    en: { backToEvents: '← All Events', programTitle: 'Program Schedule', organizersTitle: 'Organizers & Partners', venueTitle: 'Venue & Access', time: 'Time', reception: 'Reception', capacity: 'Capacity', openMaps: 'Open in Google Maps', viewProgram: 'View Program', travelDesc: 'Distance between central stations and airports in major Japanese cities', contactTitle: 'Contact Information', contactOrg: 'NPO Japan India Business Bureau (JIBB) / Japan India Consulting', contactEmail: 'trade@ji-consulting.jp' },
-    ja: { backToEvents: '← イベント一覧', programTitle: 'プログラム', organizersTitle: '主催・後援', venueTitle: '会場・アクセス', time: '時間', reception: '懇親会', capacity: '定員', openMaps: 'Google マップで開く', viewProgram: 'プログラム', travelDesc: '国内の主要都市における中心駅と空港との距離', contactTitle: 'お問い合わせ', contactOrg: 'NPO法人 日本インドビジネスビューロー（JIBB）/ 日印コンサルティング株式会社', contactEmail: 'trade@ji-consulting.jp' }
+    en: { backToEvents: '← All Events', programTitle: 'Program Schedule', organizersTitle: 'Organizers & Partners', venueTitle: 'Venue & Access', time: 'Time', reception: 'Reception', capacity: 'Capacity', openMaps: 'Open in Google Maps', register: 'Register Now', viewProgram: 'View Program', travelDesc: 'Distance between central stations and airports in major Japanese cities', contactTitle: 'Contact Information', contactOrg: 'NPO Japan India Business Bureau (JIBB) / Japan India Consulting', contactEmail: 'trade@ji-consulting.jp' },
+    ja: { backToEvents: '← イベント一覧', programTitle: 'プログラム', organizersTitle: '主催・後援', venueTitle: '会場・アクセス', time: '時間', reception: '懇親会', capacity: '定員', openMaps: 'Google マップで開く', register: '参加申込', viewProgram: 'プログラム', travelDesc: '国内の主要都市における中心駅と空港との距離', contactTitle: 'お問い合わせ', contactOrg: 'NPO法人 日本インドビジネスビューロー（JIBB）/ 日印コンサルティング株式会社', contactEmail: 'trade@ji-consulting.jp' }
   }
   const lb = labels[locale as 'en' | 'ja']
 
@@ -51,12 +57,14 @@ export default function MobilityEventPage() {
         </Link>
 
       {/* Past event banner */}
-      <div className="event-concluded-banner">
-        <span className="material-symbols-outlined">event_busy</span>
-        <span style={jpFont}>
-          {locale === 'ja' ? 'このイベントは終了しました（2026年5月11日）' : 'This event has concluded — May 11, 2026'}
-        </span>
-      </div>
+      {isPast && (
+        <div className="event-concluded-banner">
+          <span className="material-symbols-outlined">event_busy</span>
+          <span style={jpFont}>
+            {locale === 'ja' ? 'このイベントは終了しました（2026年5月11日）' : 'This event has concluded — May 11, 2026'}
+          </span>
+        </div>
+      )}
 
       {/* Poster Hero */}
       <div className="event-detail-poster-hero">
@@ -78,6 +86,12 @@ export default function MobilityEventPage() {
           </h1>
           <p className="events-hero-subtitle" style={jpFont}>{t.subtitle}</p>
           <div className="events-hero-buttons">
+            {!isPast && (
+              <a href={eventData.registrationUrl} target="_blank" rel="noopener noreferrer" className="events-btn events-btn-register">
+                <span className="material-symbols-outlined">edit_note</span>
+                {lb.register}
+              </a>
+            )}
             <a href="#program" className="events-btn events-btn-secondary">
               <span className="material-symbols-outlined">schedule</span>
               {lb.viewProgram}
@@ -88,9 +102,11 @@ export default function MobilityEventPage() {
           <div className="events-badges">
             <span className="events-badge events-badge-date">{t.date}</span>
             <span className="events-badge events-badge-format">{t.format}</span>
-            <span className="events-badge" style={{ background: '#e2e8f0', color: '#64748b' }}>
-              {locale === 'ja' ? '終了' : 'Concluded'}
-            </span>
+            {isPast && (
+              <span className="events-badge" style={{ background: '#e2e8f0', color: '#64748b' }}>
+                {locale === 'ja' ? '終了' : 'Concluded'}
+              </span>
+            )}
           </div>
           <div className="events-details">
             <div className="events-detail-item">

@@ -3,7 +3,7 @@ title: "外交を超えて：インド・日本関係の変革の時代"
 description: "産業エコシステム、技術移転、人材流動性を通じた、インドと日本の新しい事業戦略的パートナーシップの構築を探る。"
 date: "2025-06-22"
 author: "Varun Tyagi"
-image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&h=630&q=80"
+image: "/images/blog/beyond-diplomacy-india-japan-transformation-cover-image.jpg"
 tags: ["インド・日本", "産業エコシステム", "サプライチェーン", "イノベーション", "パートナーシップ"]
 featured: true
 corridor: "India-Japan"
@@ -25,7 +25,7 @@ takeaways:
 
 インドと日本が互いに提供できるすべての利点を考えると、つまり、世界クラスの技術専門知識、エンジニアリング、精密製造、急速に発展する熟練労働力を持つ市場、イノベーション、デジタルイノベーションなどを考えると、私たちは独特の経済相乗効果の機会を見ています。
 
-両国はより高い取引量を追求するのではなく、複数の産業が数十年にわたって運営できる持続可能な経済回廊の発展に注力しています。
+両国はより高い取引量を追求するのではなく、複数の産業が数十年にわたって運営できる持続可能な経済回廊の発展に注力しています（詳細は [なぜ日本とインドは共に強いのか：製造業、技術、イノベーションの未来の構築](/ja/resources/blog/india-japan-manufacturing-partnership) をご覧ください）。
 
 ## 新しいパートナーシップの進化
 
@@ -35,7 +35,7 @@ takeaways:
 
 今日、インドと日本は以下を含む多くの領域で産業が協力することを促進しています：
 
-* 半導体製造
+* 半導体製造（[インド半導体ミッション（ISM）2.0](/ja/resources/thought-leadership/semiconductor-renaissance) などの取り組みが柱）
 * 電子機器および精密工学
 * クリーンエネルギー技術
 * モビリティ技術

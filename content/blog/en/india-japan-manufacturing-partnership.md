@@ -3,7 +3,7 @@ title: "Why Japan and India Are Stronger Together: Building the Future of Manufa
 description: "Exploring the India-Japan strategic industrial alliance and how complementary strengths in manufacturing and technology are reshaping global supply chains."
 date: "2025-06-18"
 author: "JIBB Editorial"
-image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&h=630&q=80"
+image: "/images/blog/india-japan-manufacturing-partnership-cover-image.jpg"
 tags: ["Manufacturing", "India-Japan", "Supply Chain", "Semiconductors", "Innovation"]
 featured: true
 corridor: "India-Japan"
@@ -21,7 +21,7 @@ The partnership between Japan and India is entering a new phase, shaped less by 
 
 At the same time, global supply chains are undergoing major restructuring. Companies are increasingly adopting "China+1" strategies, pushing manufacturing and sourcing to more diversified and resilient locations. In this evolving environment, India and Japan are emerging as natural partners with complementary strengths in manufacturing, technology, and innovation.
 
-This is no longer just a bilateral relationship. It is a strategic industrial alignment.
+This is no longer just a bilateral relationship. It is a strategic industrial alignment, marking the beginning of a [new era of transformation](/en/resources/blog/beyond-diplomacy-india-japan-transformation) in the Indo-Pacific.
 
 ## 1. Japan's Industrial Transition and Global Expansion Strategy
 
@@ -51,7 +51,7 @@ The India–Japan partnership is particularly strong in sectors that are central
 
 ### Semiconductors and Advanced Electronics
 
-Semiconductors are critical to the global digital economy, powering everything from smartphones to artificial intelligence systems. Japan brings decades of leadership in semiconductor materials, precision equipment, and manufacturing processes. India is now building its presence in semiconductor assembly, testing, and design capabilities. Together, both countries can contribute to strengthening global semiconductor supply chain resilience.
+Semiconductors are critical to the global digital economy, powering everything from smartphones to artificial intelligence systems. Japan brings decades of leadership in semiconductor materials, precision equipment, and manufacturing processes. India is now building its presence in semiconductor assembly, testing, and design capabilities. We explore this dynamic deeply in [India–Japan Semiconductor Partnership: Beyond Silicon](/en/resources/blog/india-japan-semiconductor-partnership-beyond-silicon). Together, both countries can contribute to strengthening global semiconductor supply chain resilience.
 
 ### Automotive and Electric Mobility
 

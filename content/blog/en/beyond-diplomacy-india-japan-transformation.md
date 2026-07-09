@@ -1,9 +1,9 @@
 ---
-title: "Beyond Diplomacy: The Era of Transformation for the India-Japan Relationship"
+title: "Beyond Diplomacy: The Era of Transformation for the Japan-India Relationship"
 description: "Exploring how India and Japan are building a new era of business and strategic partnership through industrial ecosystems, technology transfer, and talent mobility."
 date: "2025-06-22"
 author: "Varun Tyagi"
-image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&h=630&q=80"
+image: "/images/blog/beyond-diplomacy-india-japan-transformation-cover-image.jpg"
 tags: ["India-Japan", "Industrial Ecosystems", "Supply Chain", "Innovation", "Partnership"]
 featured: true
 corridor: "India-Japan"
@@ -23,9 +23,9 @@ Building a structure for the future of the Indo-Pacific region based on industri
 
 As the global business environment changes rapidly, companies are restructuring their supply chains, and governments are paying closer attention to economic resilience, new partners become essential for global success.
 
-With all the advantages that India and Japan offer each other – including world-class technological expertise, engineering, precision manufacturing, rapidly developing market with a skilled workforce, a fertile ground for innovation, digital innovations and much more – we see a unique opportunity for economic synergy.
+With all the advantages that India and Japan offer each other — including world-class technological expertise, engineering, precision manufacturing, rapidly developing market with a skilled workforce, a fertile ground for innovation, digital innovations and much more — we see a unique opportunity for economic synergy.
 
-Instead of pursuing only higher trade volumes, both sides are focused on developing sustainable economic corridors for multiple industries to operate over decades.
+Instead of pursuing only higher trade volumes, both sides are focused on developing sustainable economic corridors, which we explore in detail in [Why Japan and India Are Stronger Together](/en/resources/blog/india-japan-manufacturing-partnership).
 
 ## The Evolution of a New Partnership
 
@@ -35,7 +35,7 @@ The global disruptions showed us what risks are connected with concentrating ind
 
 Today, both India and Japan encourage industries to collaborate in many spheres including:
 
-* Semiconductor manufacturing
+* Semiconductor manufacturing (anchored by initiatives like the [India Semiconductor Mission 2.0](/en/resources/thought-leadership/semiconductor-renaissance))
 * Electronics and precision engineering
 * Clean energy technologies
 * Mobility technologies
@@ -53,7 +53,7 @@ Over the years, Japanese technical expertise and financial investments have cont
 
 Modern ports, industrial corridors, urban transport systems, logistics and data infrastructure are helping to create the physical foundation for future prosperity.
 
-In the near future, intelligent infrastructure will become the core focus – projects where artificial intelligence and automation become the backbone instead of the final step.
+In the near future, intelligent infrastructure will become the core focus — projects where artificial intelligence and automation become the backbone instead of the final step.
 
 This approach is fully aligned with the needs of the contemporary global investor who is looking for stability and sustainability.
 

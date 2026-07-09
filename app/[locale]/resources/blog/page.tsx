@@ -181,15 +181,13 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
                   className="group relative flex flex-col bg-card border border-border/80 shadow-jibb hover:shadow-jibb-lg rounded-3xl overflow-hidden transition-all duration-300"
                 >
                   {/* Banner Image */}
-                  <div className="relative h-64 sm:h-80 overflow-hidden">
+                  <div className="relative w-full overflow-hidden bg-card" style={{ aspectRatio: "1700 / 800" }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={post.image}
                       alt={post.title}
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-
                     {/* Corridor Badge */}
                     {post.corridor && (
                       <div className="absolute bottom-6 left-6 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-semibold">
@@ -200,39 +198,41 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
                   </div>
 
                   {/* Body Content */}
-                  <div className="p-8 flex-1 flex flex-col justify-between space-y-6">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3">
+                  <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap items-center justify-between gap-x-2.5 gap-y-0.5">
                         {post.client && (
-                          <span className="text-xs font-bold text-jibb-orange uppercase tracking-wider">
+                          <span className="text-[11px] sm:text-xs font-bold text-jibb-orange uppercase tracking-wider">
                             {post.client}
                           </span>
                         )}
-                        <span className="text-[10px] text-muted-foreground">•</span>
-                        <span className="text-xs text-muted-foreground flex items-center gap-1">
+                        {post.client && (
+                          <span className="text-[10px] text-muted-foreground hidden xs:inline">•</span>
+                        )}
+                        <span className="text-[11px] sm:text-xs text-muted-foreground flex items-center gap-1 whitespace-nowrap">
                           <Calendar className="size-3" /> {post.date}
                         </span>
                       </div>
 
-                      <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight leading-snug group-hover:text-jibb-orange transition-colors">
+                      <h2 className="text-lg sm:text-xl font-extrabold text-foreground tracking-tight leading-snug group-hover:text-jibb-orange transition-colors">
                         <Link href={`/resources/blog/${post.slug}`}>
                           {post.title}
                         </Link>
                       </h2>
 
-                      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-3">
                         {post.description}
                       </p>
 
                       {/* Impact Highlight Box */}
                       {post.impact && (
-                        <div className="p-4 rounded-2xl bg-primary/5 border border-primary/10 flex items-start gap-3 no-hover-fill">
-                          <TrendingUp className="size-5 text-jibb-orange shrink-0 mt-0.5" />
+                        <div className="p-3 rounded-xl bg-primary/5 border border-primary/10 flex items-start gap-2.5 no-hover-fill">
+                          <TrendingUp className="size-4 text-jibb-orange shrink-0 mt-0.5" />
                           <div className="space-y-0.5">
-                            <span className="text-[10px] font-bold text-primary uppercase tracking-wider block">
+                            <span className="text-[9px] font-bold text-primary uppercase tracking-wider block">
                               {locale === "ja" ? "主要インパクト" : "Key Impact"}
                             </span>
-                            <span className="text-xs sm:text-sm font-semibold text-foreground">
+                            <span className="text-[11px] sm:text-xs font-semibold text-foreground">
                               {post.impact}
                             </span>
                           </div>
@@ -240,18 +240,18 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
                       )}
                     </div>
 
-                    <div className="border-t border-border/50 pt-6 flex items-center justify-between">
+                    <div className="border-t border-border/50 pt-4 flex items-center justify-between">
                       <div className="flex flex-wrap gap-1.5">
                         {post.tags.slice(0, 2).map((tag) => (
-                          <Badge key={tag} variant="secondary" className="text-[10px]">
+                          <Badge key={tag} variant="secondary" className="text-[9px] px-2 py-0">
                             {tag}
                           </Badge>
                         ))}
                       </div>
 
                       <Link href={`/resources/blog/${post.slug}`}>
-                        <Button variant="link" className="text-jibb-orange p-0 font-bold gap-1 group-hover:gap-2 transition-all">
-                          {locale === "ja" ? "記事を読む" : "Read Post"} <ArrowRight className="size-4" />
+                        <Button variant="link" className="text-jibb-orange p-0 font-bold text-xs gap-1 group-hover:gap-2 transition-all">
+                          {locale === "ja" ? "記事を読む" : "Read Post"} <ArrowRight className="size-3.5" />
                         </Button>
                       </Link>
                     </div>

@@ -2,11 +2,11 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useLocale } from 'next-intl'
 import EventsProgramTable from '@/components/events/EventsProgramTable'
-import { getEventBySlug } from '@/lib/eventsData'
+import { getEventBySlug, isPastEvent } from '@/lib/eventsData'
 
 // ─── Animation variants ───────────────────────────────────────────────────────
 const fadeInUp = {
@@ -87,6 +87,11 @@ export default function ManufacturingEventPage() {
   const jpFont = locale === 'ja' ? { fontFamily: 'var(--font-noto-sans-jp)' } : {}
 
   const eventData = getEventBySlug('india-japan-manufacturing-collaboration-2026')!
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  const isPast = mounted ? isPastEvent(eventData.eventDate, eventData.timeZone) : false
   const t = eventData[locale as 'en' | 'ja']
 
   // Partner logos marquee
@@ -151,6 +156,16 @@ export default function ManufacturingEventPage() {
           <span className="material-symbols-outlined">arrow_back</span>
         </Link>
 
+        {/* Past event banner */}
+        {isPast && (
+          <div className="event-concluded-banner">
+            <span className="material-symbols-outlined">event_busy</span>
+            <span style={jpFont}>
+              {locale === 'ja' ? 'このイベントは終了しました（2026年7月3日）' : 'This event has concluded — July 3, 2026'}
+            </span>
+          </div>
+        )}
+
         {/* Parallax Banner */}
         <ParallaxHeader registrationUrl={eventData.registrationUrl} />
 
@@ -171,10 +186,12 @@ export default function ManufacturingEventPage() {
             </h1>
             <p className="events-hero-subtitle" style={jpFont}>{t.subtitle}</p>
             <div className="events-hero-buttons">
-              <a href={eventData.registrationUrl} target="_blank" rel="noopener noreferrer" className="events-btn events-btn-register">
-                <span className="material-symbols-outlined">edit_note</span>
-                {lb.register}
-              </a>
+              {!isPast && (
+                <a href={eventData.registrationUrl} target="_blank" rel="noopener noreferrer" className="events-btn events-btn-register">
+                  <span className="material-symbols-outlined">edit_note</span>
+                  {lb.register}
+                </a>
+              )}
               <a href="#program" className="events-btn events-btn-secondary">
                 <span className="material-symbols-outlined">schedule</span>
                 {lb.viewProgram}
@@ -192,6 +209,11 @@ export default function ManufacturingEventPage() {
             <div className="events-badges">
               <span className="events-badge events-badge-date">{t.date}</span>
               <span className="events-badge events-badge-format">{t.format}</span>
+              {isPast && (
+                <span className="events-badge" style={{ background: '#e2e8f0', color: '#64748b' }}>
+                  {locale === 'ja' ? '終了' : 'Concluded'}
+                </span>
+              )}
             </div>
             <div className="events-details">
               <div className="events-detail-item">

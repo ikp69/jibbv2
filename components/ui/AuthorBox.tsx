@@ -55,14 +55,23 @@ function LinkedInIcon({ className }: { className?: string }) {
 
 export function AuthorBox({ author, isJa = false }: AuthorBoxProps) {
   const t = useTranslations("leadershipPage");
-  const linkedInUrl = getAuthorLinkedIn(author);
-  const authorImage = authorImageMap[author];
   const translationKey = authorTranslationKeyMap[author];
+  const isLeader = !!translationKey;
 
-  // Get the unique bio for each author from translations
-  const authorBio = translationKey
+  // Resolve details depending on if the author is a leader or Editorial Team
+  const authorBio = isLeader
     ? t(`members.${translationKey}.bio`)
-    : "Leadership team member at JIBB";
+    : (isJa
+        ? "この記事は、日印ビジネスビューローの編集チームによって執筆されました。"
+        : "This article was written by the Editorial Team at the Japan India Business Bureau.");
+
+  const linkedInUrl = isLeader
+    ? getAuthorLinkedIn(author)
+    : "https://linkedin.com/company/japan-india-business-bureau";
+
+  const authorImage = isLeader
+    ? authorImageMap[author]
+    : "/jibb-logo.svg";
 
   return (
     <div className="rounded-3xl p-6 bg-card border border-border/80 shadow-jibb relative overflow-hidden space-y-4">
@@ -81,7 +90,7 @@ export function AuthorBox({ author, isJa = false }: AuthorBoxProps) {
               src={authorImage}
               alt={author}
               fill
-              className="object-cover object-top"
+              className={isLeader ? "object-cover object-top" : "object-contain p-2.5 bg-muted/30"}
               sizes="56px"
             />
           </div>
@@ -91,7 +100,7 @@ export function AuthorBox({ author, isJa = false }: AuthorBoxProps) {
         <h4 className="text-sm font-bold text-foreground">{author}</h4>
       </div>
 
-      {/* Bio - Full width on next row - Unique for each author */}
+      {/* Bio - Full width on next row */}
       <div>
         <p className="text-xs text-muted-foreground leading-relaxed">
           {authorBio}
