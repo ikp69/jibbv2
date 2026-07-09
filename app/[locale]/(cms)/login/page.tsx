@@ -37,17 +37,22 @@ export default function LoginPage() {
     setErrors({});
     startTransition(async () => {
       try {
+        console.log("[CLIENT] Calling login with email:", email);
         const result = await login({ email, password });
+        console.log("[CLIENT] Login returned:", result);
+        
         if (result.success && result.redirectUrl) {
+          console.log("[CLIENT] Success! Navigating to:", result.redirectUrl);
           // Auth succeeded - navigate to dashboard
           router.replace(result.redirectUrl);
         } else {
+          console.log("[CLIENT] Auth failed with error:", result.error);
           // Auth failed - show error message
           setErrors({ general: result.error || "Authentication failed" });
         }
       } catch (err) {
         // Genuine network error or unexpected exception
-        console.error("Login error:", err);
+        console.error("[CLIENT] Unexpected error:", err);
         setErrors({ general: "A network error occurred. Please try again." });
       }
     });
@@ -59,16 +64,21 @@ export default function LoginPage() {
     setErrors({});
     startTransition(async () => {
       try {
+        console.log("[CLIENT] Quick login with email:", roleEmail);
         const result = await login({ email: roleEmail, password: "password123" });
+        console.log("[CLIENT] Quick login returned:", result);
+        
         if (result.success && result.redirectUrl) {
+          console.log("[CLIENT] Success! Navigating to:", result.redirectUrl);
           // Auth succeeded - navigate to dashboard
           router.replace(result.redirectUrl);
         } else {
+          console.log("[CLIENT] Auth failed with error:", result.error);
           // Auth failed - show error message
           setErrors({ general: result.error || "Authentication failed" });
         }
       } catch (err) {
-        console.error("Quick login error:", err);
+        console.error("[CLIENT] Unexpected error:", err);
         setErrors({ general: "A network error occurred. Please try again." });
       }
     });
