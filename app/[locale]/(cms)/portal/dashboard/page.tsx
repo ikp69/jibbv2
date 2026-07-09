@@ -1,6 +1,5 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import PortalDashboardClient from "./PortalDashboardClient";
 import { upcomingEvents } from "@/lib/eventsData";
@@ -9,7 +8,6 @@ export const dynamic = "force-dynamic";
 
 export default async function PortalDashboardPage() {
   const supabase = await createClient();
-  const adminClient = createAdminClient();
 
   // 1. Get authenticated user
   const {
@@ -20,8 +18,8 @@ export default async function PortalDashboardPage() {
     redirect("/en/login");
   }
 
-  // 2. Fetch profile using admin client to bypass RLS session lags
-  const { data: profile, error: profileError } = await adminClient
+  // 2. Fetch profile
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("email, company_name, designation, membership_tier, role, status")
     .eq("id", user.id)

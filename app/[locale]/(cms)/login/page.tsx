@@ -37,18 +37,17 @@ export default function LoginPage() {
     setErrors({});
     startTransition(async () => {
       try {
-        const result = await login({ email, password });
-        if (result.success) {
-          // Redirect based on role
-          if (result.role === "admin") {
-            router.push("/en/admin/dashboard");
-          } else {
-            router.push("/en/portal/dashboard");
-          }
-        } else {
-          setErrors({ general: result.error || "Authentication failed" });
-        }
+        // login() performs a server-side redirect on success (never returns)
+        await login({ email, password });
+        // If we reach here, login failed
+        setErrors({ general: "Authentication failed" });
       } catch (err) {
+        // Server-side redirect throws a TypeError, which is expected and handled by Next.js
+        // The browser will navigate to the dashboard automatically
+        if (err instanceof TypeError && err.message.includes("redirect")) {
+          // This is expected - the server redirected us
+          return;
+        }
         setErrors({ general: "A network error occurred. Please try again." });
       }
     });
@@ -60,17 +59,16 @@ export default function LoginPage() {
     setErrors({});
     startTransition(async () => {
       try {
-        const result = await login({ email: roleEmail, password: "password123" });
-        if (result.success) {
-          if (result.role === "admin") {
-            router.push("/en/admin/dashboard");
-          } else {
-            router.push("/en/portal/dashboard");
-          }
-        } else {
-          setErrors({ general: result.error || "Authentication failed" });
-        }
+        // login() performs a server-side redirect on success (never returns)
+        await login({ email: roleEmail, password: "password123" });
+        // If we reach here, login failed
+        setErrors({ general: "Authentication failed" });
       } catch (err) {
+        // Server-side redirect throws a TypeError, which is expected and handled by Next.js
+        if (err instanceof TypeError && err.message.includes("redirect")) {
+          // This is expected - the server redirected us
+          return;
+        }
         setErrors({ general: "A network error occurred. Please try again." });
       }
     });

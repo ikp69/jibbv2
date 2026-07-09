@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { loginSchema, type LoginInput } from "../schemas/login-schema";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export type LoginResult = {
   success: boolean;
@@ -81,8 +82,9 @@ export async function login(input: LoginInput): Promise<LoginResult> {
     new_values: { email, role: profile.role },
   });
 
-  return {
-    success: true,
-    role: profile.role as "admin" | "member",
-  };
+  // 4. Perform server-side redirect based on role
+  // This ensures the redirect happens AFTER the session is established on the server
+  // Note: redirect() throws an error that Next.js catches, so this function never actually returns
+  const role = profile.role as "admin" | "member";
+  redirect(role === "admin" ? "/en/admin/dashboard" : "/en/portal/dashboard");
 }

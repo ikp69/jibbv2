@@ -1,6 +1,5 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import DashboardClient from "./DashboardClient";
 
@@ -8,7 +7,6 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
   const supabase = await createClient();
-  const adminClient = createAdminClient();
 
   // Validate authentication
   const {
@@ -19,8 +17,8 @@ export default async function AdminDashboardPage() {
     redirect("/en/login");
   }
 
-  // Verify role using admin client to bypass RLS session lags
-  const { data: profile } = await adminClient
+  // Verify role
+  const { data: profile } = await supabase
     .from("profiles")
     .select("role")
     .eq("id", user.id)
