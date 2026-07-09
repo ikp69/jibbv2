@@ -68,6 +68,9 @@ export async function createCollaboration(input: CollaborationInput): Promise<Bu
         industry: data.industry,
         visible_tiers: data.visibleTiers,
         status: data.status,
+        category: data.category,
+        direction: data.direction,
+        location: data.location,
         created_by: adminId,
       })
       .select("id")
@@ -105,6 +108,9 @@ export async function updateCollaboration(id: string, input: CollaborationInput)
         industry: data.industry,
         visible_tiers: data.visibleTiers,
         status: data.status,
+        category: data.category,
+        direction: data.direction,
+        location: data.location,
       })
       .eq("id", id);
 

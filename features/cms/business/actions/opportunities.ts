@@ -143,6 +143,92 @@ export async function deleteOpportunity(id: string): Promise<BusinessResult> {
   }
 }
 
+export async function submitMatchingProposal(input: OpportunityInput): Promise<BusinessResult> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) return { success: false, error: "Unauthorized. Please sign in." };
+
+    const parsed = opportunitySchema.safeParse(input);
+    if (!parsed.success) {
+      return { success: false, error: parsed.error.issues[0]?.message || "Invalid input" };
+    }
+
+    const data = parsed.data;
+
+    const { data: record, error } = await supabase
+      .from("business_opportunities")
+      .insert({
+        title: data.title,
+        description: data.description,
+        industry: data.industry,
+        country: data.country,
+        looking_for: data.lookingFor,
+        deadline: new Date(data.deadline).toISOString(),
+        visible_tiers: data.visibleTiers,
+        status: "pending_approval",
+        created_by: user.id,
+      })
+      .select("id")
+      .single();
+
+    if (error || !record) return { success: false, error: error.message };
+
+    await writeAuditLog(supabase, user.id, "submit_matching_proposal", record.id, null, data);
+
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err.message || "An error occurred" };
+  }
+}
+
+export async function approveOpportunity(id: string): Promise<BusinessResult> {
+  try {
+    const supabase = await createClient();
+    const adminId = await checkAdminAuth(supabase);
+
+    const { data: oldVal } = await supabase.from("business_opportunities").select("status").eq("id", id).single();
+
+    const { error } = await supabase
+      .from("business_opportunities")
+      .update({ status: "published" })
+      .eq("id", id);
+
+    if (error) return { success: false, error: error.message };
+
+    await writeAuditLog(supabase, adminId, "approve_business_opportunity", id, oldVal, { status: "published" });
+
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err.message || "An error occurred" };
+  }
+}
+
+export async function rejectOpportunity(id: string): Promise<BusinessResult> {
+  try {
+    const supabase = await createClient();
+    const adminId = await checkAdminAuth(supabase);
+
+    const { data: oldVal } = await supabase.from("business_opportunities").select("status").eq("id", id).single();
+
+    const { error } = await supabase
+      .from("business_opportunities")
+      .update({ status: "closed" }) // Mark as closed/rejected
+      .eq("id", id);
+
+    if (error) return { success: false, error: error.message };
+
+    await writeAuditLog(supabase, adminId, "reject_business_opportunity", id, oldVal, { status: "closed" });
+
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err.message || "An error occurred" };
+  }
+}
+
 // -------------------------------------------------------------
 // MEMBER INTEREST SUBMISSIONS
 // -------------------------------------------------------------

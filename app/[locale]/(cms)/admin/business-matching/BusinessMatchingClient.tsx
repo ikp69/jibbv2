@@ -3,8 +3,14 @@
 import React, { useState, useTransition } from "react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { createOpportunity, deleteOpportunity, updateOpportunityInterestStatus } from "@/features/cms/business/actions/opportunities";
-import { Plus, X, Trash2, Calendar, FileText, CheckCircle, AlertCircle, RefreshCw } from "lucide-react";
+import { 
+  createOpportunity, 
+  deleteOpportunity, 
+  updateOpportunityInterestStatus,
+  approveOpportunity,
+  rejectOpportunity
+} from "@/features/cms/business/actions/opportunities";
+import { Plus, X, Trash2, Calendar, FileText, CheckCircle, AlertCircle, RefreshCw, Briefcase, ThumbsUp, ThumbsDown } from "lucide-react";
 
 type Opportunity = {
   id: string;
@@ -36,12 +42,15 @@ type BusinessMatchingClientProps = {
   pitches: Pitch[];
 };
 
+type TabType = "active" | "pending";
+
 export default function BusinessMatchingClient({ opportunities, pitches }: BusinessMatchingClientProps) {
+  const [activeTab, setActiveTab] = useState<TabType>("active");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOppId, setSelectedOppId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  // Form Fields
+  // Form Fields for Admin-created Opportunities
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [industry, setIndustry] = useState<"Semiconductors" | "Manufacturing" | "Healthcare" | "Automotive" | "Electronics" | "Energy" | "Infrastructure" | "Food" | "General">("General");
@@ -52,14 +61,14 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
   const [status, setStatus] = useState<"draft" | "published">("published");
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [matchingSuccess, setMatchingSuccess] = useState("");
+  const [matchingError, setMatchingError] = useState("");
 
   const [confirmAction, setConfirmAction] = useState<{
     id: string;
     actionFn: (id: string) => Promise<any>;
     actionName: string;
   } | null>(null);
-  const [matchingSuccess, setMatchingSuccess] = useState("");
-  const [matchingError, setMatchingError] = useState("");
 
   const handleAction = (id: string, actionFn: (id: string) => Promise<any>, actionName: string) => {
     setConfirmAction({ id, actionFn, actionName });
@@ -75,12 +84,44 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
     startTransition(async () => {
       const res = await actionFn(id);
       if (res.success) {
-        setMatchingSuccess("Opportunity deleted successfully.");
+        setMatchingSuccess("Action executed successfully.");
         setTimeout(() => {
           window.location.reload();
         }, 800);
       } else {
-        setMatchingError(res.error || "Failed to delete opportunity");
+        setMatchingError(res.error || "Action failed");
+      }
+    });
+  };
+
+  const handleApprove = (id: string) => {
+    setMatchingError("");
+    setMatchingSuccess("");
+    startTransition(async () => {
+      const res = await approveOpportunity(id);
+      if (res.success) {
+        setMatchingSuccess("Member matching proposal approved and published.");
+        setTimeout(() => {
+          window.location.reload();
+        }, 800);
+      } else {
+        setMatchingError(res.error || "Failed to approve proposal");
+      }
+    });
+  };
+
+  const handleReject = (id: string) => {
+    setMatchingError("");
+    setMatchingSuccess("");
+    startTransition(async () => {
+      const res = await rejectOpportunity(id);
+      if (res.success) {
+        setMatchingSuccess("Member matching proposal rejected.");
+        setTimeout(() => {
+          window.location.reload();
+        }, 800);
+      } else {
+        setMatchingError(res.error || "Failed to reject proposal");
       }
     });
   };
@@ -160,7 +201,11 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
     });
   };
 
-  const columns: ColumnDef<Opportunity>[] = [
+  // Filter lists based on tab
+  const pendingOpportunities = opportunities.filter((o) => o.status === "pending_approval");
+  const activeOpportunities = opportunities.filter((o) => o.status !== "pending_approval");
+
+  const activeColumns: ColumnDef<Opportunity>[] = [
     {
       header: "Opportunity Title",
       accessorKey: "title",
@@ -212,16 +257,73 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
         <div className="flex gap-2">
           <button
             onClick={() => setSelectedOppId(selectedOppId === item.id ? null : item.id)}
-            className="px-2.5 py-1 bg-slate-105 hover:bg-slate-200 text-xs font-semibold text-slate-700 rounded-lg border border-slate-200 transition-colors cursor-pointer"
+            className="px-2.5 py-1 bg-slate-105 hover:bg-slate-200 text-xs font-semibold text-slate-700 rounded-lg border border-slate-200 transition-colors cursor-pointer animate-none"
           >
             Pitches ({pitches.filter((p) => p.opportunity_id === item.id).length})
           </button>
           <button
             onClick={() => handleAction(item.id, deleteOpportunity, "delete")}
-            className="p-1 text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+            className="p-1 text-red-655 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
             title="Delete"
           >
             <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  const pendingColumns: ColumnDef<Opportunity>[] = [
+    {
+      header: "Proposed Title",
+      accessorKey: "title",
+      cell: (item) => (
+        <div>
+          <span className="font-bold text-slate-900 block">{item.title}</span>
+          <p className="text-xs text-slate-500 line-clamp-2 mt-0.5">{item.description}</p>
+        </div>
+      ),
+    },
+    {
+      header: "Sector & Region",
+      accessorKey: "industry",
+      cell: (item) => (
+        <div>
+          <span className="text-xs font-semibold text-slate-800">{item.industry}</span>
+          <p className="text-[10px] text-slate-500 mt-0.5">Focus: {item.country}</p>
+        </div>
+      ),
+    },
+    {
+      header: "Match Requirements",
+      accessorKey: "looking_for",
+      cell: (item) => (
+        <div className="flex flex-wrap gap-1">
+          {item.looking_for.map((tag, idx) => (
+            <span key={idx} className="px-1.5 py-0.5 bg-slate-100 text-[10px] text-slate-650 rounded border border-slate-200">
+              {tag}
+            </span>
+          ))}
+        </div>
+      ),
+    },
+    {
+      header: "Proposer Actions",
+      cell: (item) => (
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleApprove(item.id)}
+            className="flex items-center gap-1 px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-250 text-xs font-semibold rounded-lg cursor-pointer transition-colors"
+          >
+            <ThumbsUp className="w-3.5 h-3.5" />
+            <span>Approve & Publish</span>
+          </button>
+          <button
+            onClick={() => handleReject(item.id)}
+            className="flex items-center gap-1 px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-semibold rounded-lg cursor-pointer transition-colors"
+          >
+            <ThumbsDown className="w-3.5 h-3.5" />
+            <span>Reject</span>
           </button>
         </div>
       ),
@@ -233,8 +335,11 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
       {/* Title Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Business Matching</h1>
-          <p className="text-slate-655 mt-1">Configure cross-border matching opportunities and review member pitch letters.</p>
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            <Briefcase className="w-8 h-8 text-blue-600 shrink-0" />
+            <span>Business Matching Control</span>
+          </h1>
+          <p className="text-slate-655 mt-1">Review member-submitted matching proposals and manage active opportunity pitches.</p>
         </div>
         <button
           onClick={() => setIsOpen(true)}
@@ -251,97 +356,129 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
         </div>
       )}
       {matchingSuccess && (
-        <div className="p-3 bg-emerald-550/10 border border-emerald-500/20 text-emerald-700 text-sm rounded-lg animate-pulse">
+        <div className="p-3 bg-emerald-555/10 border border-emerald-500/20 text-emerald-700 text-sm rounded-lg animate-pulse">
           {matchingSuccess}
         </div>
       )}
 
+      {/* Tabs Menu */}
+      <div className="flex border-b border-slate-200">
+        <button
+          onClick={() => { setActiveTab("active"); setSelectedOppId(null); }}
+          className={`px-5 py-3 text-sm font-semibold border-b-2 cursor-pointer transition-colors ${
+            activeTab === "active"
+              ? "border-blue-650 text-blue-600"
+              : "border-transparent text-slate-500 hover:text-slate-800"
+          }`}
+        >
+          Active Matchings ({activeOpportunities.length})
+        </button>
+        <button
+          onClick={() => { setActiveTab("pending"); setSelectedOppId(null); }}
+          className={`px-5 py-3 text-sm font-semibold border-b-2 cursor-pointer transition-colors ${
+            activeTab === "pending"
+              ? "border-blue-650 text-blue-600 bg-blue-50/10"
+              : "border-transparent text-slate-500 hover:text-slate-800"
+          }`}
+        >
+          Pending Approvals ({pendingOpportunities.length})
+        </button>
+      </div>
+
       {/* Main Table list */}
-      <DataTable
-        columns={columns}
-        data={opportunities}
-        getRowId={(item) => item.id}
-        expandedRowId={selectedOppId || undefined}
-        renderRowDetails={(opp) => {
-          const oppPitches = pitches.filter((p) => p.opportunity_id === opp.id);
-          return (
-            <div className="bg-slate-50 border border-slate-200 p-5 rounded-xl space-y-4 shadow-inner">
-              <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
-                <h4 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                  <span className="w-1.5 h-3 bg-blue-600 rounded-full" />
-                  <span>Submitted Pitches ({oppPitches.length})</span>
-                </h4>
-                <button
-                  onClick={() => setSelectedOppId(null)}
-                  className="text-xs font-semibold text-slate-505 hover:text-slate-900 transition-colors cursor-pointer"
-                >
-                  Close Panel
-                </button>
-              </div>
-
-              {oppPitches.length === 0 ? (
-                <p className="text-xs text-slate-500 py-3">No pitches submitted for this opportunity yet.</p>
-              ) : (
-                <div className="space-y-4">
-                  {oppPitches.map((pitch) => (
-                    <div key={pitch.id} className="bg-white border border-slate-200 p-4 rounded-lg space-y-3 shadow-sm">
-                      <div className="flex flex-wrap items-center justify-between gap-4">
-                        <div>
-                          <span className="font-bold text-slate-900 text-sm">{pitch.profiles?.company_name || "Unspecified Org"}</span>
-                          <p className="text-xs text-slate-500 font-mono mt-0.5">{pitch.profiles?.email}</p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span className="text-xs text-slate-500 font-mono" suppressHydrationWarning>{new Date(pitch.created_at).toLocaleDateString()}</span>
-                          <StatusBadge status={pitch.status} />
-                        </div>
-                      </div>
-
-                      <p className="text-xs text-slate-705 leading-relaxed bg-slate-50/50 p-3 rounded border border-slate-200 whitespace-pre-wrap">
-                        {pitch.message}
-                      </p>
-
-                      {pitch.supporting_document_url && (
-                        <div className="text-xs">
-                          <span className="text-slate-500 font-semibold">Supporting File: </span>
-                          <a
-                            href={pitch.supporting_document_url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-blue-605 hover:underline font-mono font-medium"
-                          >
-                            View Attachment
-                          </a>
-                        </div>
-                      )}
-
-                      <div className="flex justify-end gap-2.5 pt-2 border-t border-slate-150">
-                        <button
-                          onClick={() => handleUpdatePitchStatus(pitch.id, "approved")}
-                          className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-250 text-xs font-semibold rounded cursor-pointer transition-colors"
-                        >
-                          Approve
-                        </button>
-                        <button
-                          onClick={() => handleUpdatePitchStatus(pitch.id, "rejected")}
-                          className="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-semibold rounded cursor-pointer transition-colors"
-                        >
-                          Reject
-                        </button>
-                        <button
-                          onClick={() => handleUpdatePitchStatus(pitch.id, "reviewed")}
-                          className="px-2.5 py-1 bg-slate-105 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-semibold rounded cursor-pointer transition-colors"
-                        >
-                          Mark Reviewed
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+      {activeTab === "active" ? (
+        <DataTable
+          columns={activeColumns}
+          data={activeOpportunities}
+          getRowId={(item) => item.id}
+          expandedRowId={selectedOppId || undefined}
+          renderRowDetails={(opp) => {
+            const oppPitches = pitches.filter((p) => p.opportunity_id === opp.id);
+            return (
+              <div className="bg-slate-50 border border-slate-200 p-5 rounded-xl space-y-4 shadow-inner">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
+                  <h4 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                    <span className="w-1.5 h-3 bg-blue-600 rounded-full" />
+                    <span>Submitted Pitches ({oppPitches.length})</span>
+                  </h4>
+                  <button
+                    onClick={() => setSelectedOppId(null)}
+                    className="text-xs font-semibold text-slate-505 hover:text-slate-900 transition-colors cursor-pointer"
+                  >
+                    Close Panel
+                  </button>
                 </div>
-              )}
-            </div>
-          );
-        }}
-      />
+
+                {oppPitches.length === 0 ? (
+                  <p className="text-xs text-slate-500 py-3">No pitches submitted for this opportunity yet.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {oppPitches.map((pitch) => (
+                      <div key={pitch.id} className="bg-white border border-slate-200 p-4 rounded-lg space-y-3 shadow-sm">
+                        <div className="flex flex-wrap items-center justify-between gap-4">
+                          <div>
+                            <span className="font-bold text-slate-900 text-sm">{pitch.profiles?.company_name || "Unspecified Org"}</span>
+                            <p className="text-xs text-slate-500 font-mono mt-0.5">{pitch.profiles?.email}</p>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span className="text-xs text-slate-500 font-mono" suppressHydrationWarning>{new Date(pitch.created_at).toLocaleDateString()}</span>
+                            <StatusBadge status={pitch.status} />
+                          </div>
+                        </div>
+
+                        <p className="text-xs text-slate-705 leading-relaxed bg-slate-50/55 p-3 rounded border border-slate-200 whitespace-pre-wrap">
+                          {pitch.message}
+                        </p>
+
+                        {pitch.supporting_document_url && (
+                          <div className="text-xs">
+                            <span className="text-slate-500 font-semibold">Supporting File: </span>
+                            <a
+                              href={pitch.supporting_document_url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-blue-605 hover:underline font-mono font-medium"
+                            >
+                              View Attachment
+                            </a>
+                          </div>
+                        )}
+
+                        <div className="flex justify-end gap-2.5 pt-2 border-t border-slate-150">
+                          <button
+                            onClick={() => handleUpdatePitchStatus(pitch.id, "approved")}
+                            className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-250 text-xs font-semibold rounded cursor-pointer transition-colors"
+                          >
+                            Approve
+                          </button>
+                          <button
+                            onClick={() => handleUpdatePitchStatus(pitch.id, "rejected")}
+                            className="px-2.5 py-1 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-semibold rounded cursor-pointer transition-colors"
+                          >
+                            Reject
+                          </button>
+                          <button
+                            onClick={() => handleUpdatePitchStatus(pitch.id, "reviewed")}
+                            className="px-2.5 py-1 bg-slate-105 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-semibold rounded cursor-pointer transition-colors"
+                          >
+                            Mark Reviewed
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          }}
+        />
+      ) : (
+        <DataTable
+          columns={pendingColumns}
+          data={pendingOpportunities}
+          getRowId={(item) => item.id}
+        />
+      )}
 
       {/* Action confirmation dialog */}
       {confirmAction && (
@@ -362,7 +499,7 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
               </button>
               <button
                 onClick={executeConfirmedAction}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-705 text-white text-xs font-semibold rounded-lg shadow-md transition-colors cursor-pointer"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-750 text-white text-xs font-semibold rounded-lg shadow-md transition-colors cursor-pointer"
               >
                 Confirm
               </button>
@@ -447,7 +584,7 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-505 uppercase tracking-wider">Deadline Date</label>
+                  <label className="text-xs font-semibold text-slate-550 uppercase tracking-wider">Deadline Date</label>
                   <input
                     type="date"
                     required
@@ -458,7 +595,7 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-505 uppercase tracking-wider">Requirements (Comma Separated)</label>
+                  <label className="text-xs font-semibold text-slate-550 uppercase tracking-wider">Requirements (Comma Separated)</label>
                   <input
                     type="text"
                     required

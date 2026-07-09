@@ -66,6 +66,64 @@ export default function PortalReportsClient({ reports }: PortalReportsClientProp
     return `${mb.toFixed(1)} MB`;
   };
 
+  const renderFilePreview = (type: string, url: string) => {
+    if (!url) return null;
+    const lowerType = type.toLowerCase();
+    
+    switch (lowerType) {
+      case "pdf":
+        return (
+          <div className="w-full h-[450px] border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
+            <iframe
+              src={`${url}#toolbar=0`}
+              className="w-full h-full"
+              title="PDF Preview"
+            />
+          </div>
+        );
+      case "image":
+        return (
+          <div className="w-full max-h-[450px] flex items-center justify-center border border-slate-200 rounded-lg overflow-hidden bg-slate-100 p-2 shadow-inner">
+            <img
+              src={url}
+              alt="File Preview"
+              className="max-w-full max-h-[430px] object-contain rounded-md"
+            />
+          </div>
+        );
+      case "video":
+        return (
+          <div className="w-full border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
+            <video
+              src={url}
+              controls
+              className="w-full max-h-[450px] object-contain"
+            />
+          </div>
+        );
+      case "spreadsheet":
+      case "document":
+      case "presentation":
+        return (
+          <div className="w-full h-[450px] border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
+            <iframe
+              src={`https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`}
+              className="w-full h-full"
+              title="Document Preview"
+            />
+          </div>
+        );
+      default:
+        return (
+          <div className="p-8 border border-dashed border-slate-200 rounded-lg text-center bg-slate-50">
+            <FileText className="w-12 h-12 text-slate-400 mx-auto mb-2" />
+            <p className="text-sm font-medium text-slate-650">No inline preview available for this format</p>
+            <p className="text-xs text-slate-400 mt-1">Please download the file to view its contents.</p>
+          </div>
+        );
+    }
+  };
+
   return (
     <div className="space-y-6 font-sans">
       <div>
@@ -192,9 +250,9 @@ export default function PortalReportsClient({ reports }: PortalReportsClientProp
       {/* Details Preview Modal */}
       {previewReport && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="w-full max-w-xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
+          <div className="w-full max-w-3xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150">
-              <h2 className="text-lg font-bold text-slate-900">Intelligence Details</h2>
+              <h2 className="text-lg font-bold text-slate-900">{previewReport.title}</h2>
               <button
                 onClick={() => setPreviewReport(null)}
                 className="text-slate-500 hover:text-slate-900 cursor-pointer"
@@ -203,57 +261,8 @@ export default function PortalReportsClient({ reports }: PortalReportsClientProp
               </button>
             </div>
 
-            <div className="p-6 space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 shrink-0">
-                  {getFileIcon(previewReport.resource_type)}
-                </div>
-                <div className="space-y-1">
-                  <span className="px-2.5 py-0.5 rounded bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-wider border border-blue-200">
-                    {previewReport.category}
-                  </span>
-                  <h3 className="text-lg font-bold text-slate-900 leading-snug">
-                    {previewReport.title}
-                  </h3>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Executive Summary</h4>
-                <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
-                  {previewReport.description || "No description provided for this library resource."}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs text-slate-600">
-                <div>
-                  <span className="text-slate-400 block font-medium">Published Date</span>
-                  <span className="font-semibold text-slate-900" suppressHydrationWarning>{new Date(previewReport.created_at).toLocaleDateString()}</span>
-                </div>
-                <div>
-                  <span className="text-slate-400 block font-medium">File Specifications</span>
-                  <span className="font-semibold text-slate-900 capitalize">{previewReport.resource_type} ({formatSize(previewReport.file_size)})</span>
-                </div>
-              </div>
-
-              <div className="flex justify-end gap-3 pt-4 border-t border-slate-150">
-                <button
-                  onClick={() => setPreviewReport(null)}
-                  className="px-4 py-2 text-sm font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
-                >
-                  Close Preview
-                </button>
-                <a
-                  href={previewReport.file_url}
-                  download
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-5 py-2 bg-blue-600 hover:bg-blue-550 text-white text-sm font-semibold rounded-lg shadow-md transition-colors cursor-pointer"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>Download Resource</span>
-                </a>
-              </div>
+            <div className="p-6">
+              {renderFilePreview(previewReport.resource_type, previewReport.file_url)}
             </div>
           </div>
         </div>

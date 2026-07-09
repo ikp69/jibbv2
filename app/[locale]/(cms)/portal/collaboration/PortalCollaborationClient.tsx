@@ -3,14 +3,30 @@
 import React, { useState, useTransition } from "react";
 import { submitCollaborationInterest } from "@/features/cms/business/actions/collaborations";
 import { EmptyState } from "@/components/ui/empty-state";
-import { ShieldCheck, Calendar, X, Send, Check } from "lucide-react";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { 
+  ShieldCheck, 
+  Calendar, 
+  X, 
+  Send, 
+  Check, 
+  Handshake, 
+  Users, 
+  Compass, 
+  TrendingUp, 
+  Cpu,
+  MapPin,
+  ArrowRight
+} from "lucide-react";
 
 type Collaboration = {
   id: string;
   title: string;
   description: string;
   industry: string;
+  category: "partnerships" | "delegations" | "tradeMissions" | "investment";
+  direction: string;
+  location: string;
 };
 
 type PortalCollaborationClientProps = {
@@ -18,7 +34,10 @@ type PortalCollaborationClientProps = {
   submittedInterests: { collaboration_id: string; status: string }[];
 };
 
+type TabType = "partnerships" | "delegations" | "tradeMissions" | "investment";
+
 export default function PortalCollaborationClient({ collaborations, submittedInterests }: PortalCollaborationClientProps) {
+  const [activeTab, setActiveTab] = useState<TabType>("partnerships");
   const [selectedCol, setSelectedCol] = useState<Collaboration | null>(null);
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -62,21 +81,62 @@ export default function PortalCollaborationClient({ collaborations, submittedInt
     });
   };
 
-  if (collaborations.length === 0) {
-    return (
-      <EmptyState
-        icon={ShieldCheck}
-        title="No Collaboration Opportunities"
-        description="There are no active strategic collaborations matching your membership tier at this moment."
-      />
-    );
-  }
+  // Tabs configuration matching FeatOpportunities.tsx
+  const tabs = [
+    { id: "partnerships", label: "Partnership Requests", icon: Handshake },
+    { id: "delegations", label: "Business Delegations", icon: Users },
+    { id: "tradeMissions", label: "Trade Missions", icon: Compass },
+    { id: "investment", label: "Investment Opportunities", icon: TrendingUp },
+  ] as const;
+
+  // Filter collaborations by selected tab
+  const filteredCollaborations = collaborations.filter((col) => col.category === activeTab);
+
+  // Layout color configurations based on category
+  const themeColors = {
+    partnerships: {
+      text: "text-jibb-indigo dark:text-jibb-indigo-light",
+      bg: "bg-jibb-indigo/5 dark:bg-jibb-indigo/10",
+      border: "border-jibb-indigo/20 dark:border-jibb-indigo-light/20",
+      hover: "hover:border-jibb-indigo/40",
+      pill: "bg-blue-50 text-blue-700 border-blue-200"
+    },
+    delegations: {
+      text: "text-emerald-600 dark:text-emerald-400",
+      bg: "bg-emerald-50 dark:bg-emerald-950/20",
+      border: "border-emerald-200 dark:border-emerald-800/20",
+      hover: "hover:border-emerald-400",
+      pill: "bg-emerald-50 text-emerald-700 border-emerald-200"
+    },
+    tradeMissions: {
+      text: "text-amber-600 dark:text-amber-400",
+      bg: "bg-amber-50 dark:bg-amber-950/20",
+      border: "border-amber-200 dark:border-amber-800/20",
+      hover: "hover:border-amber-400",
+      pill: "bg-amber-50 text-amber-700 border-amber-200"
+    },
+    investment: {
+      text: "text-rose-600 dark:text-rose-400",
+      bg: "bg-rose-50 dark:bg-rose-950/20",
+      border: "border-rose-200 dark:border-rose-800/20",
+      hover: "hover:border-rose-400",
+      pill: "bg-rose-50 text-rose-700 border-rose-200"
+    }
+  };
+
+  const activeTheme = themeColors[activeTab];
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="space-y-8 font-sans">
+      {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Strategic Collaborations</h1>
-        <p className="text-slate-600 mt-1">Review strategic alignment proposals and submit collaboration ideas.</p>
+        <h1 className="text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <ShieldCheck className="w-8 h-8 text-blue-600 shrink-0" />
+          <span>Strategic Collaborations</span>
+        </h1>
+        <p className="text-slate-600 mt-1">
+          Become a member and discover active collaboration opportunities between India and Japan.
+        </p>
       </div>
 
       {collabError && (
@@ -90,54 +150,106 @@ export default function PortalCollaborationClient({ collaborations, submittedInt
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {collaborations.map((col) => {
-          const interest = submittedInterests.find((item) => item.collaboration_id === col.id);
-          const isSubmitted = !!interest;
-
+      {/* Tabs Selector Navigation */}
+      <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-px">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
           return (
-            <div
-              key={col.id}
-              className="border border-slate-200 bg-white rounded-xl p-6 flex flex-col justify-between space-y-4 hover:border-slate-300 shadow-sm transition-colors"
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-5 py-3 border-b-2 text-sm font-semibold transition-all cursor-pointer ${
+                isActive
+                  ? "border-blue-600 text-blue-600 bg-blue-50/50"
+                  : "border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300"
+              }`}
             >
-              <div className="space-y-3">
-                <div className="flex justify-between items-start gap-2">
-                  <span className="px-2.5 py-0.5 rounded bg-blue-50 text-blue-600 text-xs font-semibold uppercase tracking-wider border border-blue-200">
-                    {col.industry}
-                  </span>
-                  {isSubmitted && (
-                    <div className="flex items-center gap-1.5">
-                      <span className="px-2 py-0.5 bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-bold rounded flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" />
-                        <span>Interest Submitted</span>
-                      </span>
-                      {interest.status && (
-                        <StatusBadge status={interest.status} className="text-[10px] px-2 py-0.5 rounded uppercase font-bold" />
-                      )}
-                    </div>
-                  )}
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 tracking-tight leading-snug">{col.title}</h3>
-                <p className="text-sm text-slate-655 leading-relaxed line-clamp-3">{col.description}</p>
-              </div>
-
-              <div className="pt-3 border-t border-slate-150 flex justify-end">
-                <button
-                  disabled={isSubmitted}
-                  onClick={() => setSelectedCol(col)}
-                    className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
-                      isSubmitted
-                        ? "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed"
-                        : "bg-blue-600 hover:bg-blue-700 text-white shadow-md active:scale-[0.98]"
-                    }`}
-                >
-                  {isSubmitted ? "Pitch Submitted" : "Express Interest"}
-                </button>
-              </div>
-            </div>
+              <Icon className="w-4 h-4" />
+              <span>{tab.label}</span>
+            </button>
           );
         })}
       </div>
+
+      {/* Feed Layout */}
+      {filteredCollaborations.length === 0 ? (
+        <EmptyState
+          icon={ShieldCheck}
+          title="No Opportunities Found"
+          description={`There are currently no active opportunities under ${tabs.find(t => t.id === activeTab)?.label}.`}
+        />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredCollaborations.map((col) => {
+            const interest = submittedInterests.find((item) => item.collaboration_id === col.id);
+            const isSubmitted = !!interest;
+
+            return (
+              <div
+                key={col.id}
+                className={`border bg-white rounded-xl p-6 flex flex-col justify-between space-y-5 transition-all shadow-sm hover:shadow-md ${activeTheme.border} ${activeTheme.hover}`}
+              >
+                <div className="space-y-4">
+                  {/* Top Badges */}
+                  <div className="flex justify-between items-start gap-2">
+                    <span className={`px-2.5 py-0.5 rounded text-xs font-bold uppercase tracking-wider border ${activeTheme.pill}`}>
+                      {col.industry}
+                    </span>
+                    <span className="text-xs font-bold font-mono text-slate-400 uppercase tracking-wide">
+                      {col.direction}
+                    </span>
+                  </div>
+
+                  {/* Looking For */}
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">LOOKING FOR:</span>
+                    <h3 className="text-lg font-bold text-slate-900 tracking-tight leading-snug">
+                      {col.title}
+                    </h3>
+                  </div>
+
+                  {/* Details */}
+                  <p className="text-sm text-slate-655 leading-relaxed line-clamp-4">
+                    {col.description}
+                  </p>
+                </div>
+
+                <div className="space-y-3 pt-3 border-t border-slate-100">
+                  {/* Region Information */}
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="flex items-center gap-1 text-[11px] text-slate-500 font-medium">
+                      <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <span>{col.location}</span>
+                    </span>
+
+                    {isSubmitted && (
+                      <span className="px-2 py-0.5 bg-emerald-50 border border-emerald-250 text-emerald-700 text-[10px] font-bold rounded flex items-center gap-1 shrink-0">
+                        <Check className="w-3.5 h-3.5" />
+                        <span>Connected</span>
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Connection Button */}
+                  <button
+                    disabled={isSubmitted}
+                    onClick={() => setSelectedCol(col)}
+                    className={`w-full py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                      isSubmitted
+                        ? "bg-slate-50 text-slate-450 border border-slate-200 cursor-not-allowed"
+                        : "bg-slate-900 hover:bg-slate-800 text-white shadow-sm"
+                    }`}
+                  >
+                    <span>{isSubmitted ? "Pitch Submitted" : "Connect via Admin"}</span>
+                    {!isSubmitted && <ArrowRight className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Submit Pitch Modal */}
       {selectedCol && (
@@ -159,7 +271,7 @@ export default function PortalCollaborationClient({ collaborations, submittedInt
 
               <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 text-slate-600 text-xs space-y-1">
                 <p className="font-semibold text-slate-900 text-sm">{selectedCol.title}</p>
-                <p>Industry Sector: {selectedCol.industry}</p>
+                <p>Industry Sector: {selectedCol.industry} | Category: {tabs.find(t => t.id === selectedCol.category)?.label}</p>
               </div>
 
               <div className="space-y-1.5">
@@ -168,7 +280,7 @@ export default function PortalCollaborationClient({ collaborations, submittedInt
                   required
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Summarize your company's alignment with this proposal, requested resources, and joint benefits..."
+                  placeholder="Explain why your company is a match, what resources you offer, and how you want to connect..."
                   rows={6}
                   className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none resize-none"
                 />
@@ -192,7 +304,7 @@ export default function PortalCollaborationClient({ collaborations, submittedInt
                     <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   ) : (
                     <>
-                      <span>Submit Alignment Pitch</span>
+                      <span>Submit Interest</span>
                       <Send className="w-3.5 h-3.5" />
                     </>
                   )}

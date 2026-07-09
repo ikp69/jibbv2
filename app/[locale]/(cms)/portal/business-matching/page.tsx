@@ -34,13 +34,11 @@ export default async function PortalBusinessMatchingPage() {
     .contains("visible_tiers", [activeTier])
     .order("created_at", { ascending: false });
 
-  // Fetch already submitted interest opportunity IDs by this member
+  // Fetch already submitted interest details by this member
   const { data: submitted } = await supabase
     .from("opportunity_interest")
-    .select("opportunity_id")
+    .select("opportunity_id, message, supporting_document_url, status")
     .eq("member_id", user.id);
-
-  const submittedIds = submitted?.map((item) => item.opportunity_id) || [];
 
   if (error) {
     return <div className="p-6 text-red-400">Error loading opportunities: {error.message}</div>;
@@ -49,7 +47,7 @@ export default async function PortalBusinessMatchingPage() {
   return (
     <PortalBusinessMatchingClient
       opportunities={opportunities || []}
-      submittedIds={submittedIds}
+      submittedPitches={submitted || []}
     />
   );
 }

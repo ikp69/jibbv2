@@ -3,8 +3,8 @@
 import React, { useState, useTransition } from "react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { createCollaboration, deleteCollaboration, updateCollaborationInterestStatus } from "@/features/cms/business/actions/collaborations";
-import { Plus, X, Trash2, ShieldCheck, Heart } from "lucide-react";
+import { createCollaboration, updateCollaboration, deleteCollaboration, updateCollaborationInterestStatus } from "@/features/cms/business/actions/collaborations";
+import { Plus, X, Trash2, ShieldCheck, Heart, Pencil } from "lucide-react";
 
 type Collaboration = {
   id: string;
@@ -13,6 +13,9 @@ type Collaboration = {
   industry: string;
   visible_tiers: string[];
   status: string;
+  category: "partnerships" | "delegations" | "tradeMissions" | "investment";
+  direction: string;
+  location: string;
 };
 
 type Pitch = {
@@ -43,6 +46,10 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
   const [industry, setIndustry] = useState("");
   const [visibleTiers, setVisibleTiers] = useState<string[]>(["associate"]);
   const [status, setStatus] = useState<"draft" | "published">("published");
+  const [category, setCategory] = useState<"partnerships" | "delegations" | "tradeMissions" | "investment">("partnerships");
+  const [direction, setDirection] = useState("");
+  const [location, setLocation] = useState("");
+  const [editingCol, setEditingCol] = useState<Collaboration | null>(null);
 
   const [confirmAction, setConfirmAction] = useState<{
     id: string;
@@ -102,12 +109,29 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
     }
   };
 
+  const handleEdit = (item: Collaboration) => {
+    setTitle(item.title);
+    setDescription(item.description);
+    setIndustry(item.industry);
+    setVisibleTiers(item.visible_tiers);
+    setStatus(item.status as any);
+    setCategory(item.category);
+    setDirection(item.direction || "");
+    setLocation(item.location || "");
+    setEditingCol(item);
+    setIsOpen(true);
+  };
+
   const handleClose = () => {
     setTitle("");
     setDescription("");
     setIndustry("");
     setVisibleTiers(["associate"]);
     setStatus("published");
+    setCategory("partnerships");
+    setDirection("");
+    setLocation("");
+    setEditingCol(null);
     setErrors({});
     setIsOpen(false);
   };
@@ -118,28 +142,35 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
     setCollabError("");
     setCollabSuccess("");
 
-    if (!title || !description || !industry) {
+    if (!title || !description || !industry || !direction || !location) {
       setErrors({ general: "All fields are required." });
       return;
     }
 
     startTransition(async () => {
-      const res = await createCollaboration({
+      const payload = {
         title,
         description,
         industry,
         visibleTiers: visibleTiers as any,
         status,
-      });
+        category,
+        direction,
+        location,
+      };
+
+      const res = editingCol 
+        ? await updateCollaboration(editingCol.id, payload)
+        : await createCollaboration(payload);
 
       if (res.success) {
-        setCollabSuccess("Strategic Collaboration Listing published successfully.");
+        setCollabSuccess(editingCol ? "Strategic Collaboration Listing updated successfully." : "Strategic Collaboration Listing published successfully.");
         setIsOpen(false);
         setTimeout(() => {
           window.location.reload();
         }, 800);
       } else {
-        setErrors({ general: res.error || "Failed to create collaboration" });
+        setErrors({ general: res.error || (editingCol ? "Failed to update collaboration" : "Failed to create collaboration") });
       }
     });
   };
@@ -156,9 +187,23 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
       ),
     },
     {
-      header: "Industry Sector",
+      header: "Industry & Category",
       accessorKey: "industry",
-      cell: (item) => <span className="text-xs font-semibold text-slate-800">{item.industry}</span>,
+      cell: (item) => (
+        <div>
+          <span className="text-xs font-semibold text-slate-800">{item.industry}</span>
+          <p className="text-[10px] text-slate-500 capitalize mt-0.5">Type: {item.category}</p>
+        </div>
+      ),
+    },
+    {
+      header: "Direction & Location",
+      cell: (item) => (
+        <div>
+          <span className="text-xs font-bold text-slate-800">{item.direction}</span>
+          <p className="text-[10px] text-slate-500 mt-0.5">{item.location}</p>
+        </div>
+      ),
     },
     {
       header: "Visible Tiers",
@@ -187,6 +232,13 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
             className="px-2.5 py-1 bg-slate-105 hover:bg-slate-200 text-xs font-semibold text-slate-700 rounded-lg border border-slate-200 transition-colors cursor-pointer"
           >
             Expressions ({pitches.filter((p) => p.collaboration_id === item.id).length})
+          </button>
+          <button
+            onClick={() => handleEdit(item)}
+            className="p-1.5 hover:bg-slate-150 text-blue-600 rounded-lg transition-colors cursor-pointer"
+            title="Edit Draft"
+          >
+            <Pencil className="w-4 h-4" />
           </button>
           <button
             onClick={() => handleAction(item.id, deleteCollaboration, "delete")}
@@ -337,7 +389,9 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
         <div className="fixed inset-0 z-50 flex justify-center items-start bg-black/40 backdrop-blur-sm p-4 font-sans overflow-y-auto">
           <div className="w-full max-w-xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150">
-              <h2 className="text-lg font-bold text-slate-900">Publish Collaboration Listing</h2>
+              <h2 className="text-lg font-bold text-slate-900">
+                {editingCol ? "Edit Collaboration Listing" : "Publish Collaboration Listing"}
+              </h2>
               <button onClick={handleClose} className="text-slate-500 hover:text-slate-905 cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
@@ -384,6 +438,46 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
                   placeholder="e.g. Automotive, Clean Energy, Chemicals"
                   className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
                 />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-505 uppercase tracking-wider">Opportunity Category</label>
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value as any)}
+                    className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 focus:outline-none"
+                  >
+                    <option value="partnerships">Partnership Requests</option>
+                    <option value="delegations">Business Delegations</option>
+                    <option value="tradeMissions">Trade Missions</option>
+                    <option value="investment">Investment Opportunities</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-505 uppercase tracking-wider">Direction</label>
+                  <input
+                    type="text"
+                    required
+                    value={direction}
+                    onChange={(e) => setDirection(e.target.value)}
+                    placeholder="e.g. JAPAN → INDIA"
+                    className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-505 uppercase tracking-wider">Location</label>
+                  <input
+                    type="text"
+                    required
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="e.g. Kyoto, Japan or India"
+                    className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
+                  />
+                </div>
               </div>
 
               {/* Tiers Checkboxes */}
@@ -448,7 +542,7 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
                   {isPending ? (
                     <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   ) : (
-                    "Publish"
+                    editingCol ? "Update Listing" : "Publish"
                   )}
                 </button>
               </div>

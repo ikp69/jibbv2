@@ -54,6 +54,28 @@ export default function LoginPage() {
     });
   };
 
+  const handleQuickLogin = (roleEmail: string) => {
+    setEmail(roleEmail);
+    setPassword("password123");
+    setErrors({});
+    startTransition(async () => {
+      try {
+        const result = await login({ email: roleEmail, password: "password123" });
+        if (result.success) {
+          if (result.role === "admin") {
+            router.push("/en/admin/dashboard");
+          } else {
+            router.push("/en/portal/dashboard");
+          }
+        } else {
+          setErrors({ general: result.error || "Authentication failed" });
+        }
+      } catch (err) {
+        setErrors({ general: "A network error occurred. Please try again." });
+      }
+    });
+  };
+
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-slate-50 overflow-hidden font-sans">
       {/* Decorative Brand Gradients */}
@@ -63,10 +85,12 @@ export default function LoginPage() {
       {/* Main Glassmorphism Login Container */}
       <div className="w-full max-w-md p-8 mx-4 bg-white backdrop-blur-xl border border-slate-200 rounded-2xl shadow-xl relative z-10">
         <div className="flex flex-col items-center mb-8">
-          {/* Brand Mark Logo Mock */}
-          <div className="w-12 h-12 bg-gradient-to-tr from-blue-600 to-red-500 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/20 mb-4">
-            J
-          </div>
+          {/* Brand Logo */}
+          <img
+            src="/jibb-logo.svg"
+            alt="JIBB Logo"
+            className="w-16 h-16 object-contain mb-4"
+          />
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">JIBB Member Portal</h1>
           <p className="text-sm text-slate-500 mt-1">Sign in to access your dashboard</p>
         </div>
@@ -138,6 +162,55 @@ export default function LoginPage() {
             )}
           </button>
         </form>
+
+        {/* Quick Demo Login */}
+        <div className="mt-6 pt-6 border-t border-slate-100">
+          <p className="text-center text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
+            Quick Demo Login
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={() => handleQuickLogin("ishwarkumar@datbanks.com")}
+              className="col-span-2 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-xs font-medium text-slate-700 rounded-lg border border-slate-200 transition-colors text-center cursor-pointer disabled:opacity-50"
+            >
+              Admin
+            </button>
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={() => handleQuickLogin("ishwarkumar2102@gmail.com")}
+              className="px-3 py-2 bg-slate-50 hover:bg-slate-100 text-xs font-medium text-slate-700 rounded-lg border border-slate-200 transition-colors text-center cursor-pointer disabled:opacity-50"
+            >
+              Associate
+            </button>
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={() => handleQuickLogin("ceo@silvercrestmetals.com")}
+              className="px-3 py-2 bg-slate-50 hover:bg-slate-100 text-xs font-medium text-slate-700 rounded-lg border border-slate-200 transition-colors text-center cursor-pointer disabled:opacity-50"
+            >
+              Silver
+            </button>
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={() => handleQuickLogin("ceo@goldenhorizonbullion.com")}
+              className="px-3 py-2 bg-slate-50 hover:bg-slate-100 text-xs font-medium text-slate-700 rounded-lg border border-slate-200 transition-colors text-center cursor-pointer disabled:opacity-50"
+            >
+              Gold
+            </button>
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={() => handleQuickLogin("md@platinumpeak.com")}
+              className="px-3 py-2 bg-slate-50 hover:bg-slate-100 text-xs font-medium text-slate-700 rounded-lg border border-slate-200 transition-colors text-center cursor-pointer disabled:opacity-50"
+            >
+              Platinum
+            </button>
+          </div>
+        </div>
 
         <div className="mt-8 text-center text-xs text-slate-450">
           Japan India Business Bureau &copy; {new Date().getFullYear()}

@@ -21,7 +21,7 @@ export const opportunitySchema = z.object({
   lookingFor: z.array(z.string()).min(1, "Specify at least one requirement"),
   deadline: z.string().min(1, "Deadline date is required"),
   visibleTiers: z.array(tierEnum).min(1, "Select at least one visible tier"),
-  status: z.enum(["draft", "published", "closed"]).default("draft"),
+  status: z.enum(["draft", "pending_approval", "published", "closed"]).default("draft"),
 });
 
 // 2. Opportunity Interest Submission Schema
@@ -38,6 +38,9 @@ export const collaborationSchema = z.object({
   industry: z.string().min(2, "Industry is required"),
   visibleTiers: z.array(tierEnum).min(1, "Select at least one visible tier"),
   status: z.enum(["draft", "published", "closed"]).default("draft"),
+  category: z.enum(["partnerships", "delegations", "tradeMissions", "investment"]),
+  direction: z.string().min(1, "Direction is required"),
+  location: z.string().min(1, "Location is required"),
 });
 
 // 4. Collaboration Interest Submission Schema

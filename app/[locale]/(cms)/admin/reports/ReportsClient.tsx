@@ -3,7 +3,7 @@
 import React, { useState, useTransition } from "react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
 import { createReport, deleteReport } from "@/features/cms/content/actions/reports";
-import { Plus, X, Trash2, FileText, Download } from "lucide-react";
+import { Plus, X, Trash2, FileText, Download, UploadCloud, Eye, FileSpreadsheet, Image, Video, HelpCircle, Calendar } from "lucide-react";
 
 type ReportItem = {
   id: string;
@@ -33,6 +33,10 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
   const [fileUrl, setFileUrl] = useState("");
   const [visibleTiers, setVisibleTiers] = useState<string[]>(["associate"]);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isDragging, setIsDragging] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadError, setUploadError] = useState("");
+  const [previewReport, setPreviewReport] = useState<ReportItem | null>(null);
 
   const [confirmAction, setConfirmAction] = useState<{
     id: string;
@@ -82,7 +86,130 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
     setFileUrl("");
     setVisibleTiers(["associate"]);
     setErrors({});
+    setIsDragging(false);
+    setUploadProgress(0);
+    setUploadError("");
     setIsOpen(false);
+  };
+
+  const handleFileUpload = async (file: File) => {
+    setUploadError("");
+    setUploadProgress(10);
+    try {
+      const { createClient } = await import("@/lib/supabase/client");
+      const supabase = createClient();
+      
+      const fileExt = file.name.split(".").pop();
+      const uniqueId = Math.random().toString(36).substring(2, 9);
+      const fileName = `${Date.now()}-${uniqueId}.${fileExt}`;
+      
+      setUploadProgress(35);
+
+      const { data, error } = await supabase.storage
+        .from("member-resources")
+        .upload(fileName, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      setUploadProgress(75);
+
+      const { data: { publicUrl } } = supabase.storage
+        .from("member-resources")
+        .getPublicUrl(fileName);
+
+      setFileUrl(publicUrl);
+      setUploadProgress(100);
+    } catch (err: any) {
+      console.error("Upload error:", err);
+      setUploadError(err.message || "Failed to upload file. Please try again.");
+      setUploadProgress(0);
+    }
+  };
+
+  const getFileIcon = (type: string) => {
+    switch (type.toLowerCase()) {
+      case "pdf":
+        return <FileText className="w-8 h-8 text-rose-500" />;
+      case "spreadsheet":
+        return <FileSpreadsheet className="w-8 h-8 text-emerald-500" />;
+      case "image":
+        return <Image className="w-8 h-8 text-blue-500" />;
+      case "video":
+        return <Video className="w-8 h-8 text-amber-500" />;
+      default:
+        return <FileText className="w-8 h-8 text-slate-500" />;
+    }
+  };
+
+  const formatSize = (bytes: number | null) => {
+    if (!bytes) return "Unknown Size";
+    const kb = bytes / 1024;
+    if (kb < 1024) return `${kb.toFixed(1)} KB`;
+    const mb = kb / 1024;
+    return `${mb.toFixed(1)} MB`;
+  };
+
+  const renderFilePreview = (type: string, url: string) => {
+    if (!url) return null;
+    const lowerType = type.toLowerCase();
+    
+    switch (lowerType) {
+      case "pdf":
+        return (
+          <div className="w-full h-[450px] border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
+            <iframe
+              src={`${url}#toolbar=0`}
+              className="w-full h-full"
+              title="PDF Preview"
+            />
+          </div>
+        );
+      case "image":
+        return (
+          <div className="w-full max-h-[450px] flex items-center justify-center border border-slate-200 rounded-lg overflow-hidden bg-slate-100 p-2 shadow-inner">
+            <img
+              src={url}
+              alt="File Preview"
+              className="max-w-full max-h-[430px] object-contain rounded-md"
+            />
+          </div>
+        );
+      case "video":
+        return (
+          <div className="w-full border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
+            <video
+              src={url}
+              controls
+              className="w-full max-h-[450px] object-contain"
+            />
+          </div>
+        );
+      case "spreadsheet":
+      case "document":
+      case "presentation":
+        return (
+          <div className="w-full h-[450px] border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
+            <iframe
+              src={`https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`}
+              className="w-full h-full"
+              title="Document Preview"
+            />
+          </div>
+        );
+      default:
+        return (
+          <div className="p-8 border border-dashed border-slate-200 rounded-lg text-center bg-slate-50">
+            <FileText className="w-12 h-12 text-slate-400 mx-auto mb-2" />
+            <p className="text-sm font-medium text-slate-650">No inline preview available for this format</p>
+            <p className="text-xs text-slate-400 mt-1">Please download the file to view its contents.</p>
+          </div>
+        );
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -172,6 +299,13 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
       header: "Actions",
       cell: (item) => (
         <div className="flex items-center gap-1">
+          <button
+            onClick={() => setPreviewReport(item)}
+            className="p-1.5 hover:bg-slate-150 text-slate-600 hover:text-slate-800 rounded-lg transition-colors cursor-pointer"
+            title="Preview Details"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
           <a
             href={item.file_url}
             target="_blank"
@@ -331,16 +465,83 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
                 </div>
               </div>
 
+              {/* File Upload / Drag & Drop */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">File Resource URL</label>
-                <input
-                  type="url"
-                  required
-                  value={fileUrl}
-                  onChange={(e) => setFileUrl(e.target.value)}
-                  placeholder="https://supabase-storage-url.com/bucket/report.pdf"
-                  className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
-                />
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  File Document
+                </label>
+                {fileUrl ? (
+                  <div className="flex items-center justify-between p-3.5 bg-slate-50 border border-slate-200 rounded-lg">
+                    <div className="flex items-center gap-2.5 overflow-hidden">
+                      <FileText className="w-5 h-5 text-blue-605 shrink-0" />
+                      <div className="text-sm font-medium text-slate-700 truncate">
+                        {fileUrl.split("/").pop() || "Uploaded File"}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setFileUrl("")}
+                      className="p-1 text-slate-400 hover:text-slate-650 hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setIsDragging(true);
+                    }}
+                    onDragLeave={() => setIsDragging(false)}
+                    onDrop={async (e) => {
+                      e.preventDefault();
+                      setIsDragging(false);
+                      const files = e.dataTransfer.files;
+                      if (files && files.length > 0) {
+                        await handleFileUpload(files[0]);
+                      }
+                    }}
+                    className={`border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 ${
+                      isDragging
+                        ? "border-blue-500 bg-blue-50/40"
+                        : "border-slate-250 hover:border-slate-350 bg-white"
+                    }`}
+                  >
+                    <input
+                      type="file"
+                      id="file-upload"
+                      className="hidden"
+                      onChange={async (e) => {
+                        const files = e.target.files;
+                        if (files && files.length > 0) {
+                          await handleFileUpload(files[0]);
+                        }
+                      }}
+                    />
+                    <label
+                      htmlFor="file-upload"
+                      className="flex flex-col items-center justify-center cursor-pointer gap-2"
+                    >
+                      <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 shadow-sm mx-auto">
+                        <UploadCloud className="w-5 h-5 text-slate-500" />
+                      </div>
+                      <div className="text-sm mt-1">
+                        <span className="font-bold text-blue-600 hover:text-blue-700">Click to upload</span>
+                        <span className="text-slate-500"> or drag and drop</span>
+                      </div>
+                      <p className="text-xs text-slate-400">PDF, DOCX, XLSX, images up to 25MB</p>
+                    </label>
+                  </div>
+                )}
+                {uploadProgress > 0 && uploadProgress < 100 && (
+                  <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-2">
+                    <div
+                      className="bg-blue-600 h-full transition-all duration-150"
+                      style={{ width: `${uploadProgress}%` }}
+                    />
+                  </div>
+                )}
+                {uploadError && <p className="text-xs text-red-600 mt-1">{uploadError}</p>}
               </div>
 
               {/* Tiers Checkboxes */}
@@ -383,6 +584,26 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {/* Details Preview Modal */}
+      {previewReport && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-y-auto font-sans">
+          <div className="w-full max-w-3xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150">
+              <h2 className="text-lg font-bold text-slate-900">{previewReport.title}</h2>
+              <button
+                onClick={() => setPreviewReport(null)}
+                className="text-slate-500 hover:text-slate-900 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6">
+              {renderFilePreview(previewReport.resource_type, previewReport.file_url)}
+            </div>
           </div>
         </div>
       )}
