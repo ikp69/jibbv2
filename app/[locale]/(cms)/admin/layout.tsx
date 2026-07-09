@@ -1,12 +1,14 @@
 import React from "react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import CmsSidebar from "@/components/layout/cms-sidebar";
 import CmsHeader from "@/components/layout/cms-header";
 import { ADMIN_NAV_GROUPS } from "@/constants/cms/navigation";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
+  const adminClient = createAdminClient();
 
   // 1. Get authenticated user
   const {
@@ -17,8 +19,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     redirect("/en/login");
   }
 
-  // 2. Fetch profile and verify role
-  const { data: profile, error } = await supabase
+  // 2. Fetch profile and verify role using admin client to bypass RLS session lags
+  const { data: profile, error } = await adminClient
     .from("profiles")
     .select("email, company_name, designation, membership_tier, role, status")
     .eq("id", user.id)
