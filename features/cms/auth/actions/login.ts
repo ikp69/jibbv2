@@ -4,92 +4,132 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { loginSchema, type LoginInput } from "../schemas/login-schema";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export type LoginResult = {
   success: boolean;
   error?: string;
   role?: "admin" | "member";
-  redirectUrl?: string;
 };
 
 export async function login(input: LoginInput): Promise<LoginResult> {
-  const parsed = loginSchema.safeParse(input);
-  if (!parsed.success) {
-    return {
-      success: false,
-      error: parsed.error.issues[0]?.message || "Invalid input data",
-    };
-  }
+  try {
+    console.log("[LOGIN] 1. Starting login");
 
-  const supabase = await createClient();
-  const { email, password } = parsed.data;
+    const parsed = loginSchema.safeParse(input);
+    if (!parsed.success) {
+      console.log("[LOGIN] Validation failed:", parsed.error.issues);
+      return {
+        success: false,
+        error: parsed.error.issues[0]?.message || "Invalid input data",
+      };
+    }
 
-  // 1. Sign in via Supabase Authentication
-  const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+    console.log("[LOGIN] 2. Creating Supabase client");
+    const supabase = await createClient();
+    const { email, password } = parsed.data;
 
-  if (authError || !authData.user) {
-    return {
-      success: false,
-      error: authError?.message || "Invalid email or password",
-    };
-  }
+    // 1. Sign in via Supabase Authentication
+    console.log("[LOGIN] 3. Attempting signInWithPassword");
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-  const userId = authData.user.id;
+    if (authError) {
+      console.log("[LOGIN] Auth error:", authError);
+      return {
+        success: false,
+        error: authError.message || "Invalid email or password",
+      };
+    }
 
-  // 2. Fetch the corresponding profile role and active status via Admin Client to bypass RLS session lags
-  const adminClient = createAdminClient();
-  const { data: profile, error: profileError } = await adminClient
-    .from("profiles")
-    .select("role, status")
-    .eq("id", userId)
-    .single();
+    if (!authData.user) {
+      console.log("[LOGIN] No user in auth data");
+      return {
+        success: false,
+        error: "Invalid email or password",
+      };
+    }
 
-  console.log("LOGIN DB CHECK:", { userId, profile, profileError });
+    const userId = authData.user.id;
+    console.log("[LOGIN] 4. User authenticated:", userId);
 
-  if (profileError || !profile) {
-    // Sign out if no profile row is linked to the authenticated user
-    await supabase.auth.signOut();
-    return {
-      success: false,
-      error: `No account profile linked to this user. DB Error: ${profileError?.message || "None"}`,
-    };
-  }
+    // 2. Fetch the corresponding profile role and active status
+    console.log("[LOGIN] 5. Creating admin client");
+    const adminClient = createAdminClient();
 
-  if (profile.status !== "active") {
-    await supabase.auth.signOut();
-    return {
-      success: false,
-      error: "Your account is currently inactive. Please contact the administrator.",
-    };
-  }
+    console.log("[LOGIN] 6. Querying profile");
+    const { data: profile, error: profileError } = await adminClient
+      .from("profiles")
+      .select("role, status")
+      .eq("id", userId)
+      .single();
+
+    if (profileError) {
+      console.log("[LOGIN] Profile query error:", profileError);
+      await supabase.auth.signOut();
+      return {
+        success: false,
+        error: `No account profile linked to this user. DB Error: ${profileError.message}`,
+      };
+    }
+
+    if (!profile) {
+      console.log("[LOGIN] No profile found");
+      await supabase.auth.signOut();
+      return {
+        success: false,
+        error: "No account profile linked to this user.",
+      };
+    }
+
+    console.log("[LOGIN] 7. Profile found:", { userId, role: profile.role, status: profile.status });
+
+    if (profile.status !== "active") {
+      console.log("[LOGIN] User inactive:", profile.status);
+      await supabase.auth.signOut();
+      return {
+        success: false,
+        error: "Your account is currently inactive. Please contact the administrator.",
+      };
+    }
 
   // 3. Create Audit Log for successful login
-  const headersList = await headers();
-  const userAgent = headersList.get("user-agent") || undefined;
-  const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0] || undefined;
+  console.log("[LOGIN] 8. Getting headers");
+  try {
+    const headersList = await headers();
+    const userAgent = headersList.get("user-agent") || undefined;
+    const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0] || undefined;
 
-  await supabase.from("audit_logs").insert({
-    user_id: userId,
-    action: "member_login",
-    table_name: "profiles",
-    record_id: userId,
-    ip_address: ipAddress,
-    user_agent: userAgent,
-    old_values: null,
-    new_values: { email, role: profile.role },
-  });
+    console.log("[LOGIN] 9. Attempting to insert audit log");
+    const { error: auditError } = await supabase.from("audit_logs").insert({
+      user_id: userId,
+      action: "member_login",
+      table_name: "profiles",
+      record_id: userId,
+      ip_address: ipAddress,
+      user_agent: userAgent,
+      old_values: null,
+      new_values: { email, role: profile.role },
+    });
 
-  // 4. Return success with redirect URL (client will handle the navigation)
-  // At this point, the auth cookie is set in the response, and the session is fully established
-  const role = profile.role as "admin" | "member";
-  const redirectUrl = role === "admin" ? "/en/admin/dashboard" : "/en/portal/dashboard";
+    if (auditError) {
+      console.log("[LOGIN] Audit log insert error (non-fatal):", auditError);
+      // Audit logging is not critical for auth flow - log but don't fail
+    } else {
+      console.log("[LOGIN] Audit log inserted successfully");
+    }
+  } catch (auditException) {
+    console.log("[LOGIN] Audit log exception (non-fatal):", auditException);
+    // Audit logging failures should not block login
+  }
 
-  return {
-    success: true,
-    role,
-    redirectUrl,
-  };
+    console.log("[LOGIN] 10. Redirect to dashboard");
+    const role = profile.role as "admin" | "member";
+    redirect(role === "admin" ? "/en/admin/dashboard" : "/en/portal/dashboard");
+  } catch (error) {
+    console.error("[LOGIN] Caught exception:", error);
+    throw error;
+  }
 }
