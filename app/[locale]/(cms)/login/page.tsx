@@ -37,13 +37,16 @@ export default function LoginPage() {
     setErrors({});
     startTransition(async () => {
       try {
-        await login({ email, password });
-        // If redirect() worked, this code is never reached
-        // If we reach here, something went wrong
-        setErrors({ general: "Login failed. Please try again." });
+        const result = await login({ email, password });
+        if (result.success && result.redirectUrl) {
+          // Auth succeeded - navigate to dashboard
+          router.replace(result.redirectUrl);
+        } else {
+          // Auth failed - show error message
+          setErrors({ general: result.error || "Authentication failed" });
+        }
       } catch (err) {
-        // redirect() throws NEXT_REDIRECT which Next.js intercepts
-        // If we catch something else, it's an actual error
+        // Genuine network error or unexpected exception
         console.error("Login error:", err);
         setErrors({ general: "A network error occurred. Please try again." });
       }
@@ -56,9 +59,14 @@ export default function LoginPage() {
     setErrors({});
     startTransition(async () => {
       try {
-        await login({ email: roleEmail, password: "password123" });
-        // If redirect() worked, this code is never reached
-        setErrors({ general: "Login failed. Please try again." });
+        const result = await login({ email: roleEmail, password: "password123" });
+        if (result.success && result.redirectUrl) {
+          // Auth succeeded - navigate to dashboard
+          router.replace(result.redirectUrl);
+        } else {
+          // Auth failed - show error message
+          setErrors({ general: result.error || "Authentication failed" });
+        }
       } catch (err) {
         console.error("Quick login error:", err);
         setErrors({ general: "A network error occurred. Please try again." });
