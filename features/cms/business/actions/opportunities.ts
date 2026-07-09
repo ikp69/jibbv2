@@ -299,3 +299,69 @@ export async function updateOpportunityInterestStatus(
     return { success: false, error: err.message || "An error occurred" };
   }
 }
+
+export async function updateMatchingProposal(id: string, input: OpportunityInput): Promise<BusinessResult> {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { success: false, error: "Unauthorized. Please sign in." };
+
+    const parsed = opportunitySchema.safeParse(input);
+    if (!parsed.success) {
+      return { success: false, error: parsed.error.issues[0]?.message || "Invalid input" };
+    }
+    const data = parsed.data;
+
+    // Check if opportunity exists, belongs to user, and is still pending approval
+    const { data: oldVal, error: fetchError } = await supabase
+      .from("business_opportunities")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (fetchError || !oldVal) return { success: false, error: "Opportunity listing not found" };
+    if (oldVal.created_by !== user.id) return { success: false, error: "Access denied. You can only edit your own proposals." };
+    if (oldVal.status !== "pending_approval") return { success: false, error: "You cannot edit this proposal once approved or rejected." };
+
+    const { error } = await supabase
+      .from("business_opportunities")
+      .update({
+        title: data.title,
+        description: data.description,
+        industry: data.industry,
+        country: data.country,
+        looking_for: data.lookingFor,
+        deadline: new Date(data.deadline).toISOString(),
+      })
+      .eq("id", id);
+
+    if (error) return { success: false, error: error.message };
+
+    await writeAuditLog(supabase, user.id, "update_matching_proposal", id, oldVal, data);
+
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err.message || "An error occurred" };
+  }
+}
+
+export async function getOpportunityEditHistory(id: string): Promise<{ success: boolean; error?: string; history?: any[] }> {
+  try {
+    const supabase = await createClient();
+    await checkAdminAuth(supabase); // Admin only
+
+    const { data, error } = await supabase
+      .from("audit_logs")
+      .select("created_at, old_values, new_values")
+      .eq("table_name", "business_opportunities")
+      .eq("record_id", id)
+      .eq("action", "update_matching_proposal")
+      .order("created_at", { ascending: false });
+
+    if (error) return { success: false, error: error.message };
+    return { success: true, history: data || [] };
+  } catch (err: any) {
+    return { success: false, error: err.message || "An error occurred" };
+  }
+}
+

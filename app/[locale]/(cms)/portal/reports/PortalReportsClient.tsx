@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { Search, FileText, Download, Calendar, Filter, X, Eye, FileSpreadsheet, Image, Video, HelpCircle } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
+import { recordViewedResource } from "@/lib/utils";
+import { incrementDownloadCount } from "@/features/cms/content/actions/reports";
 
 type ReportResource = {
   id: string;
@@ -73,7 +75,7 @@ export default function PortalReportsClient({ reports }: PortalReportsClientProp
     switch (lowerType) {
       case "pdf":
         return (
-          <div className="w-full h-[450px] border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
+          <div className="w-full h-[calc(90vh-140px)] border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
             <iframe
               src={`${url}#toolbar=0`}
               className="w-full h-full"
@@ -83,11 +85,11 @@ export default function PortalReportsClient({ reports }: PortalReportsClientProp
         );
       case "image":
         return (
-          <div className="w-full max-h-[450px] flex items-center justify-center border border-slate-200 rounded-lg overflow-hidden bg-slate-100 p-2 shadow-inner">
+          <div className="w-full max-h-[calc(90vh-140px)] flex items-center justify-center border border-slate-200 rounded-lg overflow-hidden bg-slate-100 p-2 shadow-inner">
             <img
               src={url}
               alt="File Preview"
-              className="max-w-full max-h-[430px] object-contain rounded-md"
+              className="max-w-full max-h-[calc(90vh-160px)] object-contain rounded-md"
             />
           </div>
         );
@@ -97,7 +99,7 @@ export default function PortalReportsClient({ reports }: PortalReportsClientProp
             <video
               src={url}
               controls
-              className="w-full max-h-[450px] object-contain"
+              className="w-full max-h-[calc(90vh-140px)] object-contain"
             />
           </div>
         );
@@ -105,7 +107,7 @@ export default function PortalReportsClient({ reports }: PortalReportsClientProp
       case "document":
       case "presentation":
         return (
-          <div className="w-full h-[450px] border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
+          <div className="w-full h-[calc(90vh-140px)] border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
             <iframe
               src={`https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`}
               className="w-full h-full"
@@ -224,8 +226,12 @@ export default function PortalReportsClient({ reports }: PortalReportsClientProp
 
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => setPreviewReport(item)}
-                    className="p-2 text-slate-505 hover:text-slate-800 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
+                    onClick={() => {
+                      recordViewedResource(item);
+                      incrementDownloadCount(item.id);
+                      setPreviewReport(item);
+                    }}
+                    className="p-2 text-slate-555 hover:text-slate-800 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
                     title="Preview Details"
                   >
                     <Eye className="w-4 h-4" />
@@ -235,6 +241,10 @@ export default function PortalReportsClient({ reports }: PortalReportsClientProp
                     download
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => {
+                      recordViewedResource(item);
+                      incrementDownloadCount(item.id);
+                    }}
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
                   >
                     <Download className="w-3.5 h-3.5" />
@@ -250,7 +260,7 @@ export default function PortalReportsClient({ reports }: PortalReportsClientProp
       {/* Details Preview Modal */}
       {previewReport && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="w-full max-w-3xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
+          <div className="w-full max-w-[95vw] bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150">
               <h2 className="text-lg font-bold text-slate-900">{previewReport.title}</h2>
               <button

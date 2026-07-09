@@ -3,8 +3,8 @@
 import React, { useState, useTransition } from "react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { createEvent, deleteEvent } from "@/features/cms/content/actions/events";
-import { Plus, X, Trash2, Calendar, MapPin, Users, HelpCircle } from "lucide-react";
+import { createEvent, deleteEvent, updateEvent } from "@/features/cms/content/actions/events";
+import { Plus, X, Trash2, Calendar, MapPin, Users, HelpCircle, Edit } from "lucide-react";
 
 type EventItem = {
   id: string;
@@ -25,6 +25,7 @@ type EventsClientProps = {
 export default function EventsClient({ initialList }: EventsClientProps) {
   const [list, setList] = useState(initialList);
   const [isOpen, setIsOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   // Form Fields
@@ -78,7 +79,25 @@ export default function EventsClient({ initialList }: EventsClientProps) {
     }
   };
 
+  const handleOpenEdit = (item: EventItem) => {
+    setEditingId(item.id);
+    setTitle(item.title);
+    setDescription(item.description || "");
+    setLocation(item.location);
+    if (item.event_date) {
+      setEventDate(new Date(item.event_date).toISOString().slice(0, 16));
+    }
+    if (item.registration_deadline) {
+      setRegistrationDeadline(new Date(item.registration_deadline).toISOString().slice(0, 16));
+    }
+    setCapacity(item.capacity);
+    setVisibleTiers(item.visible_tiers);
+    setStatus(item.status as any);
+    setIsOpen(true);
+  };
+
   const handleClose = () => {
+    setEditingId(null);
     setTitle("");
     setDescription("");
     setLocation("");
@@ -113,7 +132,7 @@ export default function EventsClient({ initialList }: EventsClientProps) {
     }
 
     startTransition(async () => {
-      const res = await createEvent({
+      const payload = {
         title,
         description: description || undefined,
         location,
@@ -122,16 +141,20 @@ export default function EventsClient({ initialList }: EventsClientProps) {
         capacity,
         visibleTiers: visibleTiers as any,
         status,
-      });
+      };
+
+      const res = editingId
+        ? await updateEvent(editingId, payload)
+        : await createEvent(payload);
 
       if (res.success) {
-        setEventsSuccess("Invite-Only Event added successfully.");
-        setIsOpen(false);
+        setEventsSuccess(editingId ? "Event updated successfully." : "Invite-Only Event added successfully.");
+        handleClose();
         setTimeout(() => {
           window.location.reload();
         }, 800);
       } else {
-        setErrors({ general: res.error || "Failed to create event" });
+        setErrors({ general: res.error || "Failed to save event" });
       }
     });
   };
@@ -193,13 +216,22 @@ export default function EventsClient({ initialList }: EventsClientProps) {
     {
       header: "Actions",
       cell: (item) => (
-        <button
-          onClick={() => handleAction(item.id, deleteEvent, "delete")}
-          className="p-1.5 text-red-655 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-          title="Delete Event"
-        >
-          <Trash2 className="w-4 h-4" />
-        </button>
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => handleOpenEdit(item)}
+            className="p-1.5 hover:bg-slate-150 text-slate-550 hover:text-slate-800 rounded-lg transition-colors cursor-pointer"
+            title="Edit Event"
+          >
+            <Edit className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => handleAction(item.id, deleteEvent, "delete")}
+            className="p-1.5 text-red-655 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+            title="Delete Event"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
       ),
     },
   ];
@@ -269,9 +301,11 @@ export default function EventsClient({ initialList }: EventsClientProps) {
       {/* Dialog Form */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex justify-center items-start bg-black/40 backdrop-blur-sm p-4 font-sans overflow-y-auto">
-          <div className="w-full max-w-xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150">
-              <h2 className="text-lg font-bold text-slate-900">Create Invite-Only Event</h2>
+          <div className="w-full max-w-xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8 text-slate-800">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150 bg-slate-50">
+              <h2 className="text-lg font-bold text-slate-905">
+                {editingId ? "Edit Invite-Only Event" : "Create Invite-Only Event"}
+              </h2>
               <button onClick={handleClose} className="text-slate-500 hover:text-slate-905 cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
@@ -405,7 +439,7 @@ export default function EventsClient({ initialList }: EventsClientProps) {
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="px-4 py-2 text-sm font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+                  className="px-4 py-2 text-sm font-semibold text-slate-555 hover:text-slate-800 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -417,7 +451,7 @@ export default function EventsClient({ initialList }: EventsClientProps) {
                   {isPending ? (
                     <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   ) : (
-                    "Publish Event"
+                    editingId ? "Save Changes" : "Publish Event"
                   )}
                 </button>
               </div>

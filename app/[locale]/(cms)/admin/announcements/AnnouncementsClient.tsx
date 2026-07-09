@@ -3,14 +3,17 @@
 import React, { useState, useTransition } from "react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { createAnnouncement, deleteAnnouncement, togglePinAnnouncement } from "@/features/cms/content/actions/announcements";
+import { createAnnouncement, deleteAnnouncement, togglePinAnnouncement, updateAnnouncement } from "@/features/cms/content/actions/announcements";
 import { useRouter } from "next/navigation";
-import { Pin, Trash2, Plus, X, Megaphone } from "lucide-react";
+import { Pin, Trash2, Plus, X, Megaphone, Edit } from "lucide-react";
 
 type Announcement = {
   id: string;
   title: string;
   content: string;
+  banner_image: string | null;
+  attachment: string | null;
+  external_link: string | null;
   visible_tiers: string[];
   is_pinned: boolean;
   status: string;
@@ -27,6 +30,7 @@ export default function AnnouncementsClient({ initialList }: AnnouncementsClient
   const router = useRouter();
   const [list, setList] = useState(initialList);
   const [isOpen, setIsOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   // Form Fields
@@ -84,7 +88,31 @@ export default function AnnouncementsClient({ initialList }: AnnouncementsClient
     }
   };
 
+  const handleOpenEdit = (item: Announcement) => {
+    setEditingId(item.id);
+    setTitle(item.title);
+    setContent(item.content);
+    setBannerImage(item.banner_image || "");
+    setAttachment(item.attachment || "");
+    setExternalLink(item.external_link || "");
+    setVisibleTiers(item.visible_tiers);
+    setIsPinned(item.is_pinned);
+    setStatus(item.status as any);
+    if (item.publish_date) {
+      setPublishDate(new Date(item.publish_date).toISOString().split("T")[0]);
+    } else {
+      setPublishDate("");
+    }
+    if (item.expiry_date) {
+      setExpiryDate(new Date(item.expiry_date).toISOString().split("T")[0]);
+    } else {
+      setExpiryDate("");
+    }
+    setIsOpen(true);
+  };
+
   const handleClose = () => {
+    setEditingId(null);
     setTitle("");
     setContent("");
     setBannerImage("");
@@ -116,7 +144,7 @@ export default function AnnouncementsClient({ initialList }: AnnouncementsClient
     }
 
     startTransition(async () => {
-      const res = await createAnnouncement({
+      const payload = {
         title,
         content,
         bannerImage: bannerImage || undefined,
@@ -127,16 +155,20 @@ export default function AnnouncementsClient({ initialList }: AnnouncementsClient
         status,
         publishDate: publishDate || undefined,
         expiryDate: expiryDate || undefined,
-      });
+      };
+
+      const res = editingId
+        ? await updateAnnouncement(editingId, payload)
+        : await createAnnouncement(payload);
 
       if (res.success) {
-        setNoticeSuccess("Announcement created successfully.");
+        setNoticeSuccess(editingId ? "Announcement updated successfully." : "Announcement created successfully.");
         setIsOpen(false);
         setTimeout(() => {
           window.location.reload();
         }, 800);
       } else {
-        setErrors({ general: res.error || "Failed to create announcement" });
+        setErrors({ general: res.error || "Failed to save announcement" });
       }
     });
   };
@@ -186,6 +218,13 @@ export default function AnnouncementsClient({ initialList }: AnnouncementsClient
       cell: (item) => (
         <div className="flex items-center gap-1">
           <button
+            onClick={() => handleOpenEdit(item)}
+            className="p-1.5 text-slate-550 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+            title="Edit Announcement"
+          >
+            <Edit className="w-4 h-4" />
+          </button>
+          <button
             onClick={() => handleAction(item.id, togglePinAnnouncement, "pin/unpin")}
             className={`p-1.5 rounded-lg transition-colors cursor-pointer hover:bg-slate-100/70 ${
               item.is_pinned ? "text-blue-600" : "text-slate-400 hover:text-slate-800"
@@ -196,7 +235,7 @@ export default function AnnouncementsClient({ initialList }: AnnouncementsClient
           </button>
           <button
             onClick={() => handleAction(item.id, deleteAnnouncement, "delete")}
-            className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+            className="p-1.5 text-red-605 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
             title="Delete Announcement"
           >
             <Trash2 className="w-4 h-4" />
@@ -271,9 +310,11 @@ export default function AnnouncementsClient({ initialList }: AnnouncementsClient
       {/* Dialog Form */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex justify-center items-start bg-black/40 backdrop-blur-sm p-4 font-sans overflow-y-auto">
-          <div className="w-full max-w-xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150">
-              <h2 className="text-lg font-bold text-slate-900">Create Announcement</h2>
+          <div className="w-full max-w-xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8 text-slate-800">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150 bg-slate-50">
+              <h2 className="text-lg font-bold text-slate-905">
+                {editingId ? "Edit Announcement" : "Create Announcement"}
+              </h2>
               <button onClick={handleClose} className="text-slate-500 hover:text-slate-905 cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
@@ -416,7 +457,7 @@ export default function AnnouncementsClient({ initialList }: AnnouncementsClient
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="px-4 py-2 text-sm font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+                  className="px-4 py-2 text-sm font-semibold text-slate-555 hover:text-slate-800 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -428,7 +469,7 @@ export default function AnnouncementsClient({ initialList }: AnnouncementsClient
                   {isPending ? (
                     <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   ) : (
-                    "Publish Notice"
+                    editingId ? "Save Changes" : "Publish Notice"
                   )}
                 </button>
               </div>

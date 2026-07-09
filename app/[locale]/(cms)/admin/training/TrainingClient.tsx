@@ -3,8 +3,8 @@
 import React, { useState, useTransition } from "react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { createTraining, deleteTraining } from "@/features/cms/content/actions/training";
-import { Plus, X, Trash2, BookOpen, Calendar, MapPin, Users } from "lucide-react";
+import { createTraining, deleteTraining, updateTraining } from "@/features/cms/content/actions/training";
+import { Plus, X, Trash2, BookOpen, Calendar, MapPin, Users, Edit } from "lucide-react";
 
 type TrainingItem = {
   id: string;
@@ -27,6 +27,7 @@ type TrainingClientProps = {
 export default function TrainingClient({ initialList }: TrainingClientProps) {
   const [list, setList] = useState(initialList);
   const [isOpen, setIsOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   // Form Fields
@@ -82,7 +83,27 @@ export default function TrainingClient({ initialList }: TrainingClientProps) {
     }
   };
 
+  const handleOpenEdit = (item: TrainingItem) => {
+    setEditingId(item.id);
+    setTitle(item.title);
+    setDescription(item.description || "");
+    setCategory(item.category as any);
+    setDuration(item.duration);
+    setLocation(item.location);
+    if (item.start_date) {
+      setStartDate(new Date(item.start_date).toISOString().split("T")[0]);
+    }
+    if (item.end_date) {
+      setEndDate(new Date(item.end_date).toISOString().split("T")[0]);
+    }
+    setCapacity(item.capacity);
+    setVisibleTiers(item.visible_tiers);
+    setStatus(item.status as any);
+    setIsOpen(true);
+  };
+
   const handleClose = () => {
+    setEditingId(null);
     setTitle("");
     setDescription("");
     setCategory("Corporate");
@@ -119,7 +140,7 @@ export default function TrainingClient({ initialList }: TrainingClientProps) {
     }
 
     startTransition(async () => {
-      const res = await createTraining({
+      const payload = {
         title,
         description: description || undefined,
         category,
@@ -130,16 +151,20 @@ export default function TrainingClient({ initialList }: TrainingClientProps) {
         capacity,
         visibleTiers: visibleTiers as any,
         status,
-      });
+      };
+
+      const res = editingId
+        ? await updateTraining(editingId, payload)
+        : await createTraining(payload);
 
       if (res.success) {
-        setTrainingSuccess("Training Program added successfully.");
-        setIsOpen(false);
+        setTrainingSuccess(editingId ? "Training Program updated successfully." : "Training Program added successfully.");
+        handleClose();
         setTimeout(() => {
           window.location.reload();
         }, 800);
       } else {
-        setErrors({ general: res.error || "Failed to create program" });
+        setErrors({ general: res.error || "Failed to save program" });
       }
     });
   };
@@ -198,13 +223,22 @@ export default function TrainingClient({ initialList }: TrainingClientProps) {
     {
       header: "Actions",
       cell: (item) => (
-        <button
-          onClick={() => handleAction(item.id, deleteTraining, "delete")}
-          className="p-1.5 text-red-655 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-          title="Delete Program"
-        >
-          <Trash2 className="w-4 h-4" />
-        </button>
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => handleOpenEdit(item)}
+            className="p-1.5 text-slate-550 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+            title="Edit Program"
+          >
+            <Edit className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => handleAction(item.id, deleteTraining, "delete")}
+            className="p-1.5 text-red-655 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+            title="Delete Program"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
       ),
     },
   ];
@@ -274,9 +308,11 @@ export default function TrainingClient({ initialList }: TrainingClientProps) {
       {/* Dialog Form */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex justify-center items-start bg-black/40 backdrop-blur-sm p-4 font-sans overflow-y-auto">
-          <div className="w-full max-w-xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
+          <div className="w-full max-w-xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8 text-slate-800">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150">
-              <h2 className="text-lg font-bold text-slate-900">Create Training Program</h2>
+              <h2 className="text-lg font-bold text-slate-900">
+                {editingId ? "Edit Training Program" : "Create Training Program"}
+              </h2>
               <button onClick={handleClose} className="text-slate-500 hover:text-slate-905 cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
@@ -450,7 +486,7 @@ export default function TrainingClient({ initialList }: TrainingClientProps) {
                   {isPending ? (
                     <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   ) : (
-                    "Publish Program"
+                    editingId ? "Save Changes" : "Publish Program"
                   )}
                 </button>
               </div>

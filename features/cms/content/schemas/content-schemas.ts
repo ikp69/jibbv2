@@ -113,3 +113,17 @@ export type AnnouncementInput = z.infer<typeof announcementSchema>;
 export type ReportInput = z.infer<typeof reportSchema>;
 export type TrainingInput = z.infer<typeof trainingSchema>;
 export type EventInput = z.infer<typeof eventSchema>;
+
+// 5. Newsletter Schema
+export const newsletterSchema = z.object({
+  title: z.string().min(2, "Title must be at least 25 characters").or(z.string().min(2)), // fallback simple check
+  subject: z.string().optional(),
+  content: z.string().optional(),
+  fileUrl: z.string().url("Invalid file URL").or(z.literal("")).optional(),
+  visibleTiers: z.array(tierEnum).min(1, "Select at least one visible tier"),
+  status: z.enum(["draft", "published"]).default("draft"),
+  publishDate: z.string().optional(),
+});
+
+export type NewsletterInput = z.infer<typeof newsletterSchema>;
+

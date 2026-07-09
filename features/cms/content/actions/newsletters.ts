@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { reportSchema, type ReportInput } from "../schemas/content-schemas";
+import { newsletterSchema, type NewsletterInput } from "../schemas/content-schemas";
 import { headers } from "next/headers";
 
 export type ContentResult = {
@@ -39,7 +39,7 @@ async function writeAuditLog(supabase: any, adminId: string, action: string, rec
   await supabase.from("audit_logs").insert({
     user_id: adminId,
     action,
-    table_name: "resources",
+    table_name: "newsletters",
     record_id: recordId,
     ip_address: ipAddress,
     user_agent: userAgent,
@@ -48,12 +48,12 @@ async function writeAuditLog(supabase: any, adminId: string, action: string, rec
   });
 }
 
-export async function createReport(input: ReportInput): Promise<ContentResult> {
+export async function createNewsletter(input: NewsletterInput): Promise<ContentResult> {
   try {
     const supabase = await createClient();
     const adminId = await checkAdminAuth(supabase);
 
-    const parsed = reportSchema.safeParse(input);
+    const parsed = newsletterSchema.safeParse(input);
     if (!parsed.success) {
       return { success: false, error: parsed.error.issues[0]?.message || "Invalid input" };
     }
@@ -61,24 +61,22 @@ export async function createReport(input: ReportInput): Promise<ContentResult> {
     const data = parsed.data;
 
     const { data: record, error } = await supabase
-      .from("resources")
+      .from("newsletters")
       .insert({
         title: data.title,
-        description: data.description || null,
-        category: data.category,
-        resource_type: data.resourceType,
-        file_url: data.fileUrl,
-        file_size: data.fileSize || null,
-        tags: data.tags,
+        subject: data.subject || null,
+        content: data.content || null,
+        file_url: data.fileUrl || null,
         visible_tiers: data.visibleTiers,
-        created_by: adminId,
+        status: data.status,
+        publish_date: data.publishDate ? new Date(data.publishDate).toISOString() : new Date().toISOString(),
       })
       .select("id")
       .single();
 
     if (error || !record) return { success: false, error: error.message };
 
-    await writeAuditLog(supabase, adminId, "create_report", record.id, null, data);
+    await writeAuditLog(supabase, adminId, "create_newsletter", record.id, null, data);
 
     return { success: true };
   } catch (err: any) {
@@ -86,37 +84,36 @@ export async function createReport(input: ReportInput): Promise<ContentResult> {
   }
 }
 
-export async function updateReport(id: string, input: ReportInput): Promise<ContentResult> {
+export async function updateNewsletter(id: string, input: NewsletterInput): Promise<ContentResult> {
   try {
     const supabase = await createClient();
     const adminId = await checkAdminAuth(supabase);
 
-    const parsed = reportSchema.safeParse(input);
+    const parsed = newsletterSchema.safeParse(input);
     if (!parsed.success) {
       return { success: false, error: parsed.error.issues[0]?.message || "Invalid input" };
     }
 
     const data = parsed.data;
 
-    const { data: oldVal } = await supabase.from("resources").select("*").eq("id", id).single();
+    const { data: oldVal } = await supabase.from("newsletters").select("*").eq("id", id).single();
 
     const { error } = await supabase
-      .from("resources")
+      .from("newsletters")
       .update({
         title: data.title,
-        description: data.description || null,
-        category: data.category,
-        resource_type: data.resourceType,
-        file_url: data.fileUrl,
-        file_size: data.fileSize || null,
-        tags: data.tags,
+        subject: data.subject || null,
+        content: data.content || null,
+        file_url: data.fileUrl || null,
         visible_tiers: data.visibleTiers,
+        status: data.status,
+        publish_date: data.publishDate ? new Date(data.publishDate).toISOString() : new Date().toISOString(),
       })
       .eq("id", id);
 
     if (error) return { success: false, error: error.message };
 
-    await writeAuditLog(supabase, adminId, "update_report", id, oldVal, data);
+    await writeAuditLog(supabase, adminId, "update_newsletter", id, oldVal, data);
 
     return { success: true };
   } catch (err: any) {
@@ -124,50 +121,21 @@ export async function updateReport(id: string, input: ReportInput): Promise<Cont
   }
 }
 
-export async function deleteReport(id: string): Promise<ContentResult> {
+export async function deleteNewsletter(id: string): Promise<ContentResult> {
   try {
     const supabase = await createClient();
     const adminId = await checkAdminAuth(supabase);
 
-    const { data: oldVal } = await supabase.from("resources").select("*").eq("id", id).single();
+    const { data: oldVal } = await supabase.from("newsletters").select("*").eq("id", id).single();
 
-    const { error } = await supabase.from("resources").delete().eq("id", id);
+    const { error } = await supabase.from("newsletters").delete().eq("id", id);
 
     if (error) return { success: false, error: error.message };
 
-    await writeAuditLog(supabase, adminId, "delete_report", id, oldVal, null);
+    await writeAuditLog(supabase, adminId, "delete_newsletter", id, oldVal, null);
 
     return { success: true };
   } catch (err: any) {
     return { success: false, error: err.message || "An error occurred" };
   }
 }
-
-export async function incrementDownloadCount(id: string): Promise<ContentResult> {
-  try {
-    const supabase = await createClient();
-    
-    // We fetch and update in one transaction or simple read/write (authenticated or guest is fine)
-    const { data, error: fetchError } = await supabase
-      .from("resources")
-      .select("download_count")
-      .eq("id", id)
-      .single();
-
-    if (fetchError) return { success: false, error: fetchError.message };
-
-    const nextCount = (data?.download_count || 0) + 1;
-
-    const { error: updateError } = await supabase
-      .from("resources")
-      .update({ download_count: nextCount })
-      .eq("id", id);
-
-    if (updateError) return { success: false, error: updateError.message };
-
-    return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
-  }
-}
-

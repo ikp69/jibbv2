@@ -8,7 +8,8 @@ import {
   deleteOpportunity, 
   updateOpportunityInterestStatus,
   approveOpportunity,
-  rejectOpportunity
+  rejectOpportunity,
+  getOpportunityEditHistory
 } from "@/features/cms/business/actions/opportunities";
 import { Plus, X, Trash2, Calendar, FileText, CheckCircle, AlertCircle, RefreshCw, Briefcase, ThumbsUp, ThumbsDown } from "lucide-react";
 
@@ -22,6 +23,10 @@ type Opportunity = {
   deadline: string;
   visible_tiers: string[];
   status: string;
+  profiles: {
+    company_name: string | null;
+    email: string | null;
+  } | null;
 };
 
 type Pitch = {
@@ -49,6 +54,11 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOppId, setSelectedOppId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [expandedDescriptions, setExpandedDescriptions] = useState<Record<string, boolean>>({});
+
+  const toggleDescriptionExpand = (id: string) => {
+    setExpandedDescriptions((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   // Form Fields for Admin-created Opportunities
   const [title, setTitle] = useState("");
@@ -63,6 +73,9 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [matchingSuccess, setMatchingSuccess] = useState("");
   const [matchingError, setMatchingError] = useState("");
+  const [selectedHistoryOppId, setSelectedHistoryOppId] = useState<string | null>(null);
+  const [editHistoryList, setEditHistoryList] = useState<any[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
 
   const [confirmAction, setConfirmAction] = useState<{
     id: string;
@@ -143,6 +156,18 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
     });
   };
 
+  const handleLoadHistory = async (oppId: string) => {
+    setSelectedHistoryOppId(oppId);
+    setHistoryLoading(true);
+    const res = await getOpportunityEditHistory(oppId);
+    if (res.success && res.history) {
+      setEditHistoryList(res.history);
+    } else {
+      setEditHistoryList([]);
+    }
+    setHistoryLoading(false);
+  };
+
   const handleTierToggle = (tier: string) => {
     if (visibleTiers.includes(tier)) {
       setVisibleTiers(visibleTiers.filter((t) => t !== tier));
@@ -209,10 +234,33 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
     {
       header: "Opportunity Title",
       accessorKey: "title",
+      cell: (item) => {
+        const isExpanded = !!expandedDescriptions[item.id];
+        const isLong = item.description && item.description.length > 80;
+        return (
+          <div className="max-w-md">
+            <span className="font-bold text-slate-900 block leading-tight">{item.title}</span>
+            <p className={`text-xs text-slate-500 leading-relaxed mt-1 whitespace-pre-wrap ${isExpanded ? "" : "line-clamp-2"}`}>
+              {item.description}
+            </p>
+            {isLong && (
+              <button
+                onClick={() => toggleDescriptionExpand(item.id)}
+                className="text-[11px] text-blue-600 hover:text-blue-800 font-bold mt-1 focus:outline-none cursor-pointer"
+              >
+                {isExpanded ? "Show Less" : "Read More..."}
+              </button>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      header: "Proposed By",
       cell: (item) => (
         <div>
-          <span className="font-bold text-slate-900 block">{item.title}</span>
-          <p className="text-xs text-slate-500 line-clamp-1 mt-0.5">{item.description}</p>
+          <span className="font-semibold text-slate-800 text-xs block">{item.profiles?.company_name || "Admin / System"}</span>
+          <span className="text-[10px] text-slate-500 font-mono">{item.profiles?.email || "N/A"}</span>
         </div>
       ),
     },
@@ -229,15 +277,29 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
     {
       header: "Requirements",
       accessorKey: "looking_for",
-      cell: (item) => (
-        <div className="flex flex-wrap gap-1">
-          {item.looking_for.map((tag, idx) => (
-            <span key={idx} className="px-1.5 py-0.5 bg-slate-100 text-[10px] text-slate-600 rounded border border-slate-200">
-              {tag}
-            </span>
-          ))}
-        </div>
-      ),
+      cell: (item) => {
+        const isExpanded = !!expandedDescriptions[item.id];
+        const visibleTags = isExpanded ? item.looking_for : item.looking_for.slice(0, 3);
+        const remainingTags = isExpanded ? [] : item.looking_for.slice(3);
+        return (
+          <div className="flex flex-wrap gap-1 items-center max-w-[220px]">
+            {visibleTags.map((tag, idx) => (
+              <span key={idx} className="px-1.5 py-0.5 bg-slate-100 text-[10px] text-slate-600 rounded border border-slate-200 whitespace-nowrap">
+                {tag}
+              </span>
+            ))}
+            {remainingTags.length > 0 && (
+              <span 
+                className="px-1.5 py-0.5 bg-blue-50 text-blue-600 border border-blue-200 text-[10px] rounded font-semibold cursor-pointer"
+                title={remainingTags.join(", ")}
+                onClick={() => toggleDescriptionExpand(item.id)}
+              >
+                +{remainingTags.length}
+              </span>
+            )}
+          </div>
+        );
+      },
     },
     {
       header: "Deadline",
@@ -257,9 +319,19 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
         <div className="flex gap-2">
           <button
             onClick={() => setSelectedOppId(selectedOppId === item.id ? null : item.id)}
-            className="px-2.5 py-1 bg-slate-105 hover:bg-slate-200 text-xs font-semibold text-slate-700 rounded-lg border border-slate-200 transition-colors cursor-pointer animate-none"
+            className={`px-2.5 py-1 text-xs font-semibold rounded-lg border transition-colors cursor-pointer inline-flex items-center gap-1.5 ${
+              pitches.filter((p) => p.opportunity_id === item.id && p.status === "pending").length > 0
+                ? "bg-amber-50 hover:bg-amber-100 text-amber-700 border-amber-250 font-bold"
+                : "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200"
+            }`}
           >
-            Pitches ({pitches.filter((p) => p.opportunity_id === item.id).length})
+            <span>Pitches ({pitches.filter((p) => p.opportunity_id === item.id).length})</span>
+            {pitches.filter((p) => p.opportunity_id === item.id && p.status === "pending").length > 0 && (
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-550"></span>
+              </span>
+            )}
           </button>
           <button
             onClick={() => handleAction(item.id, deleteOpportunity, "delete")}
@@ -277,10 +349,33 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
     {
       header: "Proposed Title",
       accessorKey: "title",
+      cell: (item) => {
+        const isExpanded = !!expandedDescriptions[item.id];
+        const isLong = item.description && item.description.length > 85;
+        return (
+          <div className="max-w-md">
+            <span className="font-bold text-slate-900 block leading-tight">{item.title}</span>
+            <p className={`text-xs text-slate-500 leading-relaxed mt-1 whitespace-pre-wrap ${isExpanded ? "" : "line-clamp-2"}`}>
+              {item.description}
+            </p>
+            {isLong && (
+              <button
+                onClick={() => toggleDescriptionExpand(item.id)}
+                className="text-[11px] text-blue-600 hover:text-blue-800 font-bold mt-1 focus:outline-none cursor-pointer"
+              >
+                {isExpanded ? "Show Less" : "Read More..."}
+              </button>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      header: "Proposed By",
       cell: (item) => (
         <div>
-          <span className="font-bold text-slate-900 block">{item.title}</span>
-          <p className="text-xs text-slate-500 line-clamp-2 mt-0.5">{item.description}</p>
+          <span className="font-semibold text-slate-800 text-xs block">{item.profiles?.company_name || "Unspecified Organization"}</span>
+          <span className="text-[10px] text-slate-500 font-mono">{item.profiles?.email || "N/A"}</span>
         </div>
       ),
     },
@@ -297,26 +392,40 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
     {
       header: "Match Requirements",
       accessorKey: "looking_for",
-      cell: (item) => (
-        <div className="flex flex-wrap gap-1">
-          {item.looking_for.map((tag, idx) => (
-            <span key={idx} className="px-1.5 py-0.5 bg-slate-100 text-[10px] text-slate-650 rounded border border-slate-200">
-              {tag}
-            </span>
-          ))}
-        </div>
-      ),
+      cell: (item) => {
+        const isExpanded = !!expandedDescriptions[item.id];
+        const visibleTags = isExpanded ? item.looking_for : item.looking_for.slice(0, 3);
+        const remainingTags = isExpanded ? [] : item.looking_for.slice(3);
+        return (
+          <div className="flex flex-wrap gap-1 items-center max-w-[220px]">
+            {visibleTags.map((tag, idx) => (
+              <span key={idx} className="px-1.5 py-0.5 bg-slate-100 text-[10px] text-slate-600 rounded border border-slate-200 whitespace-nowrap">
+                {tag}
+              </span>
+            ))}
+            {remainingTags.length > 0 && (
+              <span 
+                className="px-1.5 py-0.5 bg-blue-50 text-blue-600 border border-blue-200 text-[10px] rounded font-semibold cursor-pointer"
+                title={remainingTags.join(", ")}
+                onClick={() => toggleDescriptionExpand(item.id)}
+              >
+                +{remainingTags.length}
+              </span>
+            )}
+          </div>
+        );
+      },
     },
     {
       header: "Proposer Actions",
       cell: (item) => (
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
           <button
             onClick={() => handleApprove(item.id)}
             className="flex items-center gap-1 px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-250 text-xs font-semibold rounded-lg cursor-pointer transition-colors"
           >
             <ThumbsUp className="w-3.5 h-3.5" />
-            <span>Approve & Publish</span>
+            <span>Approve</span>
           </button>
           <button
             onClick={() => handleReject(item.id)}
@@ -324,6 +433,13 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
           >
             <ThumbsDown className="w-3.5 h-3.5" />
             <span>Reject</span>
+          </button>
+          <button
+            onClick={() => handleLoadHistory(item.id)}
+            className="flex items-center gap-1 px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-semibold rounded-lg cursor-pointer transition-colors"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span>Edit History</span>
           </button>
         </div>
       ),
@@ -341,13 +457,55 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
           </h1>
           <p className="text-slate-655 mt-1">Review member-submitted matching proposals and manage active opportunity pitches.</p>
         </div>
-        <button
-          onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold shadow-md shadow-blue-600/10 cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Publish Opportunity</span>
-        </button>
+      </div>
+
+      {/* Quick Stats Summary */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex items-center gap-4">
+          <div className="p-3 bg-blue-50 text-blue-600 rounded-lg">
+            <Briefcase className="w-6 h-6" />
+          </div>
+          <div>
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Active Matchings</span>
+            <span className="text-2xl font-extrabold text-slate-900 leading-none">{activeOpportunities.length}</span>
+          </div>
+        </div>
+
+        <div className={`border rounded-xl p-4 shadow-sm flex items-center gap-4 transition-colors bg-white ${
+          pendingOpportunities.length > 0
+            ? "border-rose-300 ring-1 ring-rose-300 bg-rose-50/20"
+            : "border-slate-200"
+        }`}>
+          <div className={`p-3 rounded-lg ${
+            pendingOpportunities.length > 0 ? "bg-rose-100 text-rose-600 animate-pulse" : "bg-slate-100 text-slate-500"
+          }`}>
+            <AlertCircle className="w-6 h-6" />
+          </div>
+          <div>
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Pending Proposals</span>
+            <span className={`text-2xl font-extrabold leading-none ${pendingOpportunities.length > 0 ? "text-rose-700" : "text-slate-900"}`}>
+              {pendingOpportunities.length}
+            </span>
+          </div>
+        </div>
+
+        <div className={`border rounded-xl p-4 shadow-sm flex items-center gap-4 transition-colors bg-white ${
+          pitches.filter((p) => p.status === "pending").length > 0
+            ? "border-amber-300 ring-1 ring-amber-300 bg-amber-50/10"
+            : "border-slate-200"
+        }`}>
+          <div className={`p-3 rounded-lg ${
+            pitches.filter((p) => p.status === "pending").length > 0 ? "bg-amber-100 text-amber-600 animate-pulse" : "bg-slate-100 text-slate-500"
+          }`}>
+            <FileText className="w-6 h-6" />
+          </div>
+          <div>
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Pitches to Review</span>
+            <span className={`text-2xl font-extrabold leading-none ${pitches.filter((p) => p.status === "pending").length > 0 ? "text-amber-700" : "text-slate-900"}`}>
+              {pitches.filter((p) => p.status === "pending").length}
+            </span>
+          </div>
+        </div>
       </div>
 
       {matchingError && (
@@ -508,172 +666,81 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
         </div>
       )}
 
-      {/* Dialog Form */}
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex justify-center items-start bg-black/40 backdrop-blur-sm p-4 font-sans overflow-y-auto">
-          <div className="w-full max-w-xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150">
-              <h2 className="text-lg font-bold text-slate-900">Publish Business Opportunity</h2>
-              <button onClick={handleClose} className="text-slate-500 hover:text-slate-905 cursor-pointer">
+      {/* Edit History Modal */}
+      {selectedHistoryOppId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-y-auto font-sans">
+          <div className="w-full max-w-xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8 text-slate-800 animate-none">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150 bg-slate-50">
+              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <RefreshCw className="w-5 h-5 text-blue-600" />
+                <span>Proposal Edit History</span>
+              </h2>
+              <button 
+                onClick={() => setSelectedHistoryOppId(null)} 
+                className="text-slate-500 hover:text-slate-900 cursor-pointer"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              {errors.general && (
-                <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">
-                  {errors.general}
+            <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+              {historyLoading ? (
+                <div className="text-center py-8 text-sm text-slate-500">Loading edit logs...</div>
+              ) : editHistoryList.length === 0 ? (
+                <div className="text-center py-8 text-sm text-slate-400">No edits have been made to this proposal since submission.</div>
+              ) : (
+                <div className="space-y-4">
+                  {editHistoryList.map((log, idx) => {
+                    const oldV = log.old_values || {};
+                    const newV = log.new_values || {};
+                    
+                    return (
+                      <div key={idx} className="border border-slate-200 p-4 rounded-lg bg-slate-50 space-y-3">
+                        <div className="flex items-center justify-between text-xs text-slate-500 border-b border-slate-150 pb-2">
+                          <span className="font-mono">Edit #{editHistoryList.length - idx}</span>
+                          <span suppressHydrationWarning>{new Date(log.created_at).toLocaleString()}</span>
+                        </div>
+                        
+                        <div className="space-y-2 text-xs">
+                          {oldV.title !== newV.title && (
+                            <div>
+                              <span className="font-semibold text-slate-700 block">Title changed:</span>
+                              <p className="text-red-600 line-through bg-red-50 p-1 rounded mt-0.5">{oldV.title}</p>
+                              <p className="text-emerald-700 bg-emerald-550/10 p-1 rounded mt-0.5">{newV.title}</p>
+                            </div>
+                          )}
+                          {oldV.description !== newV.description && (
+                            <div>
+                              <span className="font-semibold text-slate-700 block">Description changed:</span>
+                              <p className="text-red-650 line-through bg-red-50 p-1.5 rounded mt-0.5 whitespace-pre-wrap">{oldV.description}</p>
+                              <p className="text-emerald-700 bg-emerald-550/10 p-1.5 rounded mt-0.5 whitespace-pre-wrap">{newV.description}</p>
+                            </div>
+                          )}
+                          {(oldV.industry !== newV.industry || oldV.country !== newV.country) && (
+                            <div>
+                              <span className="font-semibold text-slate-700 block">Sector & Region changed:</span>
+                              <p className="text-slate-500 bg-slate-100 p-1 rounded mt-0.5">
+                                Old: {oldV.industry} (Focus: {oldV.country}) &rarr; New: {newV.industry} (Focus: {newV.country})
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Opportunity Title</label>
-                <input
-                  type="text"
-                  required
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="e.g. Seeking Semiconductor wafer production machinery partner"
-                  className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Description Details</label>
-                <textarea
-                  required
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Describe details of technology required, timeline, and company credentials..."
-                  rows={4}
-                  className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none resize-none"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Industry Sector</label>
-                  <select
-                    value={industry}
-                    onChange={(e) => setIndustry(e.target.value as any)}
-                    className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 focus:outline-none"
-                  >
-                    <option value="Semiconductors">Semiconductors</option>
-                    <option value="Manufacturing">Manufacturing</option>
-                    <option value="Healthcare">Healthcare</option>
-                    <option value="Automotive">Automotive</option>
-                    <option value="Electronics">Electronics</option>
-                    <option value="Energy">Energy</option>
-                    <option value="Infrastructure">Infrastructure</option>
-                    <option value="Food">Food</option>
-                    <option value="General">General</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Target Region</label>
-                  <select
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value as any)}
-                    className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 focus:outline-none"
-                  >
-                    <option value="Japan">Japan</option>
-                    <option value="India">India</option>
-                    <option value="Both">Both Regions</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-550 uppercase tracking-wider">Deadline Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={deadline}
-                    onChange={(e) => setDeadline(e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-slate-900 rounded-lg text-sm focus:outline-none"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-550 uppercase tracking-wider">Requirements (Comma Separated)</label>
-                  <input
-                    type="text"
-                    required
-                    value={lookingForText}
-                    onChange={(e) => setLookingForText(e.target.value)}
-                    placeholder="e.g. Machinery, Export License, Joint Venture"
-                    className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Tiers Checkboxes */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Visible Membership Tiers</label>
-                <div className="flex flex-wrap gap-4 mt-1 bg-slate-50 p-3 rounded-lg border border-slate-200">
-                  {["associate", "silver", "gold", "platinum"].map((t) => (
-                    <label key={t} className="flex items-center gap-2 text-sm text-slate-700 capitalize cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={visibleTiers.includes(t)}
-                        onChange={() => handleTierToggle(t)}
-                        className="rounded border-slate-350 bg-white text-blue-600 focus:ring-blue-550/20 w-4 h-4 cursor-pointer"
-                      />
-                      <span>{t}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Status */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</label>
-                <div className="flex gap-4">
-                  <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="status"
-                      checked={status === "published"}
-                      onChange={() => setStatus("published")}
-                      className="text-blue-600 focus:ring-blue-550/20 cursor-pointer"
-                    />
-                    <span>Publish Immediately</span>
-                  </label>
-                  <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="status"
-                      checked={status === "draft"}
-                      onChange={() => setStatus("draft")}
-                      className="text-blue-600 focus:ring-blue-550/20 cursor-pointer"
-                    />
-                    <span>Save Draft</span>
-                  </label>
-                </div>
-              </div>
-
-              {/* Footer buttons */}
-              <div className="flex justify-end gap-3 pt-4 border-t border-slate-150">
-                <button
-                  type="button"
-                  onClick={handleClose}
-                  className="px-4 py-2 text-sm font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isPending}
-                  className="px-5 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold rounded-lg shadow-md transition-colors cursor-pointer flex items-center justify-center min-w-28"
-                >
-                  {isPending ? (
-                    <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    "Publish"
-                  )}
-                </button>
-              </div>
-            </form>
+            </div>
+            
+            <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-150 bg-slate-50">
+              <button
+                type="button"
+                onClick={() => setSelectedHistoryOppId(null)}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow cursor-pointer"
+              >
+                Close Logs
+              </button>
+            </div>
           </div>
         </div>
       )}

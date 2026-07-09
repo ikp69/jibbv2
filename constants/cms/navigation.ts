@@ -21,6 +21,7 @@ export const ADMIN_NAV_GROUPS: NavGroup[] = [
     items: [
       { label: "Announcements", path: "/admin/announcements", icon: "Megaphone" },
       { label: "Market Reports", path: "/admin/reports", icon: "FileText" },
+      { label: "Newsletters", path: "/admin/newsletters", icon: "Newspaper" },
       { label: "Training Programs", path: "/admin/training", icon: "BookOpen" },
       { label: "Invite-Only Events", path: "/admin/events", icon: "Calendar" },
     ],
@@ -61,6 +62,7 @@ export const PORTAL_NAV_GROUPS: NavGroup[] = [
     items: [
       { label: "Announcements", path: "/portal/announcements", icon: "Megaphone" },
       { label: "Market Reports", path: "/portal/reports", icon: "FileText" },
+      { label: "Newsletters", path: "/portal/newsletters", icon: "Newspaper" },
       { label: "Business Matching", path: "/portal/business-matching", icon: "Briefcase" },
       { label: "Training Programs", path: "/portal/training", icon: "BookOpen" },
       { label: "Collaboration", path: "/portal/collaboration", icon: "ShieldCheck" },

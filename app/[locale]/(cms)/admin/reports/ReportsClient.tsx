@@ -2,8 +2,8 @@
 
 import React, { useState, useTransition } from "react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
-import { createReport, deleteReport } from "@/features/cms/content/actions/reports";
-import { Plus, X, Trash2, FileText, Download, UploadCloud, Eye, FileSpreadsheet, Image, Video, HelpCircle, Calendar } from "lucide-react";
+import { createReport, deleteReport, updateReport } from "@/features/cms/content/actions/reports";
+import { Plus, X, Trash2, FileText, Download, UploadCloud, Eye, FileSpreadsheet, Image, Video, HelpCircle, Calendar, Edit } from "lucide-react";
 
 type ReportItem = {
   id: string;
@@ -37,6 +37,7 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadError, setUploadError] = useState("");
   const [previewReport, setPreviewReport] = useState<ReportItem | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const [confirmAction, setConfirmAction] = useState<{
     id: string;
@@ -78,7 +79,19 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
     }
   };
 
+  const handleOpenEdit = (item: ReportItem) => {
+    setEditingId(item.id);
+    setTitle(item.title);
+    setDescription(item.description || "");
+    setCategory(item.category as any);
+    setResourceType(item.resource_type as any);
+    setFileUrl(item.file_url);
+    setVisibleTiers(item.visible_tiers);
+    setIsOpen(true);
+  };
+
   const handleClose = () => {
+    setEditingId(null);
     setTitle("");
     setDescription("");
     setCategory("Market Intelligence");
@@ -161,7 +174,7 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
     switch (lowerType) {
       case "pdf":
         return (
-          <div className="w-full h-[450px] border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
+          <div className="w-full h-[calc(90vh-140px)] border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
             <iframe
               src={`${url}#toolbar=0`}
               className="w-full h-full"
@@ -171,11 +184,11 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
         );
       case "image":
         return (
-          <div className="w-full max-h-[450px] flex items-center justify-center border border-slate-200 rounded-lg overflow-hidden bg-slate-100 p-2 shadow-inner">
+          <div className="w-full max-h-[calc(90vh-140px)] flex items-center justify-center border border-slate-200 rounded-lg overflow-hidden bg-slate-100 p-2 shadow-inner">
             <img
               src={url}
               alt="File Preview"
-              className="max-w-full max-h-[430px] object-contain rounded-md"
+              className="max-w-full max-h-[calc(90vh-160px)] object-contain rounded-md"
             />
           </div>
         );
@@ -185,7 +198,7 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
             <video
               src={url}
               controls
-              className="w-full max-h-[450px] object-contain"
+              className="w-full max-h-[calc(90vh-140px)] object-contain"
             />
           </div>
         );
@@ -193,7 +206,7 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
       case "document":
       case "presentation":
         return (
-          <div className="w-full h-[450px] border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
+          <div className="w-full h-[calc(90vh-140px)] border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
             <iframe
               src={`https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`}
               className="w-full h-full"
@@ -229,7 +242,7 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
     }
 
     startTransition(async () => {
-      const res = await createReport({
+      const payload = {
         title,
         description: description || undefined,
         category,
@@ -237,16 +250,20 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
         fileUrl,
         tags: [],
         visibleTiers: visibleTiers as any,
-      });
+      };
+
+      const res = editingId
+        ? await updateReport(editingId, payload)
+        : await createReport(payload);
 
       if (res.success) {
-        setReportSuccess("Market Report uploaded successfully.");
-        setIsOpen(false);
+        setReportSuccess(editingId ? "Market Report updated successfully." : "Market Report uploaded successfully.");
+        handleClose();
         setTimeout(() => {
           window.location.reload();
         }, 800);
       } else {
-        setErrors({ general: res.error || "Failed to create report" });
+        setErrors({ general: res.error || "Failed to save report" });
       }
     });
   };
@@ -300,8 +317,15 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
       cell: (item) => (
         <div className="flex items-center gap-1">
           <button
+            onClick={() => handleOpenEdit(item)}
+            className="p-1.5 hover:bg-slate-150 text-slate-550 hover:text-slate-800 rounded-lg transition-colors cursor-pointer"
+            title="Edit Report"
+          >
+            <Edit className="w-4 h-4" />
+          </button>
+          <button
             onClick={() => setPreviewReport(item)}
-            className="p-1.5 hover:bg-slate-150 text-slate-600 hover:text-slate-800 rounded-lg transition-colors cursor-pointer"
+            className="p-1.5 hover:bg-slate-150 text-slate-605 hover:text-slate-800 rounded-lg transition-colors cursor-pointer"
             title="Preview Details"
           >
             <Eye className="w-4 h-4" />
@@ -392,9 +416,11 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
       {/* Upload Dialog Form */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex justify-center items-start bg-black/40 backdrop-blur-sm p-4 font-sans overflow-y-auto">
-          <div className="w-full max-w-xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150">
-              <h2 className="text-lg font-bold text-slate-900">Upload New Document</h2>
+          <div className="w-full max-w-xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8 text-slate-800">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150 bg-slate-50">
+              <h2 className="text-lg font-bold text-slate-905">
+                {editingId ? "Edit Market Report" : "Upload New Document"}
+              </h2>
               <button onClick={handleClose} className="text-slate-500 hover:text-slate-900 cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
@@ -567,7 +593,7 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="px-4 py-2 text-sm font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+                  className="px-4 py-2 text-sm font-semibold text-slate-555 hover:text-slate-800 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -579,7 +605,7 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
                   {isPending ? (
                     <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   ) : (
-                    "Publish Document"
+                    editingId ? "Save Changes" : "Publish Document"
                   )}
                 </button>
               </div>
@@ -590,7 +616,7 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
       {/* Details Preview Modal */}
       {previewReport && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-y-auto font-sans">
-          <div className="w-full max-w-3xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
+          <div className="w-full max-w-[95vw] bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150">
               <h2 className="text-lg font-bold text-slate-900">{previewReport.title}</h2>
               <button

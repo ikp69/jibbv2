@@ -20,7 +20,7 @@ export default async function AdminBusinessMatchingPage() {
   // Fetch opportunities
   const { data: opportunities, error: oppError } = await supabase
     .from("business_opportunities")
-    .select("*")
+    .select("*, profiles(company_name, email)")
     .order("created_at", { ascending: false });
 
   // Fetch interest pitches

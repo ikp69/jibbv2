@@ -186,7 +186,7 @@ export function DataTable<T>({
                           </td>
                         )}
                         {columns.map((col, cIdx) => (
-                          <td key={cIdx} className="px-4 py-3 truncate max-w-xs">
+                          <td key={cIdx} className="px-4 py-3">
                             {col.cell
                               ? col.cell(item)
                               : col.accessorKey

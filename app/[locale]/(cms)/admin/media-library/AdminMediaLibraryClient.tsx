@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, FileText, Image, Video, FileSpreadsheet, Play, Download, Trash2, Plus, Info, X } from "lucide-react";
+import { Search, FileText, Image, Video, FileSpreadsheet, Download, Plus, Info, X, Eye } from "lucide-react";
 
 type ResourceItem = {
   id: string;
@@ -12,6 +12,7 @@ type ResourceItem = {
   thumbnail_url: string | null;
   file_url: string;
   file_size: number | null;
+  visible_tiers: string[];
   created_at: string;
 };
 
@@ -24,6 +25,7 @@ export default function AdminMediaLibraryClient({ initialResources }: AdminMedia
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
   const [showUploadInfo, setShowUploadInfo] = useState(false);
+  const [previewResource, setPreviewResource] = useState<ResourceItem | null>(null);
 
   const filtered = initialResources.filter((item) => {
     const matchesSearch =
@@ -57,6 +59,63 @@ export default function AdminMediaLibraryClient({ initialResources }: AdminMedia
     if (kb < 1024) return `${kb.toFixed(1)} KB`;
     const mb = kb / 1024;
     return `${mb.toFixed(1)} MB`;
+  };
+
+  const renderFilePreview = (type: string, url: string) => {
+    if (!url) return null;
+    const lowerType = type.toLowerCase();
+    
+    switch (lowerType) {
+      case "pdf":
+        return (
+          <div className="w-full h-[calc(90vh-140px)] border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
+            <iframe
+              src={`${url}#toolbar=0`}
+              className="w-full h-full"
+              title="PDF Preview"
+            />
+          </div>
+        );
+      case "image":
+        return (
+          <div className="w-full max-h-[calc(90vh-140px)] flex items-center justify-center border border-slate-200 rounded-lg overflow-hidden bg-slate-100 p-2 shadow-inner">
+            <img
+              src={url}
+              alt="File Preview"
+              className="max-w-full max-h-[calc(90vh-160px)] object-contain rounded-md"
+            />
+          </div>
+        );
+      case "video":
+        return (
+          <div className="w-full border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
+            <video
+              src={url}
+              controls
+              className="w-full max-h-[calc(90vh-140px)] object-contain"
+            />
+          </div>
+        );
+      case "spreadsheet":
+      case "document":
+      case "presentation":
+        return (
+          <div className="w-full h-[calc(90vh-140px)] border border-slate-200 rounded-lg overflow-hidden bg-slate-100 shadow-inner">
+            <iframe
+              src={`https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`}
+              className="w-full h-full"
+              title="Document Preview"
+            />
+          </div>
+        );
+      default:
+        return (
+          <div className="p-8 border border-dashed border-slate-200 rounded-lg text-center bg-slate-50">
+            <FileText className="w-12 h-12 text-slate-400 mx-auto mb-2" />
+            <p className="text-sm text-slate-600">Preview not available for this file type</p>
+          </div>
+        );
+    }
   };
 
   return (
@@ -147,49 +206,65 @@ export default function AdminMediaLibraryClient({ initialResources }: AdminMedia
           <p className="text-xs text-slate-500">Refine search text or check your filter criteria.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((item) => (
             <div
               key={item.id}
-              className="border border-slate-200 bg-white rounded-xl p-5 flex flex-col justify-between space-y-4 hover:border-slate-300 shadow-sm hover:shadow-md transition-all relative group"
+              className="border border-slate-200 bg-white rounded-lg p-4 flex flex-col justify-between hover:border-slate-300 shadow-sm hover:shadow-md transition-all relative group"
             >
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="flex justify-between items-start gap-2">
-                  <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-150">
+                  <div className="p-2 bg-slate-50 rounded border border-slate-150 flex-shrink-0">
                     {getFileIcon(item.resource_type)}
                   </div>
-                  <span className="px-2 py-0.5 bg-slate-50 text-slate-650 rounded text-[10px] font-semibold border border-slate-200">
-                    {item.category}
-                  </span>
-                </div>
-
-                <div>
-                  <h3 className="font-bold text-slate-800 tracking-tight text-base leading-snug truncate" title={item.title}>
-                    {item.title}
-                  </h3>
-                  <div className="flex items-center gap-2 text-xs text-slate-500 mt-1 font-mono">
-                    <span>{item.resource_type.toUpperCase()}</span>
-                    <span>•</span>
-                    <span>{formatSize(item.file_size)}</span>
+                  <div className="flex flex-col gap-1 flex-1 min-w-0">
+                    <h3 className="font-semibold text-slate-800 tracking-tight text-sm leading-tight line-clamp-2" title={item.title}>
+                      {item.title}
+                    </h3>
+                    <span className="px-1.5 py-0.5 bg-slate-50 text-slate-650 rounded text-[10px] font-semibold border border-slate-200 w-fit">
+                      {item.category}
+                    </span>
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
-                  {item.description || "No description provided."}
-                </p>
+                <div className="flex items-center gap-2 text-xs text-slate-500 font-mono">
+                  <span>{item.resource_type.toUpperCase()}</span>
+                  <span>•</span>
+                  <span>{formatSize(item.file_size)}</span>
+                </div>
+
+                {item.visible_tiers && item.visible_tiers.length > 0 && (
+                  <div className="flex flex-wrap gap-1 pt-1">
+                    {item.visible_tiers.map((tier) => (
+                      <span
+                        key={tier}
+                        className="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 rounded text-[10px] font-medium border border-amber-200"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
+                        {tier}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              <div className="pt-3 border-t border-slate-150 flex justify-between items-center text-xs">
-                <span className="text-[10px] text-slate-505 font-mono" suppressHydrationWarning>
+              <div className="pt-2 mt-2 border-t border-slate-150 flex justify-between items-center">
+                <span className="text-[10px] text-slate-500 font-mono" suppressHydrationWarning>
                   {new Date(item.created_at).toLocaleDateString()}
                 </span>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => setPreviewResource(item)}
+                    className="p-1.5 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-600 rounded border border-slate-200 hover:border-blue-300 transition-colors"
+                    title="Preview"
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                  </button>
                   <a
                     href={item.file_url}
-                    target="_blank"
-                    rel="noreferrer"
+                    download
                     className="p-1.5 bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 rounded border border-slate-200 transition-colors"
-                    title="Download/Open"
+                    title="Download"
                   >
                     <Download className="w-3.5 h-3.5" />
                   </a>
@@ -197,6 +272,27 @@ export default function AdminMediaLibraryClient({ initialResources }: AdminMedia
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Details Preview Modal */}
+      {previewResource && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="w-full max-w-[95vw] bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150">
+              <h2 className="text-lg font-bold text-slate-900">{previewResource.title}</h2>
+              <button
+                onClick={() => setPreviewResource(null)}
+                className="text-slate-500 hover:text-slate-900 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6">
+              {renderFilePreview(previewResource.resource_type, previewResource.file_url)}
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -4,7 +4,7 @@ import React, { useState, useTransition } from "react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { createCollaboration, updateCollaboration, deleteCollaboration, updateCollaborationInterestStatus } from "@/features/cms/business/actions/collaborations";
-import { Plus, X, Trash2, ShieldCheck, Heart, Pencil } from "lucide-react";
+import { Plus, X, Trash2, ShieldCheck, Heart, Pencil, AlertCircle, FileText, Briefcase } from "lucide-react";
 
 type Collaboration = {
   id: string;
@@ -39,6 +39,11 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColId, setSelectedColId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [expandedDescriptions, setExpandedDescriptions] = useState<Record<string, boolean>>({});
+
+  const toggleDescriptionExpand = (id: string) => {
+    setExpandedDescriptions((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   // Form Fields
   const [title, setTitle] = useState("");
@@ -179,12 +184,26 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
     {
       header: "Collaboration Title",
       accessorKey: "title",
-      cell: (item) => (
-        <div>
-          <span className="font-bold text-slate-900 block">{item.title}</span>
-          <p className="text-xs text-slate-500 line-clamp-1 mt-0.5">{item.description}</p>
-        </div>
-      ),
+      cell: (item) => {
+        const isExpanded = !!expandedDescriptions[item.id];
+        const isLong = item.description && item.description.length > 80;
+        return (
+          <div className="max-w-md">
+            <span className="font-bold text-slate-900 block leading-tight">{item.title}</span>
+            <p className={`text-xs text-slate-500 leading-relaxed mt-1 whitespace-pre-wrap ${isExpanded ? "" : "line-clamp-2"}`}>
+              {item.description}
+            </p>
+            {isLong && (
+              <button
+                onClick={() => toggleDescriptionExpand(item.id)}
+                className="text-[11px] text-blue-600 hover:text-blue-800 font-bold mt-1 focus:outline-none cursor-pointer"
+              >
+                {isExpanded ? "Show Less" : "Read More..."}
+              </button>
+            )}
+          </div>
+        );
+      },
     },
     {
       header: "Industry & Category",
@@ -229,9 +248,19 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
         <div className="flex gap-2">
           <button
             onClick={() => setSelectedColId(selectedColId === item.id ? null : item.id)}
-            className="px-2.5 py-1 bg-slate-105 hover:bg-slate-200 text-xs font-semibold text-slate-700 rounded-lg border border-slate-200 transition-colors cursor-pointer"
+            className={`px-2.5 py-1 text-xs font-semibold rounded-lg border transition-colors cursor-pointer inline-flex items-center gap-1.5 ${
+              pitches.filter((p) => p.collaboration_id === item.id && p.status === "pending").length > 0
+                ? "bg-amber-50 hover:bg-amber-100 text-amber-700 border-amber-250 font-bold"
+                : "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200"
+            }`}
           >
-            Expressions ({pitches.filter((p) => p.collaboration_id === item.id).length})
+            <span>Expressions ({pitches.filter((p) => p.collaboration_id === item.id).length})</span>
+            {pitches.filter((p) => p.collaboration_id === item.id && p.status === "pending").length > 0 && (
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-550"></span>
+              </span>
+            )}
           </button>
           <button
             onClick={() => handleEdit(item)}
@@ -270,6 +299,37 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
           <Plus className="w-4 h-4" />
           <span>Publish Listing</span>
         </button>
+      </div>
+
+      {/* Quick Stats Summary */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex items-center gap-4">
+          <div className="p-3 bg-blue-50 text-blue-600 rounded-lg">
+            <Briefcase className="w-6 h-6" />
+          </div>
+          <div>
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Total Collaborations</span>
+            <span className="text-2xl font-extrabold text-slate-900 leading-none">{collaborations.length}</span>
+          </div>
+        </div>
+
+        <div className={`border rounded-xl p-4 shadow-sm flex items-center gap-4 transition-colors bg-white ${
+          pitches.filter((p) => p.status === "pending").length > 0
+            ? "border-amber-300 ring-1 ring-amber-300 bg-amber-50/10"
+            : "border-slate-200"
+        }`}>
+          <div className={`p-3 rounded-lg ${
+            pitches.filter((p) => p.status === "pending").length > 0 ? "bg-amber-100 text-amber-600 animate-pulse" : "bg-slate-100 text-slate-500"
+          }`}>
+            <FileText className="w-6 h-6" />
+          </div>
+          <div>
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Expressions to Review</span>
+            <span className={`text-2xl font-extrabold leading-none ${pitches.filter((p) => p.status === "pending").length > 0 ? "text-amber-700" : "text-slate-900"}`}>
+              {pitches.filter((p) => p.status === "pending").length}
+            </span>
+          </div>
+        </div>
       </div>
 
       {collabError && (
