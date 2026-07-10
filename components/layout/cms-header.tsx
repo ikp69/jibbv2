@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { User, LogOut, Key, Settings, User as UserIcon, ShieldAlert } from "lucide-react";
 import { logout } from "@/features/cms/auth/actions/logout";
 
@@ -22,6 +23,7 @@ type CmsHeaderProps = {
 };
 
 export default function CmsHeader({ breadcrumbs, user }: CmsHeaderProps) {
+  const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
@@ -33,7 +35,9 @@ export default function CmsHeader({ breadcrumbs, user }: CmsHeaderProps) {
   const confirmLogout = async () => {
     const res = await logout();
     if (res.success) {
-      window.location.href = "/en/login";
+      // Use router.push() to navigate home after logout
+      // Middleware will handle redirecting unauthenticated users to login if needed
+      router.push("/en");
     }
   };
 
