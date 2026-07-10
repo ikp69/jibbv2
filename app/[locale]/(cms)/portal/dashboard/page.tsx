@@ -37,9 +37,10 @@ export default async function PortalDashboardPage() {
     .eq("member_id", user.id);
 
   // - list of announcements visible to this tier
+  // SECURITY: Selective projection to prevent exposing internal metadata
   const { data: announcements } = await supabase
     .from("announcements")
-    .select("*")
+    .select("id, title, content, status, publish_date, is_pinned, visible_tiers")
     .eq("status", "published")
     .contains("visible_tiers", [profile.membership_tier])
     .order("is_pinned", { ascending: false })

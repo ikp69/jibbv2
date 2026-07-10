@@ -29,9 +29,10 @@ export default async function PortalTrainingPage() {
   }
 
   // Fetch training programs visible to this tier
+  // SECURITY: Selective projection to prevent leaking creator UUID and internal metadata
   const { data: programs, error: programsError } = await supabase
     .from("training_programs")
-    .select("*")
+    .select("id, title, description, start_date, end_date, location, max_participants, status, visible_tiers, created_at")
     .in("status", ["open", "completed"])
     .contains("visible_tiers", [profile.membership_tier])
     .order("start_date", { ascending: true });
@@ -45,9 +46,10 @@ export default async function PortalTrainingPage() {
   }
 
   // Fetch active registrations for current member
+  // SECURITY: Only fetch user's own registrations with status fields (no cross-member leakage)
   const { data: registrations } = await supabase
     .from("training_registrations")
-    .select("*")
+    .select("id, training_id, status, registration_date")
     .eq("member_id", user.id);
 
   return (

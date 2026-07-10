@@ -37,9 +37,10 @@ export default async function PortalBusinessMatchingPage() {
     .order("created_at", { ascending: false });
 
   // Fetch my proposed matchings (regardless of status)
+  // SECURITY: Selective projection to prevent exposing internal statuses
   const { data: myProposals } = await supabase
     .from("business_opportunities")
-    .select("*")
+    .select("id, title, description, industry, country, looking_for, deadline, status, created_at, visible_tiers")
     .eq("created_by", user.id)
     .order("created_at", { ascending: false });
 

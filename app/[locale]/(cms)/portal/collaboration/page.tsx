@@ -27,9 +27,10 @@ export default async function PortalCollaborationPage() {
   const activeTier = profile?.membership_tier || "associate";
 
   // Fetch published collaboration opportunities visible to active tier
+  // SECURITY: Selective projection to prevent leaking creator UUID and internal metadata
   const { data: collaborations, error } = await supabase
     .from("collaboration_opportunities")
-    .select("*")
+    .select("id, title, description, industry, looking_for, deadline, status, visible_tiers, created_at")
     .eq("status", "published")
     .contains("visible_tiers", [activeTier])
     .order("created_at", { ascending: false });

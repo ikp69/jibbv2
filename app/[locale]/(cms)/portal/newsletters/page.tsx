@@ -29,9 +29,10 @@ export default async function MemberNewslettersPage() {
   }
 
   // Query published newsletters visible to their tier
+  // SECURITY: Selective projection to prevent leaking internal workflow status and admin metadata
   const { data: list, error: newsletterError } = await supabase
     .from("newsletters")
-    .select("*")
+    .select("id, title, subject, content, file_url, publish_date, status, visible_tiers")
     .eq("status", "published")
     .contains("visible_tiers", [profile.membership_tier])
     .order("publish_date", { ascending: false });
