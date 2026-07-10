@@ -108,7 +108,17 @@ export default function LoginPage() {
           {errors.general && (
             <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg flex items-start gap-2.5">
               <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
-              <span>{errors.general}</span>
+              <div className="flex flex-col gap-1">
+                <span>{errors.general}</span>
+                {errors.general.includes("No account profile linked") && (
+                  <a 
+                    href="/membership" 
+                    className="text-red-600 hover:text-red-700 underline font-semibold"
+                  >
+                    Become a Member →
+                  </a>
+                )}
+              </div>
             </div>
           )}
 
@@ -217,6 +227,27 @@ export default function LoginPage() {
             >
               Platinum
             </button>
+          </div>
+        </div>
+
+        {/* Become a Member Section */}
+        <div className="mt-8 pt-8 border-t border-slate-100">
+          <p className="text-center text-sm font-semibold text-slate-700 mb-4">
+            Become a member to login
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            <a
+              href="/membership#scheduler"
+              className="px-4 py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 hover:text-blue-800 text-sm font-semibold rounded-lg border border-blue-200 hover:border-blue-300 transition-all duration-200 text-center"
+            >
+              Schedule Consultation
+            </a>
+            <a
+              href="/membership"
+              className="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 text-sm font-semibold rounded-lg border border-slate-300 hover:border-slate-400 transition-all duration-200 text-center"
+            >
+              Explore Plans
+            </a>
           </div>
         </div>
 

@@ -3,37 +3,27 @@
 import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/src/i18n/navigation";
-import { LanguageSwitcher } from "./LanguageSwitcher";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useTickerContext } from "@/components/providers/TickerContext";
+import { checkAuthStatus } from "@/features/cms/auth/actions/check-auth";
 import {
   Menu,
   X,
   ChevronDown,
   LogIn,
-  ArrowRight,
   Building2,
-  Eye,
   Users,
-  Compass,
   Globe,
-  Handshake,
-  MapPin,
-  DollarSign,
-  BookOpen,
   Lightbulb,
-  Trophy,
-  GraduationCap,
-  FlaskConical,
   BookMarked,
-  Mail,
   TrendingUp,
   Cpu,
   Briefcase,
   Library,
   Quote,
+  LayoutDashboard,
 } from "lucide-react";
 
 /* ============================================================
@@ -173,9 +163,11 @@ function MegaMenu({
 function MobileDrawer({
   isOpen,
   onClose,
+  authStatus,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  authStatus?: { isAuthenticated: boolean; role?: "admin" | "member"; dashboardUrl?: string } | null;
 }) {
   const t = useTranslations();
   const pathname = usePathname();
@@ -354,24 +346,32 @@ function MobileDrawer({
 
             {/* Bottom Actions */}
             <div className="p-4 border-t border-border bg-muted/30">
-  <div className="flex flex-col items-center gap-3">
-    {/* Language Switcher — TEMPORARILY HIDDEN (Japanese translations being verified) */}
-    {/* <LanguageSwitcher triggerClassName="justify-center bg-card border border-border" /> */}
-
-    {/* Member Login — temporarily hidden per management */}
-    {/* <Link href="/auth/login" onClick={onClose}>
-      <AnimatedButton variant="outline" className="justify-center gap-2 font-semibold">
-        <LogIn className="size-4" />
-        {t("nav.memberLogin")}
-      </AnimatedButton>
-    </Link> */}
-
-    <Link href="/membership" onClick={onClose}>
-      <AnimatedButton variant="accent" className="justify-center gap-2 font-semibold">
-        {t("nav.joinJibb")}
-        <ArrowRight className="size-4" />
-      </AnimatedButton>
-    </Link>
+  <div className="flex flex-col items-center gap-2.5">
+    {/* Auth CTA (Mobile) */}
+    {authStatus?.isAuthenticated ? (
+      // Logged in: Show "My Dashboard"
+      <Link href={authStatus.dashboardUrl || "/en/portal/dashboard"} onClick={onClose}>
+        <AnimatedButton variant="accent" className="justify-center gap-2 font-semibold w-full">
+          <LayoutDashboard className="size-4" />
+          My Dashboard
+        </AnimatedButton>
+      </Link>
+    ) : (
+      <>
+        {/* Not logged in: Show "Join JIBB" + "Member Login" */}
+        <Link href="/membership" onClick={onClose}>
+          <AnimatedButton variant="accent" className="justify-center gap-2 font-semibold w-full">
+            Join JIBB
+          </AnimatedButton>
+        </Link>
+        <Link href="/login" onClick={onClose}>
+          <AnimatedButton variant="outline" className="justify-center gap-2 font-semibold w-full">
+            <LogIn className="size-4" />
+            Member Login
+          </AnimatedButton>
+        </Link>
+      </>
+    )}
   </div>
             </div>
           </motion.div>
@@ -391,8 +391,14 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [authStatus, setAuthStatus] = useState<{ isAuthenticated: boolean; role?: "admin" | "member"; dashboardUrl?: string } | null>(null);
   const menuTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const navRef = useRef<HTMLElement | null>(null);
+
+  // Check auth status on mount
+  useEffect(() => {
+    checkAuthStatus().then(setAuthStatus);
+  }, []);
 
   // Close menus on click outside
   useEffect(() => {
@@ -535,36 +541,35 @@ export function Navbar() {
             </nav>
 
             {/* Right Side Actions */}
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-3 shrink-0">
 
-              {/* Language Selector (Desktop) — TEMPORARILY HIDDEN (Japanese translations being verified) */}
-              {/* <div className="hidden lg:block">
-                <LanguageSwitcher
-                  triggerClassName={cn(
-                    "text-foreground hover:bg-muted"
-                  )}
-                />
-              </div> */}
-
-              {/* Login Button (Desktop) — temporarily hidden per management */}
-              {/* <Link href="/auth/login" className="hidden lg:block">
-                <AnimatedButton
-                  variant="ghost"
-                  size="sm"
-                  className="gap-1.5 font-semibold"
-                >
-                  <LogIn className="size-3.5" />
-                  {t("nav.memberLogin")}
-                </AnimatedButton>
-              </Link> */}
-
-              {/* Join CTA (Desktop) */}
-              <Link href="/membership" className="hidden lg:block">
-                <AnimatedButton variant="accent" size="sm" className="gap-1.5 font-bold shadow-sm">
-                  {t("nav.joinJibb")}
-                  <ArrowRight className="size-3.5" />
-                </AnimatedButton>
-              </Link>
+              {/* Auth + CTA (Desktop) */}
+              <div className="hidden lg:flex items-center gap-2.5">
+                {authStatus?.isAuthenticated ? (
+                  // Logged in: Show "My Dashboard"
+                  <Link href={authStatus.dashboardUrl || "/en/portal/dashboard"}>
+                    <AnimatedButton variant="accent" size="sm" className="gap-1.5 font-bold shadow-sm">
+                      <LayoutDashboard className="size-3.5" />
+                      My Dashboard
+                    </AnimatedButton>
+                  </Link>
+                ) : (
+                  <>
+                    {/* Not logged in: Show "Join JIBB" + "Member Login" */}
+                    <Link href="/membership">
+                      <AnimatedButton variant="accent" size="sm" className="gap-1.5 font-bold shadow-sm">
+                        Join JIBB
+                      </AnimatedButton>
+                    </Link>
+                    <Link href="/login">
+                      <AnimatedButton variant="outline" size="sm" className="gap-1.5 font-bold">
+                        <LogIn className="size-3.5" />
+                        Member Login
+                      </AnimatedButton>
+                    </Link>
+                  </>
+                )}
+              </div>
 
               {/* Mobile Menu Open Toggle */}
               <button
@@ -587,6 +592,7 @@ export function Navbar() {
       <MobileDrawer
         isOpen={mobileOpen}
         onClose={() => setMobileOpen(false)}
+        authStatus={authStatus}
       />
 
       {/* Dynamic Spacer: Rendered only on non-homepage screens to account for fixed ticker + navbar */}
