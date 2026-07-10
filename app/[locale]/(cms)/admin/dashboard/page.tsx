@@ -28,27 +28,27 @@ export default async function AdminDashboardPage() {
     redirect("/portal/dashboard");
   }
 
-  // Query operational metrics efficiently
-  const [
-    { count: totalMembers },
-    { count: totalCollaborations },
-    { count: totalOpportunities },
-    { data: recentLogs }
-  ] = await Promise.all([
+  // Query operational metrics efficiently in parallel
+  const [membersResult, collabResult, oppResult, logsResult] = await Promise.all([
     supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "member"),
     supabase.from("collaboration_opportunities").select("*", { count: "exact", head: true }),
     supabase.from("business_opportunities").select("*", { count: "exact", head: true }),
     supabase.from("audit_logs").select("action, table_name, created_at").order("created_at", { ascending: false }).limit(5)
   ]);
 
+  const totalMembers = membersResult.count || 0;
+  const totalCollaborations = collabResult.count || 0;
+  const totalOpportunities = oppResult.count || 0;
+  const recentLogs = logsResult.data || [];
+
   return (
     <DashboardClient
       stats={{
-        members: totalMembers || 0,
-        collaborations: totalCollaborations || 0,
-        opportunities: totalOpportunities || 0,
+        members: totalMembers,
+        collaborations: totalCollaborations,
+        opportunities: totalOpportunities,
       }}
-      recentLogs={recentLogs || []}
+      recentLogs={recentLogs}
     />
   );
 }
