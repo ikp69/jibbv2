@@ -14,7 +14,7 @@ export default async function AdminAuditLogsPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Fetch audit logs with profile joins

@@ -14,7 +14,7 @@ export default async function PortalBusinessMatchingPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Fetch active member's tier

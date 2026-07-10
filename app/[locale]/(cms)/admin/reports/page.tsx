@@ -14,7 +14,7 @@ export default async function AdminReportsPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Fetch reports

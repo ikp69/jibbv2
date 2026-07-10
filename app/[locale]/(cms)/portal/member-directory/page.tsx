@@ -14,7 +14,7 @@ export default async function PortalMemberDirectoryPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Fetch approved active members who allowed directory display

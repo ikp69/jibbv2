@@ -13,7 +13,7 @@ export default async function AdminAnnouncementsPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Fetch announcements

@@ -15,7 +15,7 @@ export default async function PortalDashboardPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // 2. Fetch profile
@@ -26,7 +26,7 @@ export default async function PortalDashboardPage() {
     .single();
 
   if (profileError || !profile) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // 3. Fetch counts & items for statistics

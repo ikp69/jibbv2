@@ -350,7 +350,7 @@ function MobileDrawer({
     {/* Auth CTA (Mobile) */}
     {authStatus?.isAuthenticated ? (
       // Logged in: Show "My Dashboard"
-      <Link href={authStatus.dashboardUrl || "/en/portal/dashboard"} onClick={onClose}>
+      <Link href={authStatus.dashboardUrl || "/portal/dashboard"} onClick={onClose}>
         <AnimatedButton variant="accent" className="justify-center gap-2 font-semibold w-full">
           <LayoutDashboard className="size-4" />
           My Dashboard
@@ -547,7 +547,7 @@ export function Navbar() {
               <div className="hidden lg:flex items-center gap-2.5">
                 {authStatus?.isAuthenticated ? (
                   // Logged in: Show "My Dashboard"
-                  <Link href={authStatus.dashboardUrl || "/en/portal/dashboard"}>
+                  <Link href={authStatus.dashboardUrl || "/portal/dashboard"}>
                     <AnimatedButton variant="accent" size="sm" className="gap-1.5 font-bold shadow-sm">
                       <LayoutDashboard className="size-3.5" />
                       My Dashboard

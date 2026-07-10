@@ -14,7 +14,7 @@ export default async function PortalProfilePage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Fetch profiles that corresponds to this user
@@ -27,7 +27,7 @@ export default async function PortalProfilePage() {
     .single();
 
   if (error || !profile) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   return <ProfileClient profile={profile as any} />;

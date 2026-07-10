@@ -34,7 +34,7 @@ export async function checkAuthStatus(): Promise<AuthStatus> {
     }
 
     const role = profile.role as "admin" | "member";
-    const dashboardUrl = role === "admin" ? "/en/admin/dashboard" : "/en/portal/dashboard";
+    const dashboardUrl = role === "admin" ? "/admin/dashboard" : "/portal/dashboard";
 
     return {
       isAuthenticated: true,

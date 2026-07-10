@@ -14,7 +14,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // 2. Fetch profile and verify role
@@ -25,12 +25,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     .single();
 
   if (error || !profile) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   if (profile.role !== "admin" || profile.status !== "active") {
     // Redirect normal members or inactive admins out
-    redirect("/en/portal/dashboard");
+    redirect("/portal/dashboard");
   }
 
   const breadcrumbs = [{ label: "Admin", path: "/en/admin/dashboard" }];

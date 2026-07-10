@@ -152,7 +152,7 @@ export async function login(input: LoginInput): Promise<LoginResult> {
     // 4. Return success with redirect URL
     console.log("[LOGIN] 10. Returning success");
     const role = profile.role as "admin" | "member";
-    const redirectUrl = role === "admin" ? "/en/admin/dashboard" : "/en/portal/dashboard";
+    const redirectUrl = role === "admin" ? "/admin/dashboard" : "/portal/dashboard";
 
     return {
       success: true,

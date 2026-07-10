@@ -14,7 +14,7 @@ export default async function MemberNewslettersPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Fetch member profile for tier verification
@@ -25,7 +25,7 @@ export default async function MemberNewslettersPage() {
     .single();
 
   if (profileError || !profile) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Query published newsletters visible to their tier

@@ -14,7 +14,7 @@ export default async function PortalLayout({ children }: { children: React.React
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // 2. Fetch profile and verify role/active status
@@ -25,11 +25,11 @@ export default async function PortalLayout({ children }: { children: React.React
     .single();
 
   if (error || !profile) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   if (profile.status !== "active") {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   const breadcrumbs = [{ label: "Portal", path: "/en/portal/dashboard" }];

@@ -13,7 +13,7 @@ export default async function AdminNewslettersPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Verify that the user has admin role
@@ -24,7 +24,7 @@ export default async function AdminNewslettersPage() {
     .single();
 
   if (!profile || profile.membership_tier !== "admin") {
-    redirect("/en/portal/dashboard");
+    redirect("/portal/dashboard");
   }
 
   // Fetch newsletters

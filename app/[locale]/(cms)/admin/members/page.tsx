@@ -14,7 +14,7 @@ export default async function AdminMembersPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Fetch profiles that are members

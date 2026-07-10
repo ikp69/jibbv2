@@ -14,7 +14,7 @@ export default async function AdminMediaLibraryPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Verify role
@@ -25,7 +25,7 @@ export default async function AdminMediaLibraryPage() {
     .single();
 
   if (!profile || profile.role !== "admin") {
-    redirect("/en/portal/dashboard");
+    redirect("/portal/dashboard");
   }
 
   // Fetch all media resources

@@ -14,7 +14,7 @@ export default async function WebsiteFormsPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Check if role is admin
@@ -25,7 +25,7 @@ export default async function WebsiteFormsPage() {
     .single();
 
   if (profile?.role !== "admin") {
-    redirect("/en/portal/dashboard");
+    redirect("/portal/dashboard");
   }
 
   // Fetch contact inquiries

@@ -14,7 +14,7 @@ export default async function AdminDashboardPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Verify role
@@ -25,7 +25,7 @@ export default async function AdminDashboardPage() {
     .single();
 
   if (!profile || profile.role !== "admin") {
-    redirect("/en/portal/dashboard");
+    redirect("/portal/dashboard");
   }
 
   // Query operational metrics efficiently

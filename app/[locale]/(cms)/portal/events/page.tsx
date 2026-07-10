@@ -14,7 +14,7 @@ export default async function PortalEventsPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Fetch member profile
@@ -25,7 +25,7 @@ export default async function PortalEventsPage() {
     .single();
 
   if (profileError || !profile) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Fetch events visible to this tier

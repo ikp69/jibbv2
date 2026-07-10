@@ -14,7 +14,7 @@ export default async function PortalReportsPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Fetch resources (automatically filtered by RLS based on active member tier)

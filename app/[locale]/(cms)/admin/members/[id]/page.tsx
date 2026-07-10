@@ -19,7 +19,7 @@ export default async function AdminMemberDetailPage({ params }: MemberDetailPage
   } = await supabase.auth.getUser();
 
   if (!currentUser) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Fetch target member details

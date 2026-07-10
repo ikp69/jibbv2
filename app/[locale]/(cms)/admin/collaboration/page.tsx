@@ -14,7 +14,7 @@ export default async function AdminCollaborationPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/en/login");
+    redirect("/login");
   }
 
   // Fetch collaboration opportunities

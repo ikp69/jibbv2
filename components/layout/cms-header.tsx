@@ -121,7 +121,7 @@ export default function CmsHeader({ breadcrumbs, user }: CmsHeaderProps) {
 
                 <div className="py-1">
                   <Link
-                    href={user.role === "admin" ? "/en/admin/settings" : "/en/portal/profile"}
+                    href={user.role === "admin" ? "/admin/settings" : "/portal/profile"}
                     onClick={() => setIsDropdownOpen(false)}
                     className="flex items-center gap-2.5 px-4 py-2 text-sm hover:bg-slate-50 hover:text-slate-900 transition-colors"
                   >
@@ -130,7 +130,7 @@ export default function CmsHeader({ breadcrumbs, user }: CmsHeaderProps) {
                   </Link>
 
                   <Link
-                    href={user.role === "admin" ? "/en/admin/settings" : "/en/portal/profile"}
+                    href={user.role === "admin" ? "/admin/settings" : "/portal/profile"}
                     onClick={() => setIsDropdownOpen(false)}
                     className="flex items-center gap-2.5 px-4 py-2 text-sm hover:bg-slate-50 hover:text-slate-900 transition-colors"
                   >
