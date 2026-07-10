@@ -32,7 +32,7 @@ export default async function MemberNewslettersPage() {
   // SECURITY: Selective projection to prevent leaking internal workflow status and admin metadata
   const { data: list, error: newsletterError } = await supabase
     .from("newsletters")
-    .select("id, title, subject, content, file_url, publish_date, status, visible_tiers")
+    .select("id, title, subject, content, file_url, publish_date, status, visible_tiers, created_at")
     .eq("status", "published")
     .contains("visible_tiers", [profile.membership_tier])
     .order("publish_date", { ascending: false });

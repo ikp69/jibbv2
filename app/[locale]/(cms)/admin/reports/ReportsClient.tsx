@@ -38,6 +38,7 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
   const [uploadError, setUploadError] = useState("");
   const [previewReport, setPreviewReport] = useState<ReportItem | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [fileSize, setFileSize] = useState<number | null>(null);
 
   const [confirmAction, setConfirmAction] = useState<{
     id: string;
@@ -86,6 +87,7 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
     setCategory(item.category as any);
     setResourceType(item.resource_type as any);
     setFileUrl(item.file_url);
+    setFileSize(null); // File size not editable for existing items
     setVisibleTiers(item.visible_tiers);
     setIsOpen(true);
   };
@@ -97,6 +99,7 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
     setCategory("Market Intelligence");
     setResourceType("pdf");
     setFileUrl("");
+    setFileSize(null);
     setVisibleTiers(["associate"]);
     setErrors({});
     setIsDragging(false);
@@ -135,6 +138,8 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
         .from("member-resources")
         .getPublicUrl(fileName);
 
+      // Store file size in bytes
+      setFileSize(file.size);
       setFileUrl(publicUrl);
       setUploadProgress(100);
     } catch (err: any) {
@@ -248,6 +253,7 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
         category,
         resourceType,
         fileUrl,
+        fileSize: fileSize || undefined,
         tags: [],
         visibleTiers: visibleTiers as any,
       };
@@ -506,7 +512,10 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
                     </div>
                     <button
                       type="button"
-                      onClick={() => setFileUrl("")}
+                      onClick={() => {
+                        setFileUrl("");
+                        setFileSize(null);
+                      }}
                       className="p-1 text-slate-400 hover:text-slate-650 hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
                     >
                       <X className="w-4 h-4" />

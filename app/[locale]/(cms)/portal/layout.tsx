@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import CmsSidebar from "@/components/layout/cms-sidebar";
 import CmsHeader from "@/components/layout/cms-header";
+import PageTransitionLoader from "@/components/layout/PageTransitionLoader";
 import { PORTAL_NAV_GROUPS } from "@/constants/cms/navigation";
 
 export default async function PortalLayout({ children }: { children: React.ReactNode }) {
@@ -44,6 +45,9 @@ export default async function PortalLayout({ children }: { children: React.React
 
   return (
     <div className="flex w-full min-h-screen bg-slate-50 text-slate-900 font-sans">
+      {/* Page Transition Loader */}
+      <PageTransitionLoader />
+
       {/* Sidebar */}
       <CmsSidebar navGroups={PORTAL_NAV_GROUPS} portalType="portal" />
 

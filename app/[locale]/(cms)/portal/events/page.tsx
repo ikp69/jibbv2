@@ -32,7 +32,7 @@ export default async function PortalEventsPage() {
   // SECURITY: Selective projection to prevent leaking creator UUID and internal metadata
   const { data: events, error: eventsError } = await supabase
     .from("events")
-    .select("id, title, description, event_date, location, capacity, status, visible_tiers, created_at")
+    .select("id, title, description, event_date, location, capacity, status, visible_tiers, created_at, banner, registration_deadline")
     .in("status", ["open", "completed"])
     .contains("visible_tiers", [profile.membership_tier])
     .order("event_date", { ascending: true });
@@ -49,7 +49,7 @@ export default async function PortalEventsPage() {
   // SECURITY: Only member's own registrations to prevent cross-member privacy violation
   const { data: registrations } = await supabase
     .from("event_registrations")
-    .select("id, event_id, status, registration_date")
+    .select("id, event_id, member_id, status, registration_date, message")
     .eq("member_id", user.id);
 
   return (

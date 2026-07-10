@@ -32,7 +32,7 @@ export default async function PortalAnnouncementsPage() {
   // SECURITY: Selective projection to prevent exposing internal metadata
   const { data: announcements, error: announcementsError } = await supabase
     .from("announcements")
-    .select("id, title, content, status, publish_date, is_pinned, visible_tiers")
+    .select("id, title, content, status, publish_date, is_pinned, visible_tiers, banner_image, attachment, external_link, created_at")
     .eq("status", "published")
     .contains("visible_tiers", [profile.membership_tier])
     .order("is_pinned", { ascending: false })
