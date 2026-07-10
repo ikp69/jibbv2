@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/src/i18n/routing";
 import { ClientProviders } from "@/components/providers/ClientProviders";
 import Script from "next/script";
+import NextTopLoader from "nextjs-toploader";
 
 // ============================================================
 // FONTS — all loaded via next/font (no external CDN requests)
@@ -140,6 +141,7 @@ export default async function LocaleLayout({
         </Script>
       </head>
       <body className="min-h-screen flex flex-col bg-background text-foreground relative overflow-x-hidden">
+        <NextTopLoader showSpinner={false} color="#2563eb" height={3} shadow="0 0 10px #2563eb,0 0 5px #2563eb" />
         <ClientProviders messages={messages} locale={locale}>
           {children}
         </ClientProviders>
