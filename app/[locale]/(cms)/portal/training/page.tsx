@@ -32,7 +32,7 @@ export default async function PortalTrainingPage() {
   // SECURITY: Selective projection to prevent leaking creator UUID and internal metadata
   const { data: programs, error: programsError } = await supabase
     .from("training_programs")
-    .select("id, title, description, start_date, end_date, location, max_participants, status, visible_tiers, created_at, category, duration, capacity")
+    .select("id, title, description, start_date, end_date, location, status, visible_tiers, created_at, category, duration, capacity")
     .in("status", ["open", "completed"])
     .contains("visible_tiers", [profile.membership_tier])
     .order("start_date", { ascending: true });
@@ -49,12 +49,36 @@ export default async function PortalTrainingPage() {
   // SECURITY: Only fetch user's own registrations with status fields (no cross-member leakage)
   const { data: registrations } = await supabase
     .from("training_registrations")
-    .select("id, training_id, member_id, status, registration_date")
+    .select("id, training_id, member_id, status")
     .eq("member_id", user.id);
+
+  // Fetch approved counts for all programs securely using admin client
+  let programsWithCounts = (programs || []).map(p => ({ ...p, approved_count: 0 }));
+  try {
+    const { createAdminClient } = await import("@/lib/supabase/admin");
+    const adminSupabase = createAdminClient();
+    const { data: allApproved } = await adminSupabase
+      .from("training_registrations")
+      .select("training_id")
+      .eq("status", "approved");
+
+    if (allApproved) {
+      const counts: Record<string, number> = {};
+      allApproved.forEach((r) => {
+        counts[r.training_id] = (counts[r.training_id] || 0) + 1;
+      });
+      programsWithCounts = programsWithCounts.map((p) => ({
+        ...p,
+        approved_count: counts[p.id] || 0,
+      }));
+    }
+  } catch (err) {
+    console.error("Failed to fetch approved counts:", err);
+  }
 
   return (
     <PortalTrainingClient
-      programs={programs || []}
+      programs={programsWithCounts}
       registrations={registrations || []}
       currentUserId={user.id}
     />

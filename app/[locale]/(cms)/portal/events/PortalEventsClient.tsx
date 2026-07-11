@@ -17,6 +17,7 @@ type EventItem = {
   capacity: number;
   visible_tiers: string[];
   status: string;
+  approved_count?: number;
 };
 
 type Registration = {
@@ -169,10 +170,7 @@ export default function PortalEventsClient({ events, registrations, currentUserI
             const userReg = registrations.find(
               (r) => r.event_id === item.id && r.member_id === currentUserId
             );
-            const registeredCount = registrations.filter(
-              (r) => r.event_id === item.id && r.status !== "rejected"
-            ).length;
-            const seatsRemaining = Math.max(0, item.capacity - registeredCount);
+            const seatsRemaining = Math.max(0, item.capacity - (item.approved_count || 0));
             
             const isRegistered = !!userReg;
             const regStatus = userReg?.status;

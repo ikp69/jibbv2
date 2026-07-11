@@ -27,5 +27,26 @@ export default async function AdminEventsPage() {
     return <div className="p-6 text-red-400">Error loading events: {error.message}</div>;
   }
 
-  return <EventsClient initialList={list || []} />;
+  // Fetch registrations with profiles (including phone)
+  const { data: registrations } = await supabase
+    .from("event_registrations")
+    .select(`
+      id,
+      event_id,
+      member_id,
+      message,
+      status,
+      created_at,
+      profiles:member_id (
+        id,
+        full_name,
+        company_name,
+        email,
+        phone,
+        membership_tier
+      )
+    `)
+    .order("created_at", { ascending: false });
+
+  return <EventsClient initialList={list || []} initialRegistrations={registrations || []} />;
 }

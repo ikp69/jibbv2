@@ -52,9 +52,33 @@ export default async function PortalEventsPage() {
     .select("id, event_id, member_id, status, registration_date, message")
     .eq("member_id", user.id);
 
+  // Fetch approved counts for all events securely using admin client
+  let eventsWithCounts = (events || []).map(e => ({ ...e, approved_count: 0 }));
+  try {
+    const { createAdminClient } = await import("@/lib/supabase/admin");
+    const adminSupabase = createAdminClient();
+    const { data: allApproved } = await adminSupabase
+      .from("event_registrations")
+      .select("event_id")
+      .eq("status", "approved");
+
+    if (allApproved) {
+      const counts: Record<string, number> = {};
+      allApproved.forEach((r) => {
+        counts[r.event_id] = (counts[r.event_id] || 0) + 1;
+      });
+      eventsWithCounts = eventsWithCounts.map((e) => ({
+        ...e,
+        approved_count: counts[e.id] || 0,
+      }));
+    }
+  } catch (err) {
+    console.error("Failed to fetch approved counts:", err);
+  }
+
   return (
     <PortalEventsClient
-      events={events || []}
+      events={eventsWithCounts}
       registrations={registrations || []}
       currentUserId={user.id}
     />

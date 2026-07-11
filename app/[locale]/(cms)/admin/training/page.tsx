@@ -27,5 +27,25 @@ export default async function AdminTrainingPage() {
     return <div className="p-6 text-red-400">Error loading training programs: {error.message}</div>;
   }
 
-  return <TrainingClient initialList={list || []} />;
+  // Fetch registrations with profiles (including phone)
+  const { data: registrations } = await supabase
+    .from("training_registrations")
+    .select(`
+      id,
+      training_id,
+      member_id,
+      status,
+      created_at,
+      profiles:member_id (
+        id,
+        full_name,
+        company_name,
+        email,
+        phone,
+        membership_tier
+      )
+    `)
+    .order("created_at", { ascending: false });
+
+  return <TrainingClient initialList={list || []} initialRegistrations={registrations || []} />;
 }

@@ -18,6 +18,7 @@ type TrainingProgram = {
   capacity: number;
   visible_tiers: string[];
   status: string;
+  approved_count?: number;
 };
 
 type Registration = {
@@ -40,7 +41,7 @@ export default function PortalTrainingClient({ programs, registrations, currentU
   const [expandedId, setExpandedId] = useState<string | null>(null);
   
   // Status and feedback states
-  const [isPending, setIsPending] = useState(false);
+  const [pendingIds, setPendingIds] = useState<Set<string>>(new Set());
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
@@ -51,7 +52,7 @@ export default function PortalTrainingClient({ programs, registrations, currentU
   const handleRegister = async (trainingId: string) => {
     setErrorMsg("");
     setSuccessMsg("");
-    setIsPending(true);
+    setPendingIds((prev) => new Set(prev).add(trainingId));
 
     try {
       const res = await registerForTraining(trainingId);
@@ -64,14 +65,18 @@ export default function PortalTrainingClient({ programs, registrations, currentU
     } catch (err) {
       setErrorMsg("An unexpected error occurred.");
     } finally {
-      setIsPending(false);
+      setPendingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(trainingId);
+        return next;
+      });
     }
   };
 
   const handleCancel = async (trainingId: string) => {
     setErrorMsg("");
     setSuccessMsg("");
-    setIsPending(true);
+    setPendingIds((prev) => new Set(prev).add(trainingId));
 
     try {
       const res = await cancelTrainingRegistration(trainingId);
@@ -84,7 +89,11 @@ export default function PortalTrainingClient({ programs, registrations, currentU
     } catch (err) {
       setErrorMsg("An unexpected error occurred.");
     } finally {
-      setIsPending(false);
+      setPendingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(trainingId);
+        return next;
+      });
     }
   };
 
@@ -178,17 +187,15 @@ export default function PortalTrainingClient({ programs, registrations, currentU
           {filtered.map((item) => {
             const isExpanded = expandedId === item.id;
             
-            // Map registration status
             const userReg = registrations.find(
               (r) => r.training_id === item.id && r.member_id === currentUserId
             );
-            const registeredCount = registrations.filter(
-              (r) => r.training_id === item.id && r.status !== "rejected"
-            ).length;
-            const seatsRemaining = Math.max(0, item.capacity - registeredCount);
             
             const isRegistered = !!userReg;
             const regStatus = userReg?.status; // 'pending', 'approved', 'rejected'
+            const isItemPending = pendingIds.has(item.id);
+            
+            const seatsRemaining = Math.max(0, item.capacity - (item.approved_count || 0));
 
             return (
               <div
@@ -248,19 +255,19 @@ export default function PortalTrainingClient({ programs, registrations, currentU
                         
                         <button
                           onClick={() => handleCancel(item.id)}
-                          disabled={isPending}
+                          disabled={isItemPending}
                           className="px-4 py-2 border border-red-200 hover:bg-red-50 text-red-600 hover:text-red-700 text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer disabled:opacity-50"
                         >
-                          Cancel Sign-up
+                          {isItemPending ? "Cancelling..." : "Cancel Sign-up"}
                         </button>
                       </div>
                     ) : (
                       <button
                         onClick={() => handleRegister(item.id)}
-                        disabled={isPending || seatsRemaining === 0}
+                        disabled={isItemPending || seatsRemaining === 0}
                         className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 text-white disabled:text-slate-400 text-xs font-semibold rounded-lg shadow-md transition-colors cursor-pointer disabled:cursor-not-allowed"
                       >
-                        {seatsRemaining === 0 ? "Seats Full" : "Register Program"}
+                        {isItemPending ? "Registering..." : seatsRemaining === 0 ? "Seats Full" : "Register Program"}
                       </button>
                     )}
                   </div>
