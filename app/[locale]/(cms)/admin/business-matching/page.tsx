@@ -20,13 +20,13 @@ export default async function AdminBusinessMatchingPage() {
   // Fetch opportunities
   const { data: opportunities, error: oppError } = await supabase
     .from("business_opportunities")
-    .select("*, profiles(company_name, email)")
+    .select("*, profiles(company_name, email, membership_tier)")
     .order("created_at", { ascending: false });
 
   // Fetch interest pitches
   const { data: pitches, error: pitchError } = await supabase
     .from("opportunity_interest")
-    .select("*, profiles(company_name, email)")
+    .select("*, profiles(company_name, email, membership_tier)")
     .order("created_at", { ascending: false });
 
   if (oppError || pitchError) {

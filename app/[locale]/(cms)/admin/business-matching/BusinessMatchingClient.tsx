@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useState, useTransition, useMemo } from "react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { 
@@ -11,7 +11,7 @@ import {
   rejectOpportunity,
   getOpportunityEditHistory
 } from "@/features/cms/business/actions/opportunities";
-import { Plus, X, Trash2, Calendar, FileText, CheckCircle, AlertCircle, RefreshCw, Briefcase, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Plus, X, Trash2, Calendar, FileText, CheckCircle, AlertCircle, RefreshCw, Briefcase, ThumbsUp, ThumbsDown, Search } from "lucide-react";
 
 type Opportunity = {
   id: string;
@@ -26,6 +26,7 @@ type Opportunity = {
   profiles: {
     company_name: string | null;
     email: string | null;
+    membership_tier: string | null;
   } | null;
 };
 
@@ -39,6 +40,7 @@ type Pitch = {
   profiles: {
     company_name: string | null;
     email: string | null;
+    membership_tier: string | null;
   } | null;
 };
 
@@ -69,6 +71,16 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
   const [deadline, setDeadline] = useState("");
   const [visibleTiers, setVisibleTiers] = useState<string[]>(["associate"]);
   const [status, setStatus] = useState<"draft" | "published">("published");
+
+  // Search & Filter State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedIndustry, setSelectedIndustry] = useState<string>("All");
+  const [selectedCountry, setSelectedCountry] = useState<string>("All");
+  const [selectedTier, setSelectedTier] = useState<string>("All");
+
+  // Sorting State
+  const [sortKey, setSortKey] = useState<string>("deadline");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [matchingSuccess, setMatchingSuccess] = useState("");
@@ -226,14 +238,78 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
     });
   };
 
+  const handleSort = (key: string, order: "asc" | "desc") => {
+    setSortKey(key);
+    setSortOrder(order);
+  };
+
   // Filter lists based on tab
   const pendingOpportunities = opportunities.filter((o) => o.status === "pending_approval");
   const activeOpportunities = opportunities.filter((o) => o.status !== "pending_approval");
+
+  const filteredAndSortedActive = useMemo(() => {
+    let result = [...activeOpportunities];
+
+    // Search by title, description, or company name
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (item) =>
+          item.title.toLowerCase().includes(query) ||
+          item.description.toLowerCase().includes(query) ||
+          (item.profiles?.company_name && item.profiles.company_name.toLowerCase().includes(query))
+      );
+    }
+
+    // Industry Filter
+    if (selectedIndustry !== "All") {
+      result = result.filter((item) => item.industry === selectedIndustry);
+    }
+
+    // Country Filter
+    if (selectedCountry !== "All") {
+      result = result.filter((item) => item.country === selectedCountry);
+    }
+
+    // Tier Filter
+    if (selectedTier !== "All") {
+      result = result.filter((item) =>
+        item.visible_tiers.some((t) => t.toLowerCase() === selectedTier.toLowerCase())
+      );
+    }
+
+    // Sort
+    result.sort((a, b) => {
+      let aVal = a[sortKey as keyof Opportunity];
+      let bVal = b[sortKey as keyof Opportunity];
+
+      if (aVal === null || aVal === undefined) return sortOrder === "asc" ? 1 : -1;
+      if (bVal === null || bVal === undefined) return sortOrder === "asc" ? -1 : 1;
+
+      if (Array.isArray(aVal) || Array.isArray(bVal)) return 0;
+      if (typeof aVal === "object" || typeof bVal === "object") return 0;
+
+      if (typeof aVal === "string" && typeof bVal === "string") {
+        return sortOrder === "asc"
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal);
+      }
+
+      if (typeof aVal === "number" && typeof bVal === "number") {
+        return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
+      }
+
+      return 0;
+    });
+
+    return result;
+  }, [activeOpportunities, searchQuery, selectedIndustry, selectedCountry, selectedTier, sortKey, sortOrder]);
 
   const activeColumns: ColumnDef<Opportunity>[] = [
     {
       header: "Opportunity Title",
       accessorKey: "title",
+      sortable: true,
       cell: (item) => {
         const isExpanded = !!expandedDescriptions[item.id];
         const isLong = item.description && item.description.length > 80;
@@ -259,7 +335,14 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
       header: "Proposed By",
       cell: (item) => (
         <div>
-          <span className="font-semibold text-slate-800 text-xs block">{item.profiles?.company_name || "Admin / System"}</span>
+          <div className="flex items-center gap-1.5">
+            <span className="font-semibold text-slate-800 text-xs">{item.profiles?.company_name || "Admin / System"}</span>
+            {item.profiles?.membership_tier && (
+              <span className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-[9px] uppercase font-bold text-slate-600 tracking-wider">
+                {item.profiles.membership_tier}
+              </span>
+            )}
+          </div>
           <span className="text-[10px] text-slate-500 font-mono">{item.profiles?.email || "N/A"}</span>
         </div>
       ),
@@ -267,6 +350,7 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
     {
       header: "Sector & Region",
       accessorKey: "industry",
+      sortable: true,
       cell: (item) => (
         <div>
           <span className="text-xs font-semibold text-slate-800">{item.industry}</span>
@@ -304,6 +388,7 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
     {
       header: "Deadline",
       accessorKey: "deadline",
+      sortable: true,
       cell: (item) => (
         <span className="text-xs font-mono text-slate-550" suppressHydrationWarning>{new Date(item.deadline).toLocaleDateString()}</span>
       ),
@@ -311,6 +396,7 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
     {
       header: "Status",
       accessorKey: "status",
+      sortable: true,
       cell: (item) => <StatusBadge status={item.status} />,
     },
     {
@@ -374,7 +460,14 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
       header: "Proposed By",
       cell: (item) => (
         <div>
-          <span className="font-semibold text-slate-800 text-xs block">{item.profiles?.company_name || "Unspecified Organization"}</span>
+          <div className="flex items-center gap-1.5">
+            <span className="font-semibold text-slate-800 text-xs">{item.profiles?.company_name || "Unspecified Organization"}</span>
+            {item.profiles?.membership_tier && (
+              <span className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-[9px] uppercase font-bold text-slate-600 tracking-wider">
+                {item.profiles.membership_tier}
+              </span>
+            )}
+          </div>
           <span className="text-[10px] text-slate-500 font-mono">{item.profiles?.email || "N/A"}</span>
         </div>
       ),
@@ -543,12 +636,92 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
         </button>
       </div>
 
+      {/* Search & Filter Panel (Active Tab Only) */}
+      {activeTab === "active" && (
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center">
+          {/* Search */}
+          <div className="relative w-full md:flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search by title, description, or company..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-9 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Filters */}
+          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+            {/* Industry */}
+            <div className="flex-1 md:flex-initial min-w-[160px]">
+              <select
+                value={selectedIndustry}
+                onChange={(e) => setSelectedIndustry(e.target.value)}
+                className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-700 focus:outline-none"
+              >
+                <option value="All">All Sectors</option>
+                <option value="Semiconductors">Semiconductors</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Automotive">Automotive</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Energy">Energy</option>
+                <option value="Infrastructure">Infrastructure</option>
+                <option value="Food">Food</option>
+                <option value="General">General</option>
+              </select>
+            </div>
+
+            {/* Country */}
+            <div className="flex-1 md:flex-initial min-w-[140px]">
+              <select
+                value={selectedCountry}
+                onChange={(e) => setSelectedCountry(e.target.value)}
+                className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-700 focus:outline-none"
+              >
+                <option value="All">All Regions</option>
+                <option value="Japan">Japan</option>
+                <option value="India">India</option>
+                <option value="Both">Both</option>
+              </select>
+            </div>
+
+            {/* Tier */}
+            <div className="flex-1 md:flex-initial min-w-[160px]">
+              <select
+                value={selectedTier}
+                onChange={(e) => setSelectedTier(e.target.value)}
+                className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-700 focus:outline-none"
+              >
+                <option value="All">All Tiers</option>
+                <option value="Associate">Associate</option>
+                <option value="Silver">Silver</option>
+                <option value="Gold">Gold</option>
+                <option value="Platinum">Platinum</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Table list */}
       {activeTab === "active" ? (
         <DataTable
           columns={activeColumns}
-          data={activeOpportunities}
+          data={filteredAndSortedActive}
           getRowId={(item) => item.id}
+          sortKey={sortKey}
+          sortOrder={sortOrder}
+          onSort={handleSort}
           expandedRowId={selectedOppId || undefined}
           renderRowDetails={(opp) => {
             const oppPitches = pitches.filter((p) => p.opportunity_id === opp.id);
@@ -575,7 +748,14 @@ export default function BusinessMatchingClient({ opportunities, pitches }: Busin
                       <div key={pitch.id} className="bg-white border border-slate-200 p-4 rounded-lg space-y-3 shadow-sm">
                         <div className="flex flex-wrap items-center justify-between gap-4">
                           <div>
-                            <span className="font-bold text-slate-900 text-sm">{pitch.profiles?.company_name || "Unspecified Org"}</span>
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-bold text-slate-900 text-sm">{pitch.profiles?.company_name || "Unspecified Org"}</span>
+                              {pitch.profiles?.membership_tier && (
+                                <span className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-[9px] uppercase font-bold text-slate-600 tracking-wider">
+                                  {pitch.profiles.membership_tier}
+                                </span>
+                              )}
+                            </div>
                             <p className="text-xs text-slate-500 font-mono mt-0.5">{pitch.profiles?.email}</p>
                           </div>
                           <div className="flex items-center gap-3">

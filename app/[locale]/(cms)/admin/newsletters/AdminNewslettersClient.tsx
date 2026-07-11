@@ -41,6 +41,10 @@ export default function AdminNewslettersClient({ initialList }: AdminNewsletters
   const [selectedMonth, setSelectedMonth] = useState("all");
   const [selectedTier, setSelectedTier] = useState("all");
 
+  // Sorting State
+  const [sortKey, setSortKey] = useState<string>("publish_date");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+
   const [confirmAction, setConfirmAction] = useState<{
     id: string;
     actionFn: (id: string) => Promise<any>;
@@ -160,6 +164,11 @@ export default function AdminNewslettersClient({ initialList }: AdminNewsletters
     });
   };
 
+  const handleSort = (key: string, order: "asc" | "desc") => {
+    setSortKey(key);
+    setSortOrder(order);
+  };
+
   // Extract unique months for filtering
   const monthsOptions = useMemo(() => {
     const months = new Set<string>();
@@ -173,9 +182,9 @@ export default function AdminNewslettersClient({ initialList }: AdminNewsletters
     return Array.from(months);
   }, [list]);
 
-  // Filter list
-  const filteredList = useMemo(() => {
-    return list.filter((item) => {
+  // Filter & Sort list
+  const filteredAndSortedList = useMemo(() => {
+    let result = list.filter((item) => {
       // Month Match
       let matchesMonth = true;
       if (selectedMonth !== "all" && item.publish_date) {
@@ -192,12 +201,34 @@ export default function AdminNewslettersClient({ initialList }: AdminNewsletters
 
       return matchesMonth && matchesTier;
     });
-  }, [list, selectedMonth, selectedTier]);
+
+    // Sort
+    result.sort((a, b) => {
+      let aVal = a[sortKey as keyof Newsletter];
+      let bVal = b[sortKey as keyof Newsletter];
+
+      if (aVal === null || aVal === undefined) return sortOrder === "asc" ? 1 : -1;
+      if (bVal === null || bVal === undefined) return sortOrder === "asc" ? -1 : 1;
+
+      if (Array.isArray(aVal) || Array.isArray(bVal)) return 0;
+
+      if (typeof aVal === "string" && typeof bVal === "string") {
+        return sortOrder === "asc"
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal);
+      }
+
+      return 0;
+    });
+
+    return result;
+  }, [list, selectedMonth, selectedTier, sortKey, sortOrder]);
 
   const columns: ColumnDef<Newsletter>[] = [
     {
       header: "Title & Subject",
       accessorKey: "title",
+      sortable: true,
       cell: (item) => (
         <div className="space-y-0.5">
           <span className="font-bold text-slate-900 leading-snug">{item.title}</span>
@@ -223,6 +254,7 @@ export default function AdminNewslettersClient({ initialList }: AdminNewsletters
     {
       header: "Publish Date",
       accessorKey: "publish_date",
+      sortable: true,
       cell: (item) => {
         if (!item.publish_date) return <span className="text-slate-500">N/A</span>;
         return <span className="text-xs font-mono text-slate-550" suppressHydrationWarning>{new Date(item.publish_date).toLocaleDateString()}</span>;
@@ -231,6 +263,7 @@ export default function AdminNewslettersClient({ initialList }: AdminNewsletters
     {
       header: "Status",
       accessorKey: "status",
+      sortable: true,
       cell: (item) => <StatusBadge status={item.status} />,
     },
     {
@@ -239,7 +272,7 @@ export default function AdminNewslettersClient({ initialList }: AdminNewsletters
         <div className="flex items-center gap-1.5">
           <button
             onClick={() => handleOpenEdit(item)}
-            className="p-1.5 text-slate-550 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+            className="p-1.5 text-slate-555 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
             title="Edit Newsletter"
           >
             <Edit className="w-4 h-4" />
@@ -324,7 +357,14 @@ export default function AdminNewslettersClient({ initialList }: AdminNewsletters
       )}
 
       {/* Table list */}
-      <DataTable columns={columns} data={filteredList} getRowId={(item) => item.id} />
+      <DataTable
+        columns={columns}
+        data={filteredAndSortedList}
+        getRowId={(item) => item.id}
+        sortKey={sortKey}
+        sortOrder={sortOrder}
+        onSort={handleSort}
+      />
 
       {/* Action confirmation dialog */}
       {confirmAction && (

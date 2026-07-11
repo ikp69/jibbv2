@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useState, useTransition, useMemo } from "react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { createEvent, deleteEvent, updateEvent } from "@/features/cms/content/actions/events";
 import { updateEventRegistrationStatus } from "@/features/cms/content/actions/registrations";
-import { Plus, X, Trash2, Calendar, MapPin, Users, HelpCircle, Edit, UserCheck, Clock, Check, Ban, Printer } from "lucide-react";
+import { Plus, X, Trash2, Calendar, MapPin, Users, HelpCircle, Edit, UserCheck, Clock, Check, Ban, Printer, Search } from "lucide-react";
 
 type EventItem = {
   id: string;
@@ -62,6 +62,15 @@ export default function EventsClient({ initialList, initialRegistrations }: Even
   const [capacity, setCapacity] = useState(50);
   const [visibleTiers, setVisibleTiers] = useState<string[]>(["gold", "platinum"]);
   const [status, setStatus] = useState<"draft" | "open">("open");
+
+  // Search & Filter State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState<string>("All");
+  const [selectedTier, setSelectedTier] = useState<string>("All");
+
+  // Sorting State
+  const [sortKey, setSortKey] = useState<string>("event_date");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   const [confirmAction, setConfirmAction] = useState<{
     id: string;
@@ -381,19 +390,101 @@ export default function EventsClient({ initialList, initialRegistrations }: Even
     printWindow.document.close();
   };
 
+  const handleSort = (key: string, order: "asc" | "desc") => {
+    setSortKey(key);
+    setSortOrder(order);
+  };
+
+  const filteredAndSortedList = useMemo(() => {
+    let result = [...list];
+
+    // Search by title, description, or location
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (item) =>
+          item.title.toLowerCase().includes(query) ||
+          (item.description && item.description.toLowerCase().includes(query)) ||
+          item.location.toLowerCase().includes(query)
+      );
+    }
+
+    // Status Filter
+    if (selectedStatus !== "All") {
+      result = result.filter((item) => item.status === selectedStatus);
+    }
+
+    // Tier Filter
+    if (selectedTier !== "All") {
+      result = result.filter((item) =>
+        item.visible_tiers.some((t) => t.toLowerCase() === selectedTier.toLowerCase())
+      );
+    }
+
+    // Sort
+    result.sort((a, b) => {
+      let aVal = a[sortKey as keyof EventItem];
+      let bVal = b[sortKey as keyof EventItem];
+
+      if (aVal === null || aVal === undefined) return sortOrder === "asc" ? 1 : -1;
+      if (bVal === null || bVal === undefined) return sortOrder === "asc" ? -1 : 1;
+
+      if (Array.isArray(aVal) || Array.isArray(bVal)) return 0;
+
+      if (typeof aVal === "string" && typeof bVal === "string") {
+        return sortOrder === "asc"
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal);
+      }
+
+      if (typeof aVal === "number" && typeof bVal === "number") {
+        return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
+      }
+
+      return 0;
+    });
+
+    return result;
+  }, [list, searchQuery, selectedStatus, selectedTier, sortKey, sortOrder]);
+
+  const DescriptionCell = ({ text }: { text: string | null }) => {
+    const [isExpanded, setIsExpanded] = useState(false);
+    if (!text) return <p className="text-xs text-slate-500 mt-0.5">No description.</p>;
+
+    const shouldTruncate = text.length > 80;
+
+    return (
+      <p className="text-xs text-slate-500 mt-0.5 max-w-md">
+        {isExpanded || !shouldTruncate ? text : `${text.slice(0, 80)}...`}{" "}
+        {shouldTruncate && (
+          <button
+            type="button"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-blue-600 hover:text-blue-800 font-semibold cursor-pointer focus:outline-none ml-1 inline-block"
+          >
+            {isExpanded ? "Read Less" : "Read More..."}
+          </button>
+        )}
+      </p>
+    );
+  };
+
   const columns: ColumnDef<EventItem>[] = [
     {
       header: "Event Title",
       accessorKey: "title",
+      sortable: true,
       cell: (item) => (
         <div>
           <span className="font-bold text-slate-900 block">{item.title}</span>
-          <p className="text-xs text-slate-500 line-clamp-1 mt-0.5">{item.description || "No description."}</p>
+          <DescriptionCell text={item.description} />
         </div>
       ),
     },
     {
       header: "Schedule & Limit",
+      accessorKey: "event_date",
+      sortable: true,
       cell: (item) => {
         const itemRegs = getEventRegs(item.id);
         const approvedCount = itemRegs.filter((r) => r.status === "approved").length;
@@ -424,6 +515,7 @@ export default function EventsClient({ initialList, initialRegistrations }: Even
     {
       header: "Location",
       accessorKey: "location",
+      sortable: true,
       cell: (item) => (
         <div className="flex items-center gap-1 text-slate-600">
           <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -447,13 +539,14 @@ export default function EventsClient({ initialList, initialRegistrations }: Even
     {
       header: "Status",
       accessorKey: "status",
+      sortable: true,
       cell: (item) => <StatusBadge status={item.status} />,
     },
     {
       header: "Actions",
       cell: (item) => {
         const itemRegs = getEventRegs(item.id);
-        const pendingCount = itemRegs.filter((r) => r.status === "approved").length; // Wait, mismatch count
+        const pendingCount = itemRegs.filter((r) => r.status === "approved").length;
 
         return (
           <div className="flex items-center gap-1.5">
@@ -523,8 +616,69 @@ export default function EventsClient({ initialList, initialRegistrations }: Even
         </div>
       )}
 
+      {/* Search & Filter Panel */}
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center">
+        {/* Search */}
+        <div className="relative w-full md:flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search by event title, details, or location..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-9 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          {/* Status */}
+          <div className="flex-1 md:flex-initial min-w-[160px]">
+            <select
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-700 focus:outline-none"
+            >
+              <option value="All">All Statuses</option>
+              <option value="open">Open Registration</option>
+              <option value="draft">Draft Notice</option>
+            </select>
+          </div>
+
+          {/* Tier */}
+          <div className="flex-1 md:flex-initial min-w-[160px]">
+            <select
+              value={selectedTier}
+              onChange={(e) => setSelectedTier(e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-700 focus:outline-none"
+            >
+              <option value="All">All Tiers</option>
+              <option value="Associate">Associate</option>
+              <option value="Silver">Silver</option>
+              <option value="Gold">Gold</option>
+              <option value="Platinum">Platinum</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       {/* Table list */}
-      <DataTable columns={columns} data={list} getRowId={(item) => item.id} />
+      <DataTable
+        columns={columns}
+        data={filteredAndSortedList}
+        getRowId={(item) => item.id}
+        sortKey={sortKey}
+        sortOrder={sortOrder}
+        onSort={handleSort}
+      />
 
       {/* View Registrations / Participants Drawer */}
       {activeEventForParticipants && (
@@ -617,8 +771,8 @@ export default function EventsClient({ initialList, initialRegistrations }: Even
                               </>
                             ) : (
                               <span className={`px-2.5 py-1 text-xs font-bold rounded-lg border uppercase tracking-wider ${reg.status === "approved"
-                                  ? "bg-emerald-50 border-emerald-250 text-emerald-700"
-                                  : "bg-red-50 border-red-200 text-red-700"
+                                ? "bg-emerald-50 border-emerald-250 text-emerald-700"
+                                : "bg-red-50 border-red-200 text-red-700"
                                 }`}>
                                 {reg.status}
                               </span>

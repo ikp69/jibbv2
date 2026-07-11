@@ -1,9 +1,8 @@
 "use client";
-
-import React, { useState, useTransition } from "react";
+import React, { useState, useTransition, useMemo } from "react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
 import { createReport, deleteReport, updateReport } from "@/features/cms/content/actions/reports";
-import { Plus, X, Trash2, FileText, Download, UploadCloud, Eye, FileSpreadsheet, Image, Video, HelpCircle, Calendar, Edit } from "lucide-react";
+import { Plus, X, Trash2, FileText, Download, UploadCloud, Eye, FileSpreadsheet, Image, Video, HelpCircle, Calendar, Edit, Search, SlidersHorizontal } from "lucide-react";
 
 type ReportItem = {
   id: string;
@@ -39,6 +38,16 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
   const [previewReport, setPreviewReport] = useState<ReportItem | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [fileSize, setFileSize] = useState<number | null>(null);
+
+  // Search & Filter State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [selectedFormat, setSelectedFormat] = useState<string>("All");
+  const [selectedTier, setSelectedTier] = useState<string>("All");
+
+  // Sorting State
+  const [sortKey, setSortKey] = useState<string>("created_at");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   const [confirmAction, setConfirmAction] = useState<{
     id: string;
@@ -274,10 +283,73 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
     });
   };
 
+  const handleSort = (key: string, order: "asc" | "desc") => {
+    setSortKey(key);
+    setSortOrder(order);
+  };
+
+  const filteredAndSortedList = useMemo(() => {
+    let result = [...list];
+
+    // Search by file name / title
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (item) =>
+          item.title.toLowerCase().includes(query) ||
+          (item.description && item.description.toLowerCase().includes(query)) ||
+          item.file_url.toLowerCase().includes(query)
+      );
+    }
+
+    // Category Filter
+    if (selectedCategory !== "All") {
+      result = result.filter((item) => item.category === selectedCategory);
+    }
+
+    // Format Filter
+    if (selectedFormat !== "All") {
+      result = result.filter((item) => item.resource_type === selectedFormat);
+    }
+
+    // Tier Filter
+    if (selectedTier !== "All") {
+      result = result.filter((item) =>
+        item.visible_tiers.some((t) => t.toLowerCase() === selectedTier.toLowerCase())
+      );
+    }
+
+    // Sort
+    result.sort((a, b) => {
+      let aVal = a[sortKey as keyof ReportItem];
+      let bVal = b[sortKey as keyof ReportItem];
+
+      if (aVal === null || aVal === undefined) return sortOrder === "asc" ? 1 : -1;
+      if (bVal === null || bVal === undefined) return sortOrder === "asc" ? -1 : 1;
+
+      if (Array.isArray(aVal) || Array.isArray(bVal)) return 0;
+
+      if (typeof aVal === "string" && typeof bVal === "string") {
+        return sortOrder === "asc"
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal);
+      }
+
+      if (typeof aVal === "number" && typeof bVal === "number") {
+        return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
+      }
+
+      return 0;
+    });
+
+    return result;
+  }, [list, searchQuery, selectedCategory, selectedFormat, selectedTier, sortKey, sortOrder]);
+
   const columns: ColumnDef<ReportItem>[] = [
     {
       header: "Title & Details",
       accessorKey: "title",
+      sortable: true,
       cell: (item) => (
         <div>
           <span className="font-bold text-slate-900 block">{item.title}</span>
@@ -288,6 +360,7 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
     {
       header: "Category & Format",
       accessorKey: "category",
+      sortable: true,
       cell: (item) => (
         <div>
           <span className="text-xs font-semibold text-slate-800">{item.category}</span>
@@ -309,13 +382,17 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
       ),
     },
     {
-      header: "Downloads",
-      accessorKey: "download_count",
+      header: "Date Uploaded",
+      accessorKey: "created_at",
+      sortable: true,
       cell: (item) => (
-        <div className="flex items-center gap-1.5 text-xs text-slate-500 font-mono">
-          <Download className="w-3.5 h-3.5 text-slate-400" />
-          <span>{item.download_count}</span>
-        </div>
+        <span className="text-xs text-slate-500 font-medium">
+          {new Date(item.created_at).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}
+        </span>
       ),
     },
     {
@@ -388,8 +465,91 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
         </div>
       )}
 
+      {/* Search & Filter Panel */}
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center">
+        {/* Search */}
+        <div className="relative w-full md:flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search by file name or details..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-9 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          {/* Category */}
+          <div className="flex-1 md:flex-initial min-w-[160px]">
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-700 focus:outline-none"
+            >
+              <option value="All">All Categories</option>
+              <option value="Market Intelligence">Market Intelligence</option>
+              <option value="Reports">Reports</option>
+              <option value="Training">Training Guides</option>
+              <option value="Guidelines">Guidelines</option>
+              <option value="Case Studies">Case Studies</option>
+              <option value="Forms">Forms</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          {/* Format */}
+          <div className="flex-1 md:flex-initial min-w-[160px]">
+            <select
+              value={selectedFormat}
+              onChange={(e) => setSelectedFormat(e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-700 focus:outline-none"
+            >
+              <option value="All">All Formats</option>
+              <option value="pdf">PDF File</option>
+              <option value="image">Image Asset</option>
+              <option value="video">Video URL</option>
+              <option value="spreadsheet">Spreadsheet</option>
+              <option value="presentation">Presentation</option>
+              <option value="document">Text Document</option>
+            </select>
+          </div>
+
+          {/* Tier */}
+          <div className="flex-1 md:flex-initial min-w-[160px]">
+            <select
+              value={selectedTier}
+              onChange={(e) => setSelectedTier(e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-700 focus:outline-none"
+            >
+              <option value="All">All Tiers</option>
+              <option value="Associate">Associate</option>
+              <option value="Silver">Silver</option>
+              <option value="Gold">Gold</option>
+              <option value="Platinum">Platinum</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       {/* Table list */}
-      <DataTable columns={columns} data={list} getRowId={(item) => item.id} />
+      <DataTable
+        columns={columns}
+        data={filteredAndSortedList}
+        getRowId={(item) => item.id}
+        sortKey={sortKey}
+        sortOrder={sortOrder}
+        onSort={handleSort}
+      />
 
       {/* Action confirmation dialog */}
       {confirmAction && (
@@ -523,24 +683,24 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
                   </div>
                 ) : (
                   <div
-                    onDragOver={(e) => {
-                      e.preventDefault();
-                      setIsDragging(true);
-                    }}
-                    onDragLeave={() => setIsDragging(false)}
-                    onDrop={async (e) => {
-                      e.preventDefault();
-                      setIsDragging(false);
-                      const files = e.dataTransfer.files;
-                      if (files && files.length > 0) {
-                        await handleFileUpload(files[0]);
-                      }
-                    }}
-                    className={`border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 ${
-                      isDragging
-                        ? "border-blue-500 bg-blue-50/40"
-                        : "border-slate-250 hover:border-slate-350 bg-white"
-                    }`}
+                     onDragOver={(e) => {
+                       e.preventDefault();
+                       setIsDragging(true);
+                     }}
+                     onDragLeave={() => setIsDragging(false)}
+                     onDrop={async (e) => {
+                       e.preventDefault();
+                       setIsDragging(false);
+                       const files = e.dataTransfer.files;
+                       if (files && files.length > 0) {
+                         await handleFileUpload(files[0]);
+                       }
+                     }}
+                     className={`border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 ${
+                       isDragging
+                         ? "border-blue-500 bg-blue-50/40"
+                         : "border-slate-250 hover:border-slate-350 bg-white"
+                     }`}
                   >
                     <input
                       type="file"
@@ -589,7 +749,7 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
                         type="checkbox"
                         checked={visibleTiers.includes(t)}
                         onChange={() => handleTierToggle(t)}
-                        className="rounded border-slate-300 bg-white text-blue-600 focus:ring-blue-500/20 w-4 h-4 cursor-pointer"
+                        className="rounded border-slate-300 bg-white text-blue-600 focus:ring-blue-550/20 w-4 h-4 cursor-pointer"
                       />
                       <span>{t}</span>
                     </label>

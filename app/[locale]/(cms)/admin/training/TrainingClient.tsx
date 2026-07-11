@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useState, useTransition, useMemo } from "react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { createTraining, deleteTraining, updateTraining } from "@/features/cms/content/actions/training";
 import { updateTrainingRegistrationStatus } from "@/features/cms/content/actions/registrations";
-import { Plus, X, Trash2, BookOpen, Calendar, MapPin, Users, Edit, UserCheck, AlertCircle, Clock, Check, Ban, Printer } from "lucide-react";
+import { Plus, X, Trash2, BookOpen, Calendar, MapPin, Users, Edit, UserCheck, AlertCircle, Clock, Check, Ban, Printer, Search } from "lucide-react";
 
 type TrainingItem = {
   id: string;
@@ -65,6 +65,16 @@ export default function TrainingClient({ initialList, initialRegistrations }: Tr
   const [capacity, setCapacity] = useState(20);
   const [visibleTiers, setVisibleTiers] = useState<string[]>(["associate"]);
   const [status, setStatus] = useState<"draft" | "open">("open");
+
+  // Search & Filter State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [selectedStatus, setSelectedStatus] = useState<string>("All");
+  const [selectedTier, setSelectedTier] = useState<string>("All");
+
+  // Sorting State
+  const [sortKey, setSortKey] = useState<string>("start_date");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   const [confirmAction, setConfirmAction] = useState<{
     id: string;
@@ -390,20 +400,106 @@ export default function TrainingClient({ initialList, initialRegistrations }: Tr
     printWindow.document.close();
   };
 
+  const handleSort = (key: string, order: "asc" | "desc") => {
+    setSortKey(key);
+    setSortOrder(order);
+  };
+
+  const filteredAndSortedList = useMemo(() => {
+    let result = [...list];
+
+    // Search by title, description, or location
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (item) =>
+          item.title.toLowerCase().includes(query) ||
+          (item.description && item.description.toLowerCase().includes(query)) ||
+          item.location.toLowerCase().includes(query)
+      );
+    }
+
+    // Category Filter
+    if (selectedCategory !== "All") {
+      result = result.filter((item) => item.category === selectedCategory);
+    }
+
+    // Status Filter
+    if (selectedStatus !== "All") {
+      result = result.filter((item) => item.status === selectedStatus);
+    }
+
+    // Tier Filter
+    if (selectedTier !== "All") {
+      result = result.filter((item) =>
+        item.visible_tiers.some((t) => t.toLowerCase() === selectedTier.toLowerCase())
+      );
+    }
+
+    // Sort
+    result.sort((a, b) => {
+      let aVal = a[sortKey as keyof TrainingItem];
+      let bVal = b[sortKey as keyof TrainingItem];
+
+      if (aVal === null || aVal === undefined) return sortOrder === "asc" ? 1 : -1;
+      if (bVal === null || bVal === undefined) return sortOrder === "asc" ? -1 : 1;
+
+      if (Array.isArray(aVal) || Array.isArray(bVal)) return 0;
+
+      if (typeof aVal === "string" && typeof bVal === "string") {
+        return sortOrder === "asc"
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal);
+      }
+
+      if (typeof aVal === "number" && typeof bVal === "number") {
+        return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
+      }
+
+      return 0;
+    });
+
+    return result;
+  }, [list, searchQuery, selectedCategory, selectedStatus, selectedTier, sortKey, sortOrder]);
+
+const DescriptionCell = ({ text }: { text: string | null }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  if (!text) return <p className="text-xs text-slate-500 mt-0.5">No description.</p>;
+  
+  const shouldTruncate = text.length > 80;
+
+  return (
+    <p className="text-xs text-slate-500 mt-0.5 max-w-md">
+      {isExpanded || !shouldTruncate ? text : `${text.slice(0, 80)}...`}{" "}
+      {shouldTruncate && (
+        <button
+          type="button"
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="text-blue-600 hover:text-blue-800 font-semibold cursor-pointer focus:outline-none ml-1 inline-block"
+        >
+          {isExpanded ? "Read Less" : "Read More"}
+        </button>
+      )}
+    </p>
+  );
+};
+
   const columns: ColumnDef<TrainingItem>[] = [
     {
       header: "Program Title",
       accessorKey: "title",
+      sortable: true,
       cell: (item) => (
         <div>
           <span className="font-bold text-slate-900 block">{item.title}</span>
-          <p className="text-xs text-slate-500 line-clamp-1 mt-0.5">{item.description || "No description."}</p>
+          <DescriptionCell text={item.description} />
         </div>
       ),
     },
     {
       header: "Category & Duration",
       accessorKey: "category",
+      sortable: true,
       cell: (item) => (
         <div>
           <span className="text-xs font-semibold text-slate-800">{item.category}</span>
@@ -413,6 +509,8 @@ export default function TrainingClient({ initialList, initialRegistrations }: Tr
     },
     {
       header: "Schedule & Capacity",
+      accessorKey: "start_date",
+      sortable: true,
       cell: (item) => {
         const itemRegs = getTrainingRegs(item.id);
         const approvedCount = itemRegs.filter((r) => r.status === "approved").length;
@@ -443,6 +541,7 @@ export default function TrainingClient({ initialList, initialRegistrations }: Tr
     {
       header: "Location",
       accessorKey: "location",
+      sortable: true,
       cell: (item) => (
         <div className="flex items-center gap-1 text-slate-600">
           <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -469,6 +568,7 @@ export default function TrainingClient({ initialList, initialRegistrations }: Tr
     {
       header: "Status",
       accessorKey: "status",
+      sortable: true,
       cell: (item) => <StatusBadge status={item.status} />,
     },
     {
@@ -545,8 +645,86 @@ export default function TrainingClient({ initialList, initialRegistrations }: Tr
         </div>
       )}
 
+      {/* Search & Filter Panel */}
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center">
+        {/* Search */}
+        <div className="relative w-full md:flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search by program title, details, or location..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-9 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          {/* Category */}
+          <div className="flex-1 md:flex-initial min-w-[160px]">
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-700 focus:outline-none"
+            >
+              <option value="All">All Categories</option>
+              <option value="Corporate">Corporate Training</option>
+              <option value="Culture">Cultural Onboarding</option>
+              <option value="Language">Language Class</option>
+              <option value="Leadership">Leadership</option>
+              <option value="Seminar">Seminar</option>
+              <option value="Workshop">Workshop</option>
+            </select>
+          </div>
+
+          {/* Status */}
+          <div className="flex-1 md:flex-initial min-w-[160px]">
+            <select
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-700 focus:outline-none"
+            >
+              <option value="All">All Statuses</option>
+              <option value="open">Open Registration</option>
+              <option value="draft">Draft Notice</option>
+            </select>
+          </div>
+
+          {/* Tier */}
+          <div className="flex-1 md:flex-initial min-w-[160px]">
+            <select
+              value={selectedTier}
+              onChange={(e) => setSelectedTier(e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-700 focus:outline-none"
+            >
+              <option value="All">All Tiers</option>
+              <option value="Associate">Associate</option>
+              <option value="Silver">Silver</option>
+              <option value="Gold">Gold</option>
+              <option value="Platinum">Platinum</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       {/* Table list */}
-      <DataTable columns={columns} data={list} getRowId={(item) => item.id} />
+      <DataTable
+        columns={columns}
+        data={filteredAndSortedList}
+        getRowId={(item) => item.id}
+        sortKey={sortKey}
+        sortOrder={sortOrder}
+        onSort={handleSort}
+      />
 
       {/* View Registrations / Participants Drawer */}
       {activeTrainingForParticipants && (

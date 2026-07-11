@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useState, useTransition, useMemo } from "react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { createCollaboration, updateCollaboration, deleteCollaboration, updateCollaborationInterestStatus } from "@/features/cms/business/actions/collaborations";
-import { Plus, X, Trash2, ShieldCheck, Heart, Pencil, AlertCircle, FileText, Briefcase } from "lucide-react";
+import { Plus, X, Trash2, ShieldCheck, Heart, Pencil, AlertCircle, FileText, Briefcase, Search } from "lucide-react";
 
 type Collaboration = {
   id: string;
@@ -55,6 +55,16 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
   const [direction, setDirection] = useState("");
   const [location, setLocation] = useState("");
   const [editingCol, setEditingCol] = useState<Collaboration | null>(null);
+
+  // Search & Filter State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [selectedStatus, setSelectedStatus] = useState<string>("All");
+  const [selectedTier, setSelectedTier] = useState<string>("All");
+
+  // Sorting State
+  const [sortKey, setSortKey] = useState<string>("title");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const [confirmAction, setConfirmAction] = useState<{
     id: string;
@@ -180,10 +190,70 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
     });
   };
 
+  const handleSort = (key: string, order: "asc" | "desc") => {
+    setSortKey(key);
+    setSortOrder(order);
+  };
+
+  const filteredAndSortedList = useMemo(() => {
+    let result = [...collaborations];
+
+    // Search
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (item) =>
+          item.title.toLowerCase().includes(query) ||
+          item.description.toLowerCase().includes(query) ||
+          item.industry.toLowerCase().includes(query) ||
+          item.location.toLowerCase().includes(query)
+      );
+    }
+
+    // Category Filter
+    if (selectedCategory !== "All") {
+      result = result.filter((item) => item.category === selectedCategory);
+    }
+
+    // Status Filter
+    if (selectedStatus !== "All") {
+      result = result.filter((item) => item.status === selectedStatus);
+    }
+
+    // Tier Filter
+    if (selectedTier !== "All") {
+      result = result.filter((item) =>
+        item.visible_tiers.some((t) => t.toLowerCase() === selectedTier.toLowerCase())
+      );
+    }
+
+    // Sort
+    result.sort((a, b) => {
+      let aVal = a[sortKey as keyof Collaboration];
+      let bVal = b[sortKey as keyof Collaboration];
+
+      if (aVal === null || aVal === undefined) return sortOrder === "asc" ? 1 : -1;
+      if (bVal === null || bVal === undefined) return sortOrder === "asc" ? -1 : 1;
+
+      if (Array.isArray(aVal) || Array.isArray(bVal)) return 0;
+
+      if (typeof aVal === "string" && typeof bVal === "string") {
+        return sortOrder === "asc"
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal);
+      }
+
+      return 0;
+    });
+
+    return result;
+  }, [collaborations, searchQuery, selectedCategory, selectedStatus, selectedTier, sortKey, sortOrder]);
+
   const columns: ColumnDef<Collaboration>[] = [
     {
       header: "Collaboration Title",
       accessorKey: "title",
+      sortable: true,
       cell: (item) => {
         const isExpanded = !!expandedDescriptions[item.id];
         const isLong = item.description && item.description.length > 80;
@@ -208,6 +278,7 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
     {
       header: "Industry & Category",
       accessorKey: "industry",
+      sortable: true,
       cell: (item) => (
         <div>
           <span className="text-xs font-semibold text-slate-800">{item.industry}</span>
@@ -217,6 +288,8 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
     },
     {
       header: "Direction & Location",
+      accessorKey: "direction",
+      sortable: true,
       cell: (item) => (
         <div>
           <span className="text-xs font-bold text-slate-800">{item.direction}</span>
@@ -240,6 +313,7 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
     {
       header: "Status",
       accessorKey: "status",
+      sortable: true,
       cell: (item) => <StatusBadge status={item.status} />,
     },
     {
@@ -343,11 +417,83 @@ export default function CollaborationClient({ collaborations, pitches }: Collabo
         </div>
       )}
 
+      {/* Search & Filter Panel */}
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center">
+        {/* Search */}
+        <div className="relative w-full md:flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search by title, description, industry, or location..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-9 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          {/* Category */}
+          <div className="flex-1 md:flex-initial min-w-[160px]">
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-700 focus:outline-none"
+            >
+              <option value="All">All Categories</option>
+              <option value="partnerships">Partnerships</option>
+              <option value="delegations">Delegations</option>
+              <option value="tradeMissions">Trade Missions</option>
+              <option value="investment">Investment</option>
+            </select>
+          </div>
+
+          {/* Status */}
+          <div className="flex-1 md:flex-initial min-w-[160px]">
+            <select
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-700 focus:outline-none"
+            >
+              <option value="All">All Statuses</option>
+              <option value="published">Published</option>
+              <option value="draft">Draft</option>
+            </select>
+          </div>
+
+          {/* Tier */}
+          <div className="flex-1 md:flex-initial min-w-[160px]">
+            <select
+              value={selectedTier}
+              onChange={(e) => setSelectedTier(e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-700 focus:outline-none"
+            >
+              <option value="All">All Tiers</option>
+              <option value="Associate">Associate</option>
+              <option value="Silver">Silver</option>
+              <option value="Gold">Gold</option>
+              <option value="Platinum">Platinum</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       {/* Main Table list */}
       <DataTable
         columns={columns}
-        data={collaborations}
+        data={filteredAndSortedList}
         getRowId={(item) => item.id}
+        sortKey={sortKey}
+        sortOrder={sortOrder}
+        onSort={handleSort}
         expandedRowId={selectedColId || undefined}
         renderRowDetails={(collab) => {
           const collabPitches = pitches.filter((p) => p.collaboration_id === collab.id);
