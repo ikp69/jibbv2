@@ -2,24 +2,33 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { headers } from "next/headers";
+import { getCurrentSessionId } from "@/lib/supabase/auth-guard";
+import { SessionService } from "@/lib/services/session-service";
 
 export type LogoutResult = {
   success: boolean;
   error?: string;
 };
 
+
 export async function logout(): Promise<LogoutResult> {
   const supabase = await createClient();
 
-  // 1. Fetch current user context before signing out (to log)
-  const { data: { user } } = await supabase.auth.getUser();
+  // 1. Fetch current session and user context
+  const { data: { session } } = await supabase.auth.getSession();
+  const token = session?.access_token || null;
+  const sid = getCurrentSessionId(token);
+  const user = session?.user || null;
 
-  if (user) {
+  if (user && sid) {
     const headersList = await headers();
     const userAgent = headersList.get("user-agent") || undefined;
     const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0] || undefined;
 
-    // Log the logout action
+    // Revoke session in database
+    await SessionService.revokeSession(sid, user.id, "user_logout");
+
+    // Insert audit log
     await supabase.from("audit_logs").insert({
       user_id: user.id,
       action: "member_logout",
@@ -28,7 +37,7 @@ export async function logout(): Promise<LogoutResult> {
       ip_address: ipAddress,
       user_agent: userAgent,
       old_values: null,
-      new_values: null,
+      new_values: { session_id: sid },
     });
   }
 
@@ -46,3 +55,4 @@ export async function logout(): Promise<LogoutResult> {
     success: true,
   };
 }
+

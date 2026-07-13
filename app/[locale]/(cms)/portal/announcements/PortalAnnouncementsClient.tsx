@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Megaphone, Calendar, Pin, Download, ExternalLink, ChevronDown, ChevronUp, Bell } from "lucide-react";
+import { Search, Megaphone, Calendar, Pin, Download, ExternalLink, ChevronRight, Bell, X } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 
 type Announcement = {
@@ -25,12 +25,7 @@ type PortalAnnouncementsClientProps = {
 export default function PortalAnnouncementsClient({ announcements }: PortalAnnouncementsClientProps) {
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState<"newest" | "oldest" | "pinned">("newest");
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-
-  // Toggle detail expansion
-  const toggleExpand = (id: string) => {
-    setExpandedId(expandedId === id ? null : id);
-  };
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
 
   // Search filter
   const searched = announcements.filter((item) => {
@@ -108,7 +103,6 @@ export default function PortalAnnouncementsClient({ announcements }: PortalAnnou
       ) : (
         <div className="space-y-4">
           {finalAnnouncements.map((item) => {
-            const isExpanded = expandedId === item.id;
             const publishDateString = item.publish_date
               ? new Date(item.publish_date).toLocaleDateString(undefined, {
                   year: "numeric",
@@ -120,95 +114,158 @@ export default function PortalAnnouncementsClient({ announcements }: PortalAnnou
             return (
               <div
                 key={item.id}
-                className={`border bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-200 ${
+                onClick={() => setSelectedAnnouncement(item)}
+                className={`border bg-white rounded-xl shadow-sm hover:shadow-md hover:border-slate-350 active:scale-[0.99] transition-all duration-200 cursor-pointer overflow-hidden p-5 flex items-start gap-4 justify-between ${
                   item.is_pinned
-                    ? "border-blue-200 ring-1 ring-blue-50/50"
+                    ? "border-blue-200 ring-1 ring-blue-50/50 bg-gradient-to-r from-white to-blue-50/10"
                     : "border-slate-200"
                 }`}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    setSelectedAnnouncement(item);
+                  }
+                }}
               >
-                {/* Announcement Card Header Header */}
-                <div className="p-5 flex items-start gap-4 justify-between">
-                  <div className="space-y-2 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      {item.is_pinned && (
-                        <span className="px-2 py-0.5 rounded bg-blue-50 border border-blue-200 text-blue-700 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
-                          <Pin className="w-3 h-3 shrink-0" />
-                          <span>Pinned Circular</span>
-                        </span>
-                      )}
-                      <span className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-                        <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <span suppressHydrationWarning>{publishDateString}</span>
+                <div className="space-y-2 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {item.is_pinned && (
+                      <span className="px-2 py-0.5 rounded bg-blue-50 border border-blue-200 text-blue-700 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                        <Pin className="w-3 h-3 shrink-0" />
+                        <span>Pinned Circular</span>
                       </span>
-                    </div>
-
-                    <h3 className="text-lg font-bold text-slate-900 leading-snug tracking-tight">
-                      {item.title}
-                    </h3>
+                    )}
+                    <span className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+                      <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <span suppressHydrationWarning>{publishDateString}</span>
+                    </span>
                   </div>
 
-                  <button
-                    onClick={() => toggleExpand(item.id)}
-                    className="p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors self-start shrink-0"
-                    title={isExpanded ? "Collapse Content" : "Expand Content"}
-                  >
-                    {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-                  </button>
+                  <h3 className="text-lg font-bold text-slate-900 leading-snug tracking-tight">
+                    {item.title}
+                  </h3>
+                  
+                  <p className="text-slate-500 text-sm line-clamp-2 font-normal leading-relaxed">
+                    {item.content}
+                  </p>
                 </div>
 
-                {/* Expanded Content Block */}
                 <div
-                  className={`px-5 pb-5 border-t border-slate-100 bg-slate-50/50 transition-all ${
-                    isExpanded ? "block" : "hidden"
-                  }`}
+                  className="p-1 text-slate-400 group-hover:text-slate-700 rounded-lg self-center shrink-0"
                 >
-                  <div className="pt-4 space-y-4">
-                    {item.banner_image && (
-                      <img
-                        src={item.banner_image}
-                        alt={item.title}
-                        className="w-full max-h-64 object-cover rounded-lg border border-slate-200"
-                      />
-                    )}
-
-                    <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap font-normal">
-                      {item.content}
-                    </div>
-
-                    {/* Resources & Links Panel */}
-                    {(item.attachment || item.external_link) && (
-                      <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-slate-200/50">
-                        {item.attachment && (
-                          <a
-                            href={item.attachment}
-                            download
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-250 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
-                          >
-                            <Download className="w-3.5 h-3.5 text-slate-505" />
-                            <span>Download PDF circular</span>
-                          </a>
-                        )}
-
-                        {item.external_link && (
-                          <a
-                            href={item.external_link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-md transition-colors cursor-pointer"
-                          >
-                            <span>Read full brief</span>
-                            <ExternalLink className="w-3.5 h-3.5 shrink-0" />
-                          </a>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                  <ChevronRight className="w-5 h-5 text-slate-400" />
                 </div>
               </div>
             );
           })}
+        </div>
+      )}
+
+      {/* Modal Dialog */}
+      {selectedAnnouncement && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-all duration-200 animate-in fade-in">
+          <div 
+            className="absolute inset-0" 
+            onClick={() => setSelectedAnnouncement(null)} 
+          />
+          
+          <div 
+            className={`bg-white rounded-2xl shadow-2xl w-full flex flex-col md:flex-row relative z-10 overflow-hidden border border-slate-100 transition-all duration-200 animate-in zoom-in-95 ${
+              selectedAnnouncement.banner_image ? "max-w-6xl" : "max-w-2xl"
+            }`}
+            style={{ height: "85vh", maxHeight: "90vh" }}
+          >
+            {/* Left side: Banner Image */}
+            {selectedAnnouncement.banner_image && (
+              <div className="w-full md:w-auto md:flex-shrink-0 h-auto md:h-full relative bg-slate-50 shrink-0 border-b md:border-b-0 md:border-r border-slate-150 flex items-center justify-center overflow-hidden" style={{ minHeight: "16rem", maxWidth: "100%", aspectRatio: "auto" }}>
+                <img
+                  src={selectedAnnouncement.banner_image}
+                  alt={selectedAnnouncement.title}
+                  className="w-full h-full object-contain md:object-cover"
+                  loading="lazy"
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    img.style.display = "none";
+                  }}
+                />
+              </div>
+            )}
+
+            {/* Right side: Announcement Details */}
+            <div className="flex-1 flex flex-col min-w-0">
+              {/* Header */}
+              <div className="p-6 border-b border-slate-150 flex items-start justify-between gap-4">
+                <div className="space-y-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {selectedAnnouncement.is_pinned && (
+                      <span className="px-2 py-0.5 rounded bg-blue-50 border border-blue-200 text-blue-700 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                        <Pin className="w-3 h-3 shrink-0" />
+                        <span>Pinned Circular</span>
+                      </span>
+                    )}
+                    <span className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+                      <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <span suppressHydrationWarning>
+                        {selectedAnnouncement.publish_date
+                          ? new Date(selectedAnnouncement.publish_date).toLocaleDateString(undefined, {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })
+                          : "Recent"}
+                      </span>
+                    </span>
+                  </div>
+                  <h2 className="text-xl font-bold text-slate-900 leading-snug">
+                    {selectedAnnouncement.title}
+                  </h2>
+                </div>
+                <button
+                  onClick={() => setSelectedAnnouncement(null)}
+                  className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors cursor-pointer shrink-0 animate-in fade-in"
+                  aria-label="Close details"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Body Content */}
+              <div className="p-6 overflow-y-auto space-y-5 flex-1 text-sm text-slate-700 leading-relaxed whitespace-pre-wrap font-normal">
+                {selectedAnnouncement.content}
+              </div>
+
+              {/* Footer / Resource links */}
+              {(selectedAnnouncement.attachment || selectedAnnouncement.external_link) && (
+                <div className="p-6 border-t border-slate-150 bg-slate-50/50 flex flex-wrap items-center gap-3">
+                  {selectedAnnouncement.attachment && (
+                    <a
+                      href={selectedAnnouncement.attachment}
+                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-250 hover:bg-slate-50 text-slate-700 text-sm font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
+                    >
+                      <Download className="w-4 h-4 text-slate-505" />
+                      <span>Download PDF circular</span>
+                    </a>
+                  )}
+
+                  {selectedAnnouncement.external_link && (
+                    <a
+                      href={selectedAnnouncement.external_link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md transition-colors cursor-pointer"
+                    >
+                      <span>Read full brief</span>
+                      <ExternalLink className="w-4 h-4 shrink-0" />
+                    </a>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>

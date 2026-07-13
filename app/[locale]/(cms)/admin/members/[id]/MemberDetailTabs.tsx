@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import { saveNotes } from "@/features/cms/members/actions/save-notes";
-import { suspendMember, activateMember, archiveMember, renewMember } from "@/features/cms/members/actions/lifecycle-actions";
+import { suspendMember, activateMember, archiveMember, renewMember, forceLogoutSession, forceLogoutAllSessions } from "@/features/cms/members/actions/lifecycle-actions";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { useRouter } from "next/navigation";
 import { Calendar, User, Globe, Briefcase, FileText, CheckCircle, ClipboardList, AlertCircle, FileSpreadsheet } from "lucide-react";
@@ -35,14 +35,32 @@ type MemberDetail = {
   is_active: boolean;
 };
 
+type SessionEntry = {
+  id: string;
+  session_id: string;
+  device_name: string | null;
+  browser: string | null;
+  operating_system: string | null;
+  user_agent: string;
+  ip_address: string | null;
+  country: string | null;
+  city: string | null;
+  login_at: string;
+  last_activity: string;
+  logout_at: string | null;
+  revoked_at: string | null;
+  revoke_reason: string | null;
+};
+
 type MemberDetailTabsProps = {
   member: MemberDetail;
   activityLogs: LogEntry[];
+  sessions: SessionEntry[];
 };
 
-export default function MemberDetailTabs({ member, activityLogs }: MemberDetailTabsProps) {
+export default function MemberDetailTabs({ member, activityLogs, sessions }: MemberDetailTabsProps) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<"overview" | "activity" | "notes" | "docs">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "activity" | "notes" | "sessions" | "docs">("overview");
   const [notesText, setNotesText] = useState(member.notes || "");
   const [isPending, startTransition] = useTransition();
   const [confirmAction, setConfirmAction] = useState<{
@@ -53,6 +71,49 @@ export default function MemberDetailTabs({ member, activityLogs }: MemberDetailT
   const [renewDateInput, setRenewDateInput] = useState("");
   const [memberSuccess, setMemberSuccess] = useState("");
   const [memberError, setMemberError] = useState("");
+  const [unmaskedSessions, setUnmaskedSessions] = useState<Record<string, boolean>>({});
+
+  const toggleIpMask = (sid: string) => {
+    setUnmaskedSessions((prev) => ({ ...prev, [sid]: !prev[sid] }));
+  };
+
+  const maskIpAddress = (ip: string | null, isUnmasked: boolean) => {
+    if (!ip) return "N/A";
+    if (isUnmasked) return ip;
+    const parts = ip.split(".");
+    if (parts.length === 4) {
+      return `${parts[0]}.${parts[1]}.xxx.xxx`;
+    }
+    return ip.substring(0, 8) + "...";
+  };
+
+  const handleForceLogoutSession = (sessionId: string) => {
+    setMemberError("");
+    setMemberSuccess("");
+    startTransition(async () => {
+      const res = await forceLogoutSession(member.id, sessionId);
+      if (res.success) {
+        setMemberSuccess("Session successfully revoked.");
+        router.refresh();
+      } else {
+        setMemberError(res.error || "Failed to revoke session");
+      }
+    });
+  };
+
+  const handleForceLogoutAll = () => {
+    setMemberError("");
+    setMemberSuccess("");
+    startTransition(async () => {
+      const res = await forceLogoutAllSessions(member.id);
+      if (res.success) {
+        setMemberSuccess("All sessions successfully revoked.");
+        router.refresh();
+      } else {
+        setMemberError(res.error || "Failed to revoke sessions");
+      }
+    });
+  };
 
   const handleSaveNotes = () => {
     setMemberError("");
@@ -260,7 +321,7 @@ export default function MemberDetailTabs({ member, activityLogs }: MemberDetailT
 
       {/* Tabs list */}
       <div className="flex border-b border-slate-200">
-        {(["overview", "activity", "notes", "docs"] as const).map((tab) => (
+        {(["overview", "activity", "notes", "sessions", "docs"] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -270,7 +331,7 @@ export default function MemberDetailTabs({ member, activityLogs }: MemberDetailT
                 : "border-transparent text-slate-500 hover:text-slate-900"
             }`}
           >
-            {tab === "docs" ? "documents" : tab === "notes" ? "internal notes" : tab}
+            {tab === "docs" ? "documents" : tab === "notes" ? "internal notes" : tab === "sessions" ? "active sessions" : tab}
           </button>
         ))}
       </div>
@@ -452,6 +513,113 @@ export default function MemberDetailTabs({ member, activityLogs }: MemberDetailT
                 {isPending ? "Saving..." : "Save Internal Notes"}
               </button>
             </div>
+          </div>
+        )}
+
+        {/* Sessions Tab */}
+        {activeTab === "sessions" && (
+          <div className="bg-white border border-slate-200 p-6 rounded-xl space-y-6 shadow-sm">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-150 pb-3">
+              <div>
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <ClipboardList className="w-4 h-4 text-blue-600" />
+                  <span>Active & Historical Sessions</span>
+                </h3>
+                <p className="text-xs text-slate-505 mt-1">
+                  Monitor active device connections and invalidate unauthorized sessions.
+                </p>
+              </div>
+              {sessions.some((s) => !s.revoked_at) && (
+                <button
+                  onClick={handleForceLogoutAll}
+                  disabled={isPending}
+                  className="px-3.5 py-2 bg-red-600 hover:bg-red-705 text-white rounded-lg text-xs font-semibold cursor-pointer shadow-md transition-colors disabled:opacity-50"
+                >
+                  Force Logout All Devices
+                </button>
+              )}
+            </div>
+
+            {sessions.length === 0 ? (
+              <p className="text-slate-500 text-sm py-4">No login sessions found for this member.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-200 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                      <th className="py-3 px-4">Device & OS</th>
+                      <th className="py-3 px-4">IP & Location</th>
+                      <th className="py-3 px-4">Activity Timeline</th>
+                      <th className="py-3 px-4">Status</th>
+                      <th className="py-3 px-4 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {sessions.map((session) => {
+                      const isUnmasked = !!unmaskedSessions[session.session_id];
+                      const isActive = !session.revoked_at;
+                      return (
+                        <tr key={session.id} className="hover:bg-slate-50/50">
+                          <td className="py-4 px-4">
+                            <span className="font-semibold text-slate-800 block">
+                              {session.browser || "Unknown Browser"} on {session.operating_system || "Unknown OS"}
+                            </span>
+                            <span className="text-[10px] text-slate-400 font-mono block max-w-xs truncate" title={session.user_agent}>
+                              {session.user_agent}
+                            </span>
+                          </td>
+                          <td className="py-4 px-4 text-xs">
+                            <div className="flex items-center gap-1.5 font-mono">
+                              <span>{maskIpAddress(session.ip_address, isUnmasked)}</span>
+                              <button
+                                onClick={() => toggleIpMask(session.session_id)}
+                                className="text-[10px] font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                              >
+                                {isUnmasked ? "Hide" : "Show"}
+                              </button>
+                            </div>
+                            <span className="text-slate-500 mt-0.5 block">
+                              {session.city || "Unknown City"}, {session.country || "Unknown Country"}
+                            </span>
+                          </td>
+                          <td className="py-4 px-4 text-xs font-mono text-slate-550">
+                            <div>Login: {new Date(session.login_at).toLocaleString()}</div>
+                            <div className="text-slate-400 mt-0.5">Last Seen: {new Date(session.last_activity).toLocaleString()}</div>
+                          </td>
+                          <td className="py-4 px-4">
+                            {isActive ? (
+                              <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-250 text-xs font-semibold rounded-full">
+                                Active
+                              </span>
+                            ) : (
+                              <div className="space-y-0.5">
+                                <span className="px-2 py-0.5 bg-slate-100 text-slate-500 border border-slate-200 text-xs font-semibold rounded-full">
+                                  Revoked
+                                </span>
+                                <span className="text-[10px] text-slate-400 block font-sans">
+                                  Reason: {session.revoke_reason || "Logout"}
+                                </span>
+                              </div>
+                            )}
+                          </td>
+                          <td className="py-4 px-4 text-right">
+                            {isActive && (
+                              <button
+                                onClick={() => handleForceLogoutSession(session.session_id)}
+                                disabled={isPending}
+                                className="px-2.5 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 rounded-lg text-xs font-semibold cursor-pointer border border-red-200 transition-colors disabled:opacity-50"
+                              >
+                                Force Sign Out
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 

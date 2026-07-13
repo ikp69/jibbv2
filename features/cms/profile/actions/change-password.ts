@@ -29,6 +29,11 @@ export async function changePassword(password: string): Promise<PasswordResult> 
       return { success: false, error: error.message };
     }
 
+    // Revoke all database sessions for this user except the current one?
+    // Wait, since password changed, revoke all sessions.
+    const { SessionService } = await import("@/lib/services/session-service");
+    await SessionService.revokeAllSessions(user.id, user.id, "password_changed");
+
     // Write audit log
     const headersList = await headers();
     const userAgent = headersList.get("user-agent") || undefined;

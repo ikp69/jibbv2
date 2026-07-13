@@ -36,17 +36,28 @@ export default async function AdminMemberDetailPage({ params }: MemberDetailPage
   }
 
   // Fetch activity logs (audit logs) relating to this member
-  const { data: logs, error: logsError } = await supabase
+  const { data: logs } = await supabase
     .from("audit_logs")
     .select("id, action, created_at, new_values")
     .or(`user_id.eq.${id},record_id.eq.${id}`)
     .order("created_at", { ascending: false })
     .limit(50);
 
+  // Fetch session history for active monitoring
+  const { data: sessions } = await supabase
+    .from("sessions")
+    .select("*")
+    .eq("user_id", id)
+    .order("last_activity", { ascending: false });
+
   return (
     <div className="space-y-6">
       {/* Detail Tabs View */}
-      <MemberDetailTabs member={member} activityLogs={logs || []} />
+      <MemberDetailTabs 
+        member={member} 
+        activityLogs={logs || []} 
+        sessions={sessions || []}
+      />
     </div>
   );
 }

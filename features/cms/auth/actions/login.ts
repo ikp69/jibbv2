@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { loginSchema, type LoginInput } from "../schemas/login-schema";
 import { headers } from "next/headers";
+import { getCurrentSessionId } from "@/lib/supabase/auth-guard";
+import { SessionService } from "@/lib/services/session-service";
 
 export type LoginResult = {
   success: boolean;
@@ -12,10 +14,34 @@ export type LoginResult = {
   redirectUrl?: string;
 };
 
+// Configuration Parameters
+const MAX_LOGIN_ATTEMPTS = 5;
+const LOCKOUT_DURATION_MINUTES = 15;
+
 function devLog(...args: any[]) {
   if (process.env.NODE_ENV === "development") {
     console.log(...args);
   }
+}
+
+function parseUserAgent(uaString: string) {
+  let browser = "Other";
+  let os = "Other";
+  const ua = uaString.toLowerCase();
+
+  if (ua.includes("firefox")) browser = "Firefox";
+  else if (ua.includes("chrome") && !ua.includes("chromium")) browser = "Chrome";
+  else if (ua.includes("safari") && !ua.includes("chrome")) browser = "Safari";
+  else if (ua.includes("edge")) browser = "Edge";
+  else if (ua.includes("opera") || ua.includes("opr")) browser = "Opera";
+
+  if (ua.includes("win")) os = "Windows";
+  else if (ua.includes("mac")) os = "macOS";
+  else if (ua.includes("linux")) os = "Linux";
+  else if (ua.includes("android")) os = "Android";
+  else if (ua.includes("iphone") || ua.includes("ipad")) os = "iOS";
+
+  return { browser, os };
 }
 
 export async function login(input: LoginInput): Promise<LoginResult> {
@@ -31,11 +57,31 @@ export async function login(input: LoginInput): Promise<LoginResult> {
       };
     }
 
+    const { email, password } = parsed.data;
+    const adminClient = createAdminClient();
+
+    // 1. Lockout Check before verification
+    const { data: preProfile } = await adminClient
+      .from("profiles")
+      .select("id, status, failed_attempts, locked_until")
+      .eq("email", email)
+      .maybeSingle();
+
+    if (preProfile && preProfile.locked_until) {
+      const lockedUntil = new Date(preProfile.locked_until);
+      if (lockedUntil > new Date()) {
+        const remainingMinutes = Math.ceil((lockedUntil.getTime() - Date.now()) / (60 * 1000));
+        return {
+          success: false,
+          error: `This account is temporarily locked due to multiple failed login attempts. Please try again in ${remainingMinutes} minutes.`,
+        };
+      }
+    }
+
     devLog("[LOGIN] 2. Creating Supabase client");
     const supabase = await createClient();
-    const { email, password } = parsed.data;
 
-    // 1. Sign in via Supabase Authentication
+    // 2. Sign in via Supabase Authentication
     devLog("[LOGIN] 3. Attempting signInWithPassword");
     let authData, authError;
     try {
@@ -45,7 +91,7 @@ export async function login(input: LoginInput): Promise<LoginResult> {
       });
       authData = result.data;
       authError = result.error;
-      devLog("[LOGIN] 3a. signInWithPassword succeeded:", authData?.user?.id);
+      devLog("[LOGIN] 3a. signInWithPassword completed. User found:", authData?.user?.id);
     } catch (signInException) {
       console.error("[LOGIN] 3b. signInWithPassword threw exception:", signInException);
       return {
@@ -54,51 +100,64 @@ export async function login(input: LoginInput): Promise<LoginResult> {
       };
     }
 
-    if (authError) {
+    // 3. Handle Auth Errors & Lockout Increments
+    if (authError || !authData?.user) {
       devLog("[LOGIN] Auth error (non-exception):", authError);
-      return {
-        success: false,
-        error: authError.message || "Invalid email or password",
-      };
-    }
+      
+      if (preProfile) {
+        const attempts = (preProfile.failed_attempts || 0) + 1;
+        const updates: any = {
+          failed_attempts: attempts,
+          last_failed_login: new Date().toISOString(),
+        };
 
-    if (!authData?.user) {
-      devLog("[LOGIN] No user in auth data");
+        if (attempts >= MAX_LOGIN_ATTEMPTS) {
+          updates.locked_until = new Date(Date.now() + LOCKOUT_DURATION_MINUTES * 60 * 1000).toISOString();
+        }
+
+        await adminClient
+          .from("profiles")
+          .update(updates)
+          .eq("id", preProfile.id);
+
+        try {
+          const headersList = await headers();
+          const userAgent = headersList.get("user-agent");
+          const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0];
+
+          await adminClient.from("audit_logs").insert({
+            user_id: preProfile.id,
+            action: "login_failure",
+            table_name: "profiles",
+            record_id: preProfile.id,
+            ip_address: ipAddress || null,
+            user_agent: userAgent || null,
+            old_values: { failed_attempts: preProfile.failed_attempts },
+            new_values: { failed_attempts: attempts, locked_until: updates.locked_until || null },
+          });
+        } catch (e) {
+          // Ignored
+        }
+      }
+
       return {
         success: false,
-        error: "Invalid email or password",
+        error: authError?.message || "Invalid email or password",
       };
     }
 
     const userId = authData.user.id;
     devLog("[LOGIN] 4. User authenticated:", userId);
 
-    // 2. Fetch the corresponding profile role and active status
-    devLog("[LOGIN] 5. Creating admin client");
-    const adminClient = createAdminClient();
-
-    devLog("[LOGIN] 6. Querying profile");
+    // 4. Fetch User Profile
     const { data: profile, error: profileError } = await adminClient
       .from("profiles")
       .select("role, status")
       .eq("id", userId)
       .single();
 
-    if (profileError) {
+    if (profileError || !profile) {
       devLog("[LOGIN] Profile query error:", profileError);
-      try {
-        await supabase.auth.signOut();
-      } catch (e) {
-        devLog("[LOGIN] SignOut failed:", e);
-      }
-      return {
-        success: false,
-        error: `No account profile linked to this user. DB Error: ${profileError.message}`,
-      };
-    }
-
-    if (!profile) {
-      devLog("[LOGIN] No profile found");
       try {
         await supabase.auth.signOut();
       } catch (e) {
@@ -109,8 +168,6 @@ export async function login(input: LoginInput): Promise<LoginResult> {
         error: "No account profile linked to this user.",
       };
     }
-
-    devLog("[LOGIN] 7. Profile found:", { userId, role: profile.role, status: profile.status });
 
     if (profile.status !== "active") {
       devLog("[LOGIN] User inactive:", profile.status);
@@ -125,38 +182,64 @@ export async function login(input: LoginInput): Promise<LoginResult> {
       };
     }
 
-    // 3. Create Audit Log for successful login (non-critical)
-    devLog("[LOGIN] 8. Getting headers");
-    try {
-      const headersList = await headers();
-      const userAgent = headersList.get("user-agent");
-      const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0];
+    // 5. Retrieve Token claims to find sid and Register active Session record
+    const token = authData.session?.access_token;
+    const sid = getCurrentSessionId(token);
 
-      devLog("[LOGIN] 9. Attempting to insert audit log");
-      const { error: auditError } = await supabase.from("audit_logs").insert({
-        user_id: userId,
-        action: "member_login",
-        table_name: "profiles",
-        record_id: userId,
-        ip_address: ipAddress || null,
-        user_agent: userAgent || null,
-        old_values: null,
-        new_values: { email, role: profile.role },
-      });
-
-      if (auditError) {
-        devLog("[LOGIN] Audit log insert error (non-critical):", auditError.message);
-        // Don't fail - audit is non-critical
-      } else {
-        devLog("[LOGIN] Audit log succeeded");
-      }
-    } catch (auditErr) {
-      devLog("[LOGIN] Audit log exception (non-critical):", auditErr);
-      // Don't fail - audit is non-critical
+    if (!sid) {
+      try {
+        await supabase.auth.signOut();
+      } catch (e) {}
+      return {
+        success: false,
+        error: "Authentication failed. Could not verify session identifier.",
+      };
     }
 
-    // 4. Return success with redirect URL
-    devLog("[LOGIN] 10. Returning success");
+    const headersList = await headers();
+    const userAgent = headersList.get("user-agent") || "Unknown";
+    const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0] || undefined;
+    const country = headersList.get("x-vercel-ip-country") || undefined;
+    const city = headersList.get("x-vercel-ip-city") || undefined;
+
+    const { browser, os } = parseUserAgent(userAgent);
+
+    // Create session in database. Under the hood, this revokes previous sessions in a database transaction.
+    await SessionService.createSession(userId, sid, {
+      browser,
+      operatingSystem: os,
+      userAgent,
+      ipAddress,
+      country,
+      city,
+    });
+
+    // 6. Reset Lockout parameters atomically
+    await adminClient
+      .from("profiles")
+      .update({
+        failed_attempts: 0,
+        locked_until: null,
+        successful_login: new Date().toISOString(),
+      })
+      .eq("id", userId);
+
+    // 7. Write Login Success Audit Log
+    try {
+      await adminClient.from("audit_logs").insert({
+        user_id: userId,
+        action: "login_success",
+        table_name: "profiles",
+        record_id: userId,
+        ip_address: ipAddress,
+        user_agent: userAgent,
+        old_values: null,
+        new_values: { email, role: profile.role, session_id: sid },
+      });
+    } catch (auditErr) {
+      devLog("[LOGIN] Audit log exception (non-critical):", auditErr);
+    }
+
     const role = profile.role as "admin" | "member";
     const redirectUrl = role === "admin" ? "/admin/dashboard" : "/portal/dashboard";
 
@@ -166,7 +249,6 @@ export async function login(input: LoginInput): Promise<LoginResult> {
       redirectUrl,
     };
   } catch (err) {
-    // Catch any unexpected errors and return them safely
     const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
     console.error("[LOGIN] Unexpected error:", errorMessage, err);
     return {

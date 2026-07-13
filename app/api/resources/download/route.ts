@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { verifyServerRequest } from "@/lib/supabase/auth-guard";
 
 export const dynamic = "force-dynamic";
 
@@ -13,13 +14,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Missing resource ID" }, { status: 400 });
     }
 
-    const supabase = await createClient();
-
-    // 1. Get logged-in user session
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const authResult = await verifyServerRequest();
+    if (!authResult.valid) {
+      return NextResponse.json({ error: authResult.error }, { status: authResult.status });
     }
+
+    const supabase = await createClient();
 
     // 2. Fetch the resource record from database
     // Row Level Security (RLS) is active on the "resources" table, so the query

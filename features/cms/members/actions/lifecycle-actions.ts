@@ -204,3 +204,64 @@ export async function renewMember(memberId: string, newEndDate: string): Promise
     return { success: false, error: err.message || "An error occurred" };
   }
 }
+
+export async function forceLogoutSession(memberId: string, sessionId: string): Promise<LifecycleResult> {
+  try {
+    const supabase = await createClient();
+    const adminId = await checkAdminAuth(supabase);
+
+    const { SessionService } = await import("@/lib/services/session-service");
+    await SessionService.revokeSession(sessionId, adminId, "admin_logout");
+
+    // Insert audit log
+    const headersList = await headers();
+    const userAgent = headersList.get("user-agent") || undefined;
+    const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0] || undefined;
+
+    await supabase.from("audit_logs").insert({
+      user_id: adminId,
+      action: "forced_logout",
+      table_name: "sessions",
+      record_id: sessionId,
+      ip_address: ipAddress,
+      user_agent: userAgent,
+      old_values: null,
+      new_values: { member_id: memberId, session_id: sessionId },
+    });
+
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err.message || "An error occurred" };
+  }
+}
+
+export async function forceLogoutAllSessions(memberId: string): Promise<LifecycleResult> {
+  try {
+    const supabase = await createClient();
+    const adminId = await checkAdminAuth(supabase);
+
+    const { SessionService } = await import("@/lib/services/session-service");
+    await SessionService.revokeAllSessions(memberId, adminId, "admin_logout");
+
+    // Insert audit log
+    const headersList = await headers();
+    const userAgent = headersList.get("user-agent") || undefined;
+    const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0] || undefined;
+
+    await supabase.from("audit_logs").insert({
+      user_id: adminId,
+      action: "forced_logout_all",
+      table_name: "profiles",
+      record_id: memberId,
+      ip_address: ipAddress,
+      user_agent: userAgent,
+      old_values: null,
+      new_values: { member_id: memberId },
+    });
+
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err.message || "An error occurred" };
+  }
+}
+
