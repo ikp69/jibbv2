@@ -140,8 +140,15 @@ export default async function middleware(request: NextRequest) {
     }
   }
 
-  // 3. Process localization routing
-  const response = handleI18nRouting(request);
+  // 3. Process localization routing (skip for API routes)
+  let response: NextResponse;
+  if (isApiRoute) {
+    // For API routes, return early without i18n routing
+    response = NextResponse.next();
+  } else {
+    // For regular routes, apply i18n routing
+    response = handleI18nRouting(request);
+  }
 
   // 4. Copy cookie updates from Supabase token refresh into final localized response
   if (supabaseResponse) {
@@ -164,5 +171,5 @@ export default async function middleware(request: NextRequest) {
 
 export const config = {
   // Match all pathnames including APIs except for Next.js internal structures and static assets
-  matcher: ["/", "/(en|ja)/:path*", "/((?!_next|.*\\..*).*)"],
+  matcher: ["/", "/(en|ja)/:path*", "/api/:path*", "/((?!_next|.*\\..*).*)"],
 };
