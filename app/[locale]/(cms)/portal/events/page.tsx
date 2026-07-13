@@ -20,7 +20,7 @@ export default async function PortalEventsPage() {
   // Fetch member profile
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("membership_tier")
+    .select("membership_tier, role")
     .eq("id", user.id)
     .single();
 
@@ -28,13 +28,18 @@ export default async function PortalEventsPage() {
     redirect("/login");
   }
 
-  // Fetch events visible to this tier
+  // Fetch events visible to this tier (or all if admin)
   // SECURITY: Selective projection to prevent leaking creator UUID and internal metadata
-  const { data: events, error: eventsError } = await supabase
+  let eventQuery = supabase
     .from("events")
     .select("id, title, description, event_date, location, capacity, status, visible_tiers, created_at, banner, registration_deadline")
-    .in("status", ["open", "completed"])
-    .contains("visible_tiers", [profile.membership_tier])
+    .in("status", ["open", "completed"]);
+
+  if (profile.role !== "admin") {
+    eventQuery = eventQuery.contains("visible_tiers", [profile.membership_tier]);
+  }
+
+  const { data: events, error: eventsError } = await eventQuery
     .order("event_date", { ascending: true });
 
   if (eventsError) {

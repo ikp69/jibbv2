@@ -22,14 +22,6 @@ export default async function middleware(request: NextRequest) {
   // 1. Update/refresh the Supabase session and get the user
   const { supabaseResponse, user, supabase } = await updateSession(request);
 
-  // TEMPORARY: Redirect /ja routes to /en (Japanese translations being verified)
-  if (pathname.startsWith("/ja")) {
-    const enPath = pathname.replace(/^\/ja/, "/en");
-    const url = request.nextUrl.clone();
-    url.pathname = enPath;
-    return NextResponse.redirect(url);
-  }
-
   // Check routes
   const isLogin = pathname.match(/^\/(en|ja)\/login(\/.*)?$/);
   const isAdminRoute = pathname.match(/^\/(en|ja)\/admin(\/.*)?$/);
@@ -43,26 +35,76 @@ export default async function middleware(request: NextRequest) {
   }
 
   if (user && (isLogin || isAdminRoute || isPortalRoute)) {
-    // Retrieve role from profiles table
+    // Retrieve role, status, and country from profiles table
     const { data: profile, error } = await supabase
       .from("profiles")
-      .select("role")
+      .select("role, status, country")
       .eq("id", user.id)
       .single();
 
     const role = profile?.role;
-    console.log("MIDDLEWARE CHECK:", { userId: user.id, role, error });
+    const status = profile?.status;
+    const country = profile?.country;
 
-    if (isLogin) {
+    if (process.env.NODE_ENV === "development") {
+      console.log("MIDDLEWARE CHECK:", { userId: user.id, role, status, country, error });
+    }
+
+    // Reject inactive users
+    if (status !== "active") {
       const url = request.nextUrl.clone();
-      url.pathname = role === "admin" ? `/${locale}/admin/dashboard` : `/${locale}/portal/dashboard`;
+      url.pathname = `/${locale}/login`;
+      // Try signing out
+      try {
+        await supabase.auth.signOut();
+      } catch (e) {
+        // Ignored in middleware
+      }
       return NextResponse.redirect(url);
     }
 
-    if (isAdminRoute && role !== "admin") {
-      // Forbidden: Redirect normal members to their portal dashboard instead of 403 to avoid exposing admin route
+    // Reject unknown roles
+    if (role !== "admin" && role !== "member") {
       const url = request.nextUrl.clone();
-      url.pathname = `/${locale}/portal/dashboard`;
+      url.pathname = `/${locale}/login`;
+      try {
+        await supabase.auth.signOut();
+      } catch (e) {
+        // Ignored in middleware
+      }
+      return NextResponse.redirect(url);
+    }
+
+    // Determine expected locale based on country
+    const isFromJapan = country && country.trim().toLowerCase() === "japan";
+    const expectedLocale = isFromJapan ? "ja" : "en";
+    const currentLocale = locale === "en" || locale === "ja" ? locale : "en";
+
+    // Handle Login redirection
+    if (isLogin) {
+      const url = request.nextUrl.clone();
+      url.pathname = role === "admin" ? `/${expectedLocale}/admin/dashboard` : `/${expectedLocale}/portal/dashboard`;
+      return NextResponse.redirect(url);
+    }
+
+    // Handle Admin attempting to visit Portal Route (Isolate Admin)
+    if (isPortalRoute && role === "admin") {
+      const url = request.nextUrl.clone();
+      url.pathname = `/${expectedLocale}/admin/dashboard`;
+      return NextResponse.redirect(url);
+    }
+
+    // Handle Member attempting to visit Admin Route
+    if (isAdminRoute && role !== "admin") {
+      const url = request.nextUrl.clone();
+      url.pathname = `/${expectedLocale}/portal/dashboard`;
+      return NextResponse.redirect(url);
+    }
+
+    // Redirect user to the correct locale path if they are on the wrong one
+    if (currentLocale !== expectedLocale) {
+      const url = request.nextUrl.clone();
+      url.pathname = pathname.replace(/^\/(en|ja)/, `/${expectedLocale}`);
       return NextResponse.redirect(url);
     }
   }
@@ -71,18 +113,20 @@ export default async function middleware(request: NextRequest) {
   const response = handleI18nRouting(request);
 
   // 4. Copy cookie updates from Supabase token refresh into final localized response
-  supabaseResponse.cookies.getAll().forEach((cookie) => {
-    response.cookies.delete(cookie.name);
-    response.cookies.set(cookie.name, cookie.value, {
-      path: cookie.path,
-      domain: cookie.domain,
-      maxAge: cookie.maxAge,
-      secure: cookie.secure,
-      sameSite: cookie.sameSite,
-      expires: cookie.expires,
-      httpOnly: cookie.httpOnly,
+  if (supabaseResponse) {
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      response.cookies.delete(cookie.name);
+      response.cookies.set(cookie.name, cookie.value, {
+        path: cookie.path,
+        domain: cookie.domain,
+        maxAge: cookie.maxAge,
+        secure: cookie.secure,
+        sameSite: cookie.sameSite,
+        expires: cookie.expires,
+        httpOnly: cookie.httpOnly,
+      });
     });
-  });
+  }
 
   return response;
 }

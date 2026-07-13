@@ -52,6 +52,12 @@ export default function PortalDashboardClient({
   upcomingEvents,
 }: PortalDashboardClientProps) {
   const [recentFiles, setRecentFiles] = useState<any[]>([]);
+  const handleDownload = (e: React.MouseEvent, file: any) => {
+    e.preventDefault();
+    recordViewedResource(file);
+    incrementDownloadCount(file.id);
+    window.open(`/api/resources/download?id=${file.id}&download=true`, "_blank");
+  };
 
   // Load recently viewed resources from localStorage on mount
   useEffect(() => {
@@ -313,20 +319,13 @@ export default function PortalDashboardClient({
                     </div>
                     
                     <div className="flex items-center gap-1 shrink-0 ml-2">
-                      <a 
-                        href={file.file_url} 
-                        download 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        onClick={() => {
-                          recordViewedResource(file);
-                          incrementDownloadCount(file.id);
-                        }}
+                      <button
+                        onClick={(e) => handleDownload(e, file)}
                         className="p-1.5 text-slate-550 hover:text-slate-800 hover:bg-white border border-transparent hover:border-slate-200 rounded transition-colors"
                         title="Download File"
                       >
                         <Download className="w-3.5 h-3.5" />
-                      </a>
+                      </button>
                     </div>
                   </div>
                 ))

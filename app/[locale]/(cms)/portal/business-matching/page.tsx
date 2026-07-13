@@ -20,20 +20,25 @@ export default async function PortalBusinessMatchingPage() {
   // Fetch active member's tier
   const { data: profile } = await supabase
     .from("profiles")
-    .select("membership_tier")
+    .select("membership_tier, role")
     .eq("id", user.id)
     .single();
 
   const activeTier = profile?.membership_tier || "associate";
 
-  // Fetch published business opportunities visible to active tier (created by others)
+  // Fetch published business opportunities visible to active tier (created by others, or all if admin)
   // Selecting only necessary columns to prevent creator UUID leakage to client payloads
-  const { data: opportunities, error } = await supabase
+  let oppQuery = supabase
     .from("business_opportunities")
     .select("id, title, description, industry, country, looking_for, deadline, created_at")
     .eq("status", "published")
-    .neq("created_by", user.id)
-    .contains("visible_tiers", [activeTier])
+    .neq("created_by", user.id);
+
+  if (profile?.role !== "admin") {
+    oppQuery = oppQuery.contains("visible_tiers", [activeTier]);
+  }
+
+  const { data: opportunities, error } = await oppQuery
     .order("created_at", { ascending: false });
 
   // Fetch my proposed matchings (regardless of status)

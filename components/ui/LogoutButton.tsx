@@ -15,7 +15,7 @@ export function LogoutButton() {
     try {
       await supabase.auth.signOut();
       router.refresh();
-      router.push("/auth/login");
+      router.push("/login");
     } catch (err) {
       console.error("Logout failed:", err);
     } finally {

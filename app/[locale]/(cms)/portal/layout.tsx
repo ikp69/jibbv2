@@ -1,38 +1,39 @@
 import React from "react";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { getCachedProfile } from "@/lib/supabase/profile";
 import CmsSidebar from "@/components/layout/cms-sidebar";
 import CmsHeader from "@/components/layout/cms-header";
 import { PORTAL_NAV_GROUPS } from "@/constants/cms/navigation";
 
-export default async function PortalLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
+export default async function PortalLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
 
-  // 1. Get authenticated user
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // 1. Retrieve cached profile
+  const { user, profile, error } = await getCachedProfile();
 
-  if (!user) {
-    redirect("/login");
-  }
-
-  // 2. Fetch profile and verify role/active status
-  const { data: profile, error } = await supabase
-    .from("profiles")
-    .select("email, company_name, designation, membership_tier, role, status")
-    .eq("id", user.id)
-    .single();
-
-  if (error || !profile) {
-    redirect("/login");
+  if (error || !user || !profile) {
+    redirect(`/${locale}/login`);
   }
 
   if (profile.status !== "active") {
-    redirect("/login");
+    redirect(`/${locale}/login`);
   }
 
-  const breadcrumbs = [{ label: "Portal", path: "/en/portal/dashboard" }];
+  if (profile.role !== "member") {
+    if (profile.role === "admin") {
+      redirect(`/${locale}/admin/dashboard`);
+    } else {
+      redirect(`/${locale}/login`);
+    }
+  }
+
+  const breadcrumbs = [{ label: "Portal", path: `/${locale}/portal/dashboard` }];
 
   const serializedUser = {
     email: user.email || "",

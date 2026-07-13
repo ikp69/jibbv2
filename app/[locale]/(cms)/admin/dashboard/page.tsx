@@ -1,32 +1,30 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getCachedProfile } from "@/lib/supabase/profile";
 import DashboardClient from "./DashboardClient";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminDashboardPage() {
+export default async function AdminDashboardPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+
+  // Validate authentication and role from cache
+  const { user, profile, error } = await getCachedProfile();
+
+  if (error || !user || !profile) {
+    redirect(`/${locale}/login`);
+  }
+
+  if (profile.role !== "admin") {
+    redirect(`/${locale}/portal/dashboard`);
+  }
+
   const supabase = await createClient();
-
-  // Validate authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  // Verify role
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (!profile || profile.role !== "admin") {
-    redirect("/portal/dashboard");
-  }
 
   // Query operational metrics efficiently in parallel
   const [membersResult, collabResult, oppResult, logsResult] = await Promise.all([

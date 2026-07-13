@@ -20,7 +20,7 @@ export default async function PortalAnnouncementsPage() {
   // Fetch member profile
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("membership_tier")
+    .select("membership_tier, role")
     .eq("id", user.id)
     .single();
 
@@ -28,13 +28,18 @@ export default async function PortalAnnouncementsPage() {
     redirect("/login");
   }
 
-  // Fetch announcements visible to this tier
+  // Fetch announcements visible to this tier (or all if admin)
   // SECURITY: Selective projection to prevent exposing internal metadata
-  const { data: announcements, error: announcementsError } = await supabase
+  let dbQuery = supabase
     .from("announcements")
     .select("id, title, content, status, publish_date, is_pinned, visible_tiers, banner_image, attachment, external_link, created_at")
-    .eq("status", "published")
-    .contains("visible_tiers", [profile.membership_tier])
+    .eq("status", "published");
+
+  if (profile.role !== "admin") {
+    dbQuery = dbQuery.contains("visible_tiers", [profile.membership_tier]);
+  }
+
+  const { data: announcements, error: announcementsError } = await dbQuery
     .order("is_pinned", { ascending: false })
     .order("publish_date", { ascending: false });
 

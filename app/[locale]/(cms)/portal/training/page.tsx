@@ -20,7 +20,7 @@ export default async function PortalTrainingPage() {
   // Fetch member profile
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("membership_tier")
+    .select("membership_tier, role")
     .eq("id", user.id)
     .single();
 
@@ -28,13 +28,18 @@ export default async function PortalTrainingPage() {
     redirect("/login");
   }
 
-  // Fetch training programs visible to this tier
+  // Fetch training programs visible to this tier (or all if admin)
   // SECURITY: Selective projection to prevent leaking creator UUID and internal metadata
-  const { data: programs, error: programsError } = await supabase
+  let progQuery = supabase
     .from("training_programs")
     .select("id, title, description, start_date, end_date, location, status, visible_tiers, created_at, category, duration, capacity")
-    .in("status", ["open", "completed"])
-    .contains("visible_tiers", [profile.membership_tier])
+    .in("status", ["open", "completed"]);
+
+  if (profile.role !== "admin") {
+    progQuery = progQuery.contains("visible_tiers", [profile.membership_tier]);
+  }
+
+  const { data: programs, error: programsError } = await progQuery
     .order("start_date", { ascending: true });
 
   if (programsError) {

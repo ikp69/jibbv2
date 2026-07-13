@@ -38,6 +38,17 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
   const [previewReport, setPreviewReport] = useState<ReportItem | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [fileSize, setFileSize] = useState<number | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const handlePreview = (item: ReportItem) => {
+    setPreviewUrl(`/api/resources/download?id=${item.id}`);
+    setPreviewReport(item);
+  };
+
+  const handleDownload = (e: React.MouseEvent, item: ReportItem) => {
+    e.preventDefault();
+    window.open(`/api/resources/download?id=${item.id}&download=true`, "_blank");
+  };
 
   // Search & Filter State
   const [searchQuery, setSearchQuery] = useState("");
@@ -407,21 +418,19 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
             <Edit className="w-4 h-4" />
           </button>
           <button
-            onClick={() => setPreviewReport(item)}
+            onClick={() => handlePreview(item)}
             className="p-1.5 hover:bg-slate-150 text-slate-605 hover:text-slate-800 rounded-lg transition-colors cursor-pointer"
             title="Preview Details"
           >
             <Eye className="w-4 h-4" />
           </button>
-          <a
-            href={item.file_url}
-            target="_blank"
-            rel="noreferrer"
+          <button
+            onClick={(e) => handleDownload(e, item)}
             className="p-1.5 hover:bg-slate-150 text-blue-600 rounded-lg transition-colors cursor-pointer"
             title="Download Link"
           >
             <Download className="w-4 h-4" />
-          </a>
+          </button>
           <button
             onClick={() => handleAction(item.id, deleteReport, "delete")}
             className="p-1.5 text-red-650 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
@@ -797,7 +806,7 @@ export default function ReportsClient({ initialList }: ReportsClientProps) {
             </div>
 
             <div className="p-6">
-              {renderFilePreview(previewReport.resource_type, previewReport.file_url)}
+              {renderFilePreview(previewReport.resource_type, previewUrl || "")}
             </div>
           </div>
         </div>

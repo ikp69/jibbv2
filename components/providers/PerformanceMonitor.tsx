@@ -29,8 +29,8 @@ interface Metric {
  */
 export function PerformanceMonitor() {
   useEffect(() => {
-    // Only run on client side
-    if (typeof window === 'undefined') return;
+    // Only run on client side in development mode
+    if (typeof window === 'undefined' || process.env.NODE_ENV !== 'development') return;
 
     // Monitor Core Web Vitals using dynamic import
     const monitorWebVitals = async () => {

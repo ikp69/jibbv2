@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import { login } from "@/features/cms/auth/actions/login";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/src/i18n/navigation";
 import { Lock, Mail, AlertCircle, ArrowRight } from "lucide-react";
 
 export default function LoginPage() {
@@ -37,22 +37,20 @@ export default function LoginPage() {
     setErrors({});
     startTransition(async () => {
       try {
-        console.log("[CLIENT] Calling login with email:", email);
         const result = await login({ email, password });
-        console.log("[CLIENT] Login returned:", result);
         
         if (result.success && result.redirectUrl) {
-          console.log("[CLIENT] Success! Navigating to:", result.redirectUrl);
           // Auth succeeded - navigate to dashboard
           router.replace(result.redirectUrl);
         } else {
-          console.log("[CLIENT] Auth failed with error:", result.error);
           // Auth failed - show error message
           setErrors({ general: result.error || "Authentication failed" });
         }
       } catch (err) {
         // Genuine network error or unexpected exception
-        console.error("[CLIENT] Unexpected error:", err);
+        if (process.env.NODE_ENV === "development") {
+          console.error("[CLIENT] Unexpected error during login:", err);
+        }
         setErrors({ general: "A network error occurred. Please try again." });
       }
     });
@@ -64,21 +62,19 @@ export default function LoginPage() {
     setErrors({});
     startTransition(async () => {
       try {
-        console.log("[CLIENT] Quick login with email:", roleEmail);
         const result = await login({ email: roleEmail, password: "password123" });
-        console.log("[CLIENT] Quick login returned:", result);
         
         if (result.success && result.redirectUrl) {
-          console.log("[CLIENT] Success! Navigating to:", result.redirectUrl);
           // Auth succeeded - navigate to dashboard
           router.replace(result.redirectUrl);
         } else {
-          console.log("[CLIENT] Auth failed with error:", result.error);
           // Auth failed - show error message
           setErrors({ general: result.error || "Authentication failed" });
         }
       } catch (err) {
-        console.error("[CLIENT] Unexpected error:", err);
+        if (process.env.NODE_ENV === "development") {
+          console.error("[CLIENT] Unexpected error during quick login:", err);
+        }
         setErrors({ general: "A network error occurred. Please try again." });
       }
     });

@@ -56,7 +56,9 @@ export async function updateSession(request: NextRequest) {
     // auth guard (dashboard/layout.tsx) will redirect if the session is invalid.
     // Network errors during middleware are expected in edge environments and can be ignored.
     if (error instanceof Error) {
-      console.debug("Middleware auth check skipped:", error.message);
+      if (process.env.NODE_ENV === "development") {
+        console.debug("Middleware auth check skipped:", error.message);
+      }
     }
   }
 

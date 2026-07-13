@@ -12,25 +12,31 @@ export type LoginResult = {
   redirectUrl?: string;
 };
 
+function devLog(...args: any[]) {
+  if (process.env.NODE_ENV === "development") {
+    console.log(...args);
+  }
+}
+
 export async function login(input: LoginInput): Promise<LoginResult> {
   try {
-    console.log("[LOGIN] 1. Starting login");
+    devLog("[LOGIN] 1. Starting login");
 
     const parsed = loginSchema.safeParse(input);
     if (!parsed.success) {
-      console.log("[LOGIN] Validation failed:", parsed.error.issues);
+      devLog("[LOGIN] Validation failed:", parsed.error.issues);
       return {
         success: false,
         error: parsed.error.issues[0]?.message || "Invalid input data",
       };
     }
 
-    console.log("[LOGIN] 2. Creating Supabase client");
+    devLog("[LOGIN] 2. Creating Supabase client");
     const supabase = await createClient();
     const { email, password } = parsed.data;
 
     // 1. Sign in via Supabase Authentication
-    console.log("[LOGIN] 3. Attempting signInWithPassword");
+    devLog("[LOGIN] 3. Attempting signInWithPassword");
     let authData, authError;
     try {
       const result = await supabase.auth.signInWithPassword({
@@ -39,7 +45,7 @@ export async function login(input: LoginInput): Promise<LoginResult> {
       });
       authData = result.data;
       authError = result.error;
-      console.log("[LOGIN] 3a. signInWithPassword succeeded:", authData?.user?.id);
+      devLog("[LOGIN] 3a. signInWithPassword succeeded:", authData?.user?.id);
     } catch (signInException) {
       console.error("[LOGIN] 3b. signInWithPassword threw exception:", signInException);
       return {
@@ -49,7 +55,7 @@ export async function login(input: LoginInput): Promise<LoginResult> {
     }
 
     if (authError) {
-      console.log("[LOGIN] Auth error (non-exception):", authError);
+      devLog("[LOGIN] Auth error (non-exception):", authError);
       return {
         success: false,
         error: authError.message || "Invalid email or password",
@@ -57,7 +63,7 @@ export async function login(input: LoginInput): Promise<LoginResult> {
     }
 
     if (!authData?.user) {
-      console.log("[LOGIN] No user in auth data");
+      devLog("[LOGIN] No user in auth data");
       return {
         success: false,
         error: "Invalid email or password",
@@ -65,13 +71,13 @@ export async function login(input: LoginInput): Promise<LoginResult> {
     }
 
     const userId = authData.user.id;
-    console.log("[LOGIN] 4. User authenticated:", userId);
+    devLog("[LOGIN] 4. User authenticated:", userId);
 
     // 2. Fetch the corresponding profile role and active status
-    console.log("[LOGIN] 5. Creating admin client");
+    devLog("[LOGIN] 5. Creating admin client");
     const adminClient = createAdminClient();
 
-    console.log("[LOGIN] 6. Querying profile");
+    devLog("[LOGIN] 6. Querying profile");
     const { data: profile, error: profileError } = await adminClient
       .from("profiles")
       .select("role, status")
@@ -79,11 +85,11 @@ export async function login(input: LoginInput): Promise<LoginResult> {
       .single();
 
     if (profileError) {
-      console.log("[LOGIN] Profile query error:", profileError);
+      devLog("[LOGIN] Profile query error:", profileError);
       try {
         await supabase.auth.signOut();
       } catch (e) {
-        console.log("[LOGIN] SignOut failed:", e);
+        devLog("[LOGIN] SignOut failed:", e);
       }
       return {
         success: false,
@@ -92,11 +98,11 @@ export async function login(input: LoginInput): Promise<LoginResult> {
     }
 
     if (!profile) {
-      console.log("[LOGIN] No profile found");
+      devLog("[LOGIN] No profile found");
       try {
         await supabase.auth.signOut();
       } catch (e) {
-        console.log("[LOGIN] SignOut failed:", e);
+        devLog("[LOGIN] SignOut failed:", e);
       }
       return {
         success: false,
@@ -104,14 +110,14 @@ export async function login(input: LoginInput): Promise<LoginResult> {
       };
     }
 
-    console.log("[LOGIN] 7. Profile found:", { userId, role: profile.role, status: profile.status });
+    devLog("[LOGIN] 7. Profile found:", { userId, role: profile.role, status: profile.status });
 
     if (profile.status !== "active") {
-      console.log("[LOGIN] User inactive:", profile.status);
+      devLog("[LOGIN] User inactive:", profile.status);
       try {
         await supabase.auth.signOut();
       } catch (e) {
-        console.log("[LOGIN] SignOut failed:", e);
+        devLog("[LOGIN] SignOut failed:", e);
       }
       return {
         success: false,
@@ -120,13 +126,13 @@ export async function login(input: LoginInput): Promise<LoginResult> {
     }
 
     // 3. Create Audit Log for successful login (non-critical)
-    console.log("[LOGIN] 8. Getting headers");
+    devLog("[LOGIN] 8. Getting headers");
     try {
       const headersList = await headers();
       const userAgent = headersList.get("user-agent");
       const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0];
 
-      console.log("[LOGIN] 9. Attempting to insert audit log");
+      devLog("[LOGIN] 9. Attempting to insert audit log");
       const { error: auditError } = await supabase.from("audit_logs").insert({
         user_id: userId,
         action: "member_login",
@@ -139,18 +145,18 @@ export async function login(input: LoginInput): Promise<LoginResult> {
       });
 
       if (auditError) {
-        console.log("[LOGIN] Audit log insert error (non-critical):", auditError.message);
+        devLog("[LOGIN] Audit log insert error (non-critical):", auditError.message);
         // Don't fail - audit is non-critical
       } else {
-        console.log("[LOGIN] Audit log succeeded");
+        devLog("[LOGIN] Audit log succeeded");
       }
     } catch (auditErr) {
-      console.log("[LOGIN] Audit log exception (non-critical):", auditErr);
+      devLog("[LOGIN] Audit log exception (non-critical):", auditErr);
       // Don't fail - audit is non-critical
     }
 
     // 4. Return success with redirect URL
-    console.log("[LOGIN] 10. Returning success");
+    devLog("[LOGIN] 10. Returning success");
     const role = profile.role as "admin" | "member";
     const redirectUrl = role === "admin" ? "/admin/dashboard" : "/portal/dashboard";
 

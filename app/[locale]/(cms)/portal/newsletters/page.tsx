@@ -20,7 +20,7 @@ export default async function MemberNewslettersPage() {
   // Fetch member profile for tier verification
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("membership_tier")
+    .select("membership_tier, role")
     .eq("id", user.id)
     .single();
 
@@ -28,13 +28,18 @@ export default async function MemberNewslettersPage() {
     redirect("/login");
   }
 
-  // Query published newsletters visible to their tier
+  // Query published newsletters visible to their tier (or all if admin)
   // SECURITY: Selective projection to prevent leaking internal workflow status and admin metadata
-  const { data: list, error: newsletterError } = await supabase
+  let newsQuery = supabase
     .from("newsletters")
     .select("id, title, subject, content, file_url, publish_date, status, visible_tiers, created_at")
-    .eq("status", "published")
-    .contains("visible_tiers", [profile.membership_tier])
+    .eq("status", "published");
+
+  if (profile.role !== "admin") {
+    newsQuery = newsQuery.contains("visible_tiers", [profile.membership_tier]);
+  }
+
+  const { data: list, error: newsletterError } = await newsQuery
     .order("publish_date", { ascending: false });
 
   if (newsletterError) {

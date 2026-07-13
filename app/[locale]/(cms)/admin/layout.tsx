@@ -1,39 +1,32 @@
 import React from "react";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { getCachedProfile } from "@/lib/supabase/profile";
 import CmsSidebar from "@/components/layout/cms-sidebar";
 import CmsHeader from "@/components/layout/cms-header";
 import { ADMIN_NAV_GROUPS } from "@/constants/cms/navigation";
 
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
+export default async function AdminLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  
+  // 1. Retrieve cached profile
+  const { user, profile, error } = await getCachedProfile();
 
-  // 1. Get authenticated user
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  // 2. Fetch profile and verify role
-  const { data: profile, error } = await supabase
-    .from("profiles")
-    .select("email, company_name, designation, membership_tier, role, status")
-    .eq("id", user.id)
-    .single();
-
-  if (error || !profile) {
-    redirect("/login");
+  if (error || !user || !profile) {
+    redirect(`/${locale}/login`);
   }
 
   if (profile.role !== "admin" || profile.status !== "active") {
     // Redirect normal members or inactive admins out
-    redirect("/portal/dashboard");
+    redirect(`/${locale}/portal/dashboard`);
   }
 
-  const breadcrumbs = [{ label: "Admin", path: "/en/admin/dashboard" }];
+  const breadcrumbs = [{ label: "Admin", path: `/${locale}/admin/dashboard` }];
 
   const serializedUser = {
     email: user.email || "",

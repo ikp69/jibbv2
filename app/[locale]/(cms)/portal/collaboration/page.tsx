@@ -20,19 +20,24 @@ export default async function PortalCollaborationPage() {
   // Fetch active member's tier
   const { data: profile } = await supabase
     .from("profiles")
-    .select("membership_tier")
+    .select("membership_tier, role")
     .eq("id", user.id)
     .single();
 
   const activeTier = profile?.membership_tier || "associate";
 
-  // Fetch published collaboration opportunities visible to active tier
+  // Fetch published collaboration opportunities visible to active tier (or all if admin)
   // SECURITY: Selective projection to prevent leaking creator UUID and internal metadata
-  const { data: collaborations, error } = await supabase
+  let collabQuery = supabase
     .from("collaboration_opportunities")
     .select("id, title, description, industry, status, visible_tiers, created_at, category, direction, location")
-    .eq("status", "published")
-    .contains("visible_tiers", [activeTier])
+    .eq("status", "published");
+
+  if (profile?.role !== "admin") {
+    collabQuery = collabQuery.contains("visible_tiers", [activeTier]);
+  }
+
+  const { data: collaborations, error } = await collabQuery
     .order("created_at", { ascending: false });
 
   // Fetch already submitted interest details (IDs and status) by this member

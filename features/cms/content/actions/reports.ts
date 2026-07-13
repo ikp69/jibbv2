@@ -171,3 +171,38 @@ export async function incrementDownloadCount(id: string): Promise<ContentResult>
   }
 }
 
+export async function getSignedResourceUrl(fileUrl: string): Promise<{ success: boolean; url?: string; error?: string }> {
+  try {
+    const supabase = await createClient();
+    
+    // 1. Verify user is logged in (authenticated)
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return { success: false, error: "You must be logged in to view this resource." };
+    }
+
+    // 2. Extract path from the full public URL stored in database
+    // e.g. "https://.../storage/v1/object/public/member-resources/filename.pdf"
+    const urlParts = fileUrl.split("/member-resources/");
+    const filePath = urlParts[urlParts.length - 1];
+
+    if (!filePath) {
+      return { success: false, error: "Invalid file path." };
+    }
+
+    // 3. Generate a signed URL valid for 60 seconds
+    const { data, error } = await supabase.storage
+      .from("member-resources")
+      .createSignedUrl(filePath, 60);
+
+    if (error || !data) {
+      return { success: false, error: error?.message || "Failed to generate download link." };
+    }
+
+    return { success: true, url: data.signedUrl };
+  } catch (err: any) {
+    return { success: false, error: err.message || "An error occurred." };
+  }
+}
+
+

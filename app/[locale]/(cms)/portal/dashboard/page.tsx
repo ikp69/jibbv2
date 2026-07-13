@@ -1,33 +1,27 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getCachedProfile } from "@/lib/supabase/profile";
 import PortalDashboardClient from "./PortalDashboardClient";
 import { upcomingEvents } from "@/lib/eventsData";
 
 export const dynamic = "force-dynamic";
 
-export default async function PortalDashboardPage() {
+export default async function PortalDashboardPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+
+  // 1. Get cached profile
+  const { user, profile, error } = await getCachedProfile();
+
+  if (error || !user || !profile) {
+    redirect(`/${locale}/login`);
+  }
+
   const supabase = await createClient();
-
-  // 1. Get authenticated user
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  // 2. Fetch profile
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("email, company_name, designation, membership_tier, role, status")
-    .eq("id", user.id)
-    .single();
-
-  if (profileError || !profile) {
-    redirect("/login");
-  }
 
   // 3. Fetch counts & items for statistics
   // - count of user's own business matchmaking requests
@@ -36,13 +30,18 @@ export default async function PortalDashboardPage() {
     .select("*", { count: "exact", head: true })
     .eq("member_id", user.id);
 
-  // - list of announcements visible to this tier
+  // - list of announcements visible to this tier (or all if admin)
   // SECURITY: Selective projection to prevent exposing internal metadata
-  const { data: announcements } = await supabase
+  let annQuery = supabase
     .from("announcements")
     .select("id, title, content, status, publish_date, is_pinned, visible_tiers")
-    .eq("status", "published")
-    .contains("visible_tiers", [profile.membership_tier])
+    .eq("status", "published");
+
+  if (profile.role !== "admin") {
+    annQuery = annQuery.contains("visible_tiers", [profile.membership_tier]);
+  }
+
+  const { data: announcements } = await annQuery
     .order("is_pinned", { ascending: false })
     .order("publish_date", { ascending: false });
 

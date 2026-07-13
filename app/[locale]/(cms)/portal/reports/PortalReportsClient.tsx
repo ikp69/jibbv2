@@ -30,6 +30,21 @@ export default function PortalReportsClient({ reports }: PortalReportsClientProp
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
   const [previewReport, setPreviewReport] = useState<ReportResource | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const handlePreview = (item: ReportResource) => {
+    recordViewedResource(item);
+    incrementDownloadCount(item.id);
+    setPreviewUrl(`/api/resources/download?id=${item.id}`);
+    setPreviewReport(item);
+  };
+
+  const handleDownload = (e: React.MouseEvent, item: ReportResource) => {
+    e.preventDefault();
+    recordViewedResource(item);
+    incrementDownloadCount(item.id);
+    window.open(`/api/resources/download?id=${item.id}&download=true`, "_blank");
+  };
 
   // Search filter
   const filtered = reports.filter((item) => {
@@ -198,9 +213,11 @@ export default function PortalReportsClient({ reports }: PortalReportsClientProp
                   <span className="px-2.5 py-0.5 rounded bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-wider border border-blue-200">
                     {item.category}
                   </span>
-                  <span className="text-[10px] text-slate-400 font-mono">
-                    {formatSize(item.file_size)}
-                  </span>
+                  {item.file_size ? (
+                    <span className="text-[10px] text-slate-400 font-mono">
+                      {formatSize(item.file_size)}
+                    </span>
+                  ) : null}
                 </div>
 
                 <div className="flex gap-3">
@@ -226,30 +243,19 @@ export default function PortalReportsClient({ reports }: PortalReportsClientProp
 
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => {
-                      recordViewedResource(item);
-                      incrementDownloadCount(item.id);
-                      setPreviewReport(item);
-                    }}
+                    onClick={() => handlePreview(item)}
                     className="p-2 text-slate-555 hover:text-slate-800 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
                     title="Preview Details"
                   >
                     <Eye className="w-4 h-4" />
                   </button>
-                  <a
-                    href={item.file_url}
-                    download
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => {
-                      recordViewedResource(item);
-                      incrementDownloadCount(item.id);
-                    }}
+                  <button
+                    onClick={(e) => handleDownload(e, item)}
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>Download</span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -265,14 +271,14 @@ export default function PortalReportsClient({ reports }: PortalReportsClientProp
               <h2 className="text-lg font-bold text-slate-900">{previewReport.title}</h2>
               <button
                 onClick={() => setPreviewReport(null)}
-                className="text-slate-500 hover:text-slate-900 cursor-pointer"
+                className="text-slate-555 hover:text-slate-900 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="p-6">
-              {renderFilePreview(previewReport.resource_type, previewReport.file_url)}
+              {renderFilePreview(previewReport.resource_type, previewUrl || "")}
             </div>
           </div>
         </div>

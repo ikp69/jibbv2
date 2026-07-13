@@ -31,7 +31,7 @@ const apiKey = process.env.RESEND_API_KEY;
 
 export const resend = apiKey ? new Resend(apiKey) : null;
 
-if (!resend) {
+if (!resend && process.env.NODE_ENV === "development") {
   console.warn("⚠️ Warning: RESEND_API_KEY is not defined in the environment. Emails will be logged to the console instead of being sent.");
 }
 
@@ -73,12 +73,14 @@ export async function sendEmail({
       };
     }
   } else {
-    console.log("======================================== MOCK EMAIL ========================================");
-    console.log(`To: ${to}`);
-    console.log(`Subject: ${subject}`);
-    console.log(`Reply-To: ${replyTo || "None"}`);
-    console.log("HTML Content:\n", html);
-    console.log("=============================================================================================");
+    if (process.env.NODE_ENV === "development") {
+      console.log("======================================== MOCK EMAIL ========================================");
+      console.log(`To: ${to}`);
+      console.log(`Subject: ${subject}`);
+      console.log(`Reply-To: ${replyTo || "None"}`);
+      console.log("HTML Content:\n", html);
+      console.log("=============================================================================================");
+    }
     return { success: true, mock: true };
   }
 }
