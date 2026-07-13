@@ -11,8 +11,8 @@ export default async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const locale = pathname.split("/")[1] || "en";
 
-  // Redirect /ja/* to /en/*
-  if (pathname.startsWith("/ja/")) {
+  // Redirect /ja/* to /en/* (but not for admin/portal routes which handle locale dynamically)
+  if (pathname.startsWith("/ja/") && !pathname.includes("/admin/") && !pathname.includes("/portal/")) {
     const url = request.nextUrl.clone();
     url.pathname = pathname.replace(/^\/ja\//, "/en/");
     return NextResponse.redirect(url, 307);
