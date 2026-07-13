@@ -26,6 +26,7 @@ export default function PortalAnnouncementsClient({ announcements }: PortalAnnou
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState<"newest" | "oldest" | "pinned">("newest");
   const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
+  const [imageAspectRatio, setImageAspectRatio] = useState<"horizontal" | "square" | null>(null);
 
   // Search filter
   const searched = announcements.filter((item) => {
@@ -56,6 +57,13 @@ export default function PortalAnnouncementsClient({ announcements }: PortalAnnou
   const finalAnnouncements = filterType === "pinned"
     ? sorted.filter((item) => item.is_pinned)
     : sorted;
+
+  const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.currentTarget;
+    const ratio = img.naturalWidth / img.naturalHeight;
+    // Consider square if aspect ratio is between 0.8 and 1.2
+    setImageAspectRatio(ratio > 0.8 && ratio < 1.2 ? "square" : "horizontal");
+  };
 
   return (
     <div className="space-y-6 font-sans">
@@ -171,19 +179,24 @@ export default function PortalAnnouncementsClient({ announcements }: PortalAnnou
           />
           
           <div 
-            className={`bg-white rounded-2xl shadow-2xl w-full flex flex-col md:flex-row relative z-10 overflow-hidden border border-slate-100 transition-all duration-200 animate-in zoom-in-95 ${
-              selectedAnnouncement.banner_image ? "max-w-6xl" : "max-w-2xl"
+            className={`bg-white rounded-2xl shadow-2xl w-full flex flex-col lg:flex-row relative z-10 overflow-hidden border border-slate-100 transition-all duration-200 animate-in zoom-in-95 max-h-[90vh] ${
+              imageAspectRatio === "square" ? "max-w-4xl lg:flex-row" : "max-w-3xl flex-col"
             }`}
-            style={{ height: "85vh", maxHeight: "90vh" }}
+            style={{ maxHeight: "90vh" }}
           >
-            {/* Left side: Banner Image */}
+            {/* Banner Image - Conditional Position */}
             {selectedAnnouncement.banner_image && (
-              <div className="w-full md:w-auto md:flex-shrink-0 h-auto md:h-full relative bg-slate-50 shrink-0 border-b md:border-b-0 md:border-r border-slate-150 flex items-center justify-center overflow-hidden" style={{ minHeight: "16rem", maxWidth: "100%", aspectRatio: "auto" }}>
+              <div className={`relative bg-slate-50 flex items-center justify-center overflow-hidden ${
+                imageAspectRatio === "square"
+                  ? "w-full lg:w-2/5 h-auto lg:h-full border-b lg:border-b-0 lg:border-r border-slate-150 flex-shrink-0"
+                  : "w-full h-auto border-b border-slate-150"
+              }`} style={imageAspectRatio === "horizontal" ? { maxHeight: "300px" } : {}}>
                 <img
                   src={selectedAnnouncement.banner_image}
                   alt={selectedAnnouncement.title}
-                  className="w-full h-full object-contain md:object-cover"
+                  className="w-full h-full object-cover"
                   loading="lazy"
+                  onLoad={handleImageLoad}
                   onError={(e) => {
                     const img = e.currentTarget;
                     img.style.display = "none";
@@ -192,8 +205,10 @@ export default function PortalAnnouncementsClient({ announcements }: PortalAnnou
               </div>
             )}
 
-            {/* Right side: Announcement Details */}
-            <div className="flex-1 flex flex-col min-w-0">
+            {/* Right side: Content Section */}
+            <div className={`flex-1 flex flex-col min-w-0 ${
+              imageAspectRatio === "square" && selectedAnnouncement.banner_image ? "w-full lg:w-3/5" : "w-full"
+            }`}>
               {/* Header */}
               <div className="p-6 border-b border-slate-150 flex items-start justify-between gap-4">
                 <div className="space-y-2">
@@ -222,7 +237,10 @@ export default function PortalAnnouncementsClient({ announcements }: PortalAnnou
                   </h2>
                 </div>
                 <button
-                  onClick={() => setSelectedAnnouncement(null)}
+                  onClick={() => {
+                    setSelectedAnnouncement(null);
+                    setImageAspectRatio(null);
+                  }}
                   className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors cursor-pointer shrink-0 animate-in fade-in"
                   aria-label="Close details"
                 >
@@ -231,13 +249,13 @@ export default function PortalAnnouncementsClient({ announcements }: PortalAnnou
               </div>
 
               {/* Body Content */}
-              <div className="p-6 overflow-y-auto space-y-5 flex-1 text-sm text-slate-700 leading-relaxed whitespace-pre-wrap font-normal">
+              <div className="p-6 overflow-y-auto flex-1 text-sm text-slate-700 leading-relaxed whitespace-pre-wrap font-normal">
                 {selectedAnnouncement.content}
               </div>
 
-              {/* Footer / Resource links */}
+              {/* Footer / Resource links - Always stick to bottom */}
               {(selectedAnnouncement.attachment || selectedAnnouncement.external_link) && (
-                <div className="p-6 border-t border-slate-150 bg-slate-50/50 flex flex-wrap items-center gap-3">
+                <div className="p-6 border-t border-slate-150 bg-slate-50/50 flex flex-wrap items-center gap-3 shrink-0">
                   {selectedAnnouncement.attachment && (
                     <a
                       href={selectedAnnouncement.attachment}

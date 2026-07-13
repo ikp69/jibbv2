@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useState, useTransition, useMemo } from "react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { createAnnouncement, deleteAnnouncement, togglePinAnnouncement, updateAnnouncement } from "@/features/cms/content/actions/announcements";
 import { useRouter } from "next/navigation";
-import { Pin, Trash2, Plus, X, Megaphone, Edit } from "lucide-react";
+import { Pin, Trash2, Plus, X, Megaphone, Edit, Eye, Search, ChevronDown } from "lucide-react";
 
 type Announcement = {
   id: string;
@@ -32,6 +32,14 @@ export default function AnnouncementsClient({ initialList }: AnnouncementsClient
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  
+  // Search, filter, sort
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft">("all");
+  const [tierFilter, setTierFilter] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<"newest" | "oldest" | "pinned">("newest");
+  const [previewItem, setPreviewItem] = useState<Announcement | null>(null);
+  const [imageAspectRatio, setImageAspectRatio] = useState<"horizontal" | "square" | null>(null);
 
   // Form Fields
   const [title, setTitle] = useState("");
@@ -54,6 +62,46 @@ export default function AnnouncementsClient({ initialList }: AnnouncementsClient
   const [noticeError, setNoticeError] = useState("");
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Filter and search logic
+  const filteredAndSearchedList = useMemo(() => {
+    let result = [...list];
+
+    // Search filter
+    if (search) {
+      const term = search.toLowerCase();
+      result = result.filter(
+        (item) =>
+          item.title.toLowerCase().includes(term) ||
+          item.content.toLowerCase().includes(term)
+      );
+    }
+
+    // Status filter
+    if (statusFilter !== "all") {
+      result = result.filter((item) => item.status === statusFilter);
+    }
+
+    // Tier filter
+    if (tierFilter !== "all") {
+      result = result.filter((item) => item.visible_tiers.includes(tierFilter));
+    }
+
+    // Sorting
+    result.sort((a, b) => {
+      if (sortBy === "pinned") {
+        if (a.is_pinned && !b.is_pinned) return -1;
+        if (!a.is_pinned && b.is_pinned) return 1;
+        return new Date(b.publish_date || b.created_at).getTime() - new Date(a.publish_date || a.created_at).getTime();
+      } else if (sortBy === "oldest") {
+        return new Date(a.publish_date || a.created_at).getTime() - new Date(b.publish_date || b.created_at).getTime();
+      } else {
+        return new Date(b.publish_date || b.created_at).getTime() - new Date(a.publish_date || a.created_at).getTime();
+      }
+    });
+
+    return result;
+  }, [list, search, statusFilter, tierFilter, sortBy]);
 
   const handleAction = (id: string, actionFn: (id: string) => Promise<any>, actionName: string) => {
     setConfirmAction({ id, actionFn, actionName });
@@ -109,6 +157,13 @@ export default function AnnouncementsClient({ initialList }: AnnouncementsClient
       setExpiryDate("");
     }
     setIsOpen(true);
+  };
+
+  const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.currentTarget;
+    const ratio = img.naturalWidth / img.naturalHeight;
+    // Consider square if aspect ratio is between 0.8 and 1.2
+    setImageAspectRatio(ratio > 0.8 && ratio < 1.2 ? "square" : "horizontal");
   };
 
   const handleClose = () => {
@@ -218,6 +273,13 @@ export default function AnnouncementsClient({ initialList }: AnnouncementsClient
       cell: (item) => (
         <div className="flex items-center gap-1">
           <button
+            onClick={() => setPreviewItem(item)}
+            className="p-1.5 text-slate-550 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+            title="Preview Announcement"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+          <button
             onClick={() => handleOpenEdit(item)}
             className="p-1.5 text-slate-550 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
             title="Edit Announcement"
@@ -276,8 +338,69 @@ export default function AnnouncementsClient({ initialList }: AnnouncementsClient
         </div>
       )}
 
+      {/* Search, Filter, and Sort Bar */}
+      <div className="flex flex-wrap items-center gap-2 bg-white border border-slate-200 p-3 rounded-xl shadow-sm">
+        <div className="relative flex-1 min-w-64">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-9 pr-4 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none transition-colors"
+          />
+        </div>
+
+        <div className="relative">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value as any)}
+            className="px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 focus:outline-none transition-colors cursor-pointer appearance-none pr-8 min-w-fit"
+          >
+            <option value="all">All Status</option>
+            <option value="published">Published</option>
+            <option value="draft">Draft</option>
+          </select>
+          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+        </div>
+
+        <div className="relative">
+          <select
+            value={tierFilter}
+            onChange={(e) => setTierFilter(e.target.value)}
+            className="px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 focus:outline-none transition-colors cursor-pointer appearance-none pr-8 min-w-fit"
+          >
+            <option value="all">All Tiers</option>
+            <option value="associate">Associate</option>
+            <option value="silver">Silver</option>
+            <option value="gold">Gold</option>
+            <option value="platinum">Platinum</option>
+          </select>
+          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+        </div>
+
+        <div className="relative">
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as any)}
+            className="px-3 py-2 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-sm text-slate-900 focus:outline-none transition-colors cursor-pointer appearance-none pr-8 min-w-fit"
+          >
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="pinned">Pinned</option>
+          </select>
+          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+        </div>
+      </div>
+
+      {/* Results count */}
+      <div className="text-sm text-slate-600">
+        Showing <span className="font-semibold text-slate-900">{filteredAndSearchedList.length}</span> of{" "}
+        <span className="font-semibold text-slate-900">{list.length}</span> announcements
+      </div>
+
       {/* Table list */}
-      <DataTable columns={columns} data={list} getRowId={(item) => item.id} />
+      <DataTable columns={columns} data={filteredAndSearchedList} getRowId={(item) => item.id} />
 
       {/* Action confirmation dialog */}
       {confirmAction && (
@@ -302,6 +425,105 @@ export default function AnnouncementsClient({ initialList }: AnnouncementsClient
               >
                 Confirm
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Preview Modal */}
+      {previewItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-all duration-200 animate-in fade-in font-sans">
+          <div className="absolute inset-0" onClick={() => setPreviewItem(null)} />
+          
+          {/* Layout changes based on image aspect ratio */}
+          <div className={`bg-white rounded-2xl shadow-2xl w-full relative z-10 overflow-hidden border border-slate-100 transition-all duration-200 animate-in zoom-in-95 max-h-[90vh] flex flex-col ${
+            imageAspectRatio === "square" ? "lg:flex-row max-w-4xl" : "max-w-3xl"
+          }`}>
+            {/* Banner Image - Conditional Position */}
+            {previewItem.banner_image && (
+              <div className={`relative bg-slate-50 flex items-center justify-center overflow-hidden ${
+                imageAspectRatio === "square"
+                  ? "w-full lg:w-2/5 h-auto lg:h-full border-b lg:border-b-0 lg:border-r border-slate-150 flex-shrink-0"
+                  : "w-full h-auto border-b border-slate-150"
+              }`} style={imageAspectRatio === "horizontal" ? { maxHeight: "300px" } : {}}>
+                <img
+                  src={previewItem.banner_image}
+                  alt={previewItem.title}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  onLoad={handleImageLoad}
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    img.style.display = "none";
+                  }}
+                />
+              </div>
+            )}
+
+            {/* Content Section */}
+            <div className={`flex-1 flex flex-col overflow-hidden ${
+              imageAspectRatio === "square" && previewItem.banner_image ? "w-full lg:w-3/5" : "w-full"
+            }`}>
+              {/* Header */}
+              <div className="p-6 border-b border-slate-150 flex items-start justify-between gap-4">
+                <div className="space-y-2 flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {previewItem.is_pinned && (
+                      <span className="px-2 py-0.5 rounded bg-blue-50 border border-blue-200 text-blue-700 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 shrink-0">
+                        <Pin className="w-3 h-3 shrink-0" />
+                        <span>Pinned</span>
+                      </span>
+                    )}
+                    <StatusBadge status={previewItem.status} />
+                  </div>
+                  <h2 className="text-xl font-bold text-slate-900 leading-snug break-words">
+                    {previewItem.title}
+                  </h2>
+                </div>
+                <button
+                  onClick={() => {
+                    setPreviewItem(null);
+                    setImageAspectRatio(null);
+                  }}
+                  className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors cursor-pointer shrink-0"
+                  aria-label="Close preview"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Body Content */}
+              <div className="p-6 overflow-y-auto flex-1 text-sm text-slate-700 leading-relaxed whitespace-pre-wrap font-normal">
+                {previewItem.content}
+              </div>
+
+              {/* Metadata Footer - Always stick to bottom */}
+              <div className="p-6 border-t border-slate-150 bg-slate-50/50 space-y-3 text-xs shrink-0">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <span className="text-slate-500 font-semibold block mb-1.5">Visible Tiers:</span>
+                    <div className="flex flex-wrap gap-1">
+                      {previewItem.visible_tiers.map((t, idx) => (
+                        <span key={idx} className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded border border-slate-200 uppercase font-semibold text-[10px]">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-slate-500 font-semibold block mb-1">Publish Date:</span>
+                    <p className="text-slate-900 font-mono">
+                      {previewItem.publish_date ? new Date(previewItem.publish_date).toLocaleDateString() : "N/A"}
+                    </p>
+                  </div>
+                </div>
+                {previewItem.external_link && (
+                  <div>
+                    <span className="text-slate-500 font-semibold block mb-1">External Link:</span>
+                    <p className="text-blue-600 truncate text-[11px]">{previewItem.external_link}</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
