@@ -120,7 +120,7 @@ export function HowWeHelp() {
   ];
 
   return (
-    <section className="py-24 bg-jibb-cream/30 dark:bg-[#0b0f19] relative overflow-hidden border-t border-border/20">
+    <section className="py-16 md:py-24 lg:py-28 bg-jibb-cream/30 dark:bg-[#0b0f19] relative overflow-hidden border-t border-border/20">
       {/* Decorative background visual details */}
       <div aria-hidden="true" className="absolute inset-0 wave-pattern opacity-3 dark:opacity-2 pointer-events-none" />
       <div aria-hidden="true" className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-jibb-orange/3 dark:bg-jibb-orange/2 rounded-full blur-3xl pointer-events-none" />
@@ -128,7 +128,7 @@ export function HowWeHelp() {
 
       <div className="section-container relative z-10 max-w-7xl">
         {/* Section Title & Subtitle */}
-        <div className="text-center space-y-4 mb-16">
+        <div className="text-center space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10 backdrop-blur-md">
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary dark:text-primary-foreground">
               {t("tagline") || "Tailored Solutions"}
@@ -143,7 +143,7 @@ export function HowWeHelp() {
         </div>
 
         {/* 3 Cards Grid */}
-        <ScrollReveal staggerChildren={0.15} direction="up" className="grid md:grid-cols-3 gap-8">
+        <ScrollReveal staggerChildren={0.15} direction="up" className="grid md:grid-cols-3 gap-6 md:gap-8 mt-8 md:mt-10">
           {cards.map((card) => {
             const MainIcon = card.icon;
             return (

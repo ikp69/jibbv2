@@ -242,13 +242,13 @@ export default async function HomePage({
       {/* ============================================================
           WHAT WE DO SECTION — Four pillars
           ============================================================ */}
-      <section className="py-24 bg-jibb-gradient-subtle border-b border-border/30 relative overflow-hidden">
+      <section className="py-16 md:py-24 lg:py-28 bg-jibb-gradient-subtle border-b border-border/30 relative overflow-hidden">
         {/* Decorative elements */}
         <div aria-hidden="true" className="absolute top-0 right-0 w-96 h-96 bg-jibb-indigo/5 rounded-full blur-3xl pointer-events-none" />
         <div aria-hidden="true" className="absolute bottom-0 left-0 w-96 h-96 bg-jibb-orange/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="section-container relative z-10 max-w-7xl">
-          <div className="text-center space-y-4 mb-16">
+          <div className="text-center space-y-4">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10 backdrop-blur-md">
               <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary dark:text-primary-foreground">
                 {t("whatWeDo.tagline")}
@@ -262,7 +262,7 @@ export default async function HomePage({
             </p>
           </div>
 
-          <ScrollReveal staggerChildren={0.15} className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <ScrollReveal staggerChildren={0.15} className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8 md:mt-10">
             {[
               {
                 icon: <Compass className="size-7 text-jibb-orange dark:text-jibb-orange-light" />,
@@ -324,12 +324,12 @@ export default async function HomePage({
       {/* ============================================================
           SECTORS SECTION — Industry cards
           ============================================================ */}
-      <section className="py-24 bg-jibb-cream/30 dark:bg-[#0b0f19] relative overflow-hidden">
+      <section className="py-16 md:py-24 lg:py-28 bg-jibb-cream/30 dark:bg-[#0b0f19] relative overflow-hidden">
         {/* Decorative background visual details */}
         <div aria-hidden="true" className="absolute inset-0 wave-pattern opacity-3 dark:opacity-2 pointer-events-none" />
 
         <div className="section-container relative z-10 max-w-7xl">
-          <div className="text-center space-y-4 mb-16">
+          <div className="text-center space-y-4">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10 backdrop-blur-md">
               <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary dark:text-primary-foreground">
                 {t("sectors.tagline")}
@@ -341,39 +341,39 @@ export default async function HomePage({
             <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               {t("sectors.sectionSubtitle")}
             </p>
+          </div>
 
-            {/* Bilateral Policy & CAGR Market Context Banner */}
-            <div className="mt-8 max-w-4xl mx-auto p-6 rounded-2xl bg-gradient-to-r from-jibb-orange/10 via-jibb-indigo/5 to-jibb-sakura/10 border border-border/40 backdrop-blur-sm text-left shadow-sm flex flex-col md:flex-row items-center gap-6">
-              <div className="space-y-2 flex-grow">
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-jibb-orange/15 text-jibb-orange text-[10px] font-extrabold uppercase tracking-wider">
-                  {t("sectors.strategicFrameworks")}
-                </span>
-                <h4 className="text-sm md:text-base font-extrabold text-foreground">
-                  {t("sectors.frameworkTitle")}
-                </h4>
-                <p
-                  className="text-xs md:text-sm text-muted-foreground leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: t.raw("sectors.frameworkDesc") }}
-                />
+          {/* Bilateral Policy & CAGR Market Context Banner */}
+          <div className="mt-8 md:mt-10 mb-6 md:mb-8 max-w-4xl mx-auto p-6 rounded-2xl bg-gradient-to-r from-jibb-orange/10 via-jibb-indigo/5 to-jibb-sakura/10 border border-border/40 backdrop-blur-sm text-left shadow-sm flex flex-col md:flex-row items-center gap-6">
+            <div className="space-y-2 flex-grow">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-jibb-orange/15 text-jibb-orange text-[10px] font-extrabold uppercase tracking-wider">
+                {t("sectors.strategicFrameworks")}
+              </span>
+              <h4 className="text-sm md:text-base font-extrabold text-foreground">
+                {t("sectors.frameworkTitle")}
+              </h4>
+              <p
+                className="text-xs md:text-sm text-muted-foreground leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: t.raw("sectors.frameworkDesc") }}
+              />
+            </div>
+            <div className="flex md:flex-col gap-4 shrink-0 justify-center w-full md:w-auto text-center border-t md:border-t-0 md:border-l border-border/40 pt-4 md:pt-0 md:pl-6">
+              <div>
+                <div className="text-2xl font-black text-jibb-orange">
+                  <AnimatedCounter value={100} prefix="$" suffix="B+" className="text-2xl font-black text-jibb-orange" />
+                </div>
+                <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">{t("sectors.semiconductorLabel")}</div>
               </div>
-              <div className="flex md:flex-col gap-4 shrink-0 justify-center w-full md:w-auto text-center border-t md:border-t-0 md:border-l border-border/40 pt-4 md:pt-0 md:pl-6">
-                <div>
-                  <div className="text-2xl font-black text-jibb-orange">
-                    <AnimatedCounter value={100} prefix="$" suffix="B+" className="text-2xl font-black text-jibb-orange" />
-                  </div>
-                  <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">{t("sectors.semiconductorLabel")}</div>
+              <div>
+                <div className="text-2xl font-black text-jibb-indigo">
+                  <AnimatedCounter value={16} suffix="%" className="text-2xl font-black text-jibb-indigo" />
                 </div>
-                <div>
-                  <div className="text-2xl font-black text-jibb-indigo">
-                    <AnimatedCounter value={16} suffix="%" className="text-2xl font-black text-jibb-indigo" />
-                  </div>
-                  <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">{t("sectors.cagrLabel")}</div>
-                </div>
+                <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">{t("sectors.cagrLabel")}</div>
               </div>
             </div>
           </div>
 
-          <ScrollReveal staggerChildren={0.08} className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <ScrollReveal staggerChildren={0.08} className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
             {[
               { icon: Cpu, label: t("sectors.semiconductor"), bgImage: "/images/sectors/semiconductor.png" },
               { icon: Car, label: t("sectors.ev"), bgImage: "/images/sectors/ev.png" },
@@ -414,14 +414,14 @@ export default async function HomePage({
       {/* ============================================================
           INNOVATION HUB PREVIEW — Bento grid
           ============================================================ */}
-      <section className="py-24 bg-jibb-cream/30 dark:bg-[#0b0f19] relative overflow-hidden border-t border-b border-border/10">
+      <section className="py-16 md:py-24 lg:py-28 bg-background dark:bg-[#0c1122] relative overflow-hidden">
         {/* Glow overlays */}
         <div aria-hidden="true" className="absolute -bottom-40 -left-40 w-96 h-96 bg-jibb-orange/3 dark:bg-jibb-orange/2 rounded-full blur-3xl pointer-events-none" />
         <div aria-hidden="true" className="absolute top-20 -right-20 w-80 h-80 bg-jibb-indigo/3 dark:bg-jibb-indigo/20 rounded-full blur-3xl pointer-events-none" />
 
         <div className="section-container relative z-10 max-w-7xl mx-auto px-4">
           {/* Section Heading replaced from user image */}
-          <div className="text-center space-y-4 mb-16">
+          <div className="text-center space-y-4">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10 backdrop-blur-md">
               <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
               <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary dark:text-primary-foreground">
@@ -437,7 +437,7 @@ export default async function HomePage({
           </div>
 
           {/* Bento Grid containing the 4 pillars with detailed descriptions */}
-          <ScrollReveal staggerChildren={0.12} scale={0.96} className="grid md:grid-cols-3 gap-6">
+          <ScrollReveal staggerChildren={0.12} scale={0.96} className="grid md:grid-cols-3 gap-6 md:gap-8 mt-8 md:mt-10">
 
             {/* Card 1: Industry (col-span-2) */}
             <div className="md:col-span-2 group relative rounded-3xl p-8 bg-card dark:bg-card/45 border border-border/50 hover:border-blue-500/20 shadow-sm hover:shadow-md transition-all duration-300">
@@ -559,11 +559,11 @@ export default async function HomePage({
       {/* ============================================================
           MEMBERSHIP PREVIEW
           ============================================================ */}
-      <section className="py-24 bg-background relative overflow-hidden border-t border-border/30">
+      <section className="py-16 md:py-24 lg:py-28 bg-background relative overflow-hidden border-t border-border/30">
         <div aria-hidden="true" className="absolute top-1/2 right-1/4 -translate-y-1/2 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="section-container relative z-10 max-w-7xl">
-          <div className="text-center space-y-4 mb-16">
+          <div className="text-center space-y-4">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10 backdrop-blur-md">
               <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary dark:text-primary-foreground">
                 Join Us
@@ -576,7 +576,7 @@ export default async function HomePage({
               {t("membership.sectionSubtitle")}
             </p>
           </div>
-          <ScrollReveal staggerChildren={0.08} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <ScrollReveal staggerChildren={0.08} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mt-8 md:mt-10">
             {[
               {
                 tier: t("membership.tiers.associate.title"),
@@ -640,25 +640,23 @@ export default async function HomePage({
                   speed={0.6}
                 >
                   <div
-                    className={`relative rounded-3xl p-6 text-left border transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between min-h-[220px] ${plan.recommended
-                      ? "bg-card text-foreground border-amber-500 dark:border-amber-400 shadow-lg scale-105 z-10"
+                     className={`relative rounded-3xl p-6 text-left border transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between min-h-[220px] ${plan.recommended
+                      ? "bg-card text-foreground border-amber-500 dark:border-amber-400 shadow-lg sm:scale-105 z-10"
                       : "bg-card text-foreground border-border/50 hover:shadow-lg backdrop-blur-sm"
                       } ${plan.colorClass}`}
                   >
-                    {plan.recommended && (
-                      <div className="absolute -top-3 left-6 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[11px] uppercase font-bold tracking-wider px-3.5 py-1 rounded-full shadow-sm whitespace-nowrap">
-                        {t("membership.popularChoice")}
-                      </div>
-                    )}
                     <div className="space-y-3 flex-grow">
-                      {/* Icon */}
-                      {/* <div className="mb-3 p-2 rounded-lg bg-foreground/10 w-fit">
-                      <IconComponent className="w-6 h-6 text-foreground" />
-                    </div> */}
+                      <div className="flex items-center justify-between gap-2">
+                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${plan.badge}`}>
+                          {plan.tier}
+                        </span>
+                        {plan.recommended && (
+                          <span className="inline-block px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-sm whitespace-nowrap">
+                            {t("membership.popularChoice")}
+                          </span>
+                        )}
+                      </div>
 
-                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${plan.badge}`}>
-                        {plan.tier}
-                      </span>
                       <p className="text-sm text-muted-foreground mt-2 font-semibold">
                         {plan.desc}
                       </p>

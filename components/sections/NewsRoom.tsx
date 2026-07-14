@@ -174,7 +174,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
   const content = getActiveContent() as any;
 
   return (
-    <section className="py-24 bg-jibb-cream/20 dark:bg-[#0b0f19] border-t border-border/30 relative overflow-hidden">
+    <section className="py-16 md:py-24 lg:py-28 bg-jibb-cream/20 dark:bg-[#0b0f19] border-t border-border/30 relative overflow-hidden">
       {/* Decorative patterns */}
       <div aria-hidden="true" className="absolute top-0 right-0 w-96 h-96 bg-jibb-indigo/5 dark:bg-[#7b9fe0]/5 rounded-full blur-3xl pointer-events-none" />
       <div aria-hidden="true" className="absolute bottom-0 left-0 w-96 h-96 bg-jibb-orange/5 dark:bg-[#f0a455]/5 rounded-full blur-3xl pointer-events-none" />
@@ -182,7 +182,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
       <div className="section-container relative z-10 max-w-7xl mx-auto px-4">
 
         {/* Header Block */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-3">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight uppercase">
               {t("title")}
@@ -203,7 +203,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
         </div>
 
         {/* Tab Headers */}
-        <div className="border-b border-border/40 mb-12">
+        <div className="border-b border-border/40 mt-8 md:mt-10">
           <div className="flex overflow-x-auto no-scrollbar gap-2 sm:gap-6 md:gap-8 pb-px">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
@@ -230,7 +230,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
         </div>
 
         {/* Dynamic Panel Header controls */}
-        <div className="flex items-center justify-between gap-4 mb-6">
+        <div className="flex items-center justify-between gap-4 mt-6 md:mt-8 mb-6">
           <h3 className="text-lg md:text-xl font-extrabold text-foreground uppercase tracking-wider">
             {content.title}
           </h3>
@@ -299,7 +299,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -15 }}
                     transition={{ duration: 0.3, delay: idx * 0.05 }}
-                    className="flex-shrink-0 w-[290px] sm:w-[340px] md:w-[380px] snap-start"
+                    className="flex-shrink-0 w-[325px] sm:w-[340px] md:w-[380px] snap-start"
                   >
                     {item.isSocial ? (
                       // LinkedIn Embed Card

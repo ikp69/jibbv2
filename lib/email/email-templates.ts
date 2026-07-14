@@ -123,3 +123,20 @@ export function getCareerApplicationNotificationEmail(data: { name: string; emai
       <div class="footer"><p>JIBB HR Talent Management Portal</p></div>
     </div></body></html>`;
 }
+
+export function getExhibitionInquiryNotificationEmail(data: { eventName: string; name: string; email: string; phone: string; message: string; }) {
+  return `<!DOCTYPE html><html><head><style>${emailStyles}</style></head><body>
+    <div class="container">
+      <div class="header"><h1>Japan Pavilion Exhibition Inquiry</h1></div>
+      <div class="content">
+        <div class="section-title">Inquiry Details</div>
+        <div class="field-group"><div class="field-label">Target Exhibition</div><div class="field-value" style="font-weight: 700; color: #FF6000;">${escapeHtml(data.eventName)}</div></div>
+        <div class="field-group"><div class="field-label">Contact Person / Company</div><div class="field-value">${escapeHtml(data.name)}</div></div>
+        <div class="field-group"><div class="field-label">Email Address</div><div class="field-value"><a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a></div></div>
+        <div class="field-group"><div class="field-label">Phone Number</div><div class="field-value">${escapeHtml(data.phone)}</div></div>
+        <div class="field-group" style="border-bottom: none;"><div class="field-label">Exhibiting Objectives / Message</div><div class="field-value" style="white-space: pre-wrap; background-color: #f8fafc; padding: 16px; border-radius: 8px; border: 1px solid #f1f5f9;">${escapeHtml(data.message)}</div></div>
+      </div>
+      <div class="footer"><p>JIBB Trade Matching &amp; Exhibitions Support</p></div>
+    </div></body></html>`;
+}
+
