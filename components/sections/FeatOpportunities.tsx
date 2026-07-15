@@ -202,7 +202,7 @@ export function FeatOpportunities() {
   };
 
   return (
-    <section className="py-24 bg-background dark:bg-[#0c1122] relative overflow-hidden border-t border-border/20">
+    <section className="py-16 md:py-24 lg:py-28 bg-background dark:bg-[#0c1122] relative overflow-hidden border-t border-border/20">
       {/* Subtle background details */}
       <div aria-hidden="true" className="absolute top-0 right-0 w-96 h-96 bg-jibb-indigo/3 dark:bg-jibb-indigo/2 rounded-full blur-3xl pointer-events-none" />
       <div aria-hidden="true" className="absolute bottom-0 left-0 w-96 h-96 bg-jibb-orange/3 dark:bg-jibb-orange/2 rounded-full blur-3xl pointer-events-none" />
@@ -210,7 +210,7 @@ export function FeatOpportunities() {
       <div className="section-container relative z-10 max-w-7xl">
 
         {/* Section Header */}
-        <div className="text-center space-y-4 mb-14">
+        <div className="text-center space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10 backdrop-blur-md">
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary dark:text-primary-foreground">
               {t("tagline") || "Opportunity Marketplace"}
@@ -225,7 +225,7 @@ export function FeatOpportunities() {
         </div>
 
         {/* Tab Selector Buttons */}
-        <div className="flex justify-center mb-12">
+        <div className="flex justify-center mt-8 md:mt-10 mb-12">
           <div className="flex flex-wrap md:flex-nowrap p-1.5 rounded-xl bg-jibb-cream dark:bg-[#151c30] border border-border/40 gap-1.5 max-w-full overflow-x-auto no-scrollbar justify-center">
             {tabs.map((tab) => {
               const TabIcon = tab.icon;

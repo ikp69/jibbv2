@@ -132,7 +132,7 @@ export function Footer() {
       <div className="section-container relative z-10 pt-16 pb-8">
 
         {/* ROW 1: BRAND IDENTITY & NAVIGATION GRID */}
-        <ScrollReveal staggerChildren={0.1} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 mb-12">
+        <ScrollReveal staggerChildren={0.1} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 md:gap-10 lg:gap-16 mb-12">
 
           {/* Column 1: Brand & Socials (Span 4) */}
           <div className="lg:col-span-4 space-y-6">
@@ -172,7 +172,7 @@ export function Footer() {
             <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
               {t("nav.about")}
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/about" className="text-white/60 hover:text-white transition-colors block py-0.5">
                   {t("nav.about")}
@@ -201,7 +201,7 @@ export function Footer() {
             <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
               Network
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/services" className="text-white/60 hover:text-white transition-colors block py-0.5">
                   {t("nav.services")}
@@ -230,7 +230,7 @@ export function Footer() {
             <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
               {t("footer.resources")}
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/resources/blog" className="text-white/60 hover:text-white transition-colors block py-0.5">
                   {t("resourcesMenu.blog")}
@@ -259,7 +259,7 @@ export function Footer() {
             <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
               Legal
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/terms" className="text-white/60 hover:text-white transition-colors block py-0.5">
                   {t("footer.terms")}
@@ -275,7 +275,7 @@ export function Footer() {
         </ScrollReveal>
 
         {/* ROW 2: DETAILED ADDRESS CARDS & NEWSLETTER FORM */}
-        <div className="border-t border-white/10 pt-10 pb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="border-t border-white/10 pt-10 pb-6 mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 items-stretch">
 
           {/* Japan Office Address Column (col span 4) */}
           <ScrollReveal direction="left" className="lg:col-span-4 md:col-span-1">

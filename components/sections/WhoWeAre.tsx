@@ -147,7 +147,7 @@ export function WhoWeAre() {
   const backOfficeItems = t.raw("backOfficeItems") || [];
 
   return (
-    <section id="who-we-are" className="py-24 bg-background relative overflow-hidden border-b border-border/20">
+    <section id="who-we-are" className="py-16 md:py-24 lg:py-28 bg-background relative overflow-hidden border-b border-border/20">
 
       {/* Background visual decorations & grid layer */}
       <div aria-hidden="true" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,rgba(36,59,107,0.07)_0%,transparent_70%)] pointer-events-none z-0" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, ReactNode } from "react";
+import { useState, useRef, ReactNode, useEffect } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -23,9 +23,20 @@ export function TiltCard({
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const mediaQuery = window.matchMedia("(max-width: 640px)");
+      setIsMobile(mediaQuery.matches);
+      const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+      mediaQuery.addEventListener("change", handler);
+      return () => mediaQuery.removeEventListener("change", handler);
+    }
+  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
+    if (isMobile || !ref.current) return;
 
     const rect = ref.current.getBoundingClientRect();
     const centerX = rect.width / 2;
@@ -47,7 +58,9 @@ export function TiltCard({
   };
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
+    if (!isMobile) {
+      setIsHovered(true);
+    }
   };
 
   return (
@@ -61,9 +74,9 @@ export function TiltCard({
         transformStyle: "preserve-3d",
       } as any}
       animate={{
-        rotateX: isHovered ? rotateX : 0,
-        rotateY: isHovered ? rotateY : 0,
-        scale: isHovered ? scale : 1,
+        rotateX: isHovered && !isMobile ? rotateX : 0,
+        rotateY: isHovered && !isMobile ? rotateY : 0,
+        scale: isHovered && !isMobile ? scale : 1,
       }}
       transition={{
         type: "spring",
@@ -86,7 +99,7 @@ export function TiltCard({
             transform: "translateZ(20px)",
           } as any}
           animate={{
-            opacity: isHovered ? 1 : 0,
+            opacity: isHovered && !isMobile ? 1 : 0,
           }}
           transition={{ duration: 0.3 }}
         />

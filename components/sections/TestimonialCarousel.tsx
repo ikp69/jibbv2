@@ -100,14 +100,14 @@ export function TestimonialCarousel() {
   };
 
   return (
-    <section className="py-24 relative overflow-hidden bg-jibb-cream/20 dark:bg-[#0b0f19]/40 border-t border-b border-border/10">
+    <section className="py-16 md:py-24 lg:py-28 relative overflow-hidden bg-jibb-cream/20 dark:bg-[#0b0f19]/40 border-t border-b border-border/10">
       {/* Decorative Blur Backgrounds */}
       <div className="absolute top-[20%] left-[10%] w-[300px] h-[300px] bg-jibb-indigo/5 rounded-full blur-[80px] pointer-events-none" />
       <div className="absolute bottom-[20%] right-[10%] w-[300px] h-[300px] bg-jibb-orange/5 rounded-full blur-[80px] pointer-events-none" />
 
       <div className="section-container relative z-10 max-w-5xl mx-auto px-4">
         {/* Header */}
-        <div className="text-center space-y-2 mb-10">
+        <div className="text-center space-y-2">
           <span className="text-xs font-bold uppercase tracking-widest text-jibb-indigo dark:text-jibb-indigo-light">
             {t("tagline")}
           </span>
@@ -117,7 +117,7 @@ export function TestimonialCarousel() {
         </div>
 
         {/* Avatars Bar with Arrows */}
-        <div className="flex items-center justify-center gap-4 md:gap-6 mb-12">
+        <div className="flex items-center justify-center gap-4 md:gap-6 mt-8 md:mt-10 mb-12">
           <button
             onClick={handlePrev}
             className="p-2.5 rounded-full border border-border bg-card hover:bg-accent text-muted-foreground hover:text-foreground transition-all duration-200 active:scale-90 shadow-sm"

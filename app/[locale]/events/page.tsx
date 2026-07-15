@@ -176,7 +176,29 @@ export default function EventsLandingPage() {
     if (addr.includes('delhi') || addr.includes('デリー') || addr.includes('noida') || addr.includes('ノイダ')) {
       return locale === 'ja' ? 'ニューデリー' : 'New Delhi'
     }
+    if (addr.includes('bengaluru') || addr.includes('bangalore') || addr.includes('ベンガルール') || addr.includes('バンガロール')) {
+      return locale === 'ja' ? 'ベンガルール' : 'Bengaluru'
+    }
     return locale === 'ja' ? '東京' : 'Tokyo'
+  }
+
+  // Helper to resolve country from venueAddress
+  const getEventCountry = (address: string) => {
+    const addr = address.toLowerCase()
+    if (
+      addr.includes('india') ||
+      addr.includes('delhi') ||
+      addr.includes('noida') ||
+      addr.includes('bengaluru') ||
+      addr.includes('bangalore') ||
+      addr.includes('デリー') ||
+      addr.includes('ノイダ') ||
+      addr.includes('ベンガルール') ||
+      addr.includes('インド')
+    ) {
+      return locale === 'ja' ? 'インド' : 'India'
+    }
+    return locale === 'ja' ? '日本' : 'Japan'
   }
 
   // Map and enrich all events (combining database events + mock upcoming events)
@@ -192,7 +214,7 @@ export default function EventsLandingPage() {
         startDate: e.eventDate,
         venue: loc.venue,
         city: getEventCity(loc.venueAddress),
-        country: locale === 'ja' ? '日本' : 'Japan',
+        country: getEventCountry(loc.venueAddress),
         capacity: parseInt(loc.seminarCapacity) || 80,
         registeredCount: 57,
         language: locale === 'ja' ? ['日本語', '英語'] : ['Japanese', 'English'],
@@ -219,7 +241,7 @@ export default function EventsLandingPage() {
         startDate: e.eventDate,
         venue: loc.venue,
         city: getEventCity(loc.venueAddress),
-        country: locale === 'ja' ? '日本' : 'Japan',
+        country: getEventCountry(loc.venueAddress),
         capacity: parseInt(loc.seminarCapacity) || 120,
         registeredCount: parseInt(loc.seminarCapacity) || 120,
         language: locale === 'ja' ? ['日本語', '英語'] : ['Japanese', 'English'],
