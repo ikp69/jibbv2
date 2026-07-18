@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Link } from "@/src/i18n/navigation";
 import { useTranslations } from "next-intl";
@@ -27,7 +27,25 @@ export function MobileStoryHero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const t = useTranslations("story");
 
+  const [hasReadStory, setHasReadStory] = useState(false);
+  const [showStory, setShowStory] = useState(true);
+
+  // Check localStorage on mount
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const read = localStorage.getItem("jibb_story_read");
+      if (read === "true") {
+        setHasReadStory(true);
+        setShowStory(false);
+      } else {
+        localStorage.setItem("jibb_story_read", "true");
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!showStory) return;
+
     gsap.registerPlugin(ScrollTrigger);
 
     // Respect prefers-reduced-motion
@@ -51,7 +69,7 @@ export function MobileStoryHero() {
             ease: "power2.out",
             scrollTrigger: {
               trigger: el as Element,
-              start: "top 85%",
+              start: "top 100%",
               toggleActions: "play none none reverse",
             },
           }
@@ -70,7 +88,7 @@ export function MobileStoryHero() {
             ease: "power3.out",
             scrollTrigger: {
               trigger: el as Element,
-              start: "top 85%",
+              start: "top 95%",
               toggleActions: "play none none reverse",
             },
           }
@@ -90,7 +108,7 @@ export function MobileStoryHero() {
             ease: "power3.out",
             scrollTrigger: {
               trigger: el as Element,
-              start: "top 85%",
+              start: "top 95%",
               toggleActions: "play none none reverse",
             },
           }
@@ -105,7 +123,7 @@ export function MobileStoryHero() {
       const hsTimeline = gsap.timeline({
         scrollTrigger: {
           trigger: ".mobile-handshake-trigger",
-          start: "top 80%",
+          start: "top 95%",
           toggleActions: "play none none reverse",
         }
       });
@@ -144,7 +162,7 @@ export function MobileStoryHero() {
       const ctaTimeline = gsap.timeline({
         scrollTrigger: {
           trigger: ".mobile-cta-card",
-          start: "top 85%",
+          start: "top 95%",
           toggleActions: "play none none reverse",
         }
       });
@@ -162,13 +180,17 @@ export function MobileStoryHero() {
         duration: 0.8,
         ease: "back.out(2.2)"
       }, "-=0.4");
+
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
     }, containerRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [showStory]);
 
   return (
-    <section ref={containerRef} className="relative w-full pt-20 pb-16 overflow-hidden">
+    <section ref={containerRef} className="relative w-full pt-20 overflow-hidden">
       {/* Hero Artwork Block at the top */}
       <div className="relative w-full h-[260px] xs:h-[320px] sm:h-[420px] overflow-hidden -mt-20">
         <Image
@@ -195,7 +217,7 @@ export function MobileStoryHero() {
       </div>
 
       {/* Blue to Orange Gradient Area for Intro, Narration, and Chat bubbles */}
-      <div className="relative w-full pb-12">
+      <div className="relative w-full pb-6">
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-10 pointer-events-none"
@@ -239,7 +261,7 @@ export function MobileStoryHero() {
             </div>
           </div>
 
-          {/* Narration */}
+          {/* Narration (Rendered always) */}
           <div className="space-y-4 text-center">
             {NARRATION_KEYS.map((key) => (
               <p key={key} className="mobile-reveal text-base sm:text-lg text-foreground/80 font-light italic leading-relaxed">
@@ -248,70 +270,88 @@ export function MobileStoryHero() {
             ))}
           </div>
 
-          {/* Conversation — shared ChatBubble primitive */}
-          <div className="flex flex-col gap-6 w-full max-w-xl mx-auto">
-            {MESSAGES.map((msg, i) => (
-              <div key={i} className={msg.speaker === "kenji" ? "mobile-bubble-left" : "mobile-bubble-right"}>
-                <ChatBubble
-                  speaker={msg.speaker}
-                  name={t(msg.speaker === "kenji" ? "kenjiName" : "aaravName")}
-                  location={msg.speaker === "kenji" ? "Tokyo" : "Noida"}
-                  size="sm"
-                >
-                  {t(msg.key)}
-                </ChatBubble>
-              </div>
-            ))}
-          </div>
+          {/* DELIBERATE BUTTON IF NOT SHOWING STORY */}
+          {!showStory && (
+            <div className="text-center pb-4">
+              <Button
+                onClick={() => setShowStory(true)}
+                variant="outline"
+                size="sm"
+                className="w-auto gap-1.5 font-semibold px-6 py-2.5 rounded-xl border border-gray-200 dark:border-border/30 bg-white/95 hover:bg-white text-gray-800 dark:text-white dark:bg-slate-900/80 dark:hover:bg-slate-900 shadow-sm"
+              >
+                <span>{t("readStory")}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Button>
+            </div>
+          )}
+
+          {showStory && (
+            /* Conversation — shared ChatBubble primitive */
+            <div className="flex flex-col gap-6 w-full max-w-xl mx-auto">
+              {MESSAGES.map((msg, i) => (
+                <div key={i} className={msg.speaker === "kenji" ? "mobile-bubble-left" : "mobile-bubble-right"}>
+                  <ChatBubble
+                    speaker={msg.speaker}
+                    name={t(msg.speaker === "kenji" ? "kenjiName" : "aaravName")}
+                    location={msg.speaker === "kenji" ? "Tokyo" : "Noida"}
+                    size="sm"
+                  >
+                    {t(msg.key)}
+                  </ChatBubble>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
       {/* Handshake & CTA section (rests on solid cream page background) */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 relative z-10 mt-4">
-        {/* Handshake & CTA */}
-        <div className="pt-8 flex flex-col items-center">
-          <div className="mobile-handshake-trigger relative w-full h-56 sm:h-72 mb-10 flex items-center justify-center">
-            {/* Kenji Mascot sliding in from left */}
-            <div className="mobile-hs-kenji absolute w-24 h-32 sm:w-32 sm:h-40">
-              <Image
-                src="/mascots/kenji.png"
-                alt="Kenji"
-                fill
-                className="object-contain"
-                sizes="(max-width: 640px) 96px, 128px"
-              />
+      {showStory && (
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 relative z-10 mt-4">
+          {/* Handshake & CTA */}
+          <div className="pt-8 flex flex-col items-center">
+            <div className="mobile-handshake-trigger relative w-full h-56 sm:h-72 mb-10 flex items-center justify-center">
+              {/* Kenji Mascot sliding in from left */}
+              <div className="mobile-hs-kenji absolute w-24 h-32 sm:w-32 sm:h-40">
+                <Image
+                  src="/mascots/kenji.png"
+                  alt="Kenji"
+                  fill
+                  className="object-contain"
+                  sizes="(max-width: 640px) 96px, 128px"
+                />
+              </div>
+              {/* Aarav Mascot sliding in from right */}
+              <div className="mobile-hs-aarav absolute w-24 h-32 sm:w-32 sm:h-40">
+                <Image
+                  src="/mascots/aarav.png"
+                  alt="Aarav"
+                  fill
+                  className="object-contain"
+                  sizes="(max-width: 640px) 96px, 128px"
+                />
+              </div>
+              {/* Handshake mascot appearing at the center */}
+              <div className="mobile-hs-handshake absolute w-56 h-56 sm:w-72 sm:h-72">
+                <div aria-hidden="true" className="absolute inset-0 bg-jibb-orange/20 blur-3xl rounded-full" />
+                <Image
+                  src="/mascots/kenji-aarav-handshake.png"
+                  alt="Handshake"
+                  fill
+                  className="object-contain drop-shadow-xl"
+                  sizes="(max-width: 640px) 224px, 288px"
+                />
+              </div>
             </div>
-            {/* Aarav Mascot sliding in from right */}
-            <div className="mobile-hs-aarav absolute w-24 h-32 sm:w-32 sm:h-40">
-              <Image
-                src="/mascots/aarav.png"
-                alt="Aarav"
-                fill
-                className="object-contain"
-                sizes="(max-width: 640px) 96px, 128px"
-              />
-            </div>
-            {/* Handshake mascot appearing at the center */}
-            <div className="mobile-hs-handshake absolute w-56 h-56 sm:w-72 sm:h-72">
-              <div aria-hidden="true" className="absolute inset-0 bg-jibb-orange/20 blur-3xl rounded-full" />
-              <Image
-                src="/mascots/kenji-aarav-handshake.png"
-                alt="Handshake"
-                fill
-                className="object-contain drop-shadow-xl"
-                sizes="(max-width: 640px) 224px, 288px"
-              />
-            </div>
-          </div>
 
-          <div className="mobile-cta-card bg-card/80 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-border shadow-xl text-center w-full">
-            {/* CTA body — fully i18n'd, no hardcoded English copy */}
-            <p className="text-base sm:text-lg font-bold text-foreground mb-3">
-              {t("ctaBody1")}
-            </p>
-            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6">
-              {t("ctaBody2")}
-            </p>
+            <div className="mobile-cta-card bg-card/80 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-border shadow-xl text-center w-full">
+              {/* CTA body — fully i18n'd, no hardcoded English copy */}
+              <p className="text-base sm:text-lg font-bold text-foreground mb-3">
+                {t("ctaBody1")}
+              </p>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6">
+                {t("ctaBody2")}
+              </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Link href="/membership" className="w-full sm:w-auto">
                   <Button variant="accent" size="lg" className="w-full gap-2 font-bold btn-pulsate mobile-cta-btn">
@@ -320,9 +360,10 @@ export function MobileStoryHero() {
                   </Button>
                 </Link>
               </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
