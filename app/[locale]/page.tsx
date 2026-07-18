@@ -3,6 +3,7 @@ import { Link } from "@/src/i18n/navigation";
 import { StoryHero } from "@/components/story/StoryHero";
 import { HowWeHelp } from "@/components/sections/HowWeHelp";
 import { WhoWeAre } from "@/components/sections/WhoWeAre";
+import { KeySectors } from "@/components/sections/KeySectors";
 // import { EventNoticeBoard } from "@/components/sections/EventNoticeBoard";
 import { FeatOpportunities } from "@/components/sections/FeatOpportunities";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -321,95 +322,7 @@ export default async function HomePage({
 
       {/* <StatCounter /> */}
 
-      {/* ============================================================
-          SECTORS SECTION — Industry cards
-          ============================================================ */}
-      <section className="py-16 md:py-24 lg:py-28 bg-jibb-cream/30 dark:bg-[#0b0f19] relative overflow-hidden">
-        {/* Decorative background visual details */}
-        <div aria-hidden="true" className="absolute inset-0 wave-pattern opacity-3 dark:opacity-2 pointer-events-none" />
-
-        <div className="section-container relative z-10 max-w-7xl">
-          <div className="text-center space-y-4">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10 backdrop-blur-md">
-              <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary dark:text-primary-foreground">
-                {t("sectors.tagline")}
-              </span>
-            </div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight">
-              {t("sectors.sectionTitle")}
-            </h2>
-            <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              {t("sectors.sectionSubtitle")}
-            </p>
-          </div>
-
-          {/* Bilateral Policy & CAGR Market Context Banner */}
-          <div className="mt-8 md:mt-10 mb-6 md:mb-8 max-w-4xl mx-auto p-6 rounded-2xl bg-gradient-to-r from-jibb-orange/10 via-jibb-indigo/5 to-jibb-sakura/10 border border-border/40 backdrop-blur-sm text-left shadow-sm flex flex-col md:flex-row items-center gap-6">
-            <div className="space-y-2 flex-grow">
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-jibb-orange/15 text-jibb-orange text-[10px] font-extrabold uppercase tracking-wider">
-                {t("sectors.strategicFrameworks")}
-              </span>
-              <h4 className="text-sm md:text-base font-extrabold text-foreground">
-                {t("sectors.frameworkTitle")}
-              </h4>
-              <p
-                className="text-xs md:text-sm text-muted-foreground leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: t.raw("sectors.frameworkDesc") }}
-              />
-            </div>
-            <div className="flex md:flex-col gap-4 shrink-0 justify-center w-full md:w-auto text-center border-t md:border-t-0 md:border-l border-border/40 pt-4 md:pt-0 md:pl-6">
-              <div>
-                <div className="text-2xl font-black text-jibb-orange">
-                  <AnimatedCounter value={100} prefix="$" suffix="B+" className="text-2xl font-black text-jibb-orange" />
-                </div>
-                <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">{t("sectors.semiconductorLabel")}</div>
-              </div>
-              <div>
-                <div className="text-2xl font-black text-jibb-indigo">
-                  <AnimatedCounter value={16} suffix="%" className="text-2xl font-black text-jibb-indigo" />
-                </div>
-                <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">{t("sectors.cagrLabel")}</div>
-              </div>
-            </div>
-          </div>
-
-          <ScrollReveal staggerChildren={0.08} className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
-            {[
-              { icon: Cpu, label: t("sectors.semiconductor"), bgImage: "/images/sectors/semiconductor.png" },
-              { icon: Car, label: t("sectors.ev"), bgImage: "/images/sectors/ev.png" },
-              { icon: Factory, label: t("sectors.electronics"), bgImage: "/images/sectors/manufacturing.png" },
-              { icon: Pill, label: t("sectors.pharma"), bgImage: "/images/sectors/pharma.png" },
-              { icon: Sun, label: t("sectors.renewable"), bgImage: "/images/sectors/renewable.png" },
-              { icon: Building2, label: t("sectors.infrastructure"), bgImage: "/images/sectors/infrastructure.png" },
-              { icon: FlaskConical, label: t("sectors.chemicals"), bgImage: "/images/sectors/chemicals.png" },
-              { icon: Microscope, label: t("sectors.emerging"), bgImage: "/images/sectors/emerging.png" },
-            ].map((sector) => {
-              const Icon = sector.icon;
-              return (
-                <div
-                  key={sector.label}
-                  className="group relative bg-card dark:bg-[#161f38]/60 p-6 text-center border border-border/50 hover:border-primary/50 shadow-sm hover:shadow-jibb transition-all duration-500 hover:-translate-y-1 cursor-pointer overflow-hidden rounded-2xl"
-                >
-                  {/* Background Image that fades in on hover */}
-                  <div
-                    className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-transform duration-700 group-hover:scale-110 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${sector.bgImage})` }}
-                  />
-                  {/* Dark overlay to ensure text readability */}
-                  <div className="absolute inset-0 z-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                  <div className="relative z-10 mb-4 transition-all duration-500 group-hover:scale-110 flex justify-center p-3 rounded-xl bg-primary/5 group-hover:bg-white/20 w-fit mx-auto backdrop-blur-md border border-primary/10 group-hover:border-white/10 transition-colors">
-                    <Icon className="size-6 text-primary group-hover:text-white transition-colors duration-300" />
-                  </div>
-                  <div className="relative z-10 font-bold text-foreground group-hover:text-white text-sm tracking-tight transition-colors duration-300">
-                    {sector.label}
-                  </div>
-                </div>
-              );
-            })}
-          </ScrollReveal>
-        </div>
-      </section>
+      <KeySectors />
 
       {/* ============================================================
           INNOVATION HUB PREVIEW — Bento grid

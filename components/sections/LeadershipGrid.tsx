@@ -33,7 +33,7 @@ export function LeadershipGrid() {
   // Render only the 11 leaders who have local portrait files in public/leaders
   const allKeys = [
     "varun", "shigemaro", "ujjawal", "vardaan", "akash",
-    "pratiksha", "nobuchika", "mai", "aya", "gyanendra", "hitesh"
+    "pratiksha", "gyanendra", "nobuchika", "mai", "aya", "hitesh"
   ];
 
   const imageMap: Record<string, string> = {
@@ -61,7 +61,7 @@ export function LeadershipGrid() {
 
   const members = allKeys.map((key, index) => {
     const isJapan = t(`members.${key}.location`).toLowerCase().includes("tokyo") || t(`members.${key}.location`).toLowerCase().includes("japan");
-    
+
     // For LinkedIn, we need to check if it exists first to avoid errors
     // If the key doesn't exist in translations, default to "#"
     let linkedinValue = "#";
@@ -75,7 +75,7 @@ export function LeadershipGrid() {
       // If there's any error, just use "#"
       linkedinValue = "#";
     }
-    
+
     return {
       key,
       name: t(`members.${key}.name`),
@@ -106,8 +106,8 @@ export function LeadershipGrid() {
         <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-16 border-b border-gray-100 pb-8">
           {[
             { id: "all", label: "View all" },
-            { id: "japan", label: "Japan Executive Team" },
-            { id: "india", label: "India Operations Team" }
+            { id: "japan", label: "Japan Team" },
+            { id: "india", label: "India Team" }
           ].map(btn => (
             <button
               key={btn.id}

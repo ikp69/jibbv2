@@ -226,7 +226,92 @@
     "renewable": "Renewable Energy",
     "infrastructure": "Infrastructure",
     "chemicals": "Chemicals & Advanced Materials",
-    "emerging": "Emerging Technologies"
+    "emerging": "Emerging Technologies",
+    "explore": "Explore",
+    "focusAreasLabel": "Focus Areas",
+    "items": {
+      "semiconductor": {
+        "title": "Electronics & Semiconductors",
+        "description": "India is rapidly becoming a global destination for semiconductor and electronics manufacturing through initiatives like the India Semiconductor Mission, PLI Scheme, and Make in India. Growing domestic demand, engineering talent, and expanding investments create strong opportunities for Japanese companies in manufacturing, R&D, and resilient supply chains.",
+        "focusAreas": [
+          "Semiconductor Manufacturing",
+          "Chip Design",
+          "Electronics Manufacturing",
+          "OSAT & ATMP",
+          "Supply Chain Partnerships"
+        ]
+      },
+      "ev": {
+        "title": "Automotive & Electric Vehicles",
+        "description": "India is among the world's fastest-growing automotive markets, with significant investments in electric mobility, battery manufacturing, and charging infrastructure. Strong demand and government incentives provide long-term collaboration opportunities for Japanese automotive companies.",
+        "focusAreas": [
+          "EV Manufacturing",
+          "Auto Components",
+          "Battery Ecosystem",
+          "Charging Infrastructure"
+        ]
+      },
+      "electronics": {
+        "title": "Advanced Manufacturing",
+        "description": "India is embracing Industry 4.0 through robotics, automation, AI, and smart manufacturing. Japanese expertise in precision engineering and factory automation can help accelerate industrial transformation.",
+        "focusAreas": [
+          "Smart Factories",
+          "Robotics",
+          "Industrial Automation",
+          "AI Manufacturing"
+        ]
+      },
+      "pharma": {
+        "title": "Pharmaceuticals",
+        "description": "India is a global pharmaceutical leader expanding rapidly into biotechnology, medical devices, and advanced healthcare research. The sector presents excellent opportunities for manufacturing and innovation partnerships.",
+        "focusAreas": [
+          "APIs",
+          "Medical Devices",
+          "Biotechnology",
+          "Clinical Research"
+        ]
+      },
+      "renewable": {
+        "title": "Renewable Energy",
+        "description": "India's ambitious renewable energy targets are creating major opportunities in solar, wind, green hydrogen, and energy storage. Japanese technologies can support sustainable growth and energy innovation.",
+        "focusAreas": [
+          "Solar Energy",
+          "Wind Energy",
+          "Green Hydrogen",
+          "Battery Storage"
+        ]
+      },
+      "infrastructure": {
+        "title": "Infrastructure",
+        "description": "Large investments in transportation, logistics, industrial corridors, and smart cities continue to strengthen India's infrastructure ecosystem, creating long-term opportunities for engineering and technology collaboration.",
+        "focusAreas": [
+          "Smart Cities",
+          "Industrial Corridors",
+          "Logistics",
+          "Urban Development"
+        ]
+      },
+      "chemicals": {
+        "title": "Chemicals & Advanced Materials",
+        "description": "India's specialty chemicals and advanced materials sector is expanding rapidly to meet demand from electronics, automotive, and clean energy industries. Collaboration with Japanese companies can accelerate innovation in sustainable, high-performance materials.",
+        "focusAreas": [
+          "Specialty Chemicals",
+          "Electronic Materials",
+          "Battery Materials",
+          "Advanced Ceramics"
+        ]
+      },
+      "emerging": {
+        "title": "Emerging Technologies",
+        "description": "India's innovation ecosystem is advancing quickly in AI, robotics, IoT, cybersecurity, and deep technology. Combined with Japan's technological strengths, these sectors offer significant opportunities for future-focused collaboration.",
+        "focusAreas": [
+          "Artificial Intelligence",
+          "Robotics",
+          "Internet of Things",
+          "Cybersecurity"
+        ]
+      }
+    }
   },
   "innovationHub": {
     "sectionTitle": "Innovation Hub",
