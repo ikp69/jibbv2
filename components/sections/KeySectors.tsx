@@ -194,20 +194,20 @@ const SectorCard = ({
             <h3 className="text-sm font-bold tracking-tight">
               {title}
             </h3>
-            <p className="text-[10px] sm:text-[11px] text-white/95 leading-relaxed font-normal">
+            <p className="text-[12px] sm:text-[11px] text-white/95 leading-relaxed font-normal">
               {description}
             </p>
           </div>
 
           <div className="space-y-2 mt-3 border-t border-white/10 pt-3">
-            <span className="text-[9px] font-bold uppercase tracking-wider text-white/60 block">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-white/60 block">
               {t("focusAreasLabel")}
             </span>
             <div className="flex flex-wrap gap-1">
               {focusAreas.map((area, idx) => (
                 <span
                   key={idx}
-                  className="px-2 py-0.5 rounded-full text-[9px] font-medium bg-white/10 hover:bg-white/15 border border-white/10 transition-colors"
+                  className="px-2 py-0.5 rounded-full text-[12px] font-medium bg-white/10 hover:bg-white/15 border border-white/10 transition-colors"
                 >
                   {area}
                 </span>
