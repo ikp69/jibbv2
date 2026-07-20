@@ -1,32 +1,20 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getCachedProfile } from "@/lib/supabase/profile";
 import PortalAnnouncementsClient from "./PortalAnnouncementsClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function PortalAnnouncementsPage() {
+  // Validate authentication and load cached profile
+  const { user, profile, error } = await getCachedProfile();
+
+  if (error || !user || !profile) {
+    redirect("/login");
+  }
+
   const supabase = await createClient();
-
-  // Validate authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  // Fetch member profile
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("membership_tier, role")
-    .eq("id", user.id)
-    .single();
-
-  if (profileError || !profile) {
-    redirect("/login");
-  }
 
   // Fetch announcements visible to this tier (or all if admin)
   // SECURITY: Selective projection to prevent exposing internal metadata

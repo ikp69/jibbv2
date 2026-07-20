@@ -1,40 +1,32 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getCachedProfile } from "@/lib/supabase/profile";
 import AdminNewslettersClient from "./AdminNewslettersClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminNewslettersPage() {
-  const supabase = await createClient();
+  // Validate admin auth and verify membership tier
+  const { user, profile, error } = await getCachedProfile();
 
-  // Validate admin auth
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (error || !user || !profile) {
     redirect("/login");
   }
 
-  // Verify that the user has admin role
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("membership_tier")
-    .eq("id", user.id)
-    .single();
-
-  if (!profile || profile.membership_tier !== "admin") {
+  if (profile.membership_tier !== "admin") {
     redirect("/portal/dashboard");
   }
 
+  const supabase = await createClient();
+
   // Fetch newsletters
-  const { data: list, error } = await supabase
+  const { data: list, error: newslettersError } = await supabase
     .from("newsletters")
     .select("*")
     .order("publish_date", { ascending: false });
 
-  if (error) {
-    return <div className="p-6 text-red-400">Error loading newsletters: {error.message}</div>;
+  if (newslettersError) {
+    return <div className="p-6 text-red-400">Error loading newsletters: {newslettersError.message}</div>;
   }
 
   return <AdminNewslettersClient initialList={list || []} />;

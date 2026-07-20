@@ -1,60 +1,51 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getCachedProfile } from "@/lib/supabase/profile";
 import PortalCollaborationClient from "./PortalCollaborationClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function PortalCollaborationPage() {
-  const supabase = await createClient();
+  // Validate member auth and load cached profile
+  const { user, profile, error } = await getCachedProfile();
 
-  // Validate member auth
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (error || !user || !profile) {
     redirect("/login");
   }
 
-  // Fetch active member's tier
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("membership_tier, role")
-    .eq("id", user.id)
-    .single();
+  const activeTier = profile.membership_tier || "associate";
+  const supabase = await createClient();
 
-  const activeTier = profile?.membership_tier || "associate";
-
-  // Fetch published collaboration opportunities visible to active tier (or all if admin)
-  // SECURITY: Selective projection to prevent leaking creator UUID and internal metadata
+  // Prepare query for published collaboration opportunities visible to active tier
   let collabQuery = supabase
     .from("collaboration_opportunities")
     .select("id, title, description, industry, status, visible_tiers, created_at, category, direction, location")
     .eq("status", "published");
 
-  if (profile?.role !== "admin") {
+  if (profile.role !== "admin") {
     collabQuery = collabQuery.contains("visible_tiers", [activeTier]);
   }
 
-  const { data: collaborations, error } = await collabQuery
-    .order("created_at", { ascending: false });
+  // Fetch both collaborations and submitted interests in parallel
+  const [collabResult, submittedResult] = await Promise.all([
+    collabQuery.order("created_at", { ascending: false }),
+    supabase
+      .from("collaboration_interest")
+      .select("collaboration_id, status")
+      .eq("member_id", user.id)
+  ]);
 
-  // Fetch already submitted interest details (IDs and status) by this member
-  const { data: submitted } = await supabase
-    .from("collaboration_interest")
-    .select("collaboration_id, status")
-    .eq("member_id", user.id);
-
-  const submittedInterests = submitted || [];
-
-  if (error) {
-    return <div className="p-6 text-red-400">Error loading collaborations: {error.message}</div>;
+  if (collabResult.error) {
+    return <div className="p-6 text-red-400">Error loading collaborations: {collabResult.error.message}</div>;
   }
+
+  const collaborations = collabResult.data || [];
+  const submittedInterests = submittedResult.data || [];
 
   return (
     <PortalCollaborationClient
-      collaborations={collaborations || []}
+      collaborations={collaborations}
       submittedInterests={submittedInterests}
     />
   );

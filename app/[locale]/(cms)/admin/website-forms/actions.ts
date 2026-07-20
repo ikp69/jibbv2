@@ -32,3 +32,37 @@ export async function updateFormStatus(
     return { success: false, error: err.message || "An unexpected error occurred." };
   }
 }
+
+export async function getSignedResumeUrl(filePath: string) {
+  try {
+    const supabase = await createClient();
+    
+    // Check if the user is an admin before generating the signed URL
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return { success: false, error: "Unauthorized" };
+    }
+    
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    if (profile?.role !== "admin") {
+      return { success: false, error: "Forbidden" };
+    }
+
+    const { data, error } = await supabase.storage
+      .from("resumes")
+      .createSignedUrl(filePath, 60 * 15); // 15 minutes is plenty for download
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, signedUrl: data.signedUrl };
+  } catch (err: any) {
+    return { success: false, error: err.message || "An unexpected error occurred." };
+  }
+}

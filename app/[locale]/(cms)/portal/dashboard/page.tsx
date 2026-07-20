@@ -23,15 +23,7 @@ export default async function PortalDashboardPage({
 
   const supabase = await createClient();
 
-  // 3. Fetch counts & items for statistics
-  // - count of user's own business matchmaking requests
-  const { count: matchesCount } = await supabase
-    .from("business_matches")
-    .select("*", { count: "exact", head: true })
-    .eq("member_id", user.id);
-
-  // - list of announcements visible to this tier (or all if admin)
-  // SECURITY: Selective projection to prevent exposing internal metadata
+  // 3. Fetch counts & items for statistics concurrently in parallel
   let annQuery = supabase
     .from("announcements")
     .select("id, title, content, status, publish_date, is_pinned, visible_tiers")
@@ -41,16 +33,22 @@ export default async function PortalDashboardPage({
     annQuery = annQuery.contains("visible_tiers", [profile.membership_tier]);
   }
 
-  const { data: announcements } = await annQuery
-    .order("is_pinned", { ascending: false })
-    .order("publish_date", { ascending: false });
+  const [matchesResult, announcementsResult, resourcesResult] = await Promise.all([
+    supabase
+      .from("business_matches")
+      .select("*", { count: "exact", head: true })
+      .eq("member_id", user.id),
+    annQuery
+      .order("is_pinned", { ascending: false })
+      .order("publish_date", { ascending: false }),
+    supabase
+      .from("resources")
+      .select("*", { count: "exact", head: true })
+  ]);
 
-  const activeAnnouncements = announcements || [];
-
-  // - count of resources the user has access to
-  const { count: resourcesCount } = await supabase
-    .from("resources")
-    .select("*", { count: "exact", head: true });
+  const matchesCount = matchesResult.count || 0;
+  const activeAnnouncements = announcementsResult.data || [];
+  const resourcesCount = resourcesResult.count || 0;
 
   const serializedUser = {
     email: user.email || "",
@@ -61,9 +59,9 @@ export default async function PortalDashboardPage({
   };
 
   const stats = {
-    matchings: matchesCount || 0,
+    matchings: matchesCount,
     events: upcomingEvents.length,
-    resources: resourcesCount || 0,
+    resources: resourcesCount,
     announcements: activeAnnouncements.length,
   };
 

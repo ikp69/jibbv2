@@ -1,41 +1,33 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getCachedProfile } from "@/lib/supabase/profile";
 import AdminMediaLibraryClient from "./AdminMediaLibraryClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminMediaLibraryPage() {
-  const supabase = await createClient();
+  // Validate admin auth and role
+  const { user, profile, error } = await getCachedProfile();
 
-  // Validate authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (error || !user || !profile) {
     redirect("/login");
   }
 
-  // Verify role
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (!profile || profile.role !== "admin") {
+  if (profile.role !== "admin") {
     redirect("/portal/dashboard");
   }
 
+  const supabase = await createClient();
+
   // Fetch all media resources
-  const { data: resources, error } = await supabase
+  const { data: resources, error: resourcesError } = await supabase
     .from("resources")
     .select("*")
     .order("created_at", { ascending: false });
 
-  if (error) {
-    return <div className="p-6 text-red-400">Error loading media library: {error.message}</div>;
+  if (resourcesError) {
+    return <div className="p-6 text-red-400">Error loading media library: {resourcesError.message}</div>;
   }
 
   return <AdminMediaLibraryClient initialResources={resources || []} />;

@@ -5,7 +5,7 @@ import { saveNotes } from "@/features/cms/members/actions/save-notes";
 import { suspendMember, activateMember, archiveMember, renewMember, forceLogoutSession, forceLogoutAllSessions } from "@/features/cms/members/actions/lifecycle-actions";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { useRouter } from "next/navigation";
-import { Calendar, User, Globe, Briefcase, FileText, CheckCircle, ClipboardList, AlertCircle, FileSpreadsheet } from "lucide-react";
+import { Calendar, User, Globe, Briefcase, FileText, CheckCircle, ClipboardList, AlertCircle, FileSpreadsheet, Handshake, Workflow, MessageSquare, Download } from "lucide-react";
 
 type LogEntry = {
   id: string;
@@ -52,15 +52,107 @@ type SessionEntry = {
   revoke_reason: string | null;
 };
 
+type BusinessProposal = {
+  id: string;
+  title: string;
+  description: string;
+  industry: string;
+  country: string;
+  looking_for: string[];
+  deadline: string;
+  status: string;
+  created_at: string;
+};
+
+type BusinessPitch = {
+  id: string;
+  opportunity_id: string;
+  message: string;
+  supporting_document_url: string | null;
+  status: string;
+  created_at: string;
+  business_opportunities: {
+    title: string;
+    industry: string;
+    country: string;
+  } | null;
+};
+
+type CollaborationProposal = {
+  id: string;
+  title: string;
+  description: string;
+  industry: string;
+  status: string;
+  created_at: string;
+  category: string;
+  direction: string;
+  location: string;
+};
+
+type CollaborationPitch = {
+  id: string;
+  collaboration_id: string;
+  message: string;
+  status: string;
+  created_at: string;
+  collaboration_opportunities: {
+    title: string;
+    industry: string;
+  } | null;
+};
+
+type EventRegistration = {
+  id: string;
+  event_id: string;
+  status: string;
+  registration_date: string;
+  message: string | null;
+  events: {
+    title: string;
+    event_date: string;
+    location: string;
+  } | null;
+};
+
+type TrainingRegistration = {
+  id: string;
+  training_id: string;
+  status: string;
+  created_at: string;
+  training_programs: {
+    title: string;
+    start_date: string;
+    location: string;
+    duration: string | null;
+  } | null;
+};
+
 type MemberDetailTabsProps = {
   member: MemberDetail;
   activityLogs: LogEntry[];
   sessions: SessionEntry[];
+  businessProposals: BusinessProposal[];
+  businessPitches: BusinessPitch[];
+  collaborationProposals: CollaborationProposal[];
+  collaborationPitches: CollaborationPitch[];
+  eventRegistrations: EventRegistration[];
+  trainingRegistrations: TrainingRegistration[];
 };
 
-export default function MemberDetailTabs({ member, activityLogs, sessions }: MemberDetailTabsProps) {
+export default function MemberDetailTabs({
+  member,
+  activityLogs,
+  sessions,
+  businessProposals,
+  businessPitches,
+  collaborationProposals,
+  collaborationPitches,
+  eventRegistrations,
+  trainingRegistrations,
+}: MemberDetailTabsProps) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<"overview" | "activity" | "notes" | "sessions" | "docs">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "activity" | "notes" | "sessions" | "docs" | "matching" | "collaboration" | "events_training">("overview");
   const [notesText, setNotesText] = useState(member.notes || "");
   const [isPending, startTransition] = useTransition();
   const [confirmAction, setConfirmAction] = useState<{
@@ -321,7 +413,7 @@ export default function MemberDetailTabs({ member, activityLogs, sessions }: Mem
 
       {/* Tabs list */}
       <div className="flex border-b border-slate-200">
-        {(["overview", "activity", "notes", "sessions", "docs"] as const).map((tab) => (
+        {(["overview", "activity", "notes", "sessions", "docs", "matching", "collaboration", "events_training"] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -331,7 +423,17 @@ export default function MemberDetailTabs({ member, activityLogs, sessions }: Mem
                 : "border-transparent text-slate-500 hover:text-slate-900"
             }`}
           >
-            {tab === "docs" ? "documents" : tab === "notes" ? "internal notes" : tab === "sessions" ? "active sessions" : tab}
+            {tab === "docs" 
+              ? "documents" 
+              : tab === "notes" 
+              ? "internal notes" 
+              : tab === "sessions" 
+              ? "active sessions" 
+              : tab === "matching" 
+              ? "business matching" 
+              : tab === "events_training"
+              ? "events & training"
+              : tab}
           </button>
         ))}
       </div>
@@ -620,6 +722,310 @@ export default function MemberDetailTabs({ member, activityLogs, sessions }: Mem
                 </table>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Business Matching Tab */}
+        {activeTab === "matching" && (
+          <div className="space-y-6">
+            {/* Proposed Opportunities Section */}
+            <div className="bg-white border border-slate-200 p-6 rounded-xl space-y-4 shadow-sm">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2 border-b border-slate-150 pb-2">
+                <Briefcase className="w-4 h-4 text-blue-600" />
+                <span>Proposed Business Opportunities (Proposals)</span>
+              </h3>
+              {businessProposals.length === 0 ? (
+                <p className="text-slate-500 text-sm py-2">No proposed business opportunities found.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-200 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                        <th className="py-3 px-4">Title</th>
+                        <th className="py-3 px-4">Sector</th>
+                        <th className="py-3 px-4">Country</th>
+                        <th className="py-3 px-4">Deadline</th>
+                        <th className="py-3 px-4">Status</th>
+                        <th className="py-3 px-4">Created At</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {businessProposals.map((prop) => (
+                        <tr key={prop.id} className="hover:bg-slate-50/50">
+                          <td className="py-3 px-4 font-semibold text-slate-800">{prop.title}</td>
+                          <td className="py-3 px-4 text-slate-600">{prop.industry}</td>
+                          <td className="py-3 px-4 text-slate-655 font-medium">{prop.country}</td>
+                          <td className="py-3 px-4 text-slate-500 font-mono text-xs" suppressHydrationWarning>
+                            {prop.deadline ? new Date(prop.deadline).toLocaleDateString() : "N/A"}
+                          </td>
+                          <td className="py-3 px-4">
+                            <StatusBadge status={prop.status} />
+                          </td>
+                          <td className="py-3 px-4 text-slate-500 font-mono text-xs" suppressHydrationWarning>
+                            {new Date(prop.created_at).toLocaleDateString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+
+            {/* Submitted Pitches Section */}
+            <div className="bg-white border border-slate-200 p-6 rounded-xl space-y-4 shadow-sm">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2 border-b border-slate-150 pb-2">
+                <Handshake className="w-4 h-4 text-blue-600" />
+                <span>Submitted Pitch & Matching Responses</span>
+              </h3>
+              {businessPitches.length === 0 ? (
+                <p className="text-slate-500 text-sm py-2">No submitted pitches found.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-200 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                        <th className="py-3 px-4">Target Opportunity</th>
+                        <th className="py-3 px-4">Message</th>
+                        <th className="py-3 px-4">Document</th>
+                        <th className="py-3 px-4">Status</th>
+                        <th className="py-3 px-4">Submitted At</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {businessPitches.map((pitch) => (
+                        <tr key={pitch.id} className="hover:bg-slate-50/50">
+                          <td className="py-3 px-4">
+                            <span className="font-semibold text-slate-800 block">
+                              {pitch.business_opportunities?.title || "Deleted Listing"}
+                            </span>
+                            <span className="text-[10px] text-slate-500 uppercase font-medium">
+                              {pitch.business_opportunities?.industry} • {pitch.business_opportunities?.country}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 text-slate-655 max-w-xs truncate" title={pitch.message}>
+                            {pitch.message}
+                          </td>
+                          <td className="py-3 px-4">
+                            {pitch.supporting_document_url ? (
+                              <a
+                                href={pitch.supporting_document_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:underline"
+                              >
+                                <Download className="w-3.5 h-3.5" />
+                                <span>Download</span>
+                              </a>
+                            ) : (
+                              <span className="text-slate-400 text-xs">None</span>
+                            )}
+                          </td>
+                          <td className="py-3 px-4">
+                            <StatusBadge status={pitch.status} />
+                          </td>
+                          <td className="py-3 px-4 text-slate-500 font-mono text-xs" suppressHydrationWarning>
+                            {new Date(pitch.created_at).toLocaleDateString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Collaboration Tab */}
+        {activeTab === "collaboration" && (
+          <div className="space-y-6">
+            {/* Proposed Collaborations Section */}
+            <div className="bg-white border border-slate-200 p-6 rounded-xl space-y-4 shadow-sm">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2 border-b border-slate-150 pb-2">
+                <Workflow className="w-4 h-4 text-blue-600" />
+                <span>Proposed Strategic Collaborations (Proposals)</span>
+              </h3>
+              {collaborationProposals.length === 0 ? (
+                <p className="text-slate-500 text-sm py-2">No proposed collaborations found.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-200 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                        <th className="py-3 px-4">Title</th>
+                        <th className="py-3 px-4">Category</th>
+                        <th className="py-3 px-4">Location</th>
+                        <th className="py-3 px-4">Direction</th>
+                        <th className="py-3 px-4">Status</th>
+                        <th className="py-3 px-4">Created At</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {collaborationProposals.map((col) => (
+                        <tr key={col.id} className="hover:bg-slate-50/50">
+                          <td className="py-3 px-4 font-semibold text-slate-800">{col.title}</td>
+                          <td className="py-3 px-4 text-slate-600 capitalize">{col.category}</td>
+                          <td className="py-3 px-4 text-slate-655 font-medium">{col.location || "N/A"}</td>
+                          <td className="py-3 px-4 text-xs font-semibold text-slate-500 capitalize">{col.direction || "General"}</td>
+                          <td className="py-3 px-4">
+                            <StatusBadge status={col.status} />
+                          </td>
+                          <td className="py-3 px-4 text-slate-500 font-mono text-xs" suppressHydrationWarning>
+                            {new Date(col.created_at).toLocaleDateString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+
+            {/* Submitted Collaboration Pitches Section */}
+            <div className="bg-white border border-slate-200 p-6 rounded-xl space-y-4 shadow-sm">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2 border-b border-slate-150 pb-2">
+                <MessageSquare className="w-4 h-4 text-blue-600" />
+                <span>Submitted Collaboration Pitches</span>
+              </h3>
+              {collaborationPitches.length === 0 ? (
+                <p className="text-slate-500 text-sm py-2">No submitted collaboration pitches found.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-200 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                        <th className="py-3 px-4">Target Collaboration</th>
+                        <th className="py-3 px-4">Message</th>
+                        <th className="py-3 px-4">Status</th>
+                        <th className="py-3 px-4">Submitted At</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {collaborationPitches.map((pitch) => (
+                        <tr key={pitch.id} className="hover:bg-slate-50/50">
+                          <td className="py-3 px-4">
+                            <span className="font-semibold text-slate-800 block">
+                              {pitch.collaboration_opportunities?.title || "Deleted Listing"}
+                            </span>
+                            <span className="text-[10px] text-slate-500 uppercase font-medium">
+                              {pitch.collaboration_opportunities?.industry}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 text-slate-655 max-w-xs truncate" title={pitch.message}>
+                            {pitch.message}
+                          </td>
+                          <td className="py-3 px-4">
+                            <StatusBadge status={pitch.status} />
+                          </td>
+                          <td className="py-3 px-4 text-slate-500 font-mono text-xs" suppressHydrationWarning>
+                            {new Date(pitch.created_at).toLocaleDateString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Events & Training Tab */}
+        {activeTab === "events_training" && (
+          <div className="space-y-6">
+            {/* Event Registrations Section */}
+            <div className="bg-white border border-slate-200 p-6 rounded-xl space-y-4 shadow-sm">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2 border-b border-slate-150 pb-2">
+                <Calendar className="w-4 h-4 text-blue-600" />
+                <span>Event Registrations</span>
+              </h3>
+              {eventRegistrations.length === 0 ? (
+                <p className="text-slate-500 text-sm py-2">No event registrations found.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-200 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                        <th className="py-3 px-4">Event</th>
+                        <th className="py-3 px-4">Message / Request</th>
+                        <th className="py-3 px-4">Status</th>
+                        <th className="py-3 px-4">Registration Date</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {eventRegistrations.map((reg) => (
+                        <tr key={reg.id} className="hover:bg-slate-50/50">
+                          <td className="py-3 px-4">
+                            <span className="font-semibold text-slate-800 block">
+                              {reg.events?.title || "Deleted Event"}
+                            </span>
+                            <span className="text-[10px] text-slate-500 font-mono block mt-0.5">
+                              {reg.events?.event_date ? new Date(reg.events.event_date).toLocaleDateString() : "N/A"} • {reg.events?.location}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 text-slate-655 max-w-xs truncate" title={reg.message || ""}>
+                            {reg.message || <span className="text-slate-400 italic">None</span>}
+                          </td>
+                          <td className="py-3 px-4">
+                            <StatusBadge status={reg.status} />
+                          </td>
+                          <td className="py-3 px-4 text-slate-500 font-mono text-xs" suppressHydrationWarning>
+                            {new Date(reg.registration_date).toLocaleDateString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+
+            {/* Training Registrations Section */}
+            <div className="bg-white border border-slate-200 p-6 rounded-xl space-y-4 shadow-sm">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2 border-b border-slate-150 pb-2">
+                <Briefcase className="w-4 h-4 text-blue-600" />
+                <span>Training Program Registrations</span>
+              </h3>
+              {trainingRegistrations.length === 0 ? (
+                <p className="text-slate-500 text-sm py-2">No training program registrations found.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-200 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                        <th className="py-3 px-4">Program</th>
+                        <th className="py-3 px-4">Details</th>
+                        <th className="py-3 px-4">Status</th>
+                        <th className="py-3 px-4">Registration Date</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {trainingRegistrations.map((reg) => (
+                        <tr key={reg.id} className="hover:bg-slate-50/50">
+                          <td className="py-3 px-4 font-semibold text-slate-800">
+                            {reg.training_programs?.title || "Deleted Program"}
+                          </td>
+                          <td className="py-3 px-4 text-xs text-slate-600">
+                            <div>Location: {reg.training_programs?.location || "Online"}</div>
+                            <div className="text-slate-400 mt-0.5" suppressHydrationWarning>
+                              Start: {reg.training_programs?.start_date ? new Date(reg.training_programs.start_date).toLocaleDateString() : "N/A"}
+                              {reg.training_programs?.duration ? ` (${reg.training_programs.duration})` : ""}
+                            </div>
+                          </td>
+                          <td className="py-3 px-4">
+                            <StatusBadge status={reg.status} />
+                          </td>
+                          <td className="py-3 px-4 text-slate-500 font-mono text-xs" suppressHydrationWarning>
+                            {new Date(reg.created_at).toLocaleDateString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
           </div>
         )}
 

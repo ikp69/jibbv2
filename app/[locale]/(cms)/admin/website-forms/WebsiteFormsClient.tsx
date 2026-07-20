@@ -70,6 +70,31 @@ export default function WebsiteFormsClient({
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
+  const [downloadingResumeId, setDownloadingResumeId] = useState<string | null>(null);
+
+  const handleDownloadResume = async (careerId: string, filePath: string) => {
+    if (!filePath) return;
+    if (filePath.startsWith("http")) {
+      window.open(filePath, "_blank");
+      return;
+    }
+    
+    setDownloadingResumeId(careerId);
+    try {
+      const { getSignedResumeUrl } = await import("./actions");
+      const res = await getSignedResumeUrl(filePath);
+      if (res.success && res.signedUrl) {
+        window.open(res.signedUrl, "_blank");
+      } else {
+        alert(res.error || "Failed to retrieve download link");
+      }
+    } catch (err) {
+      alert("Error generating download link");
+    } finally {
+      setDownloadingResumeId(null);
+    }
+  };
+
   const handleUpdateStatus = (
     tableName: "contact_inquiries" | "membership_applications" | "career_applications",
     id: string,
@@ -482,15 +507,14 @@ export default function WebsiteFormsClient({
 
                 <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
                   {app.resume_url ? (
-                    <a
-                      href={app.resume_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow transition-colors cursor-pointer"
+                    <button
+                      disabled={downloadingResumeId === app.id}
+                      onClick={() => handleDownloadResume(app.id, app.resume_url)}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-xs font-semibold rounded-lg shadow transition-colors cursor-pointer"
                     >
                       <Download className="w-3.5 h-3.5" />
-                      <span>Download Resume (CV)</span>
-                    </a>
+                      <span>{downloadingResumeId === app.id ? "Signing..." : "Download Resume (CV)"}</span>
+                    </button>
                   ) : (
                     <span className="text-xs text-slate-400 italic">No resume attachment uploaded.</span>
                   )}

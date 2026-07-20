@@ -1,32 +1,20 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getCachedProfile } from "@/lib/supabase/profile";
 import PortalEventsClient from "./PortalEventsClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function PortalEventsPage() {
+  // Validate authentication and retrieve cached profile
+  const { user, profile, error } = await getCachedProfile();
+
+  if (error || !user || !profile) {
+    redirect("/login");
+  }
+
   const supabase = await createClient();
-
-  // Validate authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  // Fetch member profile
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("membership_tier, role")
-    .eq("id", user.id)
-    .single();
-
-  if (profileError || !profile) {
-    redirect("/login");
-  }
 
   // Fetch events visible to this tier (or all if admin)
   // SECURITY: Selective projection to prevent leaking creator UUID and internal metadata
@@ -39,52 +27,58 @@ export default async function PortalEventsPage() {
     eventQuery = eventQuery.contains("visible_tiers", [profile.membership_tier]);
   }
 
-  const { data: events, error: eventsError } = await eventQuery
-    .order("event_date", { ascending: true });
+  // Fetch approved counts for all events securely using admin client
+  const fetchAllApproved = async () => {
+    try {
+      const { createAdminClient } = await import("@/lib/supabase/admin");
+      const adminSupabase = createAdminClient();
+      const { data: allApproved } = await adminSupabase
+        .from("event_registrations")
+        .select("event_id")
+        .eq("status", "approved");
+      return allApproved || [];
+    } catch (err) {
+      console.error("Failed to fetch approved counts:", err);
+      return [];
+    }
+  };
 
-  if (eventsError) {
+  // Run all database fetches concurrently in parallel
+  const [eventsResult, registrationsResult, allApproved] = await Promise.all([
+    eventQuery.order("event_date", { ascending: true }),
+    supabase
+      .from("event_registrations")
+      .select("id, event_id, member_id, status, registration_date, message")
+      .eq("member_id", user.id),
+    fetchAllApproved()
+  ]);
+
+  if (eventsResult.error) {
     return (
       <div className="p-6 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl">
-        Failed to load invite-only events: {eventsError.message}
+        Failed to load invite-only events: {eventsResult.error.message}
       </div>
     );
   }
 
-  // Fetch active registrations for current member
-  // SECURITY: Only member's own registrations to prevent cross-member privacy violation
-  const { data: registrations } = await supabase
-    .from("event_registrations")
-    .select("id, event_id, member_id, status, registration_date, message")
-    .eq("member_id", user.id);
+  const events = eventsResult.data || [];
+  const registrations = registrationsResult.data || [];
 
-  // Fetch approved counts for all events securely using admin client
-  let eventsWithCounts = (events || []).map(e => ({ ...e, approved_count: 0 }));
-  try {
-    const { createAdminClient } = await import("@/lib/supabase/admin");
-    const adminSupabase = createAdminClient();
-    const { data: allApproved } = await adminSupabase
-      .from("event_registrations")
-      .select("event_id")
-      .eq("status", "approved");
+  // Count approved registrations per event
+  const counts: Record<string, number> = {};
+  allApproved.forEach((r) => {
+    counts[r.event_id] = (counts[r.event_id] || 0) + 1;
+  });
 
-    if (allApproved) {
-      const counts: Record<string, number> = {};
-      allApproved.forEach((r) => {
-        counts[r.event_id] = (counts[r.event_id] || 0) + 1;
-      });
-      eventsWithCounts = eventsWithCounts.map((e) => ({
-        ...e,
-        approved_count: counts[e.id] || 0,
-      }));
-    }
-  } catch (err) {
-    console.error("Failed to fetch approved counts:", err);
-  }
+  const eventsWithCounts = events.map((e) => ({
+    ...e,
+    approved_count: counts[e.id] || 0,
+  }));
 
   return (
     <PortalEventsClient
       events={eventsWithCounts}
-      registrations={registrations || []}
+      registrations={registrations}
       currentUserId={user.id}
     />
   );

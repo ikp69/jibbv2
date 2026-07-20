@@ -1,52 +1,58 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getCachedProfile } from "@/lib/supabase/profile";
 import EventsClient from "./EventsClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminEventsPage() {
-  const supabase = await createClient();
+  // Validate admin auth and role
+  const { user, profile, error } = await getCachedProfile();
 
-  // Validate admin auth
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (error || !user || !profile) {
     redirect("/login");
   }
 
-  // Fetch events
-  const { data: list, error } = await supabase
-    .from("events")
-    .select("*")
-    .order("event_date", { ascending: false });
-
-  if (error) {
-    return <div className="p-6 text-red-400">Error loading events: {error.message}</div>;
+  if (profile.role !== "admin") {
+    redirect("/portal/dashboard");
   }
 
-  // Fetch registrations with profiles (including phone)
-  const { data: registrations } = await supabase
-    .from("event_registrations")
-    .select(`
-      id,
-      event_id,
-      member_id,
-      message,
-      status,
-      created_at,
-      profiles:member_id (
-        id,
-        full_name,
-        company_name,
-        email,
-        phone,
-        membership_tier
-      )
-    `)
-    .order("created_at", { ascending: false });
+  const supabase = await createClient();
 
-  return <EventsClient initialList={list || []} initialRegistrations={registrations || []} />;
+  // Fetch events and event registrations concurrently in parallel
+  const [eventsResult, registrationsResult] = await Promise.all([
+    supabase
+      .from("events")
+      .select("*")
+      .order("event_date", { ascending: false }),
+    supabase
+      .from("event_registrations")
+      .select(`
+        id,
+        event_id,
+        member_id,
+        message,
+        status,
+        created_at,
+        profiles:member_id (
+          id,
+          full_name,
+          company_name,
+          email,
+          phone,
+          membership_tier
+        )
+      `)
+      .order("created_at", { ascending: false })
+  ]);
+
+  if (eventsResult.error) {
+    return <div className="p-6 text-red-400">Error loading events: {eventsResult.error.message}</div>;
+  }
+
+  const list = eventsResult.data || [];
+  const registrations = registrationsResult.data || [];
+
+  return <EventsClient initialList={list} initialRegistrations={registrations} />;
 }

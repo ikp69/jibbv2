@@ -1,24 +1,23 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getCachedProfile } from "@/lib/supabase/profile";
 import ProfileClient from "./ProfileClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function PortalProfilePage() {
-  const supabase = await createClient();
+  // Validate authentication using cached profile
+  const { user, profile: cachedProfile, error } = await getCachedProfile();
 
-  // Validate authentication
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (error || !user || !cachedProfile) {
     redirect("/login");
   }
 
-  // Fetch profiles that corresponds to this user
-  const { data: profile, error } = await supabase
+  const supabase = await createClient();
+
+  // Fetch full details of the corresponding profile
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select(
       "id, email, full_name, company_name, designation, membership_tier, phone, industry, country, city, website, company_description, looking_for, show_in_directory"
@@ -26,7 +25,7 @@ export default async function PortalProfilePage() {
     .eq("id", user.id)
     .single();
 
-  if (error || !profile) {
+  if (profileError || !profile) {
     redirect("/login");
   }
 

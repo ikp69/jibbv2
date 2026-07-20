@@ -1,32 +1,20 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getCachedProfile } from "@/lib/supabase/profile";
 import MemberNewslettersClient from "./MemberNewslettersClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function MemberNewslettersPage() {
+  // Validate authentication using cached profile
+  const { user, profile, error } = await getCachedProfile();
+
+  if (error || !user || !profile) {
+    redirect("/login");
+  }
+
   const supabase = await createClient();
-
-  // Validate member session
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  // Fetch member profile for tier verification
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("membership_tier, role")
-    .eq("id", user.id)
-    .single();
-
-  if (profileError || !profile) {
-    redirect("/login");
-  }
 
   // Query published newsletters visible to their tier (or all if admin)
   // SECURITY: Selective projection to prevent leaking internal workflow status and admin metadata

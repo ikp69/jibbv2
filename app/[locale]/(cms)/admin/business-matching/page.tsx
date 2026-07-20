@@ -1,46 +1,52 @@
 import React from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getCachedProfile } from "@/lib/supabase/profile";
 import BusinessMatchingClient from "./BusinessMatchingClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminBusinessMatchingPage() {
-  const supabase = await createClient();
+  // Validate admin auth and role
+  const { user, profile, error } = await getCachedProfile();
 
-  // Validate admin auth
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (error || !user || !profile) {
     redirect("/login");
   }
 
-  // Fetch opportunities
-  const { data: opportunities, error: oppError } = await supabase
-    .from("business_opportunities")
-    .select("*, profiles(company_name, email, membership_tier)")
-    .order("created_at", { ascending: false });
+  if (profile.role !== "admin") {
+    redirect("/portal/dashboard");
+  }
 
-  // Fetch interest pitches
-  const { data: pitches, error: pitchError } = await supabase
-    .from("opportunity_interest")
-    .select("*, profiles(company_name, email, membership_tier)")
-    .order("created_at", { ascending: false });
+  const supabase = await createClient();
 
-  if (oppError || pitchError) {
+  // Fetch opportunities and interest pitches in parallel
+  const [oppResult, pitchResult] = await Promise.all([
+    supabase
+      .from("business_opportunities")
+      .select("*, profiles(company_name, email, membership_tier)")
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("opportunity_interest")
+      .select("*, profiles(company_name, email, membership_tier)")
+      .order("created_at", { ascending: false })
+  ]);
+
+  if (oppResult.error || pitchResult.error) {
     return (
       <div className="p-6 text-red-400">
-        Error loading business matching listings: {oppError?.message || pitchError?.message}
+        Error loading business matching listings: {oppResult.error?.message || pitchResult.error?.message}
       </div>
     );
   }
 
+  const opportunities = oppResult.data || [];
+  const pitches = pitchResult.data || [];
+
   return (
     <BusinessMatchingClient
-      opportunities={opportunities || []}
-      pitches={(pitches as any) || []}
+      opportunities={opportunities}
+      pitches={(pitches as any)}
     />
   );
 }
