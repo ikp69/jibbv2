@@ -16,7 +16,9 @@ import {
   TrendingUp, 
   Cpu,
   MapPin,
-  ArrowRight
+  ArrowRight,
+  Eye,
+  Newspaper
 } from "lucide-react";
 
 type Collaboration = {
@@ -31,7 +33,7 @@ type Collaboration = {
 
 type PortalCollaborationClientProps = {
   collaborations: Collaboration[];
-  submittedInterests: { collaboration_id: string; status: string }[];
+  submittedInterests: { collaboration_id: string; status: string; message?: string; created_at?: string }[];
 };
 
 type TabType = "partnerships" | "delegations" | "tradeMissions" | "investment";
@@ -44,6 +46,8 @@ export default function PortalCollaborationClient({ collaborations, submittedInt
   const [collabSuccess, setCollabSuccess] = useState("");
   const [collabError, setCollabError] = useState("");
   const [isPending, startTransition] = useTransition();
+  const [viewPitch, setViewPitch] = useState<{ collaboration_id: string; status: string; message?: string; created_at?: string } | null>(null);
+  const [viewPitchCol, setViewPitchCol] = useState<Collaboration | null>(null);
 
   const handleClose = () => {
     setSelectedCol(null);
@@ -223,27 +227,56 @@ export default function PortalCollaborationClient({ collaborations, submittedInt
                       <span>{col.location}</span>
                     </span>
 
-                    {isSubmitted && (
-                      <span className="px-2 py-0.5 bg-emerald-50 border border-emerald-250 text-emerald-700 text-[10px] font-bold rounded flex items-center gap-1 shrink-0">
-                        <Check className="w-3.5 h-3.5" />
-                        <span>Connected</span>
-                      </span>
+                     {isSubmitted && interest && (
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {interest.status === "pending" ? (
+                          <span className="px-2 py-0.5 bg-amber-50 border border-amber-250 text-amber-700 text-[10px] font-bold rounded flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                            <span>Pitch Sent</span>
+                          </span>
+                        ) : interest.status === "reviewed" ? (
+                          <span className="px-2 py-0.5 bg-blue-50 border border-blue-200 text-blue-700 text-[10px] font-bold rounded flex items-center gap-1">
+                            <Check className="w-3.5 h-3.5" />
+                            <span>Seen by Admin</span>
+                          </span>
+                        ) : interest.status === "approved" ? (
+                          <span className="px-2 py-0.5 bg-emerald-50 border border-emerald-250 text-emerald-700 text-[10px] font-bold rounded flex items-center gap-1">
+                            <Check className="w-3.5 h-3.5" />
+                            <span>Connected</span>
+                          </span>
+                        ) : (
+                          <StatusBadge status={interest.status} className="text-[10px] py-0.5 px-2 font-bold" />
+                        )}
+                      </div>
                     )}
                   </div>
 
                   {/* Connection Button */}
-                  <button
-                    disabled={isSubmitted}
-                    onClick={() => setSelectedCol(col)}
-                    className={`w-full py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                      isSubmitted
-                        ? "bg-slate-50 text-slate-450 border border-slate-200 cursor-not-allowed"
-                        : "bg-slate-900 hover:bg-slate-800 text-white shadow-sm"
-                    }`}
-                  >
-                    <span>{isSubmitted ? "Pitch Submitted" : "Connect via Admin"}</span>
-                    {!isSubmitted && <ArrowRight className="w-3.5 h-3.5" />}
-                  </button>
+                  {isSubmitted ? (
+                    <div className="flex gap-2">
+                      <div className="w-full py-2.5 rounded-lg text-xs font-bold bg-slate-50 text-slate-450 border border-slate-200 flex items-center justify-center gap-1.5 select-none">
+                        <span>Pitch Submitted</span>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setViewPitch(interest);
+                          setViewPitchCol(col);
+                        }}
+                        className="px-3 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 rounded-lg cursor-pointer transition-colors flex items-center justify-center"
+                        title="View Submitted Pitch"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setSelectedCol(col)}
+                      className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+                    >
+                      <span>Connect via Admin</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
               </div>
             );
@@ -311,6 +344,51 @@ export default function PortalCollaborationClient({ collaborations, submittedInt
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* View Submitted Pitch Modal */}
+      {viewPitch && viewPitchCol && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="w-full max-w-xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150">
+              <h2 className="text-lg font-bold text-slate-900">Your Submitted Pitch</h2>
+              <button 
+                onClick={() => { setViewPitch(null); setViewPitchCol(null); }} 
+                className="text-slate-500 hover:text-slate-900 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4 text-sm text-slate-700">
+              <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-1">
+                <p className="font-semibold text-slate-900 text-sm">{viewPitchCol.title}</p>
+                <p className="text-xs text-slate-500">Industry Sector: {viewPitchCol.industry} | Category: {tabs.find(t => t.id === viewPitchCol.category)?.label}</p>
+              </div>
+
+              <div className="space-y-1.5">
+                <span className="text-xs font-bold text-slate-450 uppercase tracking-wider block">Your Alignment Pitch</span>
+                <p className="bg-slate-50/50 p-4 rounded-lg border border-slate-200 whitespace-pre-wrap leading-relaxed">
+                  {viewPitch.message || "No pitch message content available."}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between pt-4 border-t border-slate-150">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-slate-455 uppercase tracking-wider">Pitch Status:</span>
+                  <StatusBadge status={viewPitch.status} />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { setViewPitch(null); setViewPitchCol(null); }}
+                  className="px-4 py-2 text-sm font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

@@ -9,6 +9,7 @@ export const profileUpdateSchema = z.object({
   companyDescription: z.string().optional(),
   lookingFor: z.array(z.string()).default([]),
   showInDirectory: z.boolean().default(true),
+  companyLogo: z.string().url("Invalid logo URL format").or(z.literal("")).optional(),
 });
 
 export type ProfileUpdateInput = z.infer<typeof profileUpdateSchema>;

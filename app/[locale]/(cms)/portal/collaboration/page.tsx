@@ -32,7 +32,7 @@ export default async function PortalCollaborationPage() {
     collabQuery.order("created_at", { ascending: false }),
     supabase
       .from("collaboration_interest")
-      .select("collaboration_id, status")
+      .select("collaboration_id, status, message, created_at")
       .eq("member_id", user.id)
   ]);
 

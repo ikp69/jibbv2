@@ -63,11 +63,11 @@ const getDaysLeft = (deadlineStr: string) => {
   return `${diffDays} days left`;
 };
 
-export default function PortalBusinessMatchingClient({ 
-  opportunities, 
-  submittedPitches, 
-  myProposals, 
-  pitchesOnMyProposals 
+export default function PortalBusinessMatchingClient({
+  opportunities,
+  submittedPitches,
+  myProposals,
+  pitchesOnMyProposals
 }: PortalBusinessMatchingClientProps) {
   const [activeTab, setActiveTab] = useState<"browse" | "my-corner">("browse");
   const [expandedProposals, setExpandedProposals] = useState<Record<string, boolean>>({});
@@ -79,7 +79,7 @@ export default function PortalBusinessMatchingClient({
   // Propose Match Form State (Used for both Create and Edit)
   const [showProposeForm, setShowProposeForm] = useState(false);
   const [editingOpp, setEditingOpp] = useState<ProposerOpportunity | null>(null);
-  
+
   const [propTitle, setPropTitle] = useState("");
   const [propDesc, setPropDesc] = useState("");
   const [propIndustry, setPropIndustry] = useState<"Semiconductors" | "Manufacturing" | "Healthcare" | "Automotive" | "Electronics" | "Energy" | "Infrastructure" | "Food" | "General">("General");
@@ -166,8 +166,8 @@ export default function PortalBusinessMatchingClient({
         : await submitMatchingProposal(payload);
 
       if (res.success) {
-        setMatchingSuccess(editingOpp 
-          ? "Your proposal has been updated successfully." 
+        setMatchingSuccess(editingOpp
+          ? "Your proposal has been updated successfully."
           : "Your matching proposal has been submitted to JIBB admin for approval. Once approved, it will be active on the dashboard."
         );
         handleCloseProposeForm();
@@ -369,21 +369,19 @@ export default function PortalBusinessMatchingClient({
       <div className="flex border-b border-slate-200">
         <button
           onClick={() => setActiveTab("browse")}
-          className={`px-5 py-3 text-sm font-semibold border-b-2 cursor-pointer transition-colors ${
-            activeTab === "browse"
+          className={`px-5 py-3 text-sm font-semibold border-b-2 cursor-pointer transition-colors ${activeTab === "browse"
               ? "border-blue-600 text-blue-600"
               : "border-transparent text-slate-500 hover:text-slate-800"
-          }`}
+            }`}
         >
           Browse Opportunities ({opportunities.length})
         </button>
         <button
           onClick={() => setActiveTab("my-corner")}
-          className={`px-5 py-3 text-sm font-semibold border-b-2 cursor-pointer transition-colors ${
-            activeTab === "my-corner"
+          className={`px-5 py-3 text-sm font-semibold border-b-2 cursor-pointer transition-colors ${activeTab === "my-corner"
               ? "border-blue-600 text-blue-600"
               : "border-transparent text-slate-500 hover:text-slate-800"
-          }`}
+            }`}
         >
           My Proposals & Pitch Inbox
         </button>
@@ -458,7 +456,7 @@ export default function PortalBusinessMatchingClient({
                             <span suppressHydrationWarning>Expires: {new Date(opp.deadline).toLocaleDateString()} ({getDaysLeft(opp.deadline)})</span>
                           </div>
                           {opp.created_at && (
-                            <span className="text-[10px] text-slate-400 pl-5.5">
+                            <span className="text-[10px] text-slate-400 pl-5.5" suppressHydrationWarning>
                               Added: {new Date(opp.created_at).toLocaleDateString()}
                             </span>
                           )}
@@ -502,7 +500,7 @@ export default function PortalBusinessMatchingClient({
               <span>My Matching Proposals</span>
             </h2>
             <p className="text-xs text-slate-500 mt-1">Manage proposals you have submitted. Editing is permitted only while review is pending approval.</p>
-            
+
             {myProposals.length === 0 ? (
               <div className="p-8 border border-dashed border-slate-200 rounded-xl text-center text-slate-500 text-sm bg-white">
                 You have not submitted any matching proposals yet. Click &quot;Propose a Match&quot; to begin.
@@ -711,8 +709,8 @@ export default function PortalBusinessMatchingClient({
           <div className="w-full max-w-xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150">
               <h2 className="text-lg font-bold text-slate-900">Your Submitted Pitch</h2>
-              <button 
-                onClick={() => { setViewPitch(null); setViewPitchOpp(null); }} 
+              <button
+                onClick={() => { setViewPitch(null); setViewPitchOpp(null); }}
                 className="text-slate-500 hover:text-slate-900 cursor-pointer"
               >
                 <X className="w-5 h-5" />

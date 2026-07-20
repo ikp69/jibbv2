@@ -53,6 +53,7 @@ export default async function PortalBusinessMatchingPage() {
         business_opportunities!inner(title, created_by)
       `)
       .eq("business_opportunities.created_by", user.id)
+      .eq("status", "approved")
   ]);
 
   if (oppResult.error) {

@@ -20,7 +20,7 @@ export default async function PortalProfilePage() {
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select(
-      "id, email, full_name, company_name, designation, membership_tier, phone, industry, country, city, website, company_description, looking_for, show_in_directory"
+      "id, email, full_name, company_name, designation, membership_tier, phone, industry, country, city, website, company_description, looking_for, show_in_directory, company_logo"
     )
     .eq("id", user.id)
     .single();

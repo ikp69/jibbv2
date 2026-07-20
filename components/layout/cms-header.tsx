@@ -19,6 +19,7 @@ type CmsHeaderProps = {
     designation?: string | null;
     membershipTier: string;
     role: string;
+    companyLogo?: string | null;
   };
 };
 
@@ -94,8 +95,12 @@ export default function CmsHeader({ breadcrumbs, user }: CmsHeaderProps) {
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             className="flex items-center gap-2.5 text-left focus:outline-none cursor-pointer group"
           >
-            <div className="w-9 h-9 bg-slate-100 rounded-lg flex items-center justify-center border border-slate-200 text-slate-600 group-hover:border-slate-300 group-hover:text-slate-900 transition-colors">
-              <User className="w-5 h-5" />
+            <div className="w-9 h-9 bg-slate-100 rounded-lg flex items-center justify-center border border-slate-200 text-slate-600 group-hover:border-slate-300 group-hover:text-slate-900 transition-colors overflow-hidden shrink-0">
+              {user.companyLogo ? (
+                <img src={user.companyLogo} alt="Logo" className="w-full h-full object-contain bg-white" />
+              ) : (
+                <User className="w-5 h-5" />
+              )}
             </div>
             <div className="hidden sm:block">
               <p className="text-xs font-semibold text-slate-800 leading-none">

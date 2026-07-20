@@ -3,7 +3,7 @@
 import React, { useState, useTransition } from "react";
 import { updateProfile } from "@/features/cms/profile/actions/update-profile";
 import { changePassword } from "@/features/cms/profile/actions/change-password";
-import { Settings, Lock, Eye, Check, AlertCircle } from "lucide-react";
+import { Settings, Lock, Eye, Check, AlertCircle, UploadCloud, Building2, Link } from "lucide-react";
 
 type ProfileDetails = {
   id: string;
@@ -20,6 +20,7 @@ type ProfileDetails = {
   company_description: string | null;
   looking_for: string[] | null;
   show_in_directory: boolean;
+  company_logo: string | null;
 };
 
 type ProfileClientProps = {
@@ -39,6 +40,49 @@ export default function ProfileClient({ profile }: ProfileClientProps) {
   const [companyDescription, setCompanyDescription] = useState(profile.company_description || "");
   const [lookingForText, setLookingForText] = useState(profile.looking_for?.join(", ") || "");
   const [showInDirectory, setShowInDirectory] = useState(profile.show_in_directory);
+  const [companyLogo, setCompanyLogo] = useState(profile.company_logo || "");
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadError, setUploadError] = useState("");
+  const [logoInputMode, setLogoInputMode] = useState<"upload" | "url">("upload");
+
+  const handleLogoUpload = async (file: File) => {
+    setUploadError("");
+    setUploadProgress(10);
+    try {
+      const { createClient } = await import("@/lib/supabase/client");
+      const supabase = createClient();
+
+      const fileExt = file.name.split(".").pop();
+      const uniqueId = Math.random().toString(36).substring(2, 9);
+      const fileName = `logos/${Date.now()}-${uniqueId}.${fileExt}`;
+
+      setUploadProgress(35);
+
+      const { data, error } = await supabase.storage
+        .from("company-logos")
+        .upload(fileName, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      setUploadProgress(75);
+
+      const { data: { publicUrl } } = supabase.storage
+        .from("company-logos")
+        .getPublicUrl(fileName);
+
+      setCompanyLogo(publicUrl);
+      setUploadProgress(100);
+    } catch (err: any) {
+      console.error("Logo upload error:", err);
+      setUploadError(err.message || "Failed to upload logo image.");
+      setUploadProgress(0);
+    }
+  };
 
   // Password state
   const [password, setPassword] = useState("");
@@ -69,6 +113,7 @@ export default function ProfileClient({ profile }: ProfileClientProps) {
         companyDescription: companyDescription || undefined,
         lookingFor,
         showInDirectory,
+        companyLogo: companyLogo || undefined,
       });
 
       if (res.success) {
@@ -141,11 +186,10 @@ export default function ProfileClient({ profile }: ProfileClientProps) {
               setErrors({});
               setSuccessMsg("");
             }}
-            className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors cursor-pointer flex items-center gap-2.5 ${
-              activeSubTab === "general"
+            className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors cursor-pointer flex items-center gap-2.5 ${activeSubTab === "general"
                 ? "bg-blue-600 text-white shadow-sm"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-            }`}
+              }`}
           >
             <Settings className="w-4 h-4 shrink-0" />
             <span>General Settings</span>
@@ -156,11 +200,10 @@ export default function ProfileClient({ profile }: ProfileClientProps) {
               setErrors({});
               setSuccessMsg("");
             }}
-            className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors cursor-pointer flex items-center gap-2.5 ${
-              activeSubTab === "password"
+            className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors cursor-pointer flex items-center gap-2.5 ${activeSubTab === "password"
                 ? "bg-blue-600 text-white shadow-sm"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-            }`}
+              }`}
           >
             <Lock className="w-4 h-4 shrink-0" />
             <span>Change Password</span>
@@ -172,6 +215,98 @@ export default function ProfileClient({ profile }: ProfileClientProps) {
           {activeSubTab === "general" ? (
             <form onSubmit={handleUpdateProfile} className="bg-white border border-slate-200 p-6 rounded-xl space-y-6 shadow-sm">
               <h3 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-2">Edit Company Profile</h3>
+
+              {/* Company Logo Upload & Preview Section */}
+              <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center bg-slate-50 p-4 border border-slate-200 rounded-xl">
+                <div className="w-20 h-20 rounded-xl border border-slate-200 bg-white flex items-center justify-center overflow-hidden shrink-0 shadow-inner">
+                  {companyLogo ? (
+                    <img src={companyLogo} alt="Company Logo" className="w-full h-full object-contain" />
+                  ) : (
+                    <Building2 className="w-8 h-8 text-slate-400" />
+                  )}
+                </div>
+
+                <div className="space-y-2 flex-1 w-full">
+                  <span className="text-xs font-bold text-slate-650 uppercase tracking-wider block">Company Logo</span>
+
+                  <div className="flex gap-4 border-b border-slate-200 w-fit pb-1">
+                    <button
+                      type="button"
+                      onClick={() => setLogoInputMode("upload")}
+                      className={`text-xs font-bold cursor-pointer transition-colors pb-0.5 border-b-2 ${logoInputMode === "upload" ? "border-blue-600 text-blue-600" : "border-transparent text-slate-500 hover:text-slate-700"}`}
+                    >
+                      Upload File
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setLogoInputMode("url")}
+                      className={`text-xs font-bold cursor-pointer transition-colors pb-0.5 border-b-2 ${logoInputMode === "url" ? "border-blue-600 text-blue-600" : "border-transparent text-slate-500 hover:text-slate-700"}`}
+                    >
+                      Image URL
+                    </button>
+                  </div>
+
+                  {logoInputMode === "upload" ? (
+                    <div className="flex flex-col gap-1.5 w-full">
+                      <div className="flex items-center gap-2">
+                        <label className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-250 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold shadow-sm cursor-pointer transition-colors">
+                          <UploadCloud className="w-3.5 h-3.5" />
+                          <span>Choose Image File</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={async (e) => {
+                              const files = e.target.files;
+                              if (files && files.length > 0) {
+                                await handleLogoUpload(files[0]);
+                              }
+                            }}
+                          />
+                        </label>
+                        {companyLogo && (
+                          <button
+                            type="button"
+                            onClick={() => setCompanyLogo("")}
+                            className="text-xs font-semibold text-red-600 hover:underline cursor-pointer"
+                          >
+                            Remove Logo
+                          </button>
+                        )}
+                      </div>
+                      {uploadProgress > 0 && uploadProgress < 100 && (
+                        <div className="w-full max-w-xs bg-slate-200 h-1 rounded-full overflow-hidden mt-1">
+                          <div className="bg-blue-600 h-full transition-all duration-150" style={{ width: `${uploadProgress}%` }} />
+                        </div>
+                      )}
+                      {uploadError && <p className="text-[11px] font-semibold text-red-600">{uploadError}</p>}
+                    </div>
+                  ) : (
+                    <div className="flex gap-2 items-center w-full">
+                      <div className="relative flex-1">
+                        <Link className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                        <input
+                          type="url"
+                          placeholder="https://example.com/logo.png"
+                          value={companyLogo}
+                          onChange={(e) => setCompanyLogo(e.target.value)}
+                          className="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-250 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg text-xs text-slate-900 focus:outline-none transition-colors"
+                        />
+                      </div>
+                      {companyLogo && (
+                        <button
+                          type="button"
+                          onClick={() => setCompanyLogo("")}
+                          className="text-xs font-semibold text-red-650 hover:underline cursor-pointer whitespace-nowrap"
+                        >
+                          Clear URL
+                        </button>
+                      )}
+                    </div>
+                  )}
+                  <p className="text-[10px] text-slate-450">Supported formats: JPG, PNG, WEBP, SVG. Recommended square proportions (e.g. 200x200px).</p>
+                </div>
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">

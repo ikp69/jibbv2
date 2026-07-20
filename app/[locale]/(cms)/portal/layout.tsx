@@ -41,6 +41,7 @@ export default async function PortalLayout({
     designation: profile.designation,
     membershipTier: profile.membership_tier,
     role: profile.role,
+    companyLogo: profile.company_logo,
   };
 
   return (

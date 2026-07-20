@@ -33,7 +33,7 @@ export async function updateProfile(input: ProfileUpdateInput): Promise<ProfileR
     // Get previous details for logs
     const { data: oldProfile } = await supabase
       .from("profiles")
-      .select("full_name, designation, phone, website, city, company_description, looking_for, show_in_directory")
+      .select("full_name, designation, phone, website, city, company_description, looking_for, show_in_directory, company_logo")
       .eq("id", user.id)
       .single();
 
@@ -49,6 +49,7 @@ export async function updateProfile(input: ProfileUpdateInput): Promise<ProfileR
         company_description: data.companyDescription || null,
         looking_for: data.lookingFor,
         show_in_directory: data.showInDirectory,
+        company_logo: data.companyLogo || null,
       })
       .eq("id", user.id);
 

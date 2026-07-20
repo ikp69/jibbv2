@@ -4,7 +4,7 @@ import React, { useState, useTransition, useMemo } from "react";
 import { DataTable, type ColumnDef } from "@/components/ui/data-table";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { createNewsletter, updateNewsletter, deleteNewsletter } from "@/features/cms/content/actions/newsletters";
-import { Trash2, Plus, X, Newspaper, Edit, Calendar, Filter, FileText } from "lucide-react";
+import { Trash2, Plus, X, Newspaper, Edit, Calendar, Filter, FileText, Eye, Download } from "lucide-react";
 
 type Newsletter = {
   id: string;
@@ -53,6 +53,7 @@ export default function AdminNewslettersClient({ initialList }: AdminNewsletters
   const [noticeSuccess, setNoticeSuccess] = useState("");
   const [noticeError, setNoticeError] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [previewNewsletter, setPreviewNewsletter] = useState<Newsletter | null>(null);
 
   const handleAction = (id: string, actionFn: (id: string) => Promise<any>, actionName: string) => {
     setConfirmAction({ id, actionFn, actionName });
@@ -271,6 +272,13 @@ export default function AdminNewslettersClient({ initialList }: AdminNewsletters
       cell: (item) => (
         <div className="flex items-center gap-1.5">
           <button
+            onClick={() => setPreviewNewsletter(item)}
+            className="p-1.5 text-slate-555 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+            title="Preview Newsletter"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+          <button
             onClick={() => handleOpenEdit(item)}
             className="p-1.5 text-slate-555 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
             title="Edit Newsletter"
@@ -389,6 +397,60 @@ export default function AdminNewslettersClient({ initialList }: AdminNewsletters
               >
                 Delete
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Preview Modal */}
+      {previewNewsletter && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-sm p-4 overflow-y-auto font-sans">
+          <div className="w-full max-w-2xl bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden relative my-8 text-slate-800">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-150 bg-slate-50">
+              <div className="flex items-center gap-2">
+                <Newspaper className="w-5 h-5 text-blue-600" />
+                {previewNewsletter.publish_date && (
+                  <span className="text-[11px] font-mono text-slate-500 font-semibold" suppressHydrationWarning>
+                    {new Date(previewNewsletter.publish_date).toLocaleDateString()}
+                  </span>
+                )}
+                <span className="px-1.5 py-0.5 bg-slate-200 text-[10px] uppercase font-bold text-slate-750 rounded border border-slate-300">Preview</span>
+              </div>
+              <button
+                onClick={() => setPreviewNewsletter(null)}
+                className="text-slate-500 hover:text-slate-900 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div className="space-y-1">
+                <h2 className="text-xl font-extrabold text-slate-900 leading-snug">{previewNewsletter.title}</h2>
+                {previewNewsletter.subject && (
+                  <p className="text-sm font-semibold text-slate-600">{previewNewsletter.subject}</p>
+                )}
+              </div>
+
+              <div className="pt-2 border-t border-slate-100 text-sm text-slate-700 leading-relaxed whitespace-pre-wrap max-h-[350px] overflow-y-auto">
+                {previewNewsletter.content || <span className="text-slate-450 italic">No text content available. Please refer to the PDF attachment.</span>}
+              </div>
+
+              {previewNewsletter.file_url && (
+                <div className="pt-4 border-t border-slate-100 flex justify-between items-center bg-slate-50 p-3 rounded-lg">
+                  <span className="text-xs font-semibold text-slate-550">Attach PDF version available:</span>
+                  <a
+                    href={previewNewsletter.file_url}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow transition-colors cursor-pointer"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Download PDF</span>
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>
