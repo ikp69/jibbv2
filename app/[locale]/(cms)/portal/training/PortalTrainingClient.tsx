@@ -39,7 +39,7 @@ export default function PortalTrainingClient({ programs, registrations, currentU
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  
+
   // Status and feedback states
   const [pendingIds, setPendingIds] = useState<Set<string>>(new Set());
   const [errorMsg, setErrorMsg] = useState("");
@@ -186,15 +186,15 @@ export default function PortalTrainingClient({ programs, registrations, currentU
         <div className="space-y-4">
           {filtered.map((item) => {
             const isExpanded = expandedId === item.id;
-            
+
             const userReg = registrations.find(
               (r) => r.training_id === item.id && r.member_id === currentUserId
             );
-            
+
             const isRegistered = !!userReg;
             const regStatus = userReg?.status; // 'pending', 'approved', 'rejected'
             const isItemPending = pendingIds.has(item.id);
-            
+
             const seatsRemaining = Math.max(0, item.capacity - (item.approved_count || 0));
 
             return (
@@ -245,14 +245,15 @@ export default function PortalTrainingClient({ programs, registrations, currentU
 
                     {isRegistered ? (
                       <div className="flex items-center gap-2">
-                        <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider ${
-                          regStatus === "approved"
+                        <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider ${regStatus === "approved"
                             ? "bg-green-50 border border-green-200 text-green-700"
-                            : "bg-amber-50 border border-amber-200 text-amber-700"
-                        }`}>
-                          {regStatus === "approved" ? "Approved" : "Pending Review"}
+                            : regStatus === "rejected"
+                              ? "bg-red-50 border border-red-200 text-red-700"
+                              : "bg-amber-50 border border-amber-200 text-amber-700"
+                          }`}>
+                          {regStatus === "approved" ? "Approved" : regStatus === "rejected" ? "Not Approved" : "Pending Review"}
                         </span>
-                        
+
                         <button
                           onClick={() => handleCancel(item.id)}
                           disabled={isItemPending}

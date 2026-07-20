@@ -29,5 +29,11 @@ export default async function PortalMemberDirectoryPage() {
     return <div className="p-6 text-red-400">Error loading directory: {membersError.message}</div>;
   }
 
-  return <MemberDirectoryClient initialMembers={members || []} />;
+  // Fetch introduction requests sent by this member to show connection status
+  const { data: requests } = await supabase
+    .from("introduction_requests")
+    .select("id, target_member_id, status")
+    .eq("requester_id", user.id);
+
+  return <MemberDirectoryClient initialMembers={members || []} initialRequests={requests || []} />;
 }

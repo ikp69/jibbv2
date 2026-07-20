@@ -27,9 +27,33 @@ export default async function AdminMemberDirectoryPage() {
     .eq("role", "member")
     .order("company_name", { ascending: true });
 
-  if (membersError) {
-    return <div className="p-6 text-red-400">Error loading directory: {membersError.message}</div>;
+  // Fetch introduction requests for review
+  const { data: requests, error: requestsError } = await supabase
+    .from("introduction_requests")
+    .select(`
+      id,
+      requester_id,
+      target_member_id,
+      objective,
+      status,
+      created_at,
+      requester:profiles!requester_id(company_name, email),
+      target:profiles!target_member_id(company_name, email)
+    `)
+    .order("created_at", { ascending: false });
+
+  if (membersError || requestsError) {
+    return (
+      <div className="p-6 text-red-400">
+        Error loading admin directory data: {membersError?.message || requestsError?.message}
+      </div>
+    );
   }
 
-  return <AdminMemberDirectoryClient initialMembers={members || []} />;
+  return (
+    <AdminMemberDirectoryClient
+      initialMembers={members || []}
+      initialRequests={(requests as any) || []}
+    />
+  );
 }

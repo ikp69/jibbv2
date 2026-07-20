@@ -31,6 +31,7 @@ export const ADMIN_NAV_GROUPS: NavGroup[] = [
     items: [
       { label: "Business Matching", path: "/admin/business-matching", icon: "Briefcase" },
       { label: "Collaboration", path: "/admin/collaboration", icon: "ShieldCheck" },
+      { label: "Delegation/Exhibitions", path: "/admin/special-forms", icon: "FileSpreadsheet" },
     ],
   },
   {
@@ -72,9 +73,9 @@ export const PORTAL_NAV_GROUPS: NavGroup[] = [
   {
     title: "Japan Engagement",
     items: [
-      { label: "Exhibition Support", path: "/portal/exhibition-support", icon: "HelpCircle", isPlaceholder: true },
-      { label: "Delegation to Japan", path: "/portal/delegation-japan", icon: "Calendar", isPlaceholder: true },
-      { label: "Japan Delegations", path: "/portal/delegation-meet", icon: "Users", isPlaceholder: true },
+      { label: "Exhibition Support", path: "/portal/exhibition-support", icon: "HelpCircle" },
+      { label: "Delegation to Japan", path: "/portal/delegation-japan", icon: "Calendar" },
+      { label: "Japan Delegations", path: "/portal/delegation-meet", icon: "Users" },
     ],
   },
   {
