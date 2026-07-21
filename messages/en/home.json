@@ -48,7 +48,9 @@
     "scrollToBegin": "Scroll to begin",
     "skipStory": "Skip Story",
     "replay": "Replay",
-    "readStory": "Read Story"
+    "readStory": "Read Story",
+    "back": "Back",
+    "next": "Next"
   },
   "whatWeDo": {
     "tagline": "Core Offerings",

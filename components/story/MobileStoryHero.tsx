@@ -2,13 +2,15 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 import { Link } from "@/src/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChatBubble } from "@/components/story/ChatBubble";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const MESSAGES: { speaker: "kenji" | "aarav"; key: string }[] = [
   { speaker: "kenji", key: "kenji1" },
@@ -29,6 +31,7 @@ export function MobileStoryHero() {
 
   const [hasReadStory, setHasReadStory] = useState(false);
   const [showStory, setShowStory] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   // Check localStorage on mount
   useEffect(() => {
@@ -42,6 +45,17 @@ export function MobileStoryHero() {
       }
     }
   }, []);
+
+  // Auto-scroll story slides right to left every 3 seconds
+  useEffect(() => {
+    if (!showStory) return;
+
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev === MESSAGES.length - 1 ? 0 : prev + 1));
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, [showStory]);
 
   useEffect(() => {
     if (!showStory) return;
@@ -70,45 +84,6 @@ export function MobileStoryHero() {
             scrollTrigger: {
               trigger: el as Element,
               start: "top 100%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      });
-      // Left bubbles: slide smoothly from left
-      const leftBubbles = gsap.utils.toArray(".mobile-bubble-left");
-      leftBubbles.forEach((el: unknown) => {
-        gsap.fromTo(
-          el as Element,
-          { autoAlpha: 0, x: -120 },
-          {
-            autoAlpha: 1,
-            x: 0,
-            duration: 1.2,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: el as Element,
-              start: "top 95%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      });
-
-      // Right bubbles: slide smoothly from right
-      const rightBubbles = gsap.utils.toArray(".mobile-bubble-right");
-      rightBubbles.forEach((el: unknown) => {
-        gsap.fromTo(
-          el as Element,
-          { autoAlpha: 0, x: 120 },
-          {
-            autoAlpha: 1,
-            x: 0,
-            duration: 1.2,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: el as Element,
-              start: "top 95%",
               toggleActions: "play none none reverse",
             },
           }
@@ -286,20 +261,49 @@ export function MobileStoryHero() {
           )}
 
           {showStory && (
-            /* Conversation — shared ChatBubble primitive */
-            <div className="flex flex-col gap-6 w-full max-w-xl mx-auto">
-              {MESSAGES.map((msg, i) => (
-                <div key={i} className={msg.speaker === "kenji" ? "mobile-bubble-left" : "mobile-bubble-right"}>
-                  <ChatBubble
-                    speaker={msg.speaker}
-                    name={t(msg.speaker === "kenji" ? "kenjiName" : "aaravName")}
-                    location={msg.speaker === "kenji" ? "Tokyo" : "Noida"}
-                    size="sm"
+            /* Conversation Carousel */
+            <div className="w-full max-w-xl mx-auto flex flex-col gap-4">
+              <div
+                className="relative min-h-[160px] w-full px-1 cursor-pointer"
+                onClick={() => setCurrentIndex((prev) => (prev === MESSAGES.length - 1 ? 0 : prev + 1))}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentIndex}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.22, ease: "easeInOut" }}
+                    className="w-full"
                   >
-                    {t(msg.key)}
-                  </ChatBubble>
-                </div>
-              ))}
+                    <ChatBubble
+                      speaker={MESSAGES[currentIndex].speaker}
+                      name={t(MESSAGES[currentIndex].speaker === "kenji" ? "kenjiName" : "aaravName")}
+                      location={MESSAGES[currentIndex].speaker === "kenji" ? "Tokyo" : "Noida"}
+                      size="sm"
+                    >
+                      {t(MESSAGES[currentIndex].key)}
+                    </ChatBubble>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* Navigation Controls (Dots only, centered) */}
+              <div className="flex justify-center gap-1.5 mt-1 select-none">
+                {MESSAGES.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentIndex(idx)}
+                    aria-label={`Go to slide ${idx + 1}`}
+                    className={cn(
+                      "w-2 h-2 rounded-full transition-all duration-300",
+                      idx === currentIndex
+                        ? "w-4 bg-jibb-orange"
+                        : "bg-gray-300 dark:bg-gray-700"
+                    )}
+                  />
+                ))}
+              </div>
             </div>
           )}
         </div>

@@ -25,7 +25,7 @@ const sectorConfigs = {
     borderColor: "border-jibb-sakura/25 dark:border-jibb-sakura/30 hover:border-jibb-sakura/50",
     glowClass: "group-hover:bg-jibb-sakura/10",
     exploreColor: "text-jibb-sakura dark:text-jibb-sakura-light",
-    bgImage: "/images/sectors/semiconductor.png",
+    bgImage: "/images/sectors/semiconductor.jpg",
   },
   ev: {
     icon: Car,
@@ -35,7 +35,7 @@ const sectorConfigs = {
     borderColor: "border-jibb-orange/25 dark:border-jibb-orange/30 hover:border-jibb-orange/50",
     glowClass: "group-hover:bg-jibb-orange/10",
     exploreColor: "text-jibb-orange dark:text-jibb-orange-light",
-    bgImage: "/images/sectors/ev.png",
+    bgImage: "/images/sectors/ev.jpg",
   },
   electronics: {
     icon: Factory,
@@ -45,7 +45,7 @@ const sectorConfigs = {
     borderColor: "border-jibb-indigo/25 dark:border-jibb-indigo/30 hover:border-jibb-indigo/50",
     glowClass: "group-hover:bg-jibb-indigo/10",
     exploreColor: "text-jibb-indigo dark:text-jibb-indigo-light",
-    bgImage: "/images/sectors/manufacturing.png",
+    bgImage: "/images/sectors/manufacturing.jpg",
   },
   pharma: {
     icon: Pill,
@@ -55,7 +55,7 @@ const sectorConfigs = {
     borderColor: "border-jibb-sakura/25 dark:border-jibb-sakura/30 hover:border-jibb-sakura/50",
     glowClass: "group-hover:bg-jibb-sakura/10",
     exploreColor: "text-jibb-sakura dark:text-jibb-sakura-light",
-    bgImage: "/images/sectors/pharma.png",
+    bgImage: "/images/sectors/pharma.jpg",
   },
   renewable: {
     icon: Sun,
@@ -65,7 +65,7 @@ const sectorConfigs = {
     borderColor: "border-jibb-orange/25 dark:border-jibb-orange/30 hover:border-jibb-orange/50",
     glowClass: "group-hover:bg-jibb-orange/10",
     exploreColor: "text-jibb-orange dark:text-jibb-orange-light",
-    bgImage: "/images/sectors/renewable.png",
+    bgImage: "/images/sectors/renewable.jpg",
   },
   infrastructure: {
     icon: Building2,
@@ -75,7 +75,7 @@ const sectorConfigs = {
     borderColor: "border-jibb-indigo/25 dark:border-jibb-indigo/30 hover:border-jibb-indigo/50",
     glowClass: "group-hover:bg-jibb-indigo/10",
     exploreColor: "text-jibb-indigo dark:text-jibb-indigo-light",
-    bgImage: "/images/sectors/infrastructure.png",
+    bgImage: "/images/sectors/infrastructure.jpg",
   },
   chemicals: {
     icon: FlaskConical,
@@ -85,7 +85,7 @@ const sectorConfigs = {
     borderColor: "border-jibb-sakura/25 dark:border-jibb-sakura/30 hover:border-jibb-sakura/50",
     glowClass: "group-hover:bg-jibb-sakura/10",
     exploreColor: "text-jibb-sakura dark:text-jibb-sakura-light",
-    bgImage: "/images/sectors/chemicals.png",
+    bgImage: "/images/sectors/chemicals.jpg",
   },
   emerging: {
     icon: Network,
@@ -95,7 +95,7 @@ const sectorConfigs = {
     borderColor: "border-jibb-orange/25 dark:border-jibb-orange/30 hover:border-jibb-orange/50",
     glowClass: "group-hover:bg-jibb-orange/10",
     exploreColor: "text-jibb-orange dark:text-jibb-orange-light",
-    bgImage: "/images/sectors/emerging.png",
+    bgImage: "/images/sectors/emerging.jpg",
   },
 };
 

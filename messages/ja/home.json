@@ -48,7 +48,9 @@
     "scrollToBegin": "スクロールして開始",
     "skipStory": "ストーリーをスキップ",
     "replay": "もう一度見る",
-    "readStory": "ストーリーを読む"
+    "readStory": "ストーリーを読む",
+    "back": "戻る",
+    "next": "次へ"
   },
   "whatWeDo": {
     "tagline": "コアサービス",

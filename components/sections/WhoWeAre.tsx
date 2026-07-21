@@ -37,7 +37,23 @@ function ServiceCard({
   bgIcon: React.ComponentType<any>;
   themeColor: "orange" | "indigo" | "sakura";
 }) {
-  const [isHovered, setIsHovered] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleMouseEnter = () => {
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches) {
+      setIsOpen(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches) {
+      setIsOpen(false);
+    }
+  };
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+  };
 
   const themeClasses = {
     orange: {
@@ -65,19 +81,20 @@ function ServiceCard({
 
   return (
     <motion.div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={handleToggle}
       whileHover={{ y: -6 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className={cn(
-        "bg-card/70 dark:bg-card/25 border border-border/40 p-6 rounded-2xl transition-all duration-300 shadow-sm hover:shadow-jibb cursor-pointer w-full relative overflow-hidden backdrop-blur-md",
+        "bg-card/70 dark:bg-card/25 border border-border/40 p-6 rounded-2xl transition-all duration-300 shadow-sm hover:shadow-jibb cursor-pointer w-full relative overflow-hidden backdrop-blur-md select-none",
         themeClasses.borderHover,
-        isHovered && themeClasses.glow
+        isOpen && themeClasses.glow
       )}
     >
       {/* Giant faint background icon in top-right */}
       <div className="absolute -top-6 -right-6 pointer-events-none opacity-[0.03] dark:opacity-[0.05] transition-transform duration-700 select-none">
-        <BgIcon className={cn("size-28", isHovered && "rotate-6 scale-110")} />
+        <BgIcon className={cn("size-28", isOpen && "rotate-6 scale-110")} />
       </div>
 
       <div className="flex items-center justify-between gap-4 relative z-10">
@@ -86,7 +103,7 @@ function ServiceCard({
           <div
             className={cn(
               "p-3 rounded-xl transition-all duration-300 shrink-0",
-              isHovered ? themeClasses.iconHoverBg : themeClasses.iconBg
+              isOpen ? themeClasses.iconHoverBg : themeClasses.iconBg
             )}
           >
             <Icon className="size-5.5" />
@@ -105,14 +122,14 @@ function ServiceCard({
         <ChevronDown
           className={cn(
             "size-4 text-muted-foreground/60 transition-transform duration-300",
-            isHovered && "rotate-180 text-foreground"
+            isOpen && "rotate-180 text-foreground"
           )}
         />
       </div>
 
       {/* Expandable list content */}
       <AnimatePresence initial={false}>
-        {isHovered && (
+        {isOpen && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
