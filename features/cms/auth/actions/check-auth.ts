@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { verifyServerRequest } from "@/lib/supabase/auth-guard";
 
 export type AuthStatus = {
   isAuthenticated: boolean;
@@ -10,29 +10,15 @@ export type AuthStatus = {
 
 export async function checkAuthStatus(): Promise<AuthStatus> {
   try {
-    const supabase = await createClient();
-    
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (!user) {
+    const authResult = await verifyServerRequest();
+
+    if (!authResult.valid) {
       return {
         isAuthenticated: false,
       };
     }
 
-    // Fetch profile to get role
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role, status")
-      .eq("id", user.id)
-      .single();
-
-    if (!profile || profile.status !== "active") {
-      return {
-        isAuthenticated: false,
-      };
-    }
-
+    const { profile } = authResult;
     const role = profile.role as "admin" | "member";
     const dashboardUrl = role === "admin" ? "/admin/dashboard" : "/portal/dashboard";
 
@@ -42,9 +28,10 @@ export async function checkAuthStatus(): Promise<AuthStatus> {
       dashboardUrl,
     };
   } catch (err) {
-    console.error("[CHECK_AUTH] Error:", err);
+    console.error("[CHECK_AUTH] Exception during checkAuthStatus:", err);
     return {
       isAuthenticated: false,
     };
   }
 }
+

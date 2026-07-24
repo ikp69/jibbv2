@@ -20,6 +20,7 @@ import { PageHero } from "@/components/sections/PageHero";
 
 import { submitMembershipApplication } from "@/app/actions/membership";
 import { isValidPhone, PHONE_ERROR } from "@/app/lib/validation/phone";
+import { env } from "@/lib/env";
 
 export default function MembershipPage() {
   const t = useTranslations("membershipPage");
@@ -489,7 +490,7 @@ export default function MembershipPage() {
 
             {/* Consultation Embed Tab — always mounted so iframe prefetches on page load */}
             {(() => {
-              const embedUrl = process.env.NEXT_PUBLIC_CALENDLY_URL || process.env.NEXT_PUBLIC_MS_BOOKINGS_URL;
+              const embedUrl = env.NEXT_PUBLIC_CALENDLY_URL || env.NEXT_PUBLIC_MS_BOOKINGS_URL;
               return (
                 <div
                   className="flex-1 flex flex-col min-h-[700px]"

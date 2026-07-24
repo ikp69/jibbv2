@@ -5,13 +5,15 @@ const BASE = 'https://npo-jibb.org'
 const SLUG = 'india-japan-manufacturing-collaboration-2026'
 const OG_IMAGE = `${BASE}/events/JIBB_Event_3_July_2026.jpg`
 
+import { env } from "@/lib/env";
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+  const baseUrl = env.NEXT_PUBLIC_APP_URL;
 
   const title = locale === "ja"
     ? "日印製造業連携2026セミナー | JIBB 東京"

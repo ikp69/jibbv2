@@ -7,6 +7,7 @@ import { routing } from "@/src/i18n/routing";
 import { ClientProviders } from "@/components/providers/ClientProviders";
 import Script from "next/script";
 import NextTopLoader from "nextjs-toploader";
+import { env } from "@/lib/env";
 
 // ============================================================
 // FONTS — all loaded via next/font (no external CDN requests)
@@ -57,7 +58,7 @@ const montserrat = Montserrat({
 // METADATA
 // ============================================================
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org"),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: {
     default: "JIBB - Japan India Business Bureau",
     template: "%s",
@@ -128,7 +129,7 @@ export default async function LocaleLayout({
         />
         {/* Google Analytics */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-7FCZTKK51X"
+          src="https://www.googletagmanager.com/gtag/id=G-7FCZTKK51X"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">

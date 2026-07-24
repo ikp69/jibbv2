@@ -1,57 +1,54 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { verifyServerRequest } from "@/lib/supabase/auth-guard";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { collaborationSchema, collaborationInterestSchema, type CollaborationInput, type CollaborationInterestInput } from "../schemas/business-schemas";
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 export type BusinessResult = {
   success: boolean;
   error?: string;
 };
 
-async function checkAdminAuth(supabase: any) {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+// Reusable audit logging helper for business collaborations
+async function writeCollaborationAuditLog(
+  userId: string,
+  action: string,
+  tableName: string,
+  recordId: string,
+  oldVal: unknown,
+  newVal: unknown
+): Promise<void> {
+  try {
+    const adminClient = createAdminClient();
+    const headersList = await headers();
+    const userAgent = headersList.get("user-agent") || undefined;
+    const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0] || undefined;
 
-  if (!user) {
-    throw new Error("Unauthorized access");
+    await adminClient.from("audit_logs").insert({
+      user_id: userId,
+      action,
+      table_name: tableName,
+      record_id: recordId,
+      ip_address: ipAddress,
+      user_agent: userAgent,
+      old_values: oldVal,
+      new_values: newVal,
+    });
+  } catch (auditErr) {
+    console.warn(`[COLLABORATIONS_AUDIT] Failed to insert log for ${action}:`, auditErr);
   }
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (profile?.role !== "admin") {
-    throw new Error("Access denied. Admin role required.");
-  }
-
-  return user.id;
-}
-
-async function writeAuditLog(supabase: any, userId: string, action: string, recordId: string, oldVal: any, newVal: any) {
-  const headersList = await headers();
-  const userAgent = headersList.get("user-agent") || undefined;
-  const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0] || undefined;
-
-  await supabase.from("audit_logs").insert({
-    user_id: userId,
-    action,
-    table_name: "collaboration_opportunities",
-    record_id: recordId,
-    ip_address: ipAddress,
-    user_agent: userAgent,
-    old_values: oldVal,
-    new_values: newVal,
-  });
 }
 
 export async function createCollaboration(input: CollaborationInput): Promise<BusinessResult> {
   try {
-    const supabase = await createClient();
-    const adminId = await checkAdminAuth(supabase);
+    const authResult = await verifyServerRequest("admin");
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
+
+    const adminId = authResult.user.id;
 
     const parsed = collaborationSchema.safeParse(input);
     if (!parsed.success) {
@@ -59,8 +56,9 @@ export async function createCollaboration(input: CollaborationInput): Promise<Bu
     }
 
     const data = parsed.data;
+    const adminClient = createAdminClient();
 
-    const { data: record, error } = await supabase
+    const { data: record, error } = await adminClient
       .from("collaboration_opportunities")
       .insert({
         title: data.title,
@@ -76,20 +74,33 @@ export async function createCollaboration(input: CollaborationInput): Promise<Bu
       .select("id")
       .single();
 
-    if (error || !record) return { success: false, error: error.message };
+    if (error || !record) return { success: false, error: error?.message || "Insert failed" };
 
-    await writeAuditLog(supabase, adminId, "create_collaboration_opportunity", record.id, null, data);
+    try {
+      revalidatePath("/[locale]/(cms)/admin/collaboration", "page");
+      revalidatePath("/[locale]/(cms)/portal/dashboard", "page");
+    } catch (e) {
+      console.warn("[CREATE_COLLABORATION] Revalidation warning:", e);
+    }
+
+    await writeCollaborationAuditLog(adminId, "create_collaboration_opportunity", "collaboration_opportunities", record.id, null, data);
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "An error occurred";
+    console.error("[CREATE_COLLABORATION] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
 
 export async function updateCollaboration(id: string, input: CollaborationInput): Promise<BusinessResult> {
   try {
-    const supabase = await createClient();
-    const adminId = await checkAdminAuth(supabase);
+    const authResult = await verifyServerRequest("admin");
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
+
+    const adminId = authResult.user.id;
 
     const parsed = collaborationSchema.safeParse(input);
     if (!parsed.success) {
@@ -97,10 +108,11 @@ export async function updateCollaboration(id: string, input: CollaborationInput)
     }
 
     const data = parsed.data;
+    const adminClient = createAdminClient();
 
-    const { data: oldVal } = await supabase.from("collaboration_opportunities").select("*").eq("id", id).single();
+    const { data: oldVal } = await adminClient.from("collaboration_opportunities").select("title, status, industry, visible_tiers").eq("id", id).single();
 
-    const { error } = await supabase
+    const { error } = await adminClient
       .from("collaboration_opportunities")
       .update({
         title: data.title,
@@ -116,30 +128,53 @@ export async function updateCollaboration(id: string, input: CollaborationInput)
 
     if (error) return { success: false, error: error.message };
 
-    await writeAuditLog(supabase, adminId, "update_collaboration_opportunity", id, oldVal, data);
+    try {
+      revalidatePath("/[locale]/(cms)/admin/collaboration", "page");
+      revalidatePath("/[locale]/(cms)/portal/dashboard", "page");
+    } catch (e) {
+      console.warn("[UPDATE_COLLABORATION] Revalidation warning:", e);
+    }
+
+    await writeCollaborationAuditLog(adminId, "update_collaboration_opportunity", "collaboration_opportunities", id, oldVal, data);
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "An error occurred";
+    console.error("[UPDATE_COLLABORATION] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
 
 export async function deleteCollaboration(id: string): Promise<BusinessResult> {
   try {
-    const supabase = await createClient();
-    const adminId = await checkAdminAuth(supabase);
+    const authResult = await verifyServerRequest("admin");
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
 
-    const { data: oldVal } = await supabase.from("collaboration_opportunities").select("*").eq("id", id).single();
+    const adminId = authResult.user.id;
+    const adminClient = createAdminClient();
 
-    const { error } = await supabase.from("collaboration_opportunities").delete().eq("id", id);
+    const { data: oldVal } = await adminClient.from("collaboration_opportunities").select("title, status").eq("id", id).single();
+
+    const { error } = await adminClient.from("collaboration_opportunities").delete().eq("id", id);
 
     if (error) return { success: false, error: error.message };
 
-    await writeAuditLog(supabase, adminId, "delete_collaboration_opportunity", id, oldVal, null);
+    try {
+      revalidatePath("/[locale]/(cms)/admin/collaboration", "page");
+      revalidatePath("/[locale]/(cms)/portal/dashboard", "page");
+    } catch (e) {
+      console.warn("[DELETE_COLLABORATION] Revalidation warning:", e);
+    }
+
+    await writeCollaborationAuditLog(adminId, "delete_collaboration_opportunity", "collaboration_opportunities", id, oldVal, null);
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "An error occurred";
+    console.error("[DELETE_COLLABORATION] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
 
@@ -149,12 +184,12 @@ export async function deleteCollaboration(id: string): Promise<BusinessResult> {
 
 export async function submitCollaborationInterest(input: CollaborationInterestInput): Promise<BusinessResult> {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const authResult = await verifyServerRequest();
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
 
-    if (!user) return { success: false, error: "Unauthorized. Please sign in." };
+    const user = authResult.user;
 
     const parsed = collaborationInterestSchema.safeParse(input);
     if (!parsed.success) {
@@ -162,8 +197,20 @@ export async function submitCollaborationInterest(input: CollaborationInterestIn
     }
 
     const data = parsed.data;
+    const adminClient = createAdminClient();
 
-    const { data: record, error } = await supabase
+    // Verify target collaboration opportunity exists and is published
+    const { data: opp, error: oppErr } = await adminClient
+      .from("collaboration_opportunities")
+      .select("id, status")
+      .eq("id", data.collaborationId)
+      .single();
+
+    if (oppErr || !opp) {
+      return { success: false, error: "Collaboration opportunity listing not found" };
+    }
+
+    const { data: record, error } = await adminClient
       .from("collaboration_interest")
       .insert({
         collaboration_id: data.collaborationId,
@@ -174,16 +221,18 @@ export async function submitCollaborationInterest(input: CollaborationInterestIn
       .select("id")
       .single();
 
-    if (error || !record) return { success: false, error: error.message };
+    if (error || !record) return { success: false, error: error?.message || "Submission failed" };
 
-    // Log member submission
-    await writeAuditLog(supabase, user.id, "submit_collaboration_interest", record.id, null, {
+    // Correct table_name: "collaboration_interest" recorded in audit log
+    await writeCollaborationAuditLog(user.id, "submit_collaboration_interest", "collaboration_interest", record.id, null, {
       collaboration_id: data.collaborationId,
     });
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "An error occurred";
+    console.error("[SUBMIT_COLLABORATION_INTEREST] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
 
@@ -192,23 +241,37 @@ export async function updateCollaborationInterestStatus(
   status: "pending" | "reviewed" | "approved" | "closed" | "rejected"
 ): Promise<BusinessResult> {
   try {
-    const supabase = await createClient();
-    const adminId = await checkAdminAuth(supabase);
+    const authResult = await verifyServerRequest("admin");
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
 
-    const { data: oldVal } = await supabase.from("collaboration_interest").select("status").eq("id", interestId).single();
+    const adminId = authResult.user.id;
+    const adminClient = createAdminClient();
 
-    const { error } = await supabase
+    const { data: oldVal } = await adminClient.from("collaboration_interest").select("status").eq("id", interestId).single();
+
+    const { error } = await adminClient
       .from("collaboration_interest")
       .update({ status })
       .eq("id", interestId);
 
     if (error) return { success: false, error: error.message };
 
-    // Audit trace
-    await writeAuditLog(supabase, adminId, "update_collaboration_interest_status", interestId, oldVal, { status });
+    try {
+      revalidatePath("/[locale]/(cms)/admin/collaboration", "page");
+    } catch (e) {
+      console.warn("[UPDATE_COLLABORATION_INTEREST_STATUS] Revalidation warning:", e);
+    }
+
+    // Audit trace on collaboration_interest table
+    await writeCollaborationAuditLog(adminId, "update_collaboration_interest_status", "collaboration_interest", interestId, oldVal, { status });
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "An error occurred";
+    console.error("[UPDATE_COLLABORATION_INTEREST_STATUS] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
+

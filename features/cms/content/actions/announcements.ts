@@ -1,57 +1,24 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { verifyServerRequest } from "@/lib/supabase/auth-guard";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { announcementSchema, type AnnouncementInput } from "../schemas/content-schemas";
-import { headers } from "next/headers";
+import { AuditService } from "@/lib/services/audit-service";
+import { CacheTarget, revalidateFeatureCache } from "@/lib/utils/cache-revalidation";
 
 export type ContentResult = {
   success: boolean;
   error?: string;
 };
 
-async function checkAdminAuth(supabase: any) {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    throw new Error("Unauthorized access");
-  }
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (profile?.role !== "admin") {
-    throw new Error("Access denied. Admin role required.");
-  }
-
-  return user.id;
-}
-
-async function writeAuditLog(supabase: any, adminId: string, action: string, recordId: string, oldVal: any, newVal: any) {
-  const headersList = await headers();
-  const userAgent = headersList.get("user-agent") || undefined;
-  const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0] || undefined;
-
-  await supabase.from("audit_logs").insert({
-    user_id: adminId,
-    action,
-    table_name: "announcements",
-    record_id: recordId,
-    ip_address: ipAddress,
-    user_agent: userAgent,
-    old_values: oldVal,
-    new_values: newVal,
-  });
-}
-
 export async function createAnnouncement(input: AnnouncementInput): Promise<ContentResult> {
   try {
-    const supabase = await createClient();
-    const adminId = await checkAdminAuth(supabase);
+    const authResult = await verifyServerRequest("admin");
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
+
+    const adminId = authResult.user.id;
 
     const parsed = announcementSchema.safeParse(input);
     if (!parsed.success) {
@@ -59,8 +26,9 @@ export async function createAnnouncement(input: AnnouncementInput): Promise<Cont
     }
 
     const data = parsed.data;
+    const adminClient = createAdminClient();
 
-    const { data: record, error } = await supabase
+    const { data: record, error } = await adminClient
       .from("announcements")
       .insert({
         title: data.title,
@@ -78,20 +46,34 @@ export async function createAnnouncement(input: AnnouncementInput): Promise<Cont
       .select("id")
       .single();
 
-    if (error || !record) return { success: false, error: error.message };
+    if (error || !record) return { success: false, error: error?.message || "Insert failed" };
 
-    await writeAuditLog(supabase, adminId, "create_announcement", record.id, null, data);
+    revalidateFeatureCache(CacheTarget.ANNOUNCEMENTS);
+
+    await AuditService.log({
+      userId: adminId,
+      action: "create_announcement",
+      tableName: "announcements",
+      recordId: record.id,
+      newValues: data,
+    });
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "An error occurred";
+    console.error("[CREATE_ANNOUNCEMENT] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
 
 export async function updateAnnouncement(id: string, input: AnnouncementInput): Promise<ContentResult> {
   try {
-    const supabase = await createClient();
-    const adminId = await checkAdminAuth(supabase);
+    const authResult = await verifyServerRequest("admin");
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
+
+    const adminId = authResult.user.id;
 
     const parsed = announcementSchema.safeParse(input);
     if (!parsed.success) {
@@ -99,10 +81,15 @@ export async function updateAnnouncement(id: string, input: AnnouncementInput): 
     }
 
     const data = parsed.data;
+    const adminClient = createAdminClient();
 
-    const { data: oldVal } = await supabase.from("announcements").select("*").eq("id", id).single();
+    const { data: oldVal } = await adminClient
+      .from("announcements")
+      .select("title, status, is_pinned, publish_date, expiry_date, visible_tiers")
+      .eq("id", id)
+      .single();
 
-    const { error } = await supabase
+    const { error } = await adminClient
       .from("announcements")
       .update({
         title: data.title,
@@ -113,59 +100,103 @@ export async function updateAnnouncement(id: string, input: AnnouncementInput): 
         visible_tiers: data.visibleTiers,
         is_pinned: data.isPinned,
         status: data.status,
-        publish_date: data.publishDate ? new Date(data.publishDate).toISOString() : oldVal.publish_date,
+        publish_date: data.publishDate ? new Date(data.publishDate).toISOString() : oldVal?.publish_date || new Date().toISOString(),
         expiry_date: data.expiryDate ? new Date(data.expiryDate).toISOString() : null,
       })
       .eq("id", id);
 
     if (error) return { success: false, error: error.message };
 
-    await writeAuditLog(supabase, adminId, "update_announcement", id, oldVal, data);
+    revalidateFeatureCache(CacheTarget.ANNOUNCEMENTS);
+
+    await AuditService.log({
+      userId: adminId,
+      action: "update_announcement",
+      tableName: "announcements",
+      recordId: id,
+      oldValues: oldVal,
+      newValues: data,
+    });
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "An error occurred";
+    console.error("[UPDATE_ANNOUNCEMENT] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
 
 export async function deleteAnnouncement(id: string): Promise<ContentResult> {
   try {
-    const supabase = await createClient();
-    const adminId = await checkAdminAuth(supabase);
+    const authResult = await verifyServerRequest("admin");
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
 
-    const { data: oldVal } = await supabase.from("announcements").select("*").eq("id", id).single();
+    const adminId = authResult.user.id;
+    const adminClient = createAdminClient();
 
-    const { error } = await supabase.from("announcements").delete().eq("id", id);
+    const { data: oldVal } = await adminClient.from("announcements").select("title, status").eq("id", id).single();
+
+    const { error } = await adminClient.from("announcements").delete().eq("id", id);
 
     if (error) return { success: false, error: error.message };
 
-    await writeAuditLog(supabase, adminId, "delete_announcement", id, oldVal, null);
+    revalidateFeatureCache(CacheTarget.ANNOUNCEMENTS);
+
+    await AuditService.log({
+      userId: adminId,
+      action: "delete_announcement",
+      tableName: "announcements",
+      recordId: id,
+      oldValues: oldVal,
+    });
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "An error occurred";
+    console.error("[DELETE_ANNOUNCEMENT] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
 
 export async function togglePinAnnouncement(id: string): Promise<ContentResult> {
   try {
-    const supabase = await createClient();
-    const adminId = await checkAdminAuth(supabase);
+    const authResult = await verifyServerRequest("admin");
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
 
-    const { data: oldVal } = await supabase.from("announcements").select("is_pinned").eq("id", id).single();
+    const adminId = authResult.user.id;
+    const adminClient = createAdminClient();
+
+    const { data: oldVal } = await adminClient.from("announcements").select("is_pinned").eq("id", id).single();
     const nextPin = !oldVal?.is_pinned;
 
-    const { error } = await supabase
+    const { error } = await adminClient
       .from("announcements")
       .update({ is_pinned: nextPin })
       .eq("id", id);
 
     if (error) return { success: false, error: error.message };
 
-    await writeAuditLog(supabase, adminId, "toggle_pin_announcement", id, oldVal, { is_pinned: nextPin });
+    revalidateFeatureCache(CacheTarget.ANNOUNCEMENTS);
+
+    await AuditService.log({
+      userId: adminId,
+      action: "toggle_pin_announcement",
+      tableName: "announcements",
+      recordId: id,
+      oldValues: oldVal,
+      newValues: { is_pinned: nextPin },
+    });
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "An error occurred";
+    console.error("[TOGGLE_PIN_ANNOUNCEMENT] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
+
+

@@ -7,56 +7,49 @@ import { SessionService } from "@/lib/services/session-service";
 
 const handleI18nRouting = createMiddleware(routing);
 
+/**
+ * Root Edge Middleware handling internationalization routing, legacy redirects,
+ * session authentication validation, role-based path protection, and security headers.
+ */
 export default async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const locale = pathname.split("/")[1] || "en";
 
-  // Redirect /ja/* to /en/* (but not for admin/portal routes which handle locale dynamically)
+  // 1. Legacy locale redirect (/ja/* to /en/*)
   if (pathname.startsWith("/ja/") && !pathname.includes("/admin/") && !pathname.includes("/portal/")) {
     const url = request.nextUrl.clone();
     url.pathname = pathname.replace(/^\/ja\//, "/en/");
     return NextResponse.redirect(url, 307);
   }
 
-  // Redirect /innovation-hub and /newsletter to homepage (temporary)
-  if (
-    pathname.match(/^\/(?:en|ja)?\/?innovation-hub(?:\/.*)?$/) ||
-    pathname.match(/^\/(?:en|ja)?\/?(?:resources\/)?newsletter(?:\/.*)?$/)
-  ) {
-    const url = request.nextUrl.clone();
-    url.pathname = `/${locale}`;
-    return NextResponse.redirect(url, 307);
-  }
-
-  // 1. Update/refresh the Supabase session and get the user
+  // 2. Refresh active session context via Supabase SSR client
   const { supabaseResponse, user, supabase } = await updateSession(request);
 
-  // Check route matches
   const isApiRoute = pathname.startsWith("/api") || pathname.includes("/api/");
   const isLogin = pathname.match(/^\/(en|ja)\/login(\/.*)?$/);
   const isAdminRoute = pathname.match(/^\/(en|ja)\/admin(\/.*)?$/);
   const isPortalRoute = pathname.match(/^\/(en|ja)\/portal(\/.*)?$/);
 
-  // 2. Perform route validation and protection
-  if (user) {
-    // Extract access token and decode sid claim
+  // 3. Route Validation & Session State Enforcement
+  if (user && supabase) {
     const { data: { session } } = await supabase.auth.getSession();
     const token = session?.access_token || null;
     const sid = getCurrentSessionId(token);
 
     if (sid) {
-      // Validate session states from database
+      // Validate session against memory cache / PostgreSQL
       const validation = await SessionService.validateSession(user.id, sid);
 
       if (!validation.valid) {
-        // Sign out Supabase auth session
         try {
           await supabase.auth.signOut();
-        } catch (e) {}
+        } catch (e) {
+          console.warn("[MIDDLEWARE] Sign out exception during session invalidation:", e);
+        }
 
         if (isApiRoute) {
           return NextResponse.json(
-            { error: `Unauthorized: Session invalid. Reason: ${validation.reason}` },
+            { error: "Unauthorized: Session is invalid or revoked." },
             { status: 401 }
           );
         }
@@ -67,41 +60,36 @@ export default async function middleware(request: NextRequest) {
         return NextResponse.redirect(url);
       }
 
-      // Session is valid. Touch the activity timestamp (throttled inside touchSession)
-      await SessionService.touchSession(sid);
+      // Non-blocking background touch of session activity timestamp
+      SessionService.touchSession(sid).catch(() => {});
 
       const profile = validation.profile;
       const role = profile?.role;
       const country = profile?.country;
 
-      // Handle redirects if visiting login/admin/portal paths
       if (isLogin || isAdminRoute || isPortalRoute) {
         const isFromJapan = country && country.trim().toLowerCase() === "japan";
         const expectedLocale = isFromJapan ? "ja" : "en";
         const currentLocale = locale === "en" || locale === "ja" ? locale : "en";
 
-        // Redirection on Login path
         if (isLogin) {
           const url = request.nextUrl.clone();
           url.pathname = role === "admin" ? `/${expectedLocale}/admin/dashboard` : `/${expectedLocale}/portal/dashboard`;
           return NextResponse.redirect(url);
         }
 
-        // Admin attempting to visit Portal Route (Isolate Admin)
         if (isPortalRoute && role === "admin") {
           const url = request.nextUrl.clone();
           url.pathname = `/${expectedLocale}/admin/dashboard`;
           return NextResponse.redirect(url);
         }
 
-        // Member attempting to visit Admin Route
         if (isAdminRoute && role !== "admin") {
           const url = request.nextUrl.clone();
           url.pathname = `/${expectedLocale}/portal/dashboard`;
           return NextResponse.redirect(url);
         }
 
-        // Redirect user to the correct locale path if they are on the wrong one
         if (currentLocale !== expectedLocale) {
           const url = request.nextUrl.clone();
           url.pathname = pathname.replace(/^\/(en|ja)/, `/${expectedLocale}`);
@@ -109,10 +97,13 @@ export default async function middleware(request: NextRequest) {
         }
       }
     } else {
-      // Missing Session ID trigger
-      try {
-        await supabase.auth.signOut();
-      } catch (e) {}
+      if (supabase) {
+        try {
+          await supabase.auth.signOut();
+        } catch (e) {
+          console.warn("[MIDDLEWARE] Sign out exception during missing sid cleanup:", e);
+        }
+      }
 
       if (isApiRoute) {
         return NextResponse.json({ error: "Unauthorized: Missing session context." }, { status: 401 });
@@ -124,7 +115,7 @@ export default async function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
     }
   } else {
-    // If no user context exists and trying to access protected paths or APIs
+    // Unauthenticated access control
     if (isAdminRoute || isPortalRoute) {
       const url = request.nextUrl.clone();
       url.pathname = `/${locale}/login`;
@@ -132,7 +123,6 @@ export default async function middleware(request: NextRequest) {
     }
 
     if (isApiRoute) {
-      // Allow general public endpoints (if any) or block private ones
       const isPublicApi = pathname.includes("/public/");
       if (!isPublicApi) {
         return NextResponse.json({ error: "Unauthorized: Access token missing." }, { status: 401 });
@@ -140,17 +130,15 @@ export default async function middleware(request: NextRequest) {
     }
   }
 
-  // 3. Process localization routing (skip for API routes)
+  // 4. Internationalization Routing Execution
   let response: NextResponse;
   if (isApiRoute) {
-    // For API routes, return early without i18n routing
     response = NextResponse.next();
   } else {
-    // For regular routes, apply i18n routing
     response = handleI18nRouting(request);
   }
 
-  // 4. Copy cookie updates from Supabase token refresh into final localized response
+  // 5. Synchronize Mutated Auth Cookies onto Final Response
   if (supabaseResponse) {
     supabaseResponse.cookies.getAll().forEach((cookie) => {
       response.cookies.delete(cookie.name);
@@ -166,10 +154,15 @@ export default async function middleware(request: NextRequest) {
     });
   }
 
+  // 6. Security Headers Injection
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  response.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+
   return response;
 }
 
 export const config = {
-  // Match all pathnames including APIs except for Next.js internal structures and static assets
   matcher: ["/", "/(en|ja)/:path*", "/api/:path*", "/((?!_next|.*\\..*).*)"],
 };

@@ -1,6 +1,8 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { verifyServerRequest } from "@/lib/supabase/auth-guard";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { SessionService } from "@/lib/services/session-service";
 import { headers } from "next/headers";
 
 export type LifecycleResult = {
@@ -8,74 +10,66 @@ export type LifecycleResult = {
   error?: string;
 };
 
-// Helper to assert admin privilege
-async function checkAdminAuth(supabase: any) {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    throw new Error("Unauthorized access");
-  }
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (profile?.role !== "admin") {
-    throw new Error("Access denied. Admin role required.");
-  }
-
-  return user.id;
-}
-
-// Log lifecycle action helper
+// Centralized audit logging helper for lifecycle transitions
 async function logLifecycleAction(
-  supabase: any,
   adminId: string,
   memberId: string,
   action: string,
-  oldVal: any,
-  newVal: any
-) {
-  const headersList = await headers();
-  const userAgent = headersList.get("user-agent") || undefined;
-  const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0] || undefined;
+  oldVal: unknown,
+  newVal: unknown
+): Promise<void> {
+  try {
+    const adminClient = createAdminClient();
+    const headersList = await headers();
+    const userAgent = headersList.get("user-agent") || undefined;
+    const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0] || undefined;
 
-  await supabase.from("audit_logs").insert({
-    user_id: adminId,
-    action,
-    table_name: "profiles",
-    record_id: memberId,
-    ip_address: ipAddress,
-    user_agent: userAgent,
-    old_values: oldVal,
-    new_values: newVal,
-  });
+    await adminClient.from("audit_logs").insert({
+      user_id: adminId,
+      action,
+      table_name: "profiles",
+      record_id: memberId,
+      ip_address: ipAddress,
+      user_agent: userAgent,
+      old_values: oldVal,
+      new_values: newVal,
+    });
+  } catch (auditErr) {
+    console.warn(`[LIFECYCLE_ACTION] Audit log failure for action ${action}:`, auditErr);
+  }
 }
 
 export async function suspendMember(memberId: string): Promise<LifecycleResult> {
   try {
-    const supabase = await createClient();
-    const adminId = await checkAdminAuth(supabase);
+    const authResult = await verifyServerRequest("admin");
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
 
-    const { data: profile } = await supabase
+    const adminId = authResult.user.id;
+    const adminClient = createAdminClient();
+
+    const { data: profile } = await adminClient
       .from("profiles")
       .select("status, is_active")
       .eq("id", memberId)
       .single();
 
-    const { error } = await supabase
+    const { error } = await adminClient
       .from("profiles")
       .update({ status: "suspended", is_active: false })
       .eq("id", memberId);
 
     if (error) return { success: false, error: error.message };
 
+    // Immediately revoke all active database sessions for the suspended member
+    try {
+      await SessionService.revokeAllSessions(memberId, adminId, "account_disabled");
+    } catch (revokeErr) {
+      console.warn("[SUSPEND_MEMBER] Session revocation warning:", revokeErr);
+    }
+
     await logLifecycleAction(
-      supabase,
       adminId,
       memberId,
       "suspend_member",
@@ -84,23 +78,30 @@ export async function suspendMember(memberId: string): Promise<LifecycleResult> 
     );
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
+    console.error("[SUSPEND_MEMBER] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
 
 export async function activateMember(memberId: string): Promise<LifecycleResult> {
   try {
-    const supabase = await createClient();
-    const adminId = await checkAdminAuth(supabase);
+    const authResult = await verifyServerRequest("admin");
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
 
-    const { data: profile } = await supabase
+    const adminId = authResult.user.id;
+    const adminClient = createAdminClient();
+
+    const { data: profile } = await adminClient
       .from("profiles")
       .select("status, is_active")
       .eq("id", memberId)
       .single();
 
-    const { error } = await supabase
+    const { error } = await adminClient
       .from("profiles")
       .update({ status: "active", is_active: true })
       .eq("id", memberId);
@@ -108,7 +109,6 @@ export async function activateMember(memberId: string): Promise<LifecycleResult>
     if (error) return { success: false, error: error.message };
 
     await logLifecycleAction(
-      supabase,
       adminId,
       memberId,
       "activate_member",
@@ -117,31 +117,44 @@ export async function activateMember(memberId: string): Promise<LifecycleResult>
     );
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
+    console.error("[ACTIVATE_MEMBER] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
 
 export async function archiveMember(memberId: string): Promise<LifecycleResult> {
   try {
-    const supabase = await createClient();
-    const adminId = await checkAdminAuth(supabase);
+    const authResult = await verifyServerRequest("admin");
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
 
-    const { data: profile } = await supabase
+    const adminId = authResult.user.id;
+    const adminClient = createAdminClient();
+
+    const { data: profile } = await adminClient
       .from("profiles")
       .select("status, is_active")
       .eq("id", memberId)
       .single();
 
-    const { error } = await supabase
+    const { error } = await adminClient
       .from("profiles")
       .update({ status: "archived", is_active: false })
       .eq("id", memberId);
 
     if (error) return { success: false, error: error.message };
 
+    // Immediately revoke active sessions for archived members
+    try {
+      await SessionService.revokeAllSessions(memberId, adminId, "account_disabled");
+    } catch (revokeErr) {
+      console.warn("[ARCHIVE_MEMBER] Session revocation warning:", revokeErr);
+    }
+
     await logLifecycleAction(
-      supabase,
       adminId,
       memberId,
       "archive_member",
@@ -150,17 +163,24 @@ export async function archiveMember(memberId: string): Promise<LifecycleResult> 
     );
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
+    console.error("[ARCHIVE_MEMBER] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
 
 export async function renewMember(memberId: string, newEndDate: string): Promise<LifecycleResult> {
   try {
-    const supabase = await createClient();
-    const adminId = await checkAdminAuth(supabase);
+    const authResult = await verifyServerRequest("admin");
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
 
-    const { data: profile } = await supabase
+    const adminId = authResult.user.id;
+    const adminClient = createAdminClient();
+
+    const { data: profile } = await adminClient
       .from("profiles")
       .select("membership_end_date, membership_valid_until, status, is_active")
       .eq("id", memberId)
@@ -168,7 +188,7 @@ export async function renewMember(memberId: string, newEndDate: string): Promise
 
     const formattedDate = new Date(newEndDate).toISOString();
 
-    const { error } = await supabase
+    const { error } = await adminClient
       .from("profiles")
       .update({
         membership_end_date: formattedDate,
@@ -181,7 +201,6 @@ export async function renewMember(memberId: string, newEndDate: string): Promise
     if (error) return { success: false, error: error.message };
 
     await logLifecycleAction(
-      supabase,
       adminId,
       memberId,
       "renew_member",
@@ -200,68 +219,63 @@ export async function renewMember(memberId: string, newEndDate: string): Promise
     );
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
+    console.error("[RENEW_MEMBER] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
 
 export async function forceLogoutSession(memberId: string, sessionId: string): Promise<LifecycleResult> {
   try {
-    const supabase = await createClient();
-    const adminId = await checkAdminAuth(supabase);
+    const authResult = await verifyServerRequest("admin");
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
 
-    const { SessionService } = await import("@/lib/services/session-service");
+    const adminId = authResult.user.id;
     await SessionService.revokeSession(sessionId, adminId, "admin_logout");
 
-    // Insert audit log
-    const headersList = await headers();
-    const userAgent = headersList.get("user-agent") || undefined;
-    const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0] || undefined;
-
-    await supabase.from("audit_logs").insert({
-      user_id: adminId,
-      action: "forced_logout",
-      table_name: "sessions",
-      record_id: sessionId,
-      ip_address: ipAddress,
-      user_agent: userAgent,
-      old_values: null,
-      new_values: { member_id: memberId, session_id: sessionId },
-    });
+    await logLifecycleAction(
+      adminId,
+      memberId,
+      "forced_logout",
+      null,
+      { member_id: memberId, session_id: sessionId }
+    );
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
+    console.error("[FORCE_LOGOUT_SESSION] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
 
 export async function forceLogoutAllSessions(memberId: string): Promise<LifecycleResult> {
   try {
-    const supabase = await createClient();
-    const adminId = await checkAdminAuth(supabase);
+    const authResult = await verifyServerRequest("admin");
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
 
-    const { SessionService } = await import("@/lib/services/session-service");
+    const adminId = authResult.user.id;
     await SessionService.revokeAllSessions(memberId, adminId, "admin_logout");
 
-    // Insert audit log
-    const headersList = await headers();
-    const userAgent = headersList.get("user-agent") || undefined;
-    const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0] || undefined;
-
-    await supabase.from("audit_logs").insert({
-      user_id: adminId,
-      action: "forced_logout_all",
-      table_name: "profiles",
-      record_id: memberId,
-      ip_address: ipAddress,
-      user_agent: userAgent,
-      old_values: null,
-      new_values: { member_id: memberId },
-    });
+    await logLifecycleAction(
+      adminId,
+      memberId,
+      "forced_logout_all",
+      null,
+      { member_id: memberId }
+    );
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An error occurred" };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
+    console.error("[FORCE_LOGOUT_ALL_SESSIONS] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
+
 

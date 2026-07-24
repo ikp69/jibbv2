@@ -11,8 +11,9 @@ import LinkedInCarousel from "@/components/sections/LinkedInCarousel";
 import { PressReleasesSection } from "@/components/sections/PressReleasesSection";
 import { createClient } from "@supabase/supabase-js";
 import type { Metadata } from "next";
+import { env } from "@/lib/env";
 
-const SITE_URL = "https://npo-jibb.org";
+const SITE_URL = env.NEXT_PUBLIC_APP_URL;
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -74,8 +75,8 @@ export default async function InsightsPage({ params, searchParams }: PageProps) 
 
   let linkedinPosts: { id: string; shareUrn: string }[] = [];
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     if (supabaseUrl && supabaseAnonKey) {
       const supabase = createClient(supabaseUrl, supabaseAnonKey);
       const { data: posts, error } = await supabase

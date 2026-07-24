@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { WorkProcess } from "@/components/sections/WorkProcess";
 import { HighvalueEcosystem } from "@/components/sections/HighvalueEcosystem";
 // import { HorizontalScroll } from "@/components/sections/HorizontalScroll";
+import { env } from "@/lib/env";
 
 
 export async function generateMetadata({
@@ -16,7 +17,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale });
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+  const baseUrl = env.NEXT_PUBLIC_APP_URL;
   const title = locale === "ja"
     ? "対象産業セクター | JIBB — 日印ビジネス機構"
     : "Industry Sectors | JIBB - Japan India Business Bureau";

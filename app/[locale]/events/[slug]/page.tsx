@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getEventBySlug } from '@/lib/eventsData'
 import EventDetailClientPage from './EventDetailClientPage'
+import { env } from '@/lib/env'
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>
@@ -10,6 +11,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params
   const event = getEventBySlug(slug)
+  const baseUrl = env.NEXT_PUBLIC_APP_URL
 
   if (!event) {
     return {
@@ -20,7 +22,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const loc = event[locale as 'en' | 'ja'] || event.en
   const title = `${loc.title} ${loc.titleHighlight} ${loc.titleEnd} | JIBB`
   const description = loc.subtitle || loc.overview || ''
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://npo-jibb.org'
   const ogImage = `${baseUrl}${event.posterEn}`
 
   return {

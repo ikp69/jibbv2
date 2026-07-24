@@ -5,13 +5,15 @@ const BASE = 'https://npo-jibb.org'
 const SLUG = 'bharat-mobility-2026'
 const OG_IMAGE = `${BASE}/events/bharat-mobility-2027-en.png`
 
+import { env } from "@/lib/env";
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+  const baseUrl = env.NEXT_PUBLIC_APP_URL;
 
   const title = locale === "ja"
     ? "バーラトモビリティ2027・インド自動車ビジネス参入セミナー | JIBB 東京"

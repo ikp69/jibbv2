@@ -21,13 +21,15 @@ import {
   Zap, Crown, Star, Diamond
 } from "lucide-react";
 
+import { env } from "@/lib/env";
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+  const baseUrl = env.NEXT_PUBLIC_APP_URL;
 
   const title = locale === "ja"
     ? "JIBB - 日印ビジネス機構 | 日本・インド間のビジネス協力と産業成長"
@@ -177,8 +179,8 @@ export default async function HomePage({
 
   let linkedinPosts: { id: string; shareUrn: string }[] = [];
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     if (supabaseUrl && supabaseAnonKey) {
       const supabase = createClient(supabaseUrl, supabaseAnonKey);
       const { data: posts, error } = await supabase

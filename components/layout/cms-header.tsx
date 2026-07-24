@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { User, LogOut, Key, Settings, User as UserIcon, ShieldAlert } from "lucide-react";
+import { User, LogOut, Key, Settings } from "lucide-react";
 import { logout } from "@/features/cms/auth/actions/logout";
 
 type BreadcrumbItem = {
@@ -23,147 +23,152 @@ type CmsHeaderProps = {
   };
 };
 
-export default function CmsHeader({ breadcrumbs, user }: CmsHeaderProps) {
+function getTierColor(tier: string): string {
+  switch (tier.toLowerCase()) {
+    case "platinum":
+      return "bg-slate-100 text-slate-850 border-slate-300";
+    case "gold":
+      return "bg-amber-50 text-amber-800 border-amber-200";
+    case "silver":
+      return "bg-slate-100 text-slate-700 border-slate-200";
+    case "admin":
+      return "bg-red-50 text-red-700 border-red-200";
+    default:
+      return "bg-blue-50 text-blue-750 border-blue-200";
+  }
+}
+
+export default React.memo(function CmsHeader({ breadcrumbs, user }: CmsHeaderProps) {
   const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     setIsDropdownOpen(false);
     setShowLogoutConfirm(true);
-  };
+  }, []);
 
-  const confirmLogout = async () => {
+  const confirmLogout = useCallback(async () => {
     const res = await logout();
     if (res.success) {
-      // Use router.push() to navigate home after logout
-      // Middleware will handle redirecting unauthenticated users to login if needed
       router.push("/en");
     }
-  };
+  }, [router]);
 
-  const getTierColor = (tier: string) => {
-    switch (tier.toLowerCase()) {
-      case "platinum":
-        return "bg-slate-100 text-slate-850 border-slate-300";
-      case "gold":
-        return "bg-amber-50 text-amber-800 border-amber-200";
-      case "silver":
-        return "bg-slate-100 text-slate-700 border-slate-200";
-      case "admin":
-        return "bg-red-50 text-red-700 border-red-200";
-      default:
-        return "bg-blue-50 text-blue-750 border-blue-200";
-    }
-  };
+  const tierBadgeColor = useMemo(() => getTierColor(user.membershipTier), [user.membershipTier]);
 
   return (
     <>
       <header className="h-16 border-b border-slate-205 bg-white/95 backdrop-blur-md flex items-center justify-between px-6 z-20 w-full font-sans">
-      {/* Left: Breadcrumbs */}
-      <nav className="flex items-center text-sm font-medium text-slate-500">
-        <ul className="flex items-center space-x-2">
-          {breadcrumbs.map((crumb, idx) => (
-            <li key={idx} className="flex items-center space-x-2">
-              {idx > 0 && <span className="text-slate-300">/</span>}
-              {crumb.path ? (
-                <Link href={crumb.path} className="hover:text-slate-900 transition-colors">
-                  {crumb.label}
-                </Link>
-              ) : (
-                <span className="text-slate-900 font-semibold">{crumb.label}</span>
-              )}
-            </li>
-          ))}
-        </ul>
-      </nav>
+        {/* Left: Breadcrumbs */}
+        <nav aria-label="Breadcrumb" className="flex items-center text-sm font-medium text-slate-500">
+          <ol className="flex items-center space-x-2">
+            {breadcrumbs.map((crumb, idx) => (
+              <li key={idx} className="flex items-center space-x-2">
+                {idx > 0 && <span className="text-slate-300" aria-hidden="true">/</span>}
+                {crumb.path ? (
+                  <Link href={crumb.path} className="hover:text-slate-900 transition-colors">
+                    {crumb.label}
+                  </Link>
+                ) : (
+                  <span className="text-slate-900 font-semibold" aria-current="page">{crumb.label}</span>
+                )}
+              </li>
+            ))}
+          </ol>
+        </nav>
 
-      {/* Right: Actions & User Dropdown */}
-      <div className="flex items-center gap-4">
-        {/* Membership Tier Badge */}
-        <span
-          className={`px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider border capitalize ${getTierColor(
-            user.membershipTier
-          )}`}
-        >
-          {user.membershipTier}
-        </span>
-
-        {/* User Dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2.5 text-left focus:outline-none cursor-pointer group"
+        {/* Right: Actions & User Dropdown */}
+        <div className="flex items-center gap-4">
+          {/* Membership Tier Badge */}
+          <span
+            className={`px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider border capitalize ${tierBadgeColor}`}
           >
-            <div className="w-9 h-9 bg-slate-100 rounded-lg flex items-center justify-center border border-slate-200 text-slate-600 group-hover:border-slate-300 group-hover:text-slate-900 transition-colors overflow-hidden shrink-0">
-              {user.companyLogo ? (
-                <img src={user.companyLogo} alt="Logo" className="w-full h-full object-contain bg-white" />
-              ) : (
-                <User className="w-5 h-5" />
-              )}
-            </div>
-            <div className="hidden sm:block">
-              <p className="text-xs font-semibold text-slate-800 leading-none">
-                {user.companyName || user.email.split("@")[0]}
-              </p>
-              <p className="text-[10px] text-slate-500 leading-none mt-1">
-                {user.designation || (user.role === "admin" ? "JIBB Admin" : "Member")}
-              </p>
-            </div>
-          </button>
+            {user.membershipTier}
+          </span>
 
-          {isDropdownOpen && (
-            <>
-              {/* Back Drop */}
-              <div onClick={() => setIsDropdownOpen(false)} className="fixed inset-0 z-10" />
-
-              {/* Dropdown Menu */}
-              <div className="absolute right-0 mt-2.5 w-56 bg-white border border-slate-200 rounded-xl shadow-lg z-20 py-1.5 text-slate-700">
-                <div className="px-4 py-2 border-b border-slate-150">
-                  <p className="text-xs font-semibold text-slate-955 truncate">{user.companyName || "Company"}</p>
-                  <p className="text-[10px] text-slate-500 truncate mt-0.5">{user.email}</p>
-                </div>
-
-                <div className="py-1">
-                  <Link
-                    href={user.role === "admin" ? "/admin/settings" : "/portal/profile"}
-                    onClick={() => setIsDropdownOpen(false)}
-                    className="flex items-center gap-2.5 px-4 py-2 text-sm hover:bg-slate-50 hover:text-slate-900 transition-colors"
-                  >
-                    <Settings className="w-4 h-4 text-slate-450" />
-                    <span>Account Settings</span>
-                  </Link>
-
-                  <Link
-                    href={user.role === "admin" ? "/admin/settings" : "/portal/profile"}
-                    onClick={() => setIsDropdownOpen(false)}
-                    className="flex items-center gap-2.5 px-4 py-2 text-sm hover:bg-slate-50 hover:text-slate-900 transition-colors"
-                  >
-                    <Key className="w-4 h-4 text-slate-450" />
-                    <span>Change Password</span>
-                  </Link>
-                </div>
-
-                <div className="border-t border-slate-150 py-1">
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-2.5 px-4 py-2 text-sm hover:bg-red-50 hover:text-red-650 transition-colors cursor-pointer text-left font-medium"
-                  >
-                    <LogOut className="w-4 h-4 text-red-500" />
-                    <span>Sign Out</span>
-                  </button>
-                </div>
+          {/* User Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setIsDropdownOpen((prev) => !prev)}
+              aria-expanded={isDropdownOpen}
+              aria-haspopup="true"
+              aria-label="User Account Menu"
+              className="flex items-center gap-2.5 text-left focus:outline-none focus:ring-2 focus:ring-slate-400 cursor-pointer group rounded-lg p-1"
+            >
+              <div className="w-9 h-9 bg-slate-100 rounded-lg flex items-center justify-center border border-slate-200 text-slate-600 group-hover:border-slate-300 group-hover:text-slate-900 transition-colors overflow-hidden shrink-0">
+                {user.companyLogo ? (
+                  <img src={user.companyLogo} alt={`${user.companyName || 'Company'} logo`} className="w-full h-full object-contain bg-white" />
+                ) : (
+                  <User className="w-5 h-5" />
+                )}
               </div>
-            </>
-          )}
+              <div className="hidden sm:block">
+                <p className="text-xs font-semibold text-slate-800 leading-none">
+                  {user.companyName || user.email.split("@")[0]}
+                </p>
+                <p className="text-[10px] text-slate-500 leading-none mt-1">
+                  {user.designation || (user.role === "admin" ? "JIBB Admin" : "Member")}
+                </p>
+              </div>
+            </button>
+
+            {isDropdownOpen && (
+              <>
+                {/* Back Drop */}
+                <div onClick={() => setIsDropdownOpen(false)} className="fixed inset-0 z-10" aria-hidden="true" />
+
+                {/* Dropdown Menu */}
+                <div role="menu" className="absolute right-0 mt-2.5 w-56 bg-white border border-slate-200 rounded-xl shadow-lg z-20 py-1.5 text-slate-700">
+                  <div className="px-4 py-2 border-b border-slate-150">
+                    <p className="text-xs font-semibold text-slate-955 truncate">{user.companyName || "Company"}</p>
+                    <p className="text-[10px] text-slate-500 truncate mt-0.5">{user.email}</p>
+                  </div>
+
+                  <div className="py-1">
+                    <Link
+                      role="menuitem"
+                      href={user.role === "admin" ? "/admin/settings" : "/portal/profile"}
+                      onClick={() => setIsDropdownOpen(false)}
+                      className="flex items-center gap-2.5 px-4 py-2 text-sm hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                    >
+                      <Settings className="w-4 h-4 text-slate-450" />
+                      <span>Account Settings</span>
+                    </Link>
+
+                    <Link
+                      role="menuitem"
+                      href={user.role === "admin" ? "/admin/settings" : "/portal/profile"}
+                      onClick={() => setIsDropdownOpen(false)}
+                      className="flex items-center gap-2.5 px-4 py-2 text-sm hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                    >
+                      <Key className="w-4 h-4 text-slate-450" />
+                      <span>Change Password</span>
+                    </Link>
+                  </div>
+
+                  <div className="border-t border-slate-150 py-1">
+                    <button
+                      role="menuitem"
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2.5 px-4 py-2 text-sm hover:bg-red-50 hover:text-red-650 transition-colors cursor-pointer text-left font-medium"
+                    >
+                      <LogOut className="w-4 h-4 text-red-500" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
       {/* Logout Confirmation Dialog */}
       {showLogoutConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 font-sans">
+        <div role="dialog" aria-modal="true" aria-labelledby="logout-dialog-title" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 font-sans">
           <div className="w-full max-w-sm bg-white border border-slate-200 rounded-xl shadow-2xl p-6 space-y-4 text-slate-800">
-            <h3 className="text-base font-bold text-slate-900">
+            <h3 id="logout-dialog-title" className="text-base font-bold text-slate-900">
               Confirm Sign Out
             </h3>
             <p className="text-sm text-slate-500">
@@ -188,4 +193,5 @@ export default function CmsHeader({ breadcrumbs, user }: CmsHeaderProps) {
       )}
     </>
   );
-}
+});
+

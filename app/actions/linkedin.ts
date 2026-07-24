@@ -3,11 +3,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { env } from "@/lib/env";
 
 export async function addLinkedInPost(urnInput: string, secret: string) {
   try {
-    // 1. Authenticate with Server Environment Secret
-    const adminSecret = process.env.ADMIN_UPDATE_SECRET;
+    // 1. Authenticate with Server Environment Secret via Zod env
+    const adminSecret = env.ADMIN_UPDATE_SECRET;
     if (!adminSecret) {
       return { success: false, error: "Admin secret is not configured on the server." };
     }
@@ -39,7 +40,7 @@ export async function addLinkedInPost(urnInput: string, secret: string) {
       if (dbError.code === "23505") { // unique_violation code
         return { success: false, error: "This post has already been added." };
       }
-      console.error("Database insert error:", dbError);
+      console.error("[LINKEDIN_ACTION] Database insert error:", dbError);
       throw new Error(dbError.message);
     }
 
@@ -48,7 +49,7 @@ export async function addLinkedInPost(urnInput: string, secret: string) {
 
     return { success: true };
   } catch (err: unknown) {
-    console.error("addLinkedInPost error:", err);
+    console.error("[LINKEDIN_ACTION] addLinkedInPost error:", err);
     const message = err instanceof Error ? err.message : "Failed to add LinkedIn post";
     return { success: false, error: message };
   }
@@ -57,7 +58,7 @@ export async function addLinkedInPost(urnInput: string, secret: string) {
 export async function deleteLinkedInPost(id: string, secret: string) {
   try {
     // 1. Authenticate with Server Environment Secret
-    const adminSecret = process.env.ADMIN_UPDATE_SECRET;
+    const adminSecret = env.ADMIN_UPDATE_SECRET;
     if (!adminSecret) {
       return { success: false, error: "Admin secret is not configured on the server." };
     }
@@ -75,7 +76,7 @@ export async function deleteLinkedInPost(id: string, secret: string) {
       .eq("id", id);
 
     if (dbError) {
-      console.error("Database delete error:", dbError);
+      console.error("[LINKEDIN_ACTION] Database delete error:", dbError);
       throw new Error(dbError.message);
     }
 
@@ -84,7 +85,7 @@ export async function deleteLinkedInPost(id: string, secret: string) {
 
     return { success: true };
   } catch (err: unknown) {
-    console.error("deleteLinkedInPost error:", err);
+    console.error("[LINKEDIN_ACTION] deleteLinkedInPost error:", err);
     const message = err instanceof Error ? err.message : "Failed to delete LinkedIn post";
     return { success: false, error: message };
   }
@@ -92,7 +93,7 @@ export async function deleteLinkedInPost(id: string, secret: string) {
 
 export async function verifyAdminPasscode(secret: string) {
   try {
-    const adminSecret = process.env.ADMIN_UPDATE_SECRET;
+    const adminSecret = env.ADMIN_UPDATE_SECRET;
     if (!adminSecret) {
       return { success: false, error: "Admin secret is not configured on the server." };
     }
@@ -101,7 +102,7 @@ export async function verifyAdminPasscode(secret: string) {
     }
     return { success: false, error: "Invalid passcode." };
   } catch (err) {
-    console.error("verifyAdminPasscode error:", err);
+    console.error("[LINKEDIN_ACTION] verifyAdminPasscode error:", err);
     return { success: false, error: "Authentication check failed." };
   }
 }

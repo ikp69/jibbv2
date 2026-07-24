@@ -18,13 +18,15 @@ import {
   Gavel,
 } from "lucide-react";
 
+import { env } from "@/lib/env";
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+  const baseUrl = env.NEXT_PUBLIC_APP_URL;
   const title =
     locale === "ja"
       ? "利用規約 | 日印ビジネス機構"

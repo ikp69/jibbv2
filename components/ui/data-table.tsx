@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { ChevronDown, ChevronUp, ChevronsLeft, ChevronsRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 export type ColumnDef<T> = {
@@ -35,7 +35,7 @@ type DataTableProps<T> = {
   expandedRowId?: string;
 };
 
-export function DataTable<T>({
+function DataTableInner<T>({
   columns,
   data,
   searchKey,
@@ -58,21 +58,21 @@ export function DataTable<T>({
 }: DataTableProps<T>) {
   const [searchValue, setSearchValue] = useState("");
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
+  const handleSearchSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (onSearchChange) {
       onSearchChange(searchValue);
     }
-  };
+  }, [onSearchChange, searchValue]);
 
-  const handleSortClick = (accessorKey?: string) => {
+  const handleSortClick = useCallback((accessorKey?: string) => {
     if (!accessorKey || !onSort) return;
     const isCurrent = sortKey === accessorKey;
     const nextOrder = isCurrent && sortOrder === "asc" ? "desc" : "asc";
     onSort(accessorKey, nextOrder);
-  };
+  }, [onSort, sortKey, sortOrder]);
 
-  const handleSelectAll = (checked: boolean) => {
+  const handleSelectAll = useCallback((checked: boolean) => {
     if (!onSelectChange || !getRowId) return;
     if (checked) {
       const allIds = data.map((item) => getRowId(item));
@@ -80,19 +80,20 @@ export function DataTable<T>({
     } else {
       onSelectChange([]);
     }
-  };
+  }, [data, getRowId, onSelectChange]);
 
-  const handleSelectRow = (id: string, checked: boolean) => {
+  const handleSelectRow = useCallback((id: string, checked: boolean) => {
     if (!onSelectChange) return;
     if (checked) {
       onSelectChange([...selectedIds, id]);
     } else {
       onSelectChange(selectedIds.filter((item) => item !== id));
     }
-  };
+  }, [onSelectChange, selectedIds]);
 
-  const allSelected =
-    data.length > 0 && getRowId && data.every((item) => selectedIds.includes(getRowId(item)));
+  const allSelected = useMemo(() => {
+    return data.length > 0 && !!getRowId && data.every((item) => selectedIds.includes(getRowId(item)));
+  }, [data, getRowId, selectedIds]);
 
   return (
     <div className="space-y-4 font-sans text-sm w-full">
@@ -104,7 +105,7 @@ export function DataTable<T>({
             placeholder={searchPlaceholder}
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
-            className="px-4 py-2 bg-white border border-slate-250 focus:border-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none w-full max-w-sm transition-all duration-200"
+            className="px-4 py-2 bg-white border border-slate-250 focus:border-blue-500 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 w-full max-w-sm transition-all duration-200"
           />
           <button
             type="submit"
@@ -118,13 +119,14 @@ export function DataTable<T>({
       {/* Main Table Border Wrapper */}
       <div className="border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm">
         <div className="overflow-x-auto w-full">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse" aria-label="Data Table">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50/75 text-xs font-semibold uppercase tracking-wider text-slate-500 h-11">
                 {onSelectChange && getRowId && (
-                  <th className="px-4 w-12 text-center">
+                  <th className="px-4 w-12 text-center" scope="col">
                     <input
                       type="checkbox"
+                      aria-label="Select all rows"
                       checked={allSelected}
                       onChange={(e) => handleSelectAll(e.target.checked)}
                       className="rounded border-slate-350 bg-white text-blue-600 focus:ring-blue-550/20 w-4 h-4 cursor-pointer"
@@ -134,6 +136,7 @@ export function DataTable<T>({
                 {columns.map((col, idx) => (
                   <th
                     key={idx}
+                    scope="col"
                     className={`px-4 py-3 font-semibold ${
                       col.sortable && onSort ? "cursor-pointer select-none hover:text-slate-900" : ""
                     }`}
@@ -142,7 +145,7 @@ export function DataTable<T>({
                     <div className="flex items-center gap-1.5">
                       <span>{col.header}</span>
                       {col.sortable && onSort && col.accessorKey === sortKey && (
-                        <span>
+                        <span aria-hidden="true">
                           {sortOrder === "asc" ? (
                             <ChevronUp className="w-3.5 h-3.5" />
                           ) : (
@@ -179,6 +182,7 @@ export function DataTable<T>({
                           <td className="px-4 w-12 text-center">
                             <input
                               type="checkbox"
+                              aria-label={`Select row ${rIdx + 1}`}
                               checked={selected}
                               onChange={(e) => handleSelectRow(id, e.target.checked)}
                               className="rounded border-slate-350 bg-white text-blue-600 focus:ring-blue-550/20 w-4 h-4 cursor-pointer"
@@ -216,8 +220,9 @@ export function DataTable<T>({
             <div className="flex items-center gap-4 text-xs text-slate-500">
               {onPageSizeChange && (
                 <div className="flex items-center gap-2">
-                  <span>Rows per page:</span>
+                  <label htmlFor="rows-per-page-select">Rows per page:</label>
                   <select
+                    id="rows-per-page-select"
                     value={pageSize}
                     onChange={(e) => onPageSizeChange(Number(e.target.value))}
                     className="bg-white border border-slate-200 rounded px-2 py-1 focus:outline-none focus:border-blue-500 text-slate-800"
@@ -233,10 +238,11 @@ export function DataTable<T>({
               <span>Page {currentPage} of {totalPages}</span>
             </div>
 
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5" aria-label="Pagination Navigation">
               <button
                 disabled={currentPage <= 1}
                 onClick={() => onPageChange(1)}
+                aria-label="First page"
                 className="w-8 h-8 rounded-lg border border-slate-200 hover:border-slate-300 disabled:opacity-30 disabled:hover:border-slate-200 flex items-center justify-center text-slate-650 cursor-pointer"
               >
                 <ChevronsLeft className="w-4 h-4" />
@@ -244,6 +250,7 @@ export function DataTable<T>({
               <button
                 disabled={currentPage <= 1}
                 onClick={() => onPageChange(currentPage - 1)}
+                aria-label="Previous page"
                 className="w-8 h-8 rounded-lg border border-slate-200 hover:border-slate-300 disabled:opacity-30 disabled:hover:border-slate-200 flex items-center justify-center text-slate-650 cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -251,6 +258,7 @@ export function DataTable<T>({
               <button
                 disabled={currentPage >= totalPages}
                 onClick={() => onPageChange(currentPage + 1)}
+                aria-label="Next page"
                 className="w-8 h-8 rounded-lg border border-slate-200 hover:border-slate-300 disabled:opacity-30 disabled:hover:border-slate-200 flex items-center justify-center text-slate-650 cursor-pointer"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -258,6 +266,7 @@ export function DataTable<T>({
               <button
                 disabled={currentPage >= totalPages}
                 onClick={() => onPageChange(totalPages)}
+                aria-label="Last page"
                 className="w-8 h-8 rounded-lg border border-slate-200 hover:border-slate-300 disabled:opacity-30 disabled:hover:border-slate-200 flex items-center justify-center text-slate-650 cursor-pointer"
               >
                 <ChevronsRight className="w-4 h-4" />
@@ -269,3 +278,6 @@ export function DataTable<T>({
     </div>
   );
 }
+
+export const DataTable = React.memo(DataTableInner) as typeof DataTableInner;
+

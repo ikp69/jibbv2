@@ -30,15 +30,18 @@ import {
   Rocket,
 } from "lucide-react";
 
+import type { Metadata } from "next";
+import { env } from "@/lib/env";
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
-}) {
+}): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+  const baseUrl = env.NEXT_PUBLIC_APP_URL;
   const title = locale === "ja"
     ? "JIBBについて | 日印ビジネス機構"
     : "About Us - Japan India Business Bureau";

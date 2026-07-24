@@ -14,16 +14,18 @@ import {
 } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 import { Button } from "@/components/ui/button";
+import { env } from "@/lib/env";
+import { Metadata } from "next";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
-}) {
+}): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+  const baseUrl = env.NEXT_PUBLIC_APP_URL;
   const title = locale === "ja"
     ? "イノベーションハブ | JIBB — 日印ビジネス機構"
     : "Innovation Hub | JIBB - Japan India Business Bureau";

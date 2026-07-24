@@ -1,37 +1,11 @@
 import { Resend } from "resend";
-import dns from "dns";
+import { env } from "@/lib/env";
 
-// Prevent Windows connection suffix redirection (like .domain.name) from breaking Resend API calls in development
-
-const originalLookup = dns.lookup;
-// @ts-ignore
-dns.lookup = function (hostname, options, callback) {
-  const cb = typeof options === "function" ? options : callback;
-  const opts = typeof options === "object" ? options : {};
-
-  if (hostname === "api.resend.com") {
-    dns.resolve4("api.resend.com", (err, addresses) => {
-      if (err || !addresses || addresses.length === 0) {
-        return (originalLookup as any)(hostname, options, callback);
-      }
-      if (opts.all) {
-        const results = addresses.map((addr) => ({ address: addr, family: 4 as const }));
-        return (cb as any)(null, results);
-      } else {
-        return (cb as any)(null, addresses[0], 4);
-      }
-    });
-    return;
-  }
-  return (originalLookup as any)(hostname, options, callback);
-};
-
-
-const apiKey = process.env.RESEND_API_KEY;
+const apiKey = env.RESEND_API_KEY;
 
 export const resend = apiKey ? new Resend(apiKey) : null;
 
-if (!resend && process.env.NODE_ENV === "development") {
+if (!resend && env.NODE_ENV === "development") {
   console.warn("⚠️ Warning: RESEND_API_KEY is not defined in the environment. Emails will be logged to the console instead of being sent.");
 }
 
@@ -49,7 +23,7 @@ export async function sendEmail({
   if (resend) {
     try {
       const { data, error } = await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || "Japan-India Business Bureau - JIBB (NPO) <noreply@npo-jibb.org>",
+        from: env.RESEND_FROM_EMAIL || "Japan-India Business Bureau - JIBB (NPO) <noreply@npo-jibb.org>",
         to,
         subject,
         html,
@@ -57,23 +31,20 @@ export async function sendEmail({
       });
 
       if (error) {
-        console.error("Resend error:", error);
+        console.error("[EMAIL_SERVICE] Resend dispatch error:", error);
         return { success: false, error: error.message };
       }
       return { success: true, data };
-    } catch (err: any) {
-      console.error("Resend execution error:", {
-        message: err?.message,
-        cause: err?.cause,
-        stack: err?.stack,
-      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unknown Resend error";
+      console.error("[EMAIL_SERVICE] Resend execution exception:", { message });
       return {
         success: false,
-        error: err?.message || "Unknown Resend error",
+        error: message,
       };
     }
   } else {
-    if (process.env.NODE_ENV === "development") {
+    if (env.NODE_ENV === "development") {
       console.log("======================================== MOCK EMAIL ========================================");
       console.log(`To: ${to}`);
       console.log(`Subject: ${subject}`);

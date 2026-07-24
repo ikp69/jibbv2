@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
+import { env } from "@/lib/env";
+
 export async function generateMetadata({
   params,
 }: {
@@ -9,7 +11,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "membershipPage" });
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+  const baseUrl = env.NEXT_PUBLIC_APP_URL;
   const title = locale === "ja"
     ? "会員プラン・特典 | JIBB — 日印ビジネス機構"
     : "Membership Tiers & Benefits | JIBB - Japan India Business Bureau";

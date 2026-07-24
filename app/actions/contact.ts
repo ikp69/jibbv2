@@ -4,9 +4,23 @@ import { createClient } from "@/lib/supabase/server";
 import { ContactSchema, type ContactInput } from "@/app/lib/validation/contact";
 import { sendEmail } from "@/lib/email/resend";
 import { getContactNotificationEmail } from "@/lib/email/email-templates";
+import { headers } from "next/headers";
+import { isRateLimited } from "@/lib/utils/rate-limiter";
 
 export async function submitContactForm(data: ContactInput) {
   try {
+    // 0. Rate limiting check
+    const headersList = await headers();
+    const clientIp = headersList.get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
+
+    const { rateLimited, resetSeconds } = await isRateLimited(`contact:${clientIp}`, 3, 60);
+    if (rateLimited) {
+      return {
+        success: false,
+        error: `Too many submissions from your network. Please wait ${resetSeconds} seconds before trying again.`,
+      };
+    }
+
     // 1. Zod Server-side Validation
     const parsed = ContactSchema.safeParse(data);
     if (!parsed.success) {
@@ -45,7 +59,7 @@ export async function submitContactForm(data: ContactInput) {
       });
 
     if (dbError) {
-      console.error("Database insert error:", dbError);
+      console.error("[CONTACT_ACTION] Database insert error:", dbError);
       throw new Error(dbError.message);
     }
 
@@ -64,7 +78,7 @@ export async function submitContactForm(data: ContactInput) {
 
     return { success: true };
   } catch (err: unknown) {
-    console.error("submitContactForm error:", err);
+    console.error("[CONTACT_ACTION] Exception:", err);
     const message = err instanceof Error ? err.message : "Failed to submit contact inquiry";
     return { success: false, error: message };
   }

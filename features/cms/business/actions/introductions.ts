@@ -1,6 +1,7 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { verifyServerRequest } from "@/lib/supabase/auth-guard";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 
 export type ActionResult = {
@@ -16,19 +17,37 @@ export async function submitIntroductionRequest(
   objective: string
 ): Promise<ActionResult> {
   try {
-    const supabase = await createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const authResult = await verifyServerRequest();
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
+    }
 
-    if (authError || !user) {
-      return { success: false, error: "Unauthorized. Please sign in." };
+    const user = authResult.user;
+
+    // Self-introduction prevention check
+    if (user.id === targetMemberId) {
+      return { success: false, error: "You cannot submit an introduction request to your own organization." };
     }
 
     if (!objective || objective.trim().length < 15) {
       return { success: false, error: "Objective statement must be at least 15 characters long." };
     }
 
+    const adminClient = createAdminClient();
+
+    // Verify target member exists
+    const { data: targetMember, error: targetErr } = await adminClient
+      .from("profiles")
+      .select("id, status")
+      .eq("id", targetMemberId)
+      .single();
+
+    if (targetErr || !targetMember || targetMember.status !== "active") {
+      return { success: false, error: "Target member organization not found or inactive." };
+    }
+
     // Insert introduction request
-    const { error } = await supabase
+    const { error } = await adminClient
       .from("introduction_requests")
       .insert({
         requester_id: user.id,
@@ -38,13 +57,21 @@ export async function submitIntroductionRequest(
       });
 
     if (error) {
+      console.error("[SUBMIT_INTRODUCTION_REQUEST] Database insert error:", error);
       return { success: false, error: error.message };
     }
 
-    revalidatePath("/[locale]/(cms)/portal/member-directory", "page");
+    try {
+      revalidatePath("/[locale]/(cms)/portal/member-directory", "page");
+    } catch (revalidateErr) {
+      console.warn("[SUBMIT_INTRODUCTION_REQUEST] Revalidation warning:", revalidateErr);
+    }
+
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An unexpected error occurred." };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred.";
+    console.error("[SUBMIT_INTRODUCTION_REQUEST] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
 
@@ -56,36 +83,34 @@ export async function updateIntroductionRequestStatus(
   status: "approved" | "rejected"
 ): Promise<ActionResult> {
   try {
-    const supabase = await createClient();
-
-    // Verify user is administrator (handled by DB RLS policies, but we can query profile role for early exit)
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      return { success: false, error: "Unauthorized." };
+    const authResult = await verifyServerRequest("admin");
+    if (!authResult.valid) {
+      return { success: false, error: authResult.error };
     }
 
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
+    const adminClient = createAdminClient();
 
-    if (!profile || profile.role !== "admin") {
-      return { success: false, error: "Access denied. Administrator privileges required." };
-    }
-
-    const { error } = await supabase
+    const { error } = await adminClient
       .from("introduction_requests")
       .update({ status, updated_at: new Date().toISOString() })
       .eq("id", requestId);
 
     if (error) {
+      console.error("[UPDATE_INTRODUCTION_STATUS] Database update error:", error);
       return { success: false, error: error.message };
     }
 
-    revalidatePath("/[locale]/(cms)/admin/member-directory", "page");
+    try {
+      revalidatePath("/[locale]/(cms)/admin/member-directory", "page");
+    } catch (revalidateErr) {
+      console.warn("[UPDATE_INTRODUCTION_STATUS] Revalidation warning:", revalidateErr);
+    }
+
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An unexpected error occurred." };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred.";
+    console.error("[UPDATE_INTRODUCTION_STATUS] Exception:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
 }
+

@@ -1,26 +1,26 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { type SupabaseClient, type User } from "@supabase/supabase-js";
+import { env } from "@/lib/env";
 
-export async function updateSession(request: NextRequest) {
+export interface UpdateSessionResult {
+  supabaseResponse: NextResponse;
+  user: User | null;
+  supabase?: SupabaseClient;
+}
+
+/**
+ * Refreshes the active Supabase authentication session and synchronizes auth cookies
+ * between incoming request and outgoing response objects in Next.js Middleware.
+ */
+export async function updateSession(request: NextRequest): Promise<UpdateSessionResult> {
   let supabaseResponse = NextResponse.next({
     request,
   });
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  // Middleware runs on every request, so we gracefully skip auth checks
-  // when Supabase is not configured (local dev without .env.local).
-  // Server actions and page components use a fail-fast client instead.
-  const isConfigured = Boolean(url && key);
-
-  if (!isConfigured) {
-    return { supabaseResponse, user: null };
-  }
-
   const supabase = createServerClient(
-    url!,
-    key!,
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {
@@ -38,27 +38,28 @@ export async function updateSession(request: NextRequest) {
             request,
           });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            supabaseResponse.cookies.set(name, value, {
+              ...options,
+              httpOnly: options?.httpOnly ?? true,
+              secure: options?.secure ?? env.NODE_ENV === "production",
+              sameSite: options?.sameSite ?? "lax",
+              path: options?.path ?? "/",
+            })
           );
         },
       },
     }
   );
 
-  let user = null;
+  let user: User | null = null;
   try {
     const {
       data: { user: fetchedUser },
     } = await supabase.auth.getUser();
     user = fetchedUser;
   } catch (error) {
-    // Session refresh failure is non-fatal in middleware — the page-level
-    // auth guard (dashboard/layout.tsx) will redirect if the session is invalid.
-    // Network errors during middleware are expected in edge environments and can be ignored.
     if (error instanceof Error) {
-      if (process.env.NODE_ENV === "development") {
-        console.debug("Middleware auth check skipped:", error.message);
-      }
+      console.warn("[SUPABASE_MIDDLEWARE] Auth session refresh non-fatal warning:", error.message);
     }
   }
 

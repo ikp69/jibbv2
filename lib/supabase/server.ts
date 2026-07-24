@@ -1,21 +1,18 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { type SupabaseClient } from "@supabase/supabase-js";
+import { env } from "@/lib/env";
 
-export async function createClient() {
+/**
+ * Creates an authenticated Supabase server client bound to the current Next.js HTTP cookie context.
+ * Uses validated environment parameters via @/lib/env.
+ */
+export async function createClient(): Promise<SupabaseClient> {
   const cookieStore = await cookies();
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!url || !key) {
-    throw new Error(
-      "Missing Supabase environment variables. " +
-        "Ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set in .env.local"
-    );
-  }
 
   return createServerClient(
-    url,
-    key,
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {
@@ -30,12 +27,17 @@ export async function createClient() {
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
+              cookieStore.set(name, value, {
+                ...options,
+                httpOnly: options?.httpOnly ?? true,
+                secure: options?.secure ?? env.NODE_ENV === "production",
+                sameSite: options?.sameSite ?? "lax",
+                path: options?.path ?? "/",
+              })
             );
-          } catch {
-            // The `setAll` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
+          } catch (err) {
+            // Invoked from Server Component rendering context where cookie mutation is restricted.
+            // Ignored as Next.js Edge Middleware handles cookie refresh synchronization.
           }
         },
       },

@@ -1,58 +1,55 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { headers } from "next/headers";
 import { getCurrentSessionId } from "@/lib/supabase/auth-guard";
 import { SessionService } from "@/lib/services/session-service";
+import { AuditService } from "@/lib/services/audit-service";
 
 export type LogoutResult = {
   success: boolean;
   error?: string;
 };
 
-
+/**
+ * Standard logout Server Action.
+ */
 export async function logout(): Promise<LogoutResult> {
-  const supabase = await createClient();
+  try {
+    const supabase = await createClient();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    const token = session?.access_token || null;
+    const user = session?.user || null;
 
-  // 1. Fetch current session and user context
-  const { data: { session } } = await supabase.auth.getSession();
-  const token = session?.access_token || null;
-  const sid = getCurrentSessionId(token);
-  const user = session?.user || null;
+    if (user) {
+      const sessionId = getCurrentSessionId(token);
+      if (sessionId) {
+        try {
+          await SessionService.revokeSession(sessionId, user.id, "user_logout");
+        } catch (revokeErr) {
+          console.warn("[LOGOUT] Failed to mark session revoked in DB:", revokeErr);
+        }
+      }
 
-  if (user && sid) {
-    const headersList = await headers();
-    const userAgent = headersList.get("user-agent") || undefined;
-    const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0] || undefined;
+      await AuditService.log({
+        userId: user.id,
+        action: "logout",
+        tableName: "profiles",
+        recordId: user.id,
+      });
+    }
 
-    // Revoke session in database
-    await SessionService.revokeSession(sid, user.id, "user_logout");
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("[LOGOUT] Supabase Auth signOut error:", error);
+      return { success: false, error: error.message };
+    }
 
-    // Insert audit log
-    await supabase.from("audit_logs").insert({
-      user_id: user.id,
-      action: "member_logout",
-      table_name: "profiles",
-      record_id: user.id,
-      ip_address: ipAddress,
-      user_agent: userAgent,
-      old_values: null,
-      new_values: { session_id: sid },
-    });
+    return { success: true };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred during logout";
+    console.error("[LOGOUT] Critical exception during logout:", errorMessage, err);
+    return { success: false, error: errorMessage };
   }
-
-  // 2. Perform Supabase Sign Out
-  const { error } = await supabase.auth.signOut();
-
-  if (error) {
-    return {
-      success: false,
-      error: error.message,
-    };
-  }
-
-  return {
-    success: true,
-  };
 }
-

@@ -6,6 +6,8 @@ import { loginSchema, type LoginInput } from "../schemas/login-schema";
 import { headers } from "next/headers";
 import { getCurrentSessionId } from "@/lib/supabase/auth-guard";
 import { SessionService } from "@/lib/services/session-service";
+import { AuditService } from "@/lib/services/audit-service";
+import { isRateLimited } from "@/lib/utils/rate-limiter";
 
 export type LoginResult = {
   success: boolean;
@@ -18,7 +20,7 @@ export type LoginResult = {
 const MAX_LOGIN_ATTEMPTS = 5;
 const LOCKOUT_DURATION_MINUTES = 15;
 
-function devLog(...args: any[]) {
+function devLog(...args: unknown[]) {
   if (process.env.NODE_ENV === "development") {
     console.log(...args);
   }
@@ -46,11 +48,22 @@ function parseUserAgent(uaString: string) {
 
 export async function login(input: LoginInput): Promise<LoginResult> {
   try {
-    devLog("[LOGIN] 1. Starting login");
+    const headersList = await headers();
+    const clientIp = headersList.get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
+
+    const { rateLimited, resetSeconds } = await isRateLimited(`login:${clientIp}`, 5, 60);
+    if (rateLimited) {
+      return {
+        success: false,
+        error: `Too many login attempts from your network. Please wait ${resetSeconds} seconds before trying again.`,
+      };
+    }
+
+    devLog("[LOGIN] 1. Starting login process");
 
     const parsed = loginSchema.safeParse(input);
     if (!parsed.success) {
-      devLog("[LOGIN] Validation failed:", parsed.error.issues);
+      devLog("[LOGIN] Schema validation failed:", parsed.error.issues);
       return {
         success: false,
         error: parsed.error.issues[0]?.message || "Invalid input data",
@@ -60,7 +73,7 @@ export async function login(input: LoginInput): Promise<LoginResult> {
     const { email, password } = parsed.data;
     const adminClient = createAdminClient();
 
-    // 1. Lockout Check before verification
+    // 1. Lockout Check before authentication attempt
     const { data: preProfile } = await adminClient
       .from("profiles")
       .select("id, status, failed_attempts, locked_until")
@@ -78,11 +91,11 @@ export async function login(input: LoginInput): Promise<LoginResult> {
       }
     }
 
-    devLog("[LOGIN] 2. Creating Supabase client");
+    devLog("[LOGIN] 2. Initializing Supabase auth client");
     const supabase = await createClient();
 
-    // 2. Sign in via Supabase Authentication
-    devLog("[LOGIN] 3. Attempting signInWithPassword");
+    // 2. Attempt authentication via Supabase Auth
+    devLog("[LOGIN] 3. Authenticating user credentials");
     let authData, authError;
     try {
       const result = await supabase.auth.signInWithPassword({
@@ -91,22 +104,21 @@ export async function login(input: LoginInput): Promise<LoginResult> {
       });
       authData = result.data;
       authError = result.error;
-      devLog("[LOGIN] 3a. signInWithPassword completed. User found:", authData?.user?.id);
     } catch (signInException) {
-      console.error("[LOGIN] 3b. signInWithPassword threw exception:", signInException);
+      console.error("[LOGIN] Exception encountered during credential check:", signInException);
       return {
         success: false,
-        error: `Auth error: ${signInException instanceof Error ? signInException.message : "Unknown"}`,
+        error: `Authentication service error: ${signInException instanceof Error ? signInException.message : "Unknown error"}`,
       };
     }
 
-    // 3. Handle Auth Errors & Lockout Increments
+    // 3. Handle Auth Failures & Record Failed Attempts
     if (authError || !authData?.user) {
-      devLog("[LOGIN] Auth error (non-exception):", authError);
-      
+      devLog("[LOGIN] Authentication failed:", authError?.message);
+
       if (preProfile) {
         const attempts = (preProfile.failed_attempts || 0) + 1;
-        const updates: any = {
+        const updates: { failed_attempts: number; last_failed_login: string; locked_until?: string } = {
           failed_attempts: attempts,
           last_failed_login: new Date().toISOString(),
         };
@@ -120,24 +132,14 @@ export async function login(input: LoginInput): Promise<LoginResult> {
           .update(updates)
           .eq("id", preProfile.id);
 
-        try {
-          const headersList = await headers();
-          const userAgent = headersList.get("user-agent");
-          const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0];
-
-          await adminClient.from("audit_logs").insert({
-            user_id: preProfile.id,
-            action: "login_failure",
-            table_name: "profiles",
-            record_id: preProfile.id,
-            ip_address: ipAddress || null,
-            user_agent: userAgent || null,
-            old_values: { failed_attempts: preProfile.failed_attempts },
-            new_values: { failed_attempts: attempts, locked_until: updates.locked_until || null },
-          });
-        } catch (e) {
-          // Ignored
-        }
+        await AuditService.log({
+          userId: preProfile.id,
+          action: "login_failure",
+          tableName: "profiles",
+          recordId: preProfile.id,
+          oldValues: { failed_attempts: preProfile.failed_attempts },
+          newValues: { failed_attempts: attempts, locked_until: updates.locked_until || null },
+        });
       }
 
       return {
@@ -147,9 +149,9 @@ export async function login(input: LoginInput): Promise<LoginResult> {
     }
 
     const userId = authData.user.id;
-    devLog("[LOGIN] 4. User authenticated:", userId);
+    devLog("[LOGIN] 4. User authenticated successfully:", userId);
 
-    // 4. Fetch User Profile
+    // 4. Fetch linked Profile metadata
     const { data: profile, error: profileError } = await adminClient
       .from("profiles")
       .select("role, status")
@@ -157,11 +159,11 @@ export async function login(input: LoginInput): Promise<LoginResult> {
       .single();
 
     if (profileError || !profile) {
-      devLog("[LOGIN] Profile query error:", profileError);
+      devLog("[LOGIN] Profile query failed for user:", userId, profileError);
       try {
         await supabase.auth.signOut();
       } catch (e) {
-        devLog("[LOGIN] SignOut failed:", e);
+        devLog("[LOGIN] SignOut cleanup failed:", e);
       }
       return {
         success: false,
@@ -170,11 +172,11 @@ export async function login(input: LoginInput): Promise<LoginResult> {
     }
 
     if (profile.status !== "active") {
-      devLog("[LOGIN] User inactive:", profile.status);
+      devLog("[LOGIN] Account is not active:", profile.status);
       try {
         await supabase.auth.signOut();
       } catch (e) {
-        devLog("[LOGIN] SignOut failed:", e);
+        devLog("[LOGIN] SignOut cleanup failed:", e);
       }
       return {
         success: false,
@@ -182,21 +184,22 @@ export async function login(input: LoginInput): Promise<LoginResult> {
       };
     }
 
-    // 5. Retrieve Token claims to find sid and Register active Session record
+    // 5. Extract Session Signature (sid) and create Session record
     const token = authData.session?.access_token;
     const sid = getCurrentSessionId(token);
 
     if (!sid) {
       try {
         await supabase.auth.signOut();
-      } catch (e) {}
+      } catch (e) {
+        devLog("[LOGIN] SignOut cleanup failed on missing sid:", e);
+      }
       return {
         success: false,
         error: "Authentication failed. Could not verify session identifier.",
       };
     }
 
-    const headersList = await headers();
     const userAgent = headersList.get("user-agent") || "Unknown";
     const ipAddress = headersList.get("x-forwarded-for")?.split(",")[0] || undefined;
     const country = headersList.get("x-vercel-ip-country") || undefined;
@@ -204,7 +207,7 @@ export async function login(input: LoginInput): Promise<LoginResult> {
 
     const { browser, os } = parseUserAgent(userAgent);
 
-    // Create session in database. Under the hood, this revokes previous sessions in a database transaction.
+    // Register active session via database RPC transaction
     await SessionService.createSession(userId, sid, {
       browser,
       operatingSystem: os,
@@ -214,7 +217,7 @@ export async function login(input: LoginInput): Promise<LoginResult> {
       city,
     });
 
-    // 6. Reset Lockout parameters atomically
+    // 6. Reset Lockout parameters upon successful authentication
     await adminClient
       .from("profiles")
       .update({
@@ -224,21 +227,15 @@ export async function login(input: LoginInput): Promise<LoginResult> {
       })
       .eq("id", userId);
 
-    // 7. Write Login Success Audit Log
-    try {
-      await adminClient.from("audit_logs").insert({
-        user_id: userId,
-        action: "login_success",
-        table_name: "profiles",
-        record_id: userId,
-        ip_address: ipAddress,
-        user_agent: userAgent,
-        old_values: null,
-        new_values: { email, role: profile.role, session_id: sid },
-      });
-    } catch (auditErr) {
-      devLog("[LOGIN] Audit log exception (non-critical):", auditErr);
-    }
+    // 7. Insert Login Success Audit Record
+    await AuditService.log({
+      userId,
+      action: "login_success",
+      tableName: "profiles",
+      recordId: userId,
+      oldValues: null,
+      newValues: { email, role: profile.role, session_id: sid },
+    });
 
     const role = profile.role as "admin" | "member";
     const redirectUrl = role === "admin" ? "/admin/dashboard" : "/portal/dashboard";
@@ -250,10 +247,12 @@ export async function login(input: LoginInput): Promise<LoginResult> {
     };
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
-    console.error("[LOGIN] Unexpected error:", errorMessage, err);
+    console.error("[LOGIN] Unexpected error during login flow:", errorMessage, err);
     return {
       success: false,
       error: `Server error: ${errorMessage}`,
     };
   }
 }
+
+

@@ -4,6 +4,7 @@ import React, { useState, useTransition } from "react";
 import { login } from "@/features/cms/auth/actions/login";
 import { useRouter } from "@/src/i18n/navigation";
 import { Lock, Mail, AlertCircle, ArrowRight } from "lucide-react";
+import { env } from "@/lib/env";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -48,7 +49,7 @@ export default function LoginPage() {
         }
       } catch (err) {
         // Genuine network error or unexpected exception
-        if (process.env.NODE_ENV === "development") {
+        if (env.NODE_ENV === "development") {
           console.error("[CLIENT] Unexpected error during login:", err);
         }
         setErrors({ general: "A network error occurred. Please try again." });
@@ -72,7 +73,7 @@ export default function LoginPage() {
           setErrors({ general: result.error || "Authentication failed" });
         }
       } catch (err) {
-        if (process.env.NODE_ENV === "development") {
+        if (env.NODE_ENV === "development") {
           console.error("[CLIENT] Unexpected error during quick login:", err);
         }
         setErrors({ general: "A network error occurred. Please try again." });

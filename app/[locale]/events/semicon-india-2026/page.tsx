@@ -5,13 +5,15 @@ const BASE = 'https://npo-jibb.org'
 const SLUG = 'semicon-india-2026'
 const OG_IMAGE = `${BASE}/events/semicon-india-2026-en.png`
 
+import { env } from "@/lib/env";
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+  const baseUrl = env.NEXT_PUBLIC_APP_URL;
 
   const title = locale === "ja"
     ? "セミコンインディア2026出展説明会・半導体市場セミナー | JIBB 東京"

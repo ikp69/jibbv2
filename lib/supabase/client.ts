@@ -1,15 +1,23 @@
 import { createBrowserClient } from "@supabase/ssr";
+import { type SupabaseClient } from "@supabase/supabase-js";
+import { env } from "@/lib/env";
 
-export function createClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+let cachedBrowserClient: SupabaseClient | null = null;
 
-  if (!url || !key) {
-    throw new Error(
-      "Missing Supabase environment variables. " +
-        "Ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set in .env.local"
-    );
+/**
+ * Creates or returns the singleton Supabase browser client for client-side components.
+ * 
+ * Uses @supabase/ssr createBrowserClient to handle authentication cookies in the browser.
+ */
+export function createClient(): SupabaseClient {
+  if (cachedBrowserClient) {
+    return cachedBrowserClient;
   }
 
-  return createBrowserClient(url, key);
+  cachedBrowserClient = createBrowserClient(
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
+
+  return cachedBrowserClient;
 }

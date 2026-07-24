@@ -9,16 +9,18 @@ import {
   Megaphone, Briefcase, ArrowRight, Sparkles, CheckCircle,
   ChevronRight,
 } from "lucide-react";
+import { Metadata } from "next";
+import { env } from "@/lib/env";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
-}) {
+}): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale });
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://npo-jibb.org";
+  const baseUrl = env.NEXT_PUBLIC_APP_URL;
   const title = locale === "ja"
     ? "ビジネスサービス | JIBB — 日印ビジネス機構"
     : "Business Services | JIBB - Japan India Business Bureau";
