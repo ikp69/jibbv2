@@ -505,7 +505,7 @@ export default async function ServicesPage({
           <div className="flex justify-center gap-3 pt-4">
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
             <span className="text-xs font-bold tracking-[0.2em] uppercase text-jibb-orange">
-              Tokyo — Noida Axis
+              {t("servicesList.tokyoNoidaAxis")}
             </span>
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
           </div>
@@ -662,7 +662,7 @@ export default async function ServicesPage({
                   {/* Title block */}
                   <div className="space-y-2">
                     <span className={`inline-flex items-center gap-1.5 text-[10px] font-black tracking-widest uppercase px-2.5 py-1 rounded-md border ${c.badge}`}>
-                      Service {svc.num}
+                      {t("servicesList.serviceLabel")} {svc.num}
                     </span>
                     <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground leading-snug">
                       {svc.title}
@@ -713,7 +713,7 @@ export default async function ServicesPage({
                       </div>
                       <div>
                         <p className={`text-[10px] font-black tracking-widest uppercase ${c.num}`}>
-                          Service {svc.num}
+                          {t("servicesList.serviceLabel")} {svc.num}
                         </p>
                         <p className="text-xs font-bold text-foreground leading-tight">
                           {svc.title}

@@ -99,6 +99,8 @@
     "services": "Services",
     "innovation": "Innovation",
     "resources": "Resources",
+    "network": "Network",
+    "legal": "Legal",
     "connect": "Connect With Us",
     "newsletter": {
       "title": "Stay Updated",
@@ -108,7 +110,8 @@
     },
     "linkedin": {
       "title": "LinkedIn Network",
-      "desc": "Follow JIBB for real-time bilateral updates, announcements, and events."
+      "desc": "Follow JIBB for real-time bilateral updates, announcements, and events.",
+      "button": "Follow on LinkedIn"
     },
     "offices": {
       "tokyoTitle": "Tokyo, Japan",
@@ -128,9 +131,17 @@
     "viewAll": "View All",
     "back": "Back",
     "loading": "Loading...",
-    "comingSoon": "Coming Soon"
+    "comingSoon": "Coming Soon",
+    "portalTitle": "JIBB Portal",
+    "memberConsole": "MEMBER CONSOLE",
+    "exploreInnovationHub": "Explore Innovation Hub",
+    "noSocialUpdates": "No Social Updates Active",
+    "pleaseSync": "Please sync items in the Admin panel to populate the feed.",
+    "linkedInPost": "LinkedIn post",
+    "deleteLinkedInPost": "Delete LinkedIn Post"
   },
   "highvalueEcosystem": {
+    "heading": "Strategic Convergence Across High-Value Ecosystems",
     "title1": "Advanced Manufacturing Technologies",
     "sub1": "(CNC, Precision Engineering, Automation)",
     "title2": "Semiconductor & Electronics",

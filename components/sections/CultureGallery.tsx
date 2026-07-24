@@ -4,10 +4,10 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Heart, Sparkles, Smile, Target, Users2 } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { useTranslations } from "next-intl";
 
 interface CultureItem {
-  title: string;
-  desc: string;
+  key: string;
   icon: React.ComponentType<{ className?: string }>;
   color: string;
   gradient: string;
@@ -15,29 +15,25 @@ interface CultureItem {
 
 const VALUES: CultureItem[] = [
   {
-    title: "Bilateral Synergy",
-    desc: "We bridge Japanese engineering precision with Indian software ingenuity to build superior solutions.",
+    key: "synergy",
     icon: Users2,
     color: "text-jibb-orange",
     gradient: "from-jibb-orange/20 to-transparent",
   },
   {
-    title: "Continuous Innovation",
-    desc: "Our labs are sandbox playgrounds where teams experiment freely with semiconductor tech, AI, and battery software.",
+    key: "innovation",
     icon: Sparkles,
     color: "text-blue-400",
     gradient: "from-blue-500/20 to-transparent",
   },
   {
-    title: "Bicultural Respect",
-    desc: "We support mutual learning, language exchanges, and shared traditions to cultivate high trust across teams.",
+    key: "respect",
     icon: Heart,
     color: "text-jibb-sakura",
     gradient: "from-jibb-sakura/20 to-transparent",
   },
   {
-    title: "Shared Purpose",
-    desc: "Every project, line of code, and hardware test aims to expand economic and technological collaboration between our nations.",
+    key: "purpose",
     icon: Target,
     color: "text-emerald-400",
     gradient: "from-emerald-500/20 to-transparent",
@@ -45,6 +41,8 @@ const VALUES: CultureItem[] = [
 ];
 
 export function CultureGallery() {
+  const t = useTranslations("cultureGallery");
+
   return (
     <section className="py-24 relative overflow-hidden bg-jibb-gradient border-t border-white/5">
       {/* Background Decorative Blur */}
@@ -56,14 +54,14 @@ export function CultureGallery() {
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Smile className="size-3.5 text-jibb-orange" />
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-white/80">
-              Our Culture &amp; Values
+              {t("badge")}
             </span>
           </div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-            Life at the Bureau
+            {t("title")}
           </h2>
           <p className="text-sm text-white/60 max-w-lg mx-auto">
-            Discover the values that shape our cross-border co-innovation and daily bilateral operations.
+            {t("subtitle")}
           </p>
         </div>
 
@@ -84,10 +82,10 @@ export function CultureGallery() {
                     <Icon className="size-5.5" />
                   </div>
                   <h3 className="text-lg font-bold text-white tracking-tight">
-                    {val.title}
+                    {t(`items.${val.key}.title`)}
                   </h3>
                   <p className="text-xs text-white/60 leading-relaxed font-medium">
-                    {val.desc}
+                    {t(`items.${val.key}.desc`)}
                   </p>
                 </div>
               </div>

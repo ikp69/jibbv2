@@ -103,13 +103,14 @@ export function AnimatedHeading({
   return (
     <Tag ref={containerRef as React.Ref<never>} className={className}>
       {words.map((word, i) => (
-        <span
-          key={`${word}-${i}`}
-          className="ah-word inline-block"
-          style={{ opacity: 0, willChange: "opacity, transform, filter" }}
-        >
-          {word}
-          {i < words.length - 1 && "\u00A0"}
+        <span key={`ah-${i}-${word}`} className="inline-block">
+          <span
+            className="ah-word inline-block"
+            style={{ opacity: 0, willChange: "opacity, transform, filter" }}
+          >
+            {word}
+          </span>
+          {i < words.length - 1 && " "}
         </span>
       ))}
     </Tag>

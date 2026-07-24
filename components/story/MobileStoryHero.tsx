@@ -221,10 +221,10 @@ export function MobileStoryHero() {
           {/* Intro */}
           <div className="text-center mobile-reveal pt-2">
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
-              <span className="text-foreground">Building Bridges,</span>
+              <span className="text-foreground">{t("buildingBridges")},</span>
               <br />
               <span className="bg-gradient-to-r from-jibb-indigo via-jibb-orange to-jibb-sakura bg-clip-text text-transparent">
-                Sparking Innovation.
+                {t("sparkingInnovation")}
               </span>
             </h1>
             <div className="mt-4 flex items-center justify-center gap-3">

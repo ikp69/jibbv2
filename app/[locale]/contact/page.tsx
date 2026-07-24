@@ -199,7 +199,7 @@ export default function ContactPage() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-white/90">
-              Get in Touch
+              {t("getInTouch")}
             </span>
           </div>
 
@@ -216,7 +216,7 @@ export default function ContactPage() {
           <div className="flex justify-center gap-3 pt-4">
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
             <span className="text-xs font-bold tracking-[0.2em] uppercase text-jibb-orange">
-              Bilateral Assistance
+              {t("bilateralAssistance")}
             </span>
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
           </div>
@@ -258,7 +258,7 @@ export default function ContactPage() {
                     <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
                       <AlertCircle className="size-5 shrink-0 mt-0.5 text-red-500" />
                       <div className="space-y-1">
-                        <p className="font-semibold text-red-700 dark:text-red-400">Submission Error</p>
+                        <p className="font-semibold text-red-700 dark:text-red-400">{t("form.submissionError")}</p>
                         <div className="text-xs text-red-600/90 dark:text-red-400/95 leading-relaxed">
                           {generalError}
                         </div>
@@ -267,7 +267,7 @@ export default function ContactPage() {
                   )}
                   {/* Honeypot field (hidden from users, visible to bots) */}
                   <div className="absolute opacity-0 pointer-events-none -z-10 h-0 w-0 overflow-hidden">
-                    <label htmlFor="website-url">Leave this field blank</label>
+                    <label htmlFor="website-url">{t("form.honeypotLabel")}</label>
                     <input
                       id="website-url"
                       type="text"
@@ -399,7 +399,7 @@ export default function ContactPage() {
                       {t("tokyoOffice")}
                     </h4>
                     <p className="text-xs text-muted-foreground leading-relaxed mt-1">
-                      Tameike Suzuki Building 3F, 1-2-13 Akasaka, Minato-ku, Tokyo
+                      {t("tokyoAddr")}
                     </p>
                   </div>
                 </div>
@@ -421,7 +421,7 @@ export default function ContactPage() {
                       {t("noidaOffice")}
                     </h4>
                     <p className="text-xs text-muted-foreground leading-relaxed mt-1">
-                      6th Floor, 162, Sector 136, Arihant Business Centre, Noida, Uttar Pradesh
+                      {t("noidaAddr")}
                     </p>
                   </div>
                 </div>

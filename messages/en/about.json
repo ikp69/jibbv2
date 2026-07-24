@@ -70,6 +70,9 @@
     }
   },
   "careersPage": {
+    "heroBadge": "Careers & Talents",
+    "joinTeam": "Join JIBB Team",
+    "corridorTitle": "Shaping the Tokyo-Noida Corridor",
     "title": "Careers at JIBB",
     "subtitle": "Building the future of the Tokyo–Noida industrial corridor.",
     "intro": "At the Japan India Business Bureau (JIBB), we are building a team that thrives at the intersection of two of the world’s most dynamic economies. If you are curious, driven, and excited about cross-border collaboration, JIBB offers a platform where your work directly contributes to shaping India–Japan business relationships.",
@@ -81,11 +84,21 @@
     "whyJoin3": "Opportunity to interact with global stakeholders and decision-makers",
     "whyJoin4": "A fast-paced environment where ideas are encouraged and ownership is valued",
     "whyJoin5": "Be part of building an organization from the ground up",
+    "quickInfoTitle": "Quick Info",
+    "quickInfo1": "Hybrid Work Options",
+    "quickInfo2": "Global Bilateral Exposure",
+    "quickInfo3": "Industry-leading mentorship",
     "openPositionsTitle": "Open Positions",
     "applyTitle": "How to Apply",
     "applyDesc": "If you’re interested in any of the above roles, please share your resume along with a short note on why you’d like to work with JIBB at hitesh@npo-jibb.org and fill out the form below.",
+    "roleOverview": "Role Overview",
+    "keyResponsibilities": "Key Responsibilities",
+    "whatWeAreLookingFor": "What We're Looking For",
+    "qualificationsRequired": "Qualifications Required",
+    "applyNow": "Apply Now",
     "form": {
       "nameLabel": "Name",
+      "positionLabel": "Position applied for",
       "emailLabel": "Email",
       "phoneLabel": "Phone Number",
       "linkedinLabel": "LinkedIn Profile Link",
@@ -191,6 +204,7 @@
     "visionDesc": "To create a collaborative future where Japan and India stand together as global leaders in technology, industry, and sustainable growth.",
     "missionTitle": "Our Mission",
     "missionDesc": "To drive meaningful partnerships and industrial progress by providing expert <servicesLink>market entry support</servicesLink>, fostering cross-border collaboration across <sectorsLink>8 focus sectors</sectorsLink>, and delivering world-class innovation incubation for businesses and governments.",
+    "framework": "Framework",
     "pillarsTitle": "Bilateral Cooperation Pillars",
     "pillar1Title": "Bilateral Co-Innovation",
     "pillar1Desc": "Bud innovations from scratch and then facilitate them in global expansions.",
@@ -203,7 +217,11 @@
     "title": "JIBB Leadership & Core Team",
     "subtitle": "Experienced leaders from India and Japan driving bilateral synergy, policy alignment, and corporate growth.",
     "intro": "Meet the co-founders, advisors, and ground experts who steer the Tokyo-Noida corridor.",
+    "jibbBoard": "JIBB Board",
     "viewAllLeaders": "View All Core Leaders",
+    "viewAll": "View all",
+    "japanTeam": "Japan Team",
+    "indiaTeam": "India Team",
     "members": {
       "varun": {
         "name": "Varun Tyagi",
@@ -300,5 +318,51 @@
     "ctaTitle": "Ready to Start Your Bilateral Journey?",
     "ctaDesc": "Partner with JIBB to access exclusive insights, sandbox laboratories, and a pre-screened business network across the Tokyo–Noida corridor.",
     "ctaButton": "Join the Bureau"
+  },
+  "cultureGallery": {
+    "badge": "Our Culture & Values",
+    "title": "Life at the Bureau",
+    "subtitle": "Discover the values that shape our cross-border co-innovation and daily bilateral operations.",
+    "items": {
+      "synergy": {
+        "title": "Bilateral Synergy",
+        "desc": "We bridge Japanese engineering precision with Indian software ingenuity to build superior solutions."
+      },
+      "innovation": {
+        "title": "Continuous Innovation",
+        "desc": "Our labs are sandbox playgrounds where teams experiment freely with semiconductor tech, AI, and battery software."
+      },
+      "respect": {
+        "title": "Bicultural Respect",
+        "desc": "We support mutual learning, language exchanges, and shared traditions to cultivate high trust across teams."
+      },
+      "purpose": {
+        "title": "Shared Purpose",
+        "desc": "Every project, line of code, and hardware test aims to expand economic and technological collaboration between our nations."
+      }
+    }
+  },
+  "hiringProcess": {
+    "badge": "Join Our Team",
+    "title": "Our Hiring Process",
+    "subtitle": "A transparent, collaborative journey designed to evaluate engineering skills and bicultural alignment.",
+    "steps": {
+      "review": {
+        "title": "Application Review",
+        "desc": "We review your qualifications, focusing on cross-border interest, technical skills, and collaborative potential."
+      },
+      "matchmaking": {
+        "title": "Technical Matchmaking",
+        "desc": "Meet our Tokyo hardware engineers or Noida software architects. We discuss engineering paradigms and code design."
+      },
+      "sandbox": {
+        "title": "Collaborative Sandbox",
+        "desc": "A 2-day paid challenge working on a real prototype in our Noida/Tokyo co-development laboratory environment."
+      },
+      "welcome": {
+        "title": "Welcome Aboard",
+        "desc": "Receive your offer, bicultural alignment support, visa sponsorship coordination, and access to premium health benefits."
+      }
+    }
   }
 }

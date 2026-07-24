@@ -23,6 +23,7 @@ import { isValidPhone, PHONE_ERROR } from "@/app/lib/validation/phone";
 
 export default function MembershipPage() {
   const t = useTranslations("membershipPage");
+  const tContact = useTranslations("contactPage");
 
   // Membership Offer Schema for SEO
   const membershipOffers = [
@@ -204,7 +205,7 @@ export default function MembershipPage() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-white/90">
-              Ecosystem Enrollment
+              {t("comparison.heroBadge")}
             </span>
           </div>
 
@@ -215,13 +216,13 @@ export default function MembershipPage() {
           />
 
           <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
-            {t("subtitle")} Choose the tier that matches your business needs and unlock access to JIBB's <Link href="/services" className="text-jibb-orange hover:text-jibb-orange-light font-semibold underline">integrated services</Link> and partnership opportunities.
+            {t("subtitle")} {t("comparison.subtitleHero")}
           </p>
 
           <div className="flex justify-center gap-3 pt-4">
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
             <span className="text-xs font-bold tracking-[0.2em] uppercase text-jibb-orange">
-              Join the Bureau
+              {t("comparison.joinBureau")}
             </span>
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
           </div>
@@ -235,12 +236,10 @@ export default function MembershipPage() {
         <div className="section-container max-w-[96rem] mx-auto px-4 text-center space-y-16">
           <div className="space-y-4">
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
-              Select Your Membership Plan
+              {t("comparison.selectPlanTitle")}
             </h2>
             <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
           </div>
-
-
 
           <ScrollReveal staggerChildren={0.12} className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Associate Member */}
@@ -248,33 +247,31 @@ export default function MembershipPage() {
               <div className="space-y-6">
                 <div>
                   <span className="text-[10px] font-bold px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-600 dark:text-blue-400 uppercase tracking-wide">
-                    Associate Member
+                    {t("comparison.associate")}
                   </span>
                   <h3 className="text-2xl font-bold text-foreground mt-3 tracking-tight">
-                    Entry Level
+                    {t("comparison.tiers.associate.title")}
                   </h3>
                   <p className="text-xs text-muted-foreground mt-1.5">
-                    For early-stage teams and networking
+                    {t("comparison.tiers.associate.desc")}
                   </p>
                 </div>
 
-
-
                 <ul className="space-y-3.5 text-xs text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <span className="text-blue-500 font-bold">✓</span> 5% Business Matching Discount
+                    <span className="text-blue-500 font-bold">✓</span> {t("comparison.tiers.associate.f1")}
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-blue-500 font-bold">✓</span> 5% Training Program Discount
+                    <span className="text-blue-500 font-bold">✓</span> {t("comparison.tiers.associate.f2")}
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-blue-500 font-bold">✓</span> Standard Portal Directory Access
+                    <span className="text-blue-500 font-bold">✓</span> {t("comparison.tiers.associate.f3")}
                   </li>
                 </ul>
               </div>
               <div className="pt-6">
                 <a href="#scheduler" className="block" onClick={() => setForm(prev => ({ ...prev, membershipTier: "associate" }))}>
-                  <AnimatedButton variant="outline" className="w-full font-semibold border-blue-500/20 hover:bg-blue-500/5 hover:text-blue-500">Inquire Plan</AnimatedButton>
+                  <AnimatedButton variant="outline" className="w-full font-semibold border-blue-500/20 hover:bg-blue-500/5 hover:text-blue-500">{t("comparison.inquirePlan")}</AnimatedButton>
                 </a>
               </div>
             </div>
@@ -284,36 +281,34 @@ export default function MembershipPage() {
               <div className="space-y-6">
                 <div>
                   <span className="text-[10px] font-bold px-2.5 py-1 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase tracking-wide">
-                    Silver Member
+                    {t("comparison.silver")}
                   </span>
                   <h3 className="text-2xl font-bold text-foreground mt-3 tracking-tight">
-                    Standard Growth
+                    {t("comparison.tiers.silver.title")}
                   </h3>
                   <p className="text-xs text-muted-foreground mt-1.5">
-                    For active research and matching support
+                    {t("comparison.tiers.silver.desc")}
                   </p>
                 </div>
 
-
-
                 <ul className="space-y-3.5 text-xs text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <span className="text-slate-400 dark:text-slate-300 font-bold">✓</span> Intelligence Newsletter Only
+                    <span className="text-slate-400 dark:text-slate-300 font-bold">✓</span> {t("comparison.tiers.silver.f1")}
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-slate-400 dark:text-slate-300 font-bold">✓</span> 10% Business Matching Discount
+                    <span className="text-slate-400 dark:text-slate-300 font-bold">✓</span> {t("comparison.tiers.silver.f2")}
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-slate-400 dark:text-slate-300 font-bold">✓</span> 2.5% Exhibition/Event Support
+                    <span className="text-slate-400 dark:text-slate-300 font-bold">✓</span> {t("comparison.tiers.silver.f3")}
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-slate-400 dark:text-slate-300 font-bold">✓</span> Japan Meeting Delegations
+                    <span className="text-slate-400 dark:text-slate-300 font-bold">✓</span> {t("comparison.tiers.silver.f4")}
                   </li>
                 </ul>
               </div>
               <div className="pt-6">
                 <a href="#scheduler" className="block" onClick={() => setForm(prev => ({ ...prev, membershipTier: "silver" }))}>
-                  <AnimatedButton variant="outline" className="w-full font-semibold border-slate-300 hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300">Inquire Plan</AnimatedButton>
+                  <AnimatedButton variant="outline" className="w-full font-semibold border-slate-300 hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300">{t("comparison.inquirePlan")}</AnimatedButton>
                 </a>
               </div>
             </div>
@@ -321,42 +316,40 @@ export default function MembershipPage() {
             {/* Gold Member - Recommended */}
             <div className="group relative rounded-3xl p-6 md:p-8 bg-amber-500/[0.08] text-foreground border-2 border-amber-500 dark:border-amber-400 shadow-xl scale-105 transition-all duration-300 text-left flex flex-col justify-between min-h-[380px]">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
-                Popular Choice
+                {t("comparison.popularChoice")}
               </div>
 
               <div className="space-y-6">
                 <div>
                   <span className="text-[10px] font-bold px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-700 dark:text-amber-400 uppercase tracking-wide">
-                    Gold Member
+                    {t("comparison.gold")}
                   </span>
                   <h3 className="text-2xl font-bold text-foreground mt-3 tracking-tight flex items-center gap-1.5">
-                    Professional <Sparkles className="size-4 text-amber-500 fill-amber-500 stroke-none animate-pulse" />
+                    {t("comparison.tiers.gold.title")} <Sparkles className="size-4 text-amber-500 fill-amber-500 stroke-none animate-pulse" />
                   </h3>
                   <p className="text-xs text-muted-foreground mt-1.5">
-                    For scaling and full co-innovation access
+                    {t("comparison.tiers.gold.desc")}
                   </p>
                 </div>
 
-
-
                 <ul className="space-y-3.5 text-xs text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <span className="text-amber-500 font-bold">✓</span> Limited Intelligence Access
+                    <span className="text-amber-500 font-bold">✓</span> {t("comparison.tiers.gold.f1")}
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-amber-500 font-bold">✓</span> 20% Business Matching Discount
+                    <span className="text-amber-500 font-bold">✓</span> {t("comparison.tiers.gold.f2")}
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-amber-500 font-bold">✓</span> 3 Free Training Programs
+                    <span className="text-amber-500 font-bold">✓</span> {t("comparison.tiers.gold.f3")}
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-amber-500 font-bold">✓</span> Active Japan Delegations
+                    <span className="text-amber-500 font-bold">✓</span> {t("comparison.tiers.gold.f4")}
                   </li>
                 </ul>
               </div>
               <div className="pt-6">
                 <a href="#scheduler" className="block" onClick={() => setForm(prev => ({ ...prev, membershipTier: "gold" }))}>
-                  <AnimatedButton variant="accent" className="w-full font-bold shadow-md bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 border-none text-white">Apply Gold</AnimatedButton>
+                  <AnimatedButton variant="accent" className="w-full font-bold shadow-md bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 border-none text-white">{t("comparison.applyGold")}</AnimatedButton>
                 </a>
               </div>
             </div>
@@ -366,36 +359,34 @@ export default function MembershipPage() {
               <div className="space-y-6">
                 <div>
                   <span className="text-[10px] font-bold px-2.5 py-1 rounded-md bg-slate-300 dark:bg-slate-700 text-slate-800 dark:text-slate-200 uppercase tracking-wide">
-                    Platinum Member
+                    {t("comparison.platinum")}
                   </span>
                   <h3 className="text-2xl font-bold text-foreground mt-3 tracking-tight">
-                    Ultimate Access
+                    {t("comparison.tiers.platinum.title")}
                   </h3>
                   <p className="text-xs text-muted-foreground mt-1.5">
-                    For institutional and leadership scale
+                    {t("comparison.tiers.platinum.desc")}
                   </p>
                 </div>
 
-
-
                 <ul className="space-y-3.5 text-xs text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <span className="text-slate-500 font-bold">✓</span> Full intelligence access
+                    <span className="text-slate-500 font-bold">✓</span> {t("comparison.tiers.platinum.f1")}
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-slate-500 font-bold">✓</span> 30% Business Matching Discount
+                    <span className="text-slate-500 font-bold">✓</span> {t("comparison.tiers.platinum.f2")}
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-slate-500 font-bold">✓</span> 7 Free Training Programs
+                    <span className="text-slate-500 font-bold">✓</span> {t("comparison.tiers.platinum.f3")}
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-slate-500 font-bold">✓</span> Selected Collaboration & Advocacy
+                    <span className="text-slate-500 font-bold">✓</span> {t("comparison.tiers.platinum.f4")}
                   </li>
                 </ul>
               </div>
               <div className="pt-6">
                 <a href="#scheduler" className="block" onClick={() => setForm(prev => ({ ...prev, membershipTier: "platinum" }))}>
-                  <AnimatedButton variant="outline" className="w-full font-semibold border-slate-400 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground">Partner Inquiry</AnimatedButton>
+                  <AnimatedButton variant="outline" className="w-full font-semibold border-slate-400 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 text-foreground">{t("comparison.partnerInquiry")}</AnimatedButton>
                 </a>
               </div>
             </div>
@@ -507,7 +498,7 @@ export default function MembershipPage() {
                   ) : (
                     <div className="flex-1 flex flex-col items-center justify-center gap-4 p-10 text-center text-muted-foreground min-h-[580px]">
                       <Calendar className="size-10 opacity-30" />
-                      <p className="text-sm font-medium">Consultation Scheduler is not configured yet.</p>
+                      <p className="text-sm font-medium">{t("schedulerNotConfigured")}</p>
                       <p className="text-xs opacity-60">
                         Set <code className="bg-muted px-1.5 py-0.5 rounded text-foreground/70">NEXT_PUBLIC_CALENDLY_URL</code> or <code className="bg-muted px-1.5 py-0.5 rounded text-foreground/70">NEXT_PUBLIC_MS_BOOKINGS_URL</code> in your environment variables to enable the embed.
                       </p>
@@ -523,7 +514,7 @@ export default function MembershipPage() {
                 <div className="max-w-2xl mx-auto w-full space-y-5 text-left">
                   {/* Honeypot field (hidden from users, visible to bots) */}
                   <div className="absolute opacity-0 pointer-events-none -z-10 h-0 w-0 overflow-hidden">
-                    <label htmlFor="membership-website-url">Leave this field blank</label>
+                    <label htmlFor="membership-website-url">{tContact("form.honeypotLabel")}</label>
                     <input
                       id="membership-website-url"
                       type="text"
@@ -538,7 +529,7 @@ export default function MembershipPage() {
                   {/* Tier Select */}
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
-                      Membership Tier
+                      {t("form.tierLabel")}
                     </label>
                     <select
                       name="membershipTier"
@@ -546,16 +537,16 @@ export default function MembershipPage() {
                       onChange={handleInputChange}
                       className="flex h-11 w-full rounded-xl border border-input bg-card px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-jibb-orange/20 focus:border-jibb-orange transition-all duration-200"
                     >
-                      <option value="associate">Associate Member</option>
-                      <option value="silver">Silver Member</option>
-                      <option value="gold">Gold Member</option>
-                      <option value="platinum">Platinum Member</option>
+                      <option value="associate">{t("comparison.associate")}</option>
+                      <option value="silver">{t("comparison.silver")}</option>
+                      <option value="gold">{t("comparison.gold")}</option>
+                      <option value="platinum">{t("comparison.platinum")}</option>
                     </select>
                   </div>
 
                   {/* Company Name */}
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">Company Name</label>
+                    <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">{t("form.companyName")}</label>
                     <Input
                       type="text"
                       name="companyName"
@@ -570,7 +561,7 @@ export default function MembershipPage() {
 
                   {/* Contact Person Name */}
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">Contact Person Name</label>
+                    <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">{t("form.contactPerson")}</label>
                     <Input
                       type="text"
                       name="contactPerson"
@@ -585,7 +576,7 @@ export default function MembershipPage() {
 
                   {/* Corporate Email */}
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">Corporate Email Address</label>
+                    <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">{t("form.email")}</label>
                     <Input
                       type="email"
                       name="email"
@@ -600,7 +591,7 @@ export default function MembershipPage() {
 
                   {/* Phone */}
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">Phone Number</label>
+                    <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">{t("form.phone")}</label>
                     <Input
                       type="tel"
                       name="phone"
@@ -616,7 +607,7 @@ export default function MembershipPage() {
                   {/* Industry & Company Size */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">Industry</label>
+                      <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">{t("form.industry")}</label>
                       <Input
                         type="text"
                         name="industry"
@@ -627,7 +618,7 @@ export default function MembershipPage() {
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">Company Size</label>
+                      <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">{t("form.companySize")}</label>
                       <Input
                         type="text"
                         name="companySize"
@@ -641,7 +632,7 @@ export default function MembershipPage() {
 
                   {/* Objectives / Message */}
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">Objectives & Special Requests</label>
+                    <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider block">{t("form.message")}</label>
                     <textarea
                       name="message"
                       placeholder="Tell us about your bilateral objectives or special requests..."
@@ -656,7 +647,7 @@ export default function MembershipPage() {
                 <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-2xl mx-auto w-full">
                   <div className="text-xs text-muted-foreground flex items-center gap-1.5">
                     <Clock className="size-4 text-jibb-orange" />
-                    <span>Our membership team will contact you within 24-48 business hours</span>
+                    <span>{t("form.contactNotice")}</span>
                   </div>
                   <AnimatedButton
                     type="submit"

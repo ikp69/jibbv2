@@ -162,7 +162,7 @@ export function Footer() {
                 aria-label="LinkedIn"
               >
                 <LinkedInIcon className="size-4 shrink-0" />
-                <span className="text-xs font-semibold">Follow on LinkedIn</span>
+                <span className="text-xs font-semibold">{t("footer.linkedin.button")}</span>
               </motion.a>
             </div>
           </div>
@@ -199,7 +199,7 @@ export function Footer() {
           {/* Column 3: Network (Span 2) */}
           <div className="lg:col-span-2 space-y-4">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
-              Network
+              {t("footer.network")}
             </h4>
             <ul className="space-y-3 text-sm">
               <li>
@@ -257,7 +257,7 @@ export function Footer() {
           {/* Column 5: Legal (Span 2) */}
           <div className="lg:col-span-2 space-y-4">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-jibb-orange">
-              Legal
+              {t("footer.legal")}
             </h4>
             <ul className="space-y-3 text-sm">
               <li>

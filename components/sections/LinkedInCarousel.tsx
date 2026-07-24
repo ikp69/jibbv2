@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Globe } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 interface LinkedInCarouselProps {
   posts: { id: string; shareUrn: string }[];
@@ -31,6 +31,7 @@ function LinkedinIcon({ className }: { className?: string }) {
 export default function LinkedInCarousel({ posts }: LinkedInCarouselProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const locale = useLocale();
+  const tLayout = useTranslations("layout");
   const [adminPasscode, setAdminPasscode] = useState<string | null>(null);
 
   const fontHeading = locale === "ja"
@@ -140,8 +141,8 @@ export default function LinkedInCarousel({ posts }: LinkedInCarouselProps) {
               {posts.length === 0 ? (
                 <div className="py-16 text-center text-muted-foreground w-full flex flex-col items-center justify-center border border-dashed border-border/40 rounded-3xl bg-card/20 backdrop-blur-sm">
                   <Globe className="size-10 opacity-30 mb-3 text-jibb-orange animate-soft-pulse" />
-                  <p className="text-sm font-bold uppercase tracking-wider text-foreground">No Social Updates Active</p>
-                  <p className="text-xs opacity-75 mt-1">Please sync items in the Admin panel to populate the feed.</p>
+                  <p className="text-sm font-bold uppercase tracking-wider text-foreground">{tLayout("common.noSocialUpdates")}</p>
+                  <p className="text-xs opacity-75 mt-1">{tLayout("common.pleaseSync")}</p>
                 </div>
               ) : (
                 posts.map((post, idx) => (
@@ -162,7 +163,7 @@ export default function LinkedInCarousel({ posts }: LinkedInCarouselProps) {
                             width="100%"
                             style={{ border: 'none', borderRadius: '12px' }}
                             allowFullScreen
-                            title="LinkedIn post"
+                            title={tLayout("common.linkedInPost")}
                             loading="lazy"
                             scrolling="no"
                           />

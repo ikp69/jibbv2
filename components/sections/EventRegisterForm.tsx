@@ -18,6 +18,7 @@ interface FieldErrors {
 
 export function EventRegisterForm() {
   const t = useTranslations("eventsPage");
+  const tContact = useTranslations("contactPage");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -160,7 +161,7 @@ export function EventRegisterForm() {
 
           {/* Honeypot field (hidden from users, visible to bots) */}
           <div className="absolute opacity-0 pointer-events-none -z-10 h-0 w-0 overflow-hidden">
-            <label htmlFor="event-website-url">Leave this field blank</label>
+            <label htmlFor="event-website-url">{tContact("form.honeypotLabel")}</label>
             <input
               id="event-website-url"
               type="text"

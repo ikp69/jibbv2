@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "JIBB - 日印ビジネスビューロー",
+    "title": "日印ビジネスビューロー（JIBB）",
     "description": "日本とインドをイノベーション、貿易、製造、テクノロジーを通じてつなぐ、国境を越えた産業協力エコシステム。"
   },
   "nav": {
@@ -9,23 +9,23 @@
     "services": "サービス",
     "innovationHub": "イノベーションハブ",
     "sectors": "セクター",
-    "membership": "メンバーシップ",
+    "membership": "会員制度",
     "events": "イベント",
     "resources": "リソース",
     "careers": "採用情報",
     "contact": "お問い合わせ",
     "ecosystem": "エコシステム",
     "memberLogin": "会員ログイン",
-    "joinJibb": "JIBBに参加",
+    "joinJibb": "JIBBに参加する",
     "switchLanguage": "English"
   },
   "aboutMenu": {
     "whoWeAre": "JIBBのミッション、社会的インパクト、コアメンバーのご紹介",
-    "vision": "ビジョン＆ミッション",
+    "vision": "ビジョンとミッション",
     "visionDesc": "私たちの長期目標と設立目的",
     "leadership": "リーダーシップ",
     "leadershipDesc": "ミッションを舵取りする理事会と経営陣",
-    "approach": "アプローチ",
+    "approach": "私たちのアプローチ",
     "approachDesc": "国境を越えた貿易・事業創出の手法",
     "ecosystem": "エコシステム",
     "ecosystemDesc": "スタートアップと大企業の動的なネットワーク",
@@ -35,7 +35,7 @@
   "servicesMenu": {
     "marketEntry": "市場参入＆ローカライズ",
     "marketEntryDesc": "海外市場へのスムーズな進出・立ち上げとローカライズ支援",
-    "partnership": "パートナーシップ促進",
+    "partnership": "パートナーシップの仲介",
     "partnershipDesc": "信頼できる現地パートナーとの戦略的マッチング",
     "coInnovation": "共同イノベーション提携",
     "coInnovationDesc": "日印企業間の共同研究開発プロジェクトおよびR&Dの促進",
@@ -67,16 +67,18 @@
     "challengesDesc": "重要課題を解決する技術コンテストの開催"
   },
   "resourcesMenu": {
-    "insights": "メディア＆インサイト",
-    "insightsDesc": "深掘り分析、最新ニュース、リーダーシップ・ソーツ",
+    "insights": "メディア・インサイト",
+    "insightsDesc": "深掘り分析、ニュース、リーダーシップの視点",
     "blog": "ブログ",
-    "blogDesc": "最新記事、お知らせ、業界インサイト",
-    "caseStudies": "ケーススタディ",
-    "caseStudiesDesc": "JIBB会員のリアルな成功事例のご紹介",
+    "blogDesc": "最新記事、アップデート、業界インサイト",
+    "media": "メディア・プレスリリース",
+    "mediaDesc": "プレスリリースおよびメディアリソース",
+    "caseStudies": "ブログ",
+    "caseStudiesDesc": "最新記事、アップデート、業界インサイト",
     "newsletter": "メールマガジン",
     "newsletterDesc": "最新の市場動向を毎週あなたの受信トレイにお届け",
-    "leadership": "リーダーシップ・ソーツ",
-    "leadershipDesc": "JIBBの共同創設者やリーダーによる記事と展望"
+    "leadership": "ソートリーダーシップ",
+    "leadershipDesc": "JIBBの共同創業者・リーダーによる記事と視点"
   },
   "sectorsMenu": {
     "desc": "日印協力を牽引する主要8大セクターをご紹介"
@@ -97,6 +99,8 @@
     "services": "サービス",
     "innovation": "イノベーション",
     "resources": "リソース",
+    "network": "ネットワーク",
+    "legal": "法的情報",
     "connect": "つながる",
     "newsletter": {
       "title": "最新情報を受け取る",
@@ -105,14 +109,15 @@
       "desc": "最新の二国間市場インサイトとイベントご招待をお届けします。"
     },
     "linkedin": {
-      "title": "LinkedIn ネットワーク",
-      "desc": "二国間の最新情報、公式発表、イベント情報をリアルタイムで受け取るには、日印ビジネスビューローをフォローしてください。"
+      "title": "LinkedInネットワーク",
+      "desc": "リアルタイムの二国間更新、発表、イベントについては、JIBBをフォローしてください。",
+      "button": "LinkedInでフォローする"
     },
     "offices": {
-      "tokyoTitle": "東京、日本",
-      "tokyoAddress": "東京都港区赤坂1-2-13 溜池鈴木ビル 3F",
-      "noidaTitle": "ノイダ、インド",
-      "noidaAddress": "インド、ウッタル・プラデーシュ州ノイダ、セクター136、アリハント・ビジネスセンター 6階 JIBB"
+      "tokyoTitle": "日本・東京",
+      "tokyoAddress": "東京都港区赤坂1-2-13 溜池鈴木ビル3F",
+      "noidaTitle": "インド・ノイダ",
+      "noidaAddress": "インド ウッタル・プラデーシュ州 ノイダ セクター136, 162 アリハント・ビジネスセンター 6階"
     },
     "copyright": "© {year} 日印ビジネスビューロー. 全著作権所有。",
     "privacy": "プライバシーポリシー",
@@ -123,13 +128,21 @@
     "getStarted": "始める",
     "contactUs": "お問い合わせ",
     "readMore": "続きを読む",
-    "viewAll": "すべて表示",
+    "viewAll": "すべて見る",
     "back": "戻る",
     "loading": "読み込み中...",
-    "comingSoon": "近日公開"
+    "comingSoon": "近日公開",
+    "portalTitle": "JIBBポータル",
+    "memberConsole": "会員コンソール",
+    "exploreInnovationHub": "イノベーションハブを探索する",
+    "noSocialUpdates": "アクティブなSNS更新はありません",
+    "pleaseSync": "管理パネルでアイテムを同期してフィードを表示してください。",
+    "linkedInPost": "LinkedInの投稿",
+    "deleteLinkedInPost": "LinkedInの投稿を削除"
   },
   "highvalueEcosystem": {
-    "title1": "先進的製造技術",
+    "heading": "高価値エコシステム全体における戦略的シナジーと推進領域",
+    "title1": "先進製造技術",
     "sub1": "(CNC、精密工学、自動化)",
     "title2": "半導体＆エレクトロニクス",
     "sub2": "(設計、製造、OSAT、ATMP、材料、および関連産業)",
@@ -137,7 +150,7 @@
     "sub3": "(EV、コネクテッドビークル、ADAS、部品)",
     "title4": "産業用機器＆機械",
     "sub4": "(工作機械、ロボティクス、プロセス機器)",
-    "title5": "新興技術",
+    "title5": "先端技術",
     "sub5": "(AI、IoT統合、インダストリー4.0、5.0、持続可能な製造)",
     "bannerText": "<orange>チャイナ＋1戦略、アトマニルバル・インディア（自己完結型インド）、およびメイク・イン・インディア：</orange> インドの半導体市場は<underline>16%のCAGR</underline>で成長し、2030年までに<orangeVal>1,000億ドル以上</orangeVal>に達すると予測されており、自動車部品産業は<orangeVal>515億ドル</orangeVal>を突破しました。"
   }

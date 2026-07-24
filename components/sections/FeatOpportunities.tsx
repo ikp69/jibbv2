@@ -142,7 +142,7 @@ export function FeatOpportunities() {
         return [
           {
             id: "m1",
-            bgImage: "/images/sectors/renewable.png",
+            bgImage: "/images/sectors/renewable.jpg",
             title: t("data.tradeMissions.m1.title") || "Clean Energy Mission",
             direction: t("data.tradeMissions.m1.direction") || "India ↔ Japan",
             purpose: t("data.tradeMissions.m1.purpose") || "Connecting Indian manufacturers with Japanese green hydrogen buyers.",
@@ -159,7 +159,7 @@ export function FeatOpportunities() {
           },
           {
             id: "m2",
-            bgImage: "/images/sectors/infrastructure.png",
+            bgImage: "/images/sectors/infrastructure.jpg",
             title: t("data.tradeMissions.m2.title") || "Smart Cities Mission",
             direction: t("data.tradeMissions.m2.direction") || "Japan → India",
             purpose: t("data.tradeMissions.m2.purpose") || "Exploring municipal collaboration in smart grid tech and EV public charging.",

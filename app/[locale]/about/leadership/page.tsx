@@ -10,9 +10,18 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
+  const title =
+    locale === "ja"
+      ? "リーダーシップ＆役員・コアチーム | 日印ビジネス機構"
+      : "Leadership & Core Team - Japan India Business Bureau";
+  const description =
+    locale === "ja"
+      ? "日印ビジネス機構（JIBB）の役員、理事、および両国の産業交流・政策アライメントを推進するコアチームをご紹介します。"
+      : t("description");
+
   return {
-    title: "Leadership & Core Team - Japan India Business Bureau",
-    description: t("description"),
+    title,
+    description,
   };
 }
 
@@ -33,7 +42,7 @@ export default async function LeadershipPage({
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <span className="flex h-2 w-2 rounded-full bg-jibb-orange animate-soft-pulse" />
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-white/90">
-              JIBB Board
+              {t("leadershipPage.jibbBoard")}
             </span>
           </div>
 

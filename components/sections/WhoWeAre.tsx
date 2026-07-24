@@ -158,10 +158,17 @@ function ServiceCard({
 export function WhoWeAre() {
   const t = useTranslations("whoWeAre");
 
-  // Type-safe translation arrays
-  const consultingItems = t.raw("consultingItems") || [];
-  const marketEntryItems = t.raw("marketEntryItems") || [];
-  const backOfficeItems = t.raw("backOfficeItems") || [];
+  // Type-safe translation arrays with safe fallback
+  let consultingItems: string[] = [];
+  let marketEntryItems: string[] = [];
+  let backOfficeItems: string[] = [];
+  try {
+    consultingItems = t.raw("consultingItems") || [];
+    marketEntryItems = t.raw("marketEntryItems") || [];
+    backOfficeItems = t.raw("backOfficeItems") || [];
+  } catch (e) {
+    console.error("Failed to load WhoWeAre items from translations:", e);
+  }
 
   return (
     <section id="who-we-are" className="py-16 md:py-24 lg:py-28 bg-background relative overflow-hidden border-b border-border/20">

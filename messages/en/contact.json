@@ -2,12 +2,16 @@
   "contactPage": {
     "title": "Contact the Bureau",
     "subtitle": "Get in touch with our bilateral trade specialists. We respond to all inquiries within 24 hours.",
+    "getInTouch": "Get in Touch",
     "officesTitle": "Our Offices",
     "formTitle": "Send us a Message",
+    "bilateralAssistance": "Bilateral Assistance",
     "tokyoOffice": "Japan Office",
     "tokyoAddr": "Tameike Suzuki Building 3F, 1-2-13 Akasaka, Minato-ku, Tokyo",
     "noidaOffice": "Noida Office",
     "noidaAddr": "JIBB, 6th Floor, 162, Sector 136, Arihant Business Centre, Noida, Uttar Pradesh",
+    "tokyoHQ": "Tokyo HQ",
+    "noidaHQ": "Noida HQ",
     "form": {
       "inquiryType": "Inquiry Type",
       "typeSelect": "Select Type",
@@ -22,7 +26,9 @@
       "submit": "Send Message",
       "successTitle": "Message Sent Successfully!",
       "successDesc": "Thank you for contacting JIBB. A trade specialist from our team will reach out to you shortly.",
-      "emailErrorText": "Email service is facing some problems. Please try again after some time or directly write to"
+      "emailErrorText": "Email service is facing some problems. Please try again after some time or directly write to",
+      "honeypotLabel": "Leave this field blank",
+      "submissionError": "Submission Error"
     }
   }
 }

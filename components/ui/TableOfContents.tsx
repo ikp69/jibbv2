@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { AlignLeft, Hash, ChevronRight } from "lucide-react";
 
+import { useLocale } from "next-intl";
+
 interface TocItem {
   id: string;
   text: string;
@@ -16,6 +18,7 @@ interface TocGroup {
 }
 
 export function TableOfContents() {
+  const locale = useLocale();
   const [headings, setHeadings] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState<string>("");
   const [hoveredGroupId, setHoveredGroupId] = useState<string | null>(null);
@@ -29,12 +32,14 @@ export function TableOfContents() {
     const mappedHeadings: TocItem[] = Array.from(headingElements).map((el: any, index) => {
       let id = el.id;
       if (!id) {
-        id = el.textContent
+        const textSlug = el.textContent
           ? el.textContent
+              .trim()
               .toLowerCase()
-              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/[\s\W]+/g, "-")
               .replace(/(^-|-$)/g, "")
-          : `heading-${index}`;
+          : "";
+        id = textSlug ? encodeURIComponent(textSlug) : `heading-${index}`;
         el.id = id;
       }
       return {
@@ -140,12 +145,12 @@ export function TableOfContents() {
       <div className="flex items-center gap-2 pb-3 border-b border-border/50">
         <AlignLeft className="size-4 text-jibb-orange animate-soft-pulse" />
         <span className="text-xs font-bold uppercase tracking-wider text-foreground/80">
-          Table of Contents
+          {locale === "ja" ? "目次" : "Table of Contents"}
         </span>
       </div>
 
       <ul className="space-y-3 max-h-[70vh] overflow-y-auto no-scrollbar py-1 text-left relative">
-        {groups.map((group) => {
+        {groups.map((group, index) => {
           const isParentActive = activeId === group.parent.id;
           const isGroupActive = activeGroupParentId === group.parent.id;
           const isHovered = hoveredGroupId === group.parent.id;
@@ -153,7 +158,7 @@ export function TableOfContents() {
 
           return (
             <li
-              key={group.parent.id}
+              key={group.parent.id || `parent-${index}`}
               className="space-y-1.5 transition-all duration-200"
               onMouseEnter={() => setHoveredGroupId(group.parent.id)}
               onMouseLeave={() => setHoveredGroupId(null)}
@@ -196,10 +201,10 @@ export function TableOfContents() {
                     isExpanded ? "max-h-[500px] opacity-100 py-0.5" : "max-h-0 opacity-0 py-0 pointer-events-none"
                   )}
                 >
-                  {group.children.map((child) => {
+                  {group.children.map((child, cIdx) => {
                     const isChildActive = child.id === activeId;
                     return (
-                      <li key={child.id}>
+                      <li key={child.id || `child-${cIdx}`}>
                         <a
                           href={`#${child.id}`}
                           onClick={(e) => handleClick(e, child.id)}

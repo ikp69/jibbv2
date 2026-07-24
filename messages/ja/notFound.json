@@ -1,14 +1,14 @@
 {
   "notFound": {
     "title": "404 — ページが見つかりません",
-    "headline": "お探しのルートが見つかりません",
-    "description": "アクセスしようとしたページは存在しないか、移動されたか、または日印のビジネス回廊で現在構築中の可能性があります。",
-    "goHome": "ポータルに戻る",
+    "headline": "お探しのページが見つかりません",
+    "description": "お探しのページは存在しないか、移動または削除された可能性があります。",
+    "goHome": "トップページに戻る",
     "contactAdvisory": "アドバイザリーに連絡",
-    "backTrack": "戻る",
-    "suggestedLinks": "推奨のコンテンツ",
-    "services": "提供サービス",
-    "innovationHub": "共同研究ラボ",
-    "membership": "会員プラン一覧"
+    "backTrack": "前のページに戻る",
+    "suggestedLinks": "おすすめのページ",
+    "services": "二国間サービス",
+    "innovationHub": "イノベーションラボ",
+    "membership": "戦略的会員制度"
   }
 }

@@ -181,7 +181,7 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
                   className="group relative flex flex-col bg-card border border-border/80 shadow-jibb hover:shadow-jibb-lg rounded-3xl overflow-hidden transition-all duration-300"
                 >
                   {/* Banner Image */}
-                  <div className="relative w-full overflow-hidden bg-card" style={{ aspectRatio: "1700 / 800" }}>
+                  <Link href={`/resources/blog/${post.slug}`} className="block relative w-full overflow-hidden bg-card cursor-pointer" style={{ aspectRatio: "1700 / 800" }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={post.image}
@@ -192,10 +192,10 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
                     {post.corridor && (
                       <div className="absolute bottom-6 left-6 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-semibold">
                         <MapPin className="size-3.5 text-jibb-orange" />
-                        {post.corridor}
+                        {locale === "ja" && post.corridor === "India-Japan" ? "日印関係" : post.corridor}
                       </div>
                     )}
-                  </div>
+                  </Link>
 
                   {/* Body Content */}
                   <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
@@ -203,7 +203,7 @@ export default async function CaseStudiesPage({ params, searchParams }: PageProp
                       <div className="flex flex-wrap items-center justify-between gap-x-2.5 gap-y-0.5">
                         {post.client && (
                           <span className="text-[11px] sm:text-xs font-bold text-jibb-orange uppercase tracking-wider">
-                            {post.client}
+                            {locale === "ja" && post.client === "Japan India Business Bureau" ? "日印ビジネスビューロー" : post.client}
                           </span>
                         )}
                         {post.client && (

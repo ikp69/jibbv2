@@ -12,7 +12,6 @@ import {
   UserCheck,
   Globe,
   Mail,
-  AlertCircle,
   RefreshCw,
   Cookie,
   FileText,
@@ -87,7 +86,7 @@ export async function generateMetadata({
   };
 }
 
-const sections = [
+const sectionsEn = [
   {
     id: "information-we-collect",
     icon: Database,
@@ -262,6 +261,181 @@ const sections = [
   },
 ];
 
+const sectionsJa = [
+  {
+    id: "information-we-collect",
+    icon: Database,
+    iconColor: "text-jibb-indigo",
+    iconBg: "bg-jibb-indigo/5",
+    title: "収集する情報",
+    content: [
+      {
+        subtitle: "お客様から直接ご提供いただく情報",
+        body: "会員登録、イベントお申し込み、お問い合わせフォームの送信、ニュースレター登録などの際、お名前、メールアドレス、電話番号、会社名、役職、および共有いただいたメッセージや書類等の個人情報を収集します。",
+      },
+      {
+        subtitle: "自動的に収集される情報",
+        body: "当ウェブサイトを閲覧する際、IPアドレス、ブラウザの種類・バージョン、OS、参照URL、閲覧ページ、滞在時間、端末識別子などの技術データを自動的に収集します。これらはクッキー等の技術を利用し、利便性向上に役立てられています。",
+      },
+      {
+        subtitle: "第三者から取得する情報",
+        body: "当団体は、サービス向上やビジネスニーズへの対応のため、パートナー企業、SNSプラットフォーム（当団体プロフィールへのインタラクション時）、公的データベース等から情報を取得する場合があります。",
+      },
+    ],
+  },
+  {
+    id: "how-we-use",
+    icon: Eye,
+    iconColor: "text-jibb-orange",
+    iconBg: "bg-jibb-orange/5",
+    title: "情報の利用目的",
+    content: [
+      {
+        subtitle: "サービス提供および会員サポート",
+        body: "収集した情報は、会員登録手続き、日印企業間のパートナー引き合わせ、お問い合わせへの回答、イベント受付、ビジネスマッチング、各種情報リソースの提供のために利用します。",
+      },
+      {
+        subtitle: "連絡および情報配信",
+        body: "ご同意いただいたお客様に対し、ニュースレター、業界レポート、イベントのご案内、関心分野に応じた日印ビジネス機会の最新情報を配信します。配信停止はメール内のリンクからいつでも可能です。",
+      },
+      {
+        subtitle: "プラットフォームの改善・分析",
+        body: "匿名化・統計化されたデータを活用し、サイトの利用傾向分析、ユーザー体験の改善、コンテンツの最適化、ならびに二国間コミュニティを繋ぐ新サービスの開発に活用します。",
+      },
+      {
+        subtitle: "法的義務およびコンプライアンス",
+        body: "日本およびインドの適用法令の遵守、当局からの正当な要請への対応、利用規約の運用・適用、当団体・会員・第三者の権利や安全の保護のためにデータを処理する場合があります。",
+      },
+    ],
+  },
+  {
+    id: "data-sharing",
+    icon: Share2,
+    iconColor: "text-jibb-sakura",
+    iconBg: "bg-jibb-sakura/5",
+    title: "データの共有および第三者提供",
+    content: [
+      {
+        subtitle: "ビジネスマッチングにおける情報共有",
+        body: "二国間ビジネス機構として、会員間の国境を越えた接続がコアサービスとなります。明示的なご同意に基づき、マッチング支援の一環として該当するプロフェッショナル情報（氏名、会社名、役職、事業関心事項）を相手企業（日本・インド）と共有する場合があります。",
+      },
+      {
+        subtitle: "信頼できる業務委託先",
+        body: "メール配信、イベント管理、サイトホスティング、CRMツール等の運用のため、厳選された第三者委託先と連携します。委託先は契約により適切なデータ保護と指定目的のみでの取り扱いが義務付けられています。",
+      },
+      {
+        subtitle: "データの売買・転売の禁止",
+        body: "JIBBは、いかなる理由であれ、第三者のマーケティング目的のために個人情報を売買、賃貸、共有することはありません。データは当団体のミッションと会員サポートのためにのみ使用されます。",
+      },
+      {
+        subtitle: "法的開示要請",
+        body: "法令、裁判所の命令、または日本もしくはインドの政府機関からの要請に基づく場合、あるいは当団体の法的権利保護や不正防止に必要な場合、情報を開示することがあります。",
+      },
+    ],
+  },
+  {
+    id: "data-security",
+    icon: Lock,
+    iconColor: "text-jibb-indigo",
+    iconBg: "bg-jibb-indigo/5",
+    title: "データセキュリティ",
+    content: [
+      {
+        subtitle: "技術的安全管理措置",
+        body: "通信のTLS/SSL暗号化、機密データの暗号化保存、アクセス制御、定期的なセキュリティ監査等、業界標準の安全管理措置を講じています。インフラは高セキュリティなエンタープライズ級クラウドで運用されています。",
+      },
+      {
+        subtitle: "組織的安全管理措置",
+        body: "個人情報へのアクセスは業務上必要なスタッフのみに制限しています。全チームメンバーへデータ保護研修を実施し、取扱い・保存・破棄に関する内部規程を遵守しています。",
+      },
+      {
+        subtitle: "データ侵害発生時の対応",
+        body: "万一、個人情報漏洩等のインシデントが発生した場合は、速やかに法的期限内に該当者および管轄当局へ通知し、被害拡大防止と復旧措置を迅速に行います。",
+      },
+    ],
+  },
+  {
+    id: "your-rights",
+    icon: UserCheck,
+    iconColor: "text-jibb-orange",
+    iconBg: "bg-jibb-orange/5",
+    title: "お客様の権利",
+    content: [
+      {
+        subtitle: "開示およびデータポータビリティ",
+        body: "お客様は当団体が保有する個人情報の開示および構造化された一般的な形式でのデータ受領を請求できます。vc@npo-jibb.org までご連絡いただければ、30日以内に対応いたします。",
+      },
+      {
+        subtitle: "訂正および削除",
+        body: "誤ったデータの訂正や、不要となった個人情報の削除を請求できます。ただし、法令上または契約上保存が必要なデータについては対応できない場合があります。",
+      },
+      {
+        subtitle: "同意の撤回",
+        body: "同意に基づいてデータ処理を行っている場合、いつでも同意を撤回できます。撤回前の処理の合法性には影響しません。マーケティング配信はいつでも解除可能です。",
+      },
+      {
+        subtitle: "異議申し立ておよび利用制限",
+        body: "特定のデータ処理に対して異議を申し立てる権利、または審査中の利用制限を求める権利があります。適用される個人情報保護法に従って適切に対応いたします。",
+      },
+    ],
+  },
+  {
+    id: "cookies",
+    icon: Cookie,
+    iconColor: "text-jibb-sakura",
+    iconBg: "bg-jibb-sakura/5",
+    title: "クッキー（Cookie）およびトラッキング",
+    content: [
+      {
+        subtitle: "必須クッキー",
+        body: "セッション管理、安全なログイン、言語設定など、ウェブサイトの基本機能の動作に必要なクッキーです。サイト機能に不可欠なため無効化することはできません。",
+      },
+      {
+        subtitle: "分析用クッキー",
+        body: "アクセス傾向の把握とユーザー体験向上のため、Google Analytics（IP匿名化済）等の分析ツールを使用しています。クッキーバナーまたはブラウザ設定から拒否可能です。",
+      },
+      {
+        subtitle: "クッキー設定の管理",
+        body: "ブラウザ設定を通じていつでもクッキーを無効化・管理できます。ただし、特定のクッキーを無効にするとサイトの一部機能が利用できなくなる場合があります。",
+      },
+    ],
+  },
+  {
+    id: "international-transfers",
+    icon: Globe,
+    iconColor: "text-jibb-indigo",
+    iconBg: "bg-jibb-indigo/5",
+    title: "国際データ移転",
+    content: [
+      {
+        subtitle: "国境を越えた事業運用",
+        body: "東京とノイダに拠点を置く二国間機関として、データは日本、インド、および委託先が所在する国へ移転され処理される場合があります。各国の個人情報保護法は居住国と異なる場合があります。",
+      },
+      {
+        subtitle: "移転保護措置",
+        body: "日本（個人情報保護法・APPI）およびインド（デジタル個人データ保護法・DPDPA）の双方の規定を遵守し、適切な契約条項やデータ処理協定等の安全措置を確実に講じています。",
+      },
+    ],
+  },
+  {
+    id: "updates",
+    icon: RefreshCw,
+    iconColor: "text-jibb-orange",
+    iconBg: "bg-jibb-orange/5",
+    title: "ポリシーの改定",
+    content: [
+      {
+        subtitle: "本ポリシーの変更",
+        body: "運用の変更、技術の進歩、法改正に応じて本ポリシーを改定することがあります。最新の改定日は本ページ上部に記載されます。重要な変更の際はメール等で事前通知いたします。",
+      },
+      {
+        subtitle: "改定後の継続利用",
+        body: "改定後も継続してサービスを利用された場合、変更後のプライバシーポリシーに同意したものとみなされます。定期的に本ページをご確認いただくことをお勧めします。",
+      },
+    ],
+  },
+];
+
 export default async function PrivacyPage({
   params,
 }: {
@@ -270,8 +444,9 @@ export default async function PrivacyPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const effectiveDate = "June 19, 2025";
-  const lastUpdated = "June 19, 2026";
+  const effectiveDate = locale === "ja" ? "2025年6月19日" : "June 19, 2025";
+  const lastUpdated = locale === "ja" ? "2026年6月19日" : "June 19, 2026";
+  const sections = locale === "ja" ? sectionsJa : sectionsEn;
 
   return (
     <main className="flex-1 bg-background text-foreground">
@@ -283,27 +458,32 @@ export default async function PrivacyPage({
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Shield className="size-3.5 text-jibb-orange" />
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-white/90">
-              Legal &amp; Compliance
+              {locale === "ja" ? "法務・コンプライアンス" : "Legal & Compliance"}
             </span>
           </div>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-            Privacy Policy
+            {locale === "ja" ? "プライバシーポリシー" : "Privacy Policy"}
           </h1>
 
           <p className="text-base md:text-lg text-white/75 max-w-2xl mx-auto leading-relaxed">
-            At JIBB, your privacy is not an afterthought — it is a commitment.
-            This policy explains what data we collect, why we collect it, and how we protect it.
+            {locale === "ja"
+              ? "JIBBはお客様のプライバシーを最優先に保護します。本方針では、個人情報の収集・利用・管理について明確にご説明いたします。"
+              : "At JIBB, your privacy is not an afterthought — it is a commitment. This policy explains what data we collect, why we collect it, and how we protect it."}
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 pt-2">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md">
               <FileText className="size-3.5 text-white/60" />
-              <span className="text-xs text-white/70">Effective: {effectiveDate}</span>
+              <span className="text-xs text-white/70">
+                {locale === "ja" ? `施行日: ${effectiveDate}` : `Effective: ${effectiveDate}`}
+              </span>
             </div>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md">
               <RefreshCw className="size-3.5 text-white/60" />
-              <span className="text-xs text-white/70">Last Updated: {lastUpdated}</span>
+              <span className="text-xs text-white/70">
+                {locale === "ja" ? `最終更新日: ${lastUpdated}` : `Last Updated: ${lastUpdated}`}
+              </span>
             </div>
           </div>
         </div>
@@ -322,7 +502,7 @@ export default async function PrivacyPage({
 
             {/* Main Content Area */}
             <div className="lg:col-span-3 jibb-prose space-y-16">
-              {sections.map((section, sectionIndex) => {
+              {sections.map((section) => {
                 const Icon = section.icon;
                 return (
                   <div key={section.id} id={section.id} className="scroll-mt-24">
@@ -333,24 +513,27 @@ export default async function PrivacyPage({
                           <div className={`p-2.5 rounded-xl ${section.iconBg} shrink-0 flex items-center justify-center`}>
                             <Icon className={`size-5 ${section.iconColor}`} />
                           </div>
-                          <h2 className="text-xl md:text-2xl font-bold text-foreground tracking-tight m-0 leading-none">
+                          <h2 id={section.id} className="text-xl md:text-2xl font-bold text-foreground tracking-tight m-0 leading-none">
                             {section.title}
                           </h2>
                         </div>
 
                         {/* Subsections */}
                         <div className="space-y-6 pl-0 md:pl-2">
-                          {section.content.map((item, i) => (
-                            <div key={i} className="space-y-2">
-                              <h3 className="text-sm font-bold text-foreground tracking-tight flex items-center gap-2">
-                                <span className="inline-block w-1.5 h-1.5 rounded-full bg-jibb-orange shrink-0" />
-                                {item.subtitle}
-                              </h3>
-                              <p className="text-sm md:text-base text-muted-foreground leading-relaxed pl-3.5">
-                                {item.body}
-                              </p>
-                            </div>
-                          ))}
+                          {section.content.map((item, i) => {
+                            const subId = `${section.id}-sub-${i}`;
+                            return (
+                              <div key={i} id={subId} className="space-y-2 scroll-mt-24">
+                                <h3 id={`h3-${subId}`} className="text-sm font-bold text-foreground tracking-tight flex items-center gap-2">
+                                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-jibb-orange shrink-0" />
+                                  {item.subtitle}
+                                </h3>
+                                <p className="text-sm md:text-base text-muted-foreground leading-relaxed pl-3.5">
+                                  {item.body}
+                                </p>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     </ScrollReveal>
@@ -376,10 +559,12 @@ export default async function PrivacyPage({
                   <Mail className="size-6 text-white" />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight">
-                  Questions About Your Privacy?
+                  {locale === "ja" ? "プライバシーに関するお問い合わせ" : "Questions About Your Privacy?"}
                 </h2>
                 <p className="text-sm md:text-base text-white/75 max-w-xl mx-auto leading-relaxed">
-                  If you have any questions, concerns, or requests related to this Privacy Policy or how we handle your personal data, our Data Protection point of contact is available to assist you.
+                  {locale === "ja"
+                    ? "本プライバシーポリシーや個人情報の取り扱いに関するご質問、各種請求につきましては、個人情報管理窓口までお問い合わせください。"
+                    : "If you have any questions, concerns, or requests related to this Privacy Policy or how we handle your personal data, our Data Protection point of contact is available to assist you."}
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center gap-4 pt-2">
                   <a
@@ -393,12 +578,13 @@ export default async function PrivacyPage({
                     href="/contact"
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/10 border border-white/20 text-white font-semibold text-sm hover:bg-white/20 transition-colors backdrop-blur-sm"
                   >
-                    Contact Form
+                    {locale === "ja" ? "お問い合わせフォーム" : "Contact Form"}
                   </Link>
                 </div>
                 <p className="text-xs text-white/50 mt-4">
-                  Tokyo: Tameike Suzuki Building 3F, 1-2-13 Akasaka, Minato-ku, Tokyo, Japan<br />
-                  Noida: 6th Floor, 162, Sector 136, Arihant Business Centre, Noida, Uttar Pradesh, India
+                  {locale === "ja"
+                    ? "東京：東京都港区赤坂1-2-13 溜池鈴木ビル3F · ノイダ：インド ウッタル・プラデーシュ州 ノイダ セクター136, 162 アリハント・ビジネスセンター 6階"
+                    : "Tokyo: Tameike Suzuki Building 3F, 1-2-13 Akasaka, Minato-ku, Tokyo, Japan · Noida: JIBB, 6th Floor, 162, Sector 136, Arihant Business Centre, Noida, Uttar Pradesh, India"}
                 </p>
               </div>
             </div>

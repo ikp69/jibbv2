@@ -10,7 +10,7 @@ import {
   FlaskConical, Microscope, Cpu, ArrowRight, Lightbulb, GraduationCap,
   Users, Award, Sparkles, Building2, BatteryCharging, Battery, Trophy,
   Landmark, Globe, Handshake, Zap, Target, Rocket, Clock, Car, Factory,
-  DollarSign,
+  DollarSign, Layers,
 } from "lucide-react";
 import { PageHero } from "@/components/sections/PageHero";
 import { Button } from "@/components/ui/button";
@@ -89,52 +89,67 @@ export default async function InnovationHubPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations({ locale });
+  const tHub = await getTranslations("innovationHub");
+  const t = await getTranslations("hubPage");
+  const tCoe = await getTranslations("coePage");
+  const tLabs = await getTranslations("laboratoriesPage");
+  const tInc = await getTranslations("incubationPage");
+  const tPart = await getTranslations("partnerPage");
+  const tChal = await getTranslations("challengesPage");
+  const tMenu = await getTranslations("hubMenu");
 
   const labs = [
     {
       id: "semiconductor",
       icon: <Cpu className="size-8 text-white" />,
-      title: t("hubPage.labs.semiconductor.title"),
-      desc: t("hubPage.labs.semiconductor.desc"),
+      title: t("labs.semiconductor.title"),
+      desc: t("labs.semiconductor.desc"),
       spanClass: "md:col-span-2",
       bgClass: "bg-jibb-indigo hover:shadow-jibb-glow hover:-translate-y-1",
     },
     {
       id: "ev",
       icon: <BatteryCharging className="size-8 text-white" />,
-      title: t("hubPage.labs.ev.title"),
-      desc: t("hubPage.labs.ev.desc"),
+      title: t("labs.ev.title"),
+      desc: t("labs.ev.desc"),
       spanClass: "md:col-span-1",
       bgClass: "bg-jibb-orange hover:shadow-jibb-orange-glow hover:-translate-y-1",
     },
     {
       id: "pharma",
       icon: <FlaskConical className="size-8 text-white" />,
-      title: t("hubPage.labs.pharma.title"),
-      desc: t("hubPage.labs.pharma.desc"),
-      spanClass: "md:col-span-3",
-      bgClass: "bg-jibb-sakura hover:shadow-jibb-sakura-glow hover:-translate-y-1",
+      title: t("labs.pharma.title"),
+      desc: t("labs.pharma.desc"),
+      spanClass: "md:col-span-1",
+      bgClass: "bg-jibb-sakura hover:shadow-jibb-glow hover:-translate-y-1",
+    },
+    {
+      id: "ai",
+      icon: <Layers className="size-8 text-white" />,
+      title: locale === "ja" ? "AI & ディープテック" : "AI & Deeptech",
+      desc: locale === "ja" ? "次世代AIモデル、ロボティクス、量子コンピューティングの協創サンドボックス。" : "Co-creation sandbox for next-generation AI models, robotics, and quantum computing.",
+      spanClass: "md:col-span-2",
+      bgClass: "bg-gradient-to-r from-jibb-indigo via-jibb-orange to-jibb-sakura hover:shadow-jibb-orange-glow hover:-translate-y-1",
     },
   ];
 
   const coeFocuses = [
     {
       icon: <Cpu className="size-6 text-white" />,
-      title: t("coePage.f1Title"),
-      desc: t("coePage.f1Desc"),
+      title: tCoe("f1Title"),
+      desc: tCoe("f1Desc"),
       color: "from-jibb-orange to-jibb-orange-light",
     },
     {
       icon: <Car className="size-6 text-white" />,
-      title: t("coePage.f2Title"),
-      desc: t("coePage.f2Desc"),
+      title: tCoe("f2Title"),
+      desc: tCoe("f2Desc"),
       color: "from-jibb-indigo to-jibb-indigo-light",
     },
     {
       icon: <Factory className="size-6 text-white" />,
-      title: t("coePage.f3Title"),
-      desc: t("coePage.f3Desc"),
+      title: tCoe("f3Title"),
+      desc: tCoe("f3Desc"),
       color: "from-jibb-sakura to-jibb-sakura-light",
     },
   ];
@@ -142,20 +157,20 @@ export default async function InnovationHubPage({
   const labFacilities = [
     {
       icon: <Battery className="size-6 text-white" />,
-      title: t("laboratoriesPage.l1Title"),
-      desc: t("laboratoriesPage.l1Desc"),
+      title: tLabs("l1Title"),
+      desc: tLabs("l1Desc"),
       color: "from-jibb-orange to-jibb-orange-light",
     },
     {
       icon: <Cpu className="size-6 text-white" />,
-      title: t("laboratoriesPage.l2Title"),
-      desc: t("laboratoriesPage.l2Desc"),
+      title: tLabs("l2Title"),
+      desc: tLabs("l2Desc"),
       color: "from-jibb-indigo to-jibb-indigo-light",
     },
     {
       icon: <Microscope className="size-6 text-white" />,
-      title: t("laboratoriesPage.l3Title"),
-      desc: t("laboratoriesPage.l3Desc"),
+      title: tLabs("l3Title"),
+      desc: tLabs("l3Desc"),
       color: "from-jibb-sakura to-jibb-sakura-light",
     },
   ];
@@ -163,36 +178,36 @@ export default async function InnovationHubPage({
   const incubationBenefits = [
     {
       icon: <Building2 className="size-6 text-white" />,
-      title: t("incubationPage.b1Title"),
-      desc: t("incubationPage.b1Desc"),
+      title: tInc("b1Title"),
+      desc: tInc("b1Desc"),
       color: "from-jibb-orange to-jibb-orange-light",
     },
     {
       icon: <Users className="size-6 text-white" />,
-      title: t("incubationPage.b2Title"),
-      desc: t("incubationPage.b2Desc"),
+      title: tInc("b2Title"),
+      desc: tInc("b2Desc"),
       color: "from-jibb-indigo to-jibb-indigo-light",
     },
     {
       icon: <DollarSign className="size-6 text-white" />,
-      title: t("incubationPage.b3Title"),
-      desc: t("incubationPage.b3Desc"),
+      title: tInc("b3Title"),
+      desc: tInc("b3Desc"),
       color: "from-jibb-sakura to-jibb-sakura-light",
     },
   ];
 
   const partners = [
-    { icon: <GraduationCap className="size-6 text-white" />, name: t("partnerPage.p1Name"), desc: t("partnerPage.p1Desc"), color: "from-jibb-orange to-jibb-orange-light" },
-    { icon: <GraduationCap className="size-6 text-white" />, name: t("partnerPage.p2Name"), desc: t("partnerPage.p2Desc"), color: "from-jibb-indigo to-jibb-indigo-light" },
-    { icon: <Landmark className="size-6 text-white" />, name: t("partnerPage.p3Name"), desc: t("partnerPage.p3Desc"), color: "from-jibb-sakura to-jibb-sakura-light" },
-    { icon: <Globe className="size-6 text-white" />, name: t("partnerPage.p4Name"), desc: t("partnerPage.p4Desc"), color: "from-jibb-orange to-jibb-orange-light" },
+    { icon: <GraduationCap className="size-6 text-white" />, name: tPart("p1Name"), desc: tPart("p1Desc"), color: "from-jibb-orange to-jibb-orange-light" },
+    { icon: <GraduationCap className="size-6 text-white" />, name: tPart("p2Name"), desc: tPart("p2Desc"), color: "from-jibb-indigo to-jibb-indigo-light" },
+    { icon: <Landmark className="size-6 text-white" />, name: tPart("p3Name"), desc: tPart("p3Desc"), color: "from-jibb-sakura to-jibb-sakura-light" },
+    { icon: <Globe className="size-6 text-white" />, name: tPart("p4Name"), desc: tPart("p4Desc"), color: "from-jibb-orange to-jibb-orange-light" },
   ];
 
   const challenges = [
     {
       icon: <Zap className="size-6 text-white" />,
-      title: t("challengesPage.c1Title"),
-      desc: t("challengesPage.c1Desc"),
+      title: tChal("c1Title"),
+      desc: tChal("c1Desc"),
       color: "from-jibb-orange to-jibb-orange-light",
       prize: "¥5,000,000",
       deadline: "2026-09-30",
@@ -200,8 +215,8 @@ export default async function InnovationHubPage({
     },
     {
       icon: <Target className="size-6 text-white" />,
-      title: t("challengesPage.c2Title"),
-      desc: t("challengesPage.c2Desc"),
+      title: tChal("c2Title"),
+      desc: tChal("c2Desc"),
       color: "from-jibb-indigo to-jibb-indigo-light",
       prize: "¥3,000,000",
       deadline: "2026-11-15",
@@ -269,13 +284,13 @@ export default async function InnovationHubPage({
           </div>
 
           <AnimatedHeading
-            text={t("hubPage.title")}
+            text={t("title")}
             className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight"
             immediate
           />
 
           <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
-            {t("hubPage.subtitle")}
+            {t("subtitle")}
           </p>
 
           <div className="flex justify-center gap-3 pt-4">
@@ -298,8 +313,8 @@ export default async function InnovationHubPage({
               <FlaskConical className="size-3.5 text-primary" />
               <span className="text-[10px] font-bold tracking-wider uppercase text-primary">R&amp;D Facilities</span>
             </div>
-            <h2 className="text-3xl font-extrabold text-foreground tracking-tight">{t("hubPage.labsTitle")}</h2>
-            <p className="text-sm text-muted-foreground max-w-lg mx-auto leading-relaxed">{t("hubPage.labsSubtitle")}</p>
+            <h2 className="text-3xl font-extrabold text-foreground tracking-tight">{t("labsTitle")}</h2>
+            <p className="text-sm text-muted-foreground max-w-lg mx-auto leading-relaxed">{t("labsSubtitle")}</p>
             <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
           </div>
 
@@ -334,24 +349,24 @@ export default async function InnovationHubPage({
           <div className="flex flex-col gap-3 mb-12">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 w-fit">
               <Trophy className="size-3.5 text-primary" />
-              <span className="text-[10px] font-bold tracking-wider uppercase text-primary">{t("hubMenu.coe")}</span>
+              <span className="text-[10px] font-bold tracking-wider uppercase text-primary">{tMenu("coe")}</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">{t("coePage.headline")}</h2>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">{tCoe("headline")}</h2>
           </div>
 
           <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-start mb-16">
             <div className="md:col-span-8 space-y-6 text-left">
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{t("coePage.para1")}</p>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{t("coePage.para2")}</p>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{tCoe("para1")}</p>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{tCoe("para2")}</p>
             </div>
             <div className="md:col-span-4 flex justify-center">
               <div className="relative w-full max-w-xs rounded-3xl p-6 bg-card border border-border/80 shadow-jibb flex flex-col gap-4 text-left overflow-hidden">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
-                <h3 className="text-xs font-bold text-foreground tracking-tight uppercase">CoE Core Metrics</h3>
+                <h3 className="text-xs font-bold text-foreground tracking-tight uppercase">{tHub("coeMetricsTitle")}</h3>
                 <ul className="space-y-2 text-xs text-muted-foreground font-semibold">
                   <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> 5+ Shared IC Testers</li>
                   <li className="flex items-center gap-1.5"><span className="text-jibb-indigo font-bold">•</span> 24/7 Remote Sandbox API</li>
-                  <li className="flex items-center gap-1.5"><span className="text-jibb-sakura font-bold">•</span> Bilateral Compliant Specs</li>
+                  <li className="flex items-center gap-1.5"><span className="text-jibb-sakura font-bold">•</span> {tHub("bilateralCompliantSpecs")}</li>
                   <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> Direct METI/DPIIT Audited</li>
                 </ul>
               </div>
@@ -359,7 +374,7 @@ export default async function InnovationHubPage({
           </div>
 
           <div className="space-y-4 mb-10 text-center">
-            <h3 className="text-2xl font-extrabold text-foreground tracking-tight">{t("coePage.focusTitle")}</h3>
+            <h3 className="text-2xl font-extrabold text-foreground tracking-tight">{tCoe("focusTitle")}</h3>
             <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -373,7 +388,7 @@ export default async function InnovationHubPage({
                   </div>
                 </div>
                 <div className="pt-4 border-t border-border/40 mt-4 flex items-center justify-between text-xs font-semibold text-primary/75">
-                  <span>Industrial Standard</span>
+                  <span>{tHub("industrialStandard")}</span>
                   <Sparkles className="size-4 text-jibb-orange opacity-40 group-hover:opacity-100 transition-opacity" />
                 </div>
               </div>
@@ -391,18 +406,18 @@ export default async function InnovationHubPage({
             <div className="md:col-span-7 space-y-5 text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10">
                 <Lightbulb className="size-3.5 text-primary" />
-                <span className="text-[10px] font-bold tracking-wider uppercase text-primary">Incubator</span>
+                <span className="text-[10px] font-bold tracking-wider uppercase text-primary">{tHub("incubatorTitle")}</span>
               </div>
-              <h2 className="text-3xl font-extrabold text-foreground tracking-tight">{t("hubPage.incubationTitle")}</h2>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{t("hubPage.incubationDesc")}</p>
+              <h2 className="text-3xl font-extrabold text-foreground tracking-tight">{t("incubationTitle")}</h2>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{t("incubationDesc")}</p>
               <div className="flex gap-4 pt-2">
                 <div className="text-left">
                   <AnimatedCounter value={100} suffix="+" className="text-2xl font-bold text-jibb-orange block" />
-                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Startups Incubated</span>
+                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">{tHub("startupsIncubated")}</span>
                 </div>
                 <div className="border-l border-border pl-4 text-left">
                   <AnimatedCounter value={850} prefix="₹" suffix=" Cr+" className="text-2xl font-bold text-jibb-indigo block" />
-                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">VC Dealflow</span>
+                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">{tHub("vcDealflow")}</span>
                 </div>
               </div>
             </div>
@@ -431,7 +446,7 @@ export default async function InnovationHubPage({
           </div>
 
           <div className="space-y-4 mb-10 text-center">
-            <h3 className="text-2xl font-extrabold text-foreground tracking-tight">{t("incubationPage.programTitle")}</h3>
+            <h3 className="text-2xl font-extrabold text-foreground tracking-tight">{tInc("programTitle")}</h3>
             <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -445,7 +460,7 @@ export default async function InnovationHubPage({
                   </div>
                 </div>
                 <div className="pt-4 border-t border-border/40 mt-4 flex items-center justify-between text-xs font-semibold text-primary/75">
-                  <span>Incubation Benefit</span>
+                  <span>{tHub("incubationBenefit")}</span>
                   <Sparkles className="size-4 text-jibb-orange opacity-40 group-hover:opacity-100 transition-opacity" />
                 </div>
               </div>
@@ -462,32 +477,32 @@ export default async function InnovationHubPage({
           <div className="flex flex-col gap-3 mb-12">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 w-fit">
               <FlaskConical className="size-3.5 text-primary" />
-              <span className="text-[10px] font-bold tracking-wider uppercase text-primary">{t("hubMenu.labs")}</span>
+              <span className="text-[10px] font-bold tracking-wider uppercase text-primary">{tMenu("labs")}</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">{t("laboratoriesPage.headline")}</h2>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">{tLabs("headline")}</h2>
           </div>
 
           <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-start mb-16">
             <div className="md:col-span-8 space-y-6 text-left">
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{t("laboratoriesPage.para1")}</p>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{t("laboratoriesPage.para2")}</p>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{tLabs("para1")}</p>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{tLabs("para2")}</p>
             </div>
             <div className="md:col-span-4 flex justify-center">
               <div className="relative w-full max-w-xs rounded-3xl p-6 bg-card border border-border/80 shadow-jibb flex flex-col gap-4 text-left overflow-hidden">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
-                <h3 className="text-xs font-bold text-foreground tracking-tight uppercase">Lab Diagnostics</h3>
+                <h3 className="text-xs font-bold text-foreground tracking-tight uppercase">{tHub("labDiagnostics")}</h3>
                 <ul className="space-y-2 text-xs text-muted-foreground font-semibold">
                   <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> Wafer Cutters &amp; Bonders</li>
-                  <li className="flex items-center gap-1.5"><span className="text-jibb-indigo font-bold">•</span> Environmental Climate Chambers</li>
-                  <li className="flex items-center gap-1.5"><span className="text-jibb-sakura font-bold">•</span> Class 1000 Cleanroom</li>
-                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> Spectrometer Analytics</li>
+                  <li className="flex items-center gap-1.5"><span className="text-jibb-indigo font-bold">•</span> {tHub("environmentalClimateChambers")}</li>
+                  <li className="flex items-center gap-1.5"><span className="text-jibb-sakura font-bold">•</span> {tHub("class1000Cleanroom")}</li>
+                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> {tHub("spectrometerAnalytics")}</li>
                 </ul>
               </div>
             </div>
           </div>
 
           <div className="space-y-4 mb-10 text-center">
-            <h3 className="text-2xl font-extrabold text-foreground tracking-tight">{t("laboratoriesPage.labsTitle")}</h3>
+            <h3 className="text-2xl font-extrabold text-foreground tracking-tight">{tLabs("labsTitle")}</h3>
             <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -501,7 +516,7 @@ export default async function InnovationHubPage({
                   </div>
                 </div>
                 <div className="pt-4 border-t border-border/40 mt-4 flex items-center justify-between text-xs font-semibold text-primary/75">
-                  <span>Certified Environment</span>
+                  <span>{tHub("certifiedEnvironment")}</span>
                   <Sparkles className="size-4 text-jibb-orange opacity-40 group-hover:opacity-100 transition-opacity" />
                 </div>
               </div>
@@ -518,24 +533,24 @@ export default async function InnovationHubPage({
           <div className="flex flex-col gap-3 mb-12">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 w-fit">
               <GraduationCap className="size-3.5 text-primary" />
-              <span className="text-[10px] font-bold tracking-wider uppercase text-primary">{t("hubMenu.partners")}</span>
+              <span className="text-[10px] font-bold tracking-wider uppercase text-primary">{tMenu("partners")}</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">{t("partnerPage.headline")}</h2>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">{tPart("headline")}</h2>
           </div>
 
           <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-start mb-16">
             <div className="md:col-span-8 space-y-6 text-left">
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{t("partnerPage.para1")}</p>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{t("partnerPage.para2")}</p>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{tPart("para1")}</p>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{tPart("para2")}</p>
             </div>
             <div className="md:col-span-4 flex justify-center">
               <div className="relative w-full max-w-xs rounded-3xl p-6 bg-card border border-border/80 shadow-jibb flex flex-col gap-4 text-left overflow-hidden">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
-                <h3 className="text-xs font-bold text-foreground tracking-tight uppercase flex items-center gap-1"><Handshake className="size-4 text-primary" /> Alliance Specs</h3>
+                <h3 className="text-xs font-bold text-foreground tracking-tight uppercase flex items-center gap-1"><Handshake className="size-4 text-primary" /> {tHub("allianceSpecs")}</h3>
                 <ul className="space-y-2 text-xs text-muted-foreground font-semibold">
-                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> Tier 1 Academic Hubs</li>
-                  <li className="flex items-center gap-1.5"><span className="text-jibb-indigo font-bold">•</span> Sovereign Credit Agencies</li>
-                  <li className="flex items-center gap-1.5"><span className="text-jibb-sakura font-bold">•</span> Bilateral Ministry Board</li>
+                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> {tHub("tier1AcademicHubs")}</li>
+                  <li className="flex items-center gap-1.5"><span className="text-jibb-indigo font-bold">•</span> {tHub("sovereignCreditAgencies")}</li>
+                  <li className="flex items-center gap-1.5"><span className="text-jibb-sakura font-bold">•</span> {tHub("bilateralMinistryBoard")}</li>
                   <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> 30+ Corporate Allies</li>
                 </ul>
               </div>
@@ -543,7 +558,7 @@ export default async function InnovationHubPage({
           </div>
 
           <div className="space-y-4 mb-10 text-center">
-            <h3 className="text-2xl font-extrabold text-foreground tracking-tight">{t("partnerPage.partnersTitle")}</h3>
+            <h3 className="text-2xl font-extrabold text-foreground tracking-tight">{tPart("partnersTitle")}</h3>
             <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
           </div>
           <div className="grid md:grid-cols-2 gap-8">
@@ -557,7 +572,7 @@ export default async function InnovationHubPage({
                   </div>
                 </div>
                 <div className="pt-4 border-t border-border/40 mt-4 flex items-center justify-between text-xs font-semibold text-primary/75">
-                  <span>Official Affiliate</span>
+                  <span>{tHub("officialAffiliate")}</span>
                   <Sparkles className="size-4 text-jibb-orange opacity-40 group-hover:opacity-100 transition-opacity" />
                 </div>
               </div>
@@ -574,25 +589,25 @@ export default async function InnovationHubPage({
           <div className="flex flex-col gap-3 mb-12">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 w-fit">
               <Trophy className="size-3.5 text-primary" />
-              <span className="text-[10px] font-bold tracking-wider uppercase text-primary">{t("hubMenu.challenges")}</span>
+              <span className="text-[10px] font-bold tracking-wider uppercase text-primary">{tMenu("challenges")}</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">{t("challengesPage.headline")}</h2>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">{tChal("headline")}</h2>
           </div>
 
           <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-start mb-16">
             <div className="md:col-span-8 space-y-6 text-left">
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{t("challengesPage.para1")}</p>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{t("challengesPage.para2")}</p>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{tChal("para1")}</p>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{tChal("para2")}</p>
             </div>
             <div className="md:col-span-4 flex justify-center">
               <div className="relative w-full max-w-xs rounded-3xl p-6 bg-card border border-border/80 shadow-jibb flex flex-col gap-4 text-left overflow-hidden">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
-                <h3 className="text-xs font-bold text-foreground tracking-tight uppercase flex items-center gap-1"><Trophy className="size-4 text-primary" /> Challenge Specs</h3>
+                <h3 className="text-xs font-bold text-foreground tracking-tight uppercase flex items-center gap-1"><Trophy className="size-4 text-primary" /> {tHub("challengeSpecs")}</h3>
                 <ul className="space-y-2 text-xs text-muted-foreground font-semibold">
-                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> Tech Problem Hackathons</li>
-                  <li className="flex items-center gap-1.5"><span className="text-jibb-indigo font-bold">•</span> Corporate Sponsored</li>
+                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> {tHub("techProblemHackathons")}</li>
+                  <li className="flex items-center gap-1.5"><span className="text-jibb-indigo font-bold">•</span> {tHub("corporateSponsored")}</li>
                   <li className="flex items-center gap-1.5"><span className="text-jibb-sakura font-bold">•</span> Cash Prizes + PoC Access</li>
-                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> Lab Credits Included</li>
+                  <li className="flex items-center gap-1.5"><span className="text-jibb-orange font-bold">•</span> {tHub("labCreditsIncluded")}</li>
                 </ul>
               </div>
             </div>
@@ -601,7 +616,7 @@ export default async function InnovationHubPage({
           {/* Winner Benefits */}
           <div className="py-12 bg-card rounded-3xl border border-border/30 mb-16 px-8 space-y-10">
             <div className="space-y-4 text-center">
-              <h3 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">Winner Benefits</h3>
+              <h3 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">{tHub("winnerBenefits")}</h3>
               <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
             </div>
             <div className="grid md:grid-cols-3 gap-6">
@@ -616,7 +631,7 @@ export default async function InnovationHubPage({
           </div>
 
           <div className="space-y-4 mb-10 text-center">
-            <h3 className="text-2xl font-extrabold text-foreground tracking-tight">{t("challengesPage.activeTitle")}</h3>
+            <h3 className="text-2xl font-extrabold text-foreground tracking-tight">{tChal("activeTitle")}</h3>
             <div className="h-1 w-12 bg-jibb-orange/60 mx-auto rounded-full" />
           </div>
           <div className="grid md:grid-cols-2 gap-8">

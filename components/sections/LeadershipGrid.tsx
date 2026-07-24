@@ -60,7 +60,8 @@ export function LeadershipGrid() {
   ];
 
   const members = allKeys.map((key, index) => {
-    const isJapan = t(`members.${key}.location`).toLowerCase().includes("tokyo") || t(`members.${key}.location`).toLowerCase().includes("japan");
+    const loc = t(`members.${key}.location`).toLowerCase();
+    const isJapan = loc.includes("tokyo") || loc.includes("japan") || loc.includes("東京") || loc.includes("日本");
 
     // For LinkedIn, we need to check if it exists first to avoid errors
     // If the key doesn't exist in translations, default to "#"
@@ -105,9 +106,9 @@ export function LeadershipGrid() {
         {/* Filter Toolbar */}
         <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-16 border-b border-gray-100 pb-8">
           {[
-            { id: "all", label: "View all" },
-            { id: "japan", label: "Japan Team" },
-            { id: "india", label: "India Team" }
+            { id: "all", label: t("viewAll") },
+            { id: "japan", label: t("japanTeam") },
+            { id: "india", label: t("indiaTeam") }
           ].map(btn => (
             <button
               key={btn.id}

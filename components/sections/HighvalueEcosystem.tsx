@@ -144,7 +144,7 @@ export function HighvalueEcosystem() {
         {/* Main Heading */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight mb-2">
-            Strategic Convergence Across High-Value Ecosystems
+            {t("heading")}
           </h2>
         </div>
 

@@ -8,6 +8,7 @@
     "schedulerSubtitle": "Book a 30-minute consultation or send an inquiry to our membership team to discuss custom integration opportunities.",
     "consultationTab": "Schedule Consultation",
     "inquiryTab": "Membership Inquiry",
+    "schedulerNotConfigured": "Consultation Scheduler is not configured yet.",
     "bookBtn": "Submit Inquiry",
     "bookingSuccessTitle": "Inquiry Submitted Successfully!",
     "bookingSuccessDesc": "Thank you. Your membership inquiry has been received. Our team will contact you shortly.",
@@ -47,10 +48,127 @@
       }
     },
     "comparison": {
-      "title": "Moving Beyond Passive Networking",
-      "subtitle": "How the Japan India Business Bureau compares against traditional trade bodies in delivering tangible economic value.",
+      "strategyBadge": "Bilateral Strategy",
+      "badge": "Deliverables & Benefits",
+      "title": "Compare Membership Features",
+      "subtitle": "Review detailed plan limits, discounts, and collaboration structures across our 4 membership tiers.",
+      "colTitle": "Benefits & Features",
+      "associate": "Associate",
+      "associateDesc": "Entry Level",
+      "silver": "Silver Member",
+      "silverDesc": "Standard Growth",
+      "gold": "Gold Member",
+      "goldDesc": "Professional Tier",
+      "platinum": "Platinum Member",
+      "platinumDesc": "Ultimate Access",
       "col1": "Traditional Trade Bodies",
       "col2": "Japan India Business Bureau",
+      "selectPlanTitle": "Select Your Membership Plan",
+      "heroBadge": "Ecosystem Enrollment",
+      "joinBureau": "Join the Bureau",
+      "subtitleHero": "Choose the tier that matches your business needs and unlock access to JIBB's integrated services and partnership opportunities.",
+      "inquirePlan": "Inquire Plan",
+      "applyGold": "Apply Gold",
+      "partnerInquiry": "Partner Inquiry",
+      "popularChoice": "Popular Choice",
+      "matrix": {
+        "m01": {
+          "name": "Market Intelligence Reports",
+          "associate": false,
+          "silver": "Newsletter Only",
+          "gold": "Limited Access",
+          "platinum": "Full Access"
+        },
+        "m02": {
+          "name": "Business Matching",
+          "associate": "5% Discount",
+          "silver": "10% Discount",
+          "gold": "20% Discount",
+          "platinum": "30% Discount"
+        },
+        "m03": {
+          "name": "Exhibition/Event Support",
+          "associate": "No Discount",
+          "silver": "2.5% Discount",
+          "gold": "5% Discount",
+          "platinum": "7.5% Discount"
+        },
+        "m04": {
+          "name": "Delegation to Japan",
+          "associate": false,
+          "silver": false,
+          "gold": true,
+          "platinum": true
+        },
+        "m05": {
+          "name": "Training Programs",
+          "associate": "5% Discount",
+          "silver": "10% Discount",
+          "gold": "3 Free Programs",
+          "platinum": "7 Free Programs"
+        },
+        "m06": {
+          "name": "Opportunities for Collaboration",
+          "associate": false,
+          "silver": false,
+          "gold": "Random Ones",
+          "platinum": "Selected Ones"
+        },
+        "m07": {
+          "name": "Meeting Delegation from Japan",
+          "associate": false,
+          "silver": true,
+          "gold": true,
+          "platinum": true
+        },
+        "m08": {
+          "name": "Invite Only Events Invitation",
+          "associate": false,
+          "silver": false,
+          "gold": false,
+          "platinum": true
+        },
+        "m09": {
+          "name": "Advocacy Voice",
+          "associate": false,
+          "silver": false,
+          "gold": false,
+          "platinum": true
+        }
+      },
+      "tiers": {
+        "associate": {
+          "title": "Entry Level",
+          "desc": "For early-stage teams and networking",
+          "f1": "5% Business Matching Discount",
+          "f2": "5% Training Program Discount",
+          "f3": "Standard Portal Directory Access"
+        },
+        "silver": {
+          "title": "Standard Growth",
+          "desc": "For active research and matching support",
+          "f1": "Intelligence Newsletter Only",
+          "f2": "10% Business Matching Discount",
+          "f3": "2.5% Exhibition/Event Support",
+          "f4": "Japan Meeting Delegations"
+        },
+        "gold": {
+          "title": "Professional",
+          "desc": "For scaling and full co-innovation access",
+          "f1": "Limited Intelligence Access",
+          "f2": "20% Business Matching Discount",
+          "f3": "3 Free Training Programs",
+          "f4": "Active Japan Delegations"
+        },
+        "platinum": {
+          "title": "Ultimate Access",
+          "desc": "For institutional and leadership scale",
+          "f1": "Full intelligence access",
+          "f2": "30% Business Matching Discount",
+          "f3": "7 Free Training Programs",
+          "f4": "Selected Collaboration & Advocacy"
+        }
+      },
       "rows": [
         {
           "label": "Focus Sectors",
@@ -80,6 +198,7 @@
       ]
     },
     "whyBecomeMember": {
+      "advantagesBadge": "Bilateral Advantages",
       "title": "Why Become Our Member?",
       "subtitle": "Unlocking dual-corridor resources, on-ground networks, and trade acceleration programs.",
       "japaneseEntities": {
@@ -114,6 +233,17 @@
           "Delegation visits to Tokyo/Japan"
         ]
       }
+    },
+    "form": {
+      "tierLabel": "Membership Tier",
+      "companyName": "Company Name",
+      "contactPerson": "Contact Person Name",
+      "email": "Corporate Email Address",
+      "phone": "Phone Number",
+      "industry": "Industry",
+      "companySize": "Company Size",
+      "message": "Objectives & Special Requests",
+      "contactNotice": "Our membership team will contact you within 24-48 business hours"
     }
   }
 }

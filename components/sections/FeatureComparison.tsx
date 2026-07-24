@@ -3,6 +3,7 @@
 import React from "react";
 import { Check, X, Award, Sparkles } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { useTranslations } from "next-intl";
 
 interface ComparisonRow {
   id: string;
@@ -89,6 +90,8 @@ const COMPARISON_ROWS: ComparisonRow[] = [
 ];
 
 export function FeatureComparison() {
+  const t = useTranslations("membershipPage.comparison");
+
   const renderCellValue = (value: string | boolean, tier: "associate" | "silver" | "gold" | "platinum") => {
     if (typeof value === "boolean") {
       if (value) {
@@ -118,17 +121,17 @@ export function FeatureComparison() {
 
     // Custom styling based on value text and tier
     let textStyle = "text-foreground/80 dark:text-foreground/95 font-medium";
-    if (value.includes("Free")) {
+    if (value.includes("Free") || value.includes("無料")) {
       if (tier === "gold") textStyle = "text-amber-600 dark:text-amber-400 font-bold";
       else if (tier === "platinum") textStyle = "text-slate-600 dark:text-slate-400 font-bold";
       else textStyle = "text-jibb-indigo dark:text-jibb-indigo-light font-bold";
-    } else if (value.includes("Discount")) {
+    } else if (value.includes("Discount") || value.includes("割引")) {
       if (tier === "associate") textStyle = "text-blue-600 dark:text-blue-400 font-semibold";
       else if (tier === "silver") textStyle = "text-slate-600 dark:text-slate-400 font-semibold";
       else if (tier === "gold") textStyle = "text-amber-600 dark:text-amber-400 font-semibold";
       else if (tier === "platinum") textStyle = "text-slate-600 dark:text-slate-400 font-semibold";
       else textStyle = "text-jibb-indigo dark:text-jibb-indigo-light font-semibold";
-    } else if (value.includes("Access") || value.includes("Ones") || value.includes("Only")) {
+    } else if (value.includes("Access") || value.includes("アクセス") || value.includes("Ones") || value.includes("Only") || value.includes("のみ")) {
       textStyle = "text-foreground font-semibold";
     }
 
@@ -138,6 +141,8 @@ export function FeatureComparison() {
       </span>
     );
   };
+
+  const matrixKeys = ["m01", "m02", "m03", "m04", "m05", "m06", "m07", "m08", "m09"];
 
   return (
     <section className="py-24 relative overflow-hidden bg-jibb-cream/10 dark:bg-[#0b0f19]/20 border-t border-border/20">
@@ -150,14 +155,14 @@ export function FeatureComparison() {
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10 backdrop-blur-md">
             <Award className="size-3.5 text-jibb-indigo" />
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-foreground/80">
-              Deliverables &amp; Benefits
+              {t("badge")}
             </span>
           </div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">
-            Compare Membership Features
+            {t("title")}
           </h2>
           <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-            Review detailed plan limits, discounts, and collaboration structures across our 4 membership tiers.
+            {t("subtitle")}
           </p>
         </div>
 
@@ -168,76 +173,80 @@ export function FeatureComparison() {
               <thead>
                 <tr className="border-b border-border bg-muted/30">
                   <th className="p-5 text-sm font-bold text-foreground uppercase tracking-wider w-[28%]">
-                    Benefits &amp; Features
+                    {t("colTitle")}
                   </th>
                   <th className="p-5 text-center w-[18%] border-l border-border bg-blue-500/5">
                     <div className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-[10px] font-bold uppercase tracking-wider mb-1">
-                      Associate
+                      {t("associate")}
                     </div>
-                    <span className="block text-[11px] text-muted-foreground font-semibold">Entry Level</span>
+                    <span className="block text-[11px] text-muted-foreground font-semibold">{t("associateDesc")}</span>
                   </th>
                   <th className="p-5 text-center w-[18%] border-l border-border bg-slate-500/5">
                     <div className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-bold uppercase tracking-wider mb-1">
-                      Silver Member
+                      {t("silver")}
                     </div>
-                    <span className="block text-[11px] text-muted-foreground font-semibold">Standard Growth</span>
+                    <span className="block text-[11px] text-muted-foreground font-semibold">{t("silverDesc")}</span>
                   </th>
                   <th className="p-5 text-center w-[18%] border-l border-border bg-amber-500/5 relative">
                     <div className="absolute top-0 inset-x-0 h-[3px] bg-amber-500" />
                     <div className="inline-flex items-center justify-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 text-[10px] font-bold uppercase tracking-wider mb-1">
-                      Gold Member <Sparkles className="size-3 fill-amber-500 text-amber-500 stroke-none animate-pulse" />
+                      {t("gold")} <Sparkles className="size-3 fill-amber-500 text-amber-500 stroke-none animate-pulse" />
                     </div>
-                    <span className="block text-[11px] text-muted-foreground font-semibold">Professional Tier</span>
+                    <span className="block text-[11px] text-muted-foreground font-semibold">{t("goldDesc")}</span>
                   </th>
                   <th className="p-5 text-center w-[18%] border-l border-border bg-slate-500/10 relative">
                     <div className="absolute top-0 inset-x-0 h-[3px] bg-slate-400" />
                     <div className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-800 dark:text-slate-200 text-[10px] font-bold uppercase tracking-wider mb-1">
-                      Platinum Member
+                      {t("platinum")}
                     </div>
-                    <span className="block text-[11px] text-muted-foreground font-semibold">Ultimate Access</span>
+                    <span className="block text-[11px] text-muted-foreground font-semibold">{t("platinumDesc")}</span>
                   </th>
                 </tr>
               </thead>
 
               <tbody>
-                {COMPARISON_ROWS.map((row) => (
-                  <tr
-                    key={row.id}
-                    className="border-b border-border/50 hover:bg-muted/20 transition-colors duration-150"
-                  >
-                    {/* Feature ID & Name */}
-                    <td className="p-5">
-                      <div className="flex items-start gap-3">
-                        <span className="text-xs font-mono font-bold text-muted-foreground/60 mt-0.5">
-                          {row.id}
-                        </span>
-                        <span className="text-sm font-bold text-foreground">
-                          {row.name}
-                        </span>
-                      </div>
-                    </td>
+                {matrixKeys.map((key, idx) => {
+                  const idStr = String(idx + 1).padStart(2, "0");
+                  const name = t.has(`matrix.${key}.name`) ? t(`matrix.${key}.name`) : COMPARISON_ROWS[idx].name;
+                  const associateVal = t.has(`matrix.${key}.associate`) ? t.raw(`matrix.${key}.associate`) : COMPARISON_ROWS[idx].associate;
+                  const silverVal = t.has(`matrix.${key}.silver`) ? t.raw(`matrix.${key}.silver`) : COMPARISON_ROWS[idx].silver;
+                  const goldVal = t.has(`matrix.${key}.gold`) ? t.raw(`matrix.${key}.gold`) : COMPARISON_ROWS[idx].gold;
+                  const platinumVal = t.has(`matrix.${key}.platinum`) ? t.raw(`matrix.${key}.platinum`) : COMPARISON_ROWS[idx].platinum;
 
-                    {/* Associate Member */}
-                    <td className="p-5 text-center align-middle border-l border-border/40 bg-blue-500/[0.01]">
-                      {renderCellValue(row.associate, "associate")}
-                    </td>
+                  return (
+                    <tr
+                      key={key}
+                      className="border-b border-border/50 hover:bg-muted/20 transition-colors duration-150"
+                    >
+                      <td className="p-5">
+                        <div className="flex items-start gap-3">
+                          <span className="text-xs font-mono font-bold text-muted-foreground/60 mt-0.5">
+                            {idStr}
+                          </span>
+                          <span className="text-sm font-bold text-foreground">
+                            {name}
+                          </span>
+                        </div>
+                      </td>
 
-                    {/* Silver Member */}
-                    <td className="p-5 text-center align-middle border-l border-border/40 bg-slate-500/[0.01]">
-                      {renderCellValue(row.silver, "silver")}
-                    </td>
+                      <td className="p-5 text-center align-middle border-l border-border/40 bg-blue-500/[0.01]">
+                        {renderCellValue(associateVal, "associate")}
+                      </td>
 
-                    {/* Gold Member */}
-                    <td className="p-5 text-center align-middle border-l border-border/40 bg-amber-500/[0.01]">
-                      {renderCellValue(row.gold, "gold")}
-                    </td>
+                      <td className="p-5 text-center align-middle border-l border-border/40 bg-slate-500/[0.01]">
+                        {renderCellValue(silverVal, "silver")}
+                      </td>
 
-                    {/* Platinum Member */}
-                    <td className="p-5 text-center align-middle border-l border-border/40 bg-slate-500/[0.03]">
-                      {renderCellValue(row.platinum, "platinum")}
-                    </td>
-                  </tr>
-                ))}
+                      <td className="p-5 text-center align-middle border-l border-border/40 bg-amber-500/[0.01]">
+                        {renderCellValue(goldVal, "gold")}
+                      </td>
+
+                      <td className="p-5 text-center align-middle border-l border-border/40 bg-slate-500/[0.03]">
+                        {renderCellValue(platinumVal, "platinum")}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

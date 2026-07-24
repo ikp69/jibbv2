@@ -272,10 +272,11 @@ export const KeySectors = () => {
             <h4 className="text-sm md:text-base font-extrabold text-gray-900 dark:text-white">
               {t("frameworkTitle")}
             </h4>
-            <p
-              className="text-xs md:text-sm text-gray-500 dark:text-gray-400 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: t.raw("frameworkDesc") }}
-            />
+            <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+              {t.rich("frameworkDesc", {
+                strong: (chunks) => <strong className="text-foreground font-bold">{chunks}</strong>,
+              })}
+            </p>
           </div>
           <div className="flex md:flex-col gap-4 shrink-0 justify-center w-full md:w-auto text-center border-t md:border-t-0 md:border-l border-gray-150 dark:border-border/40 pt-4 md:pt-0 md:pl-6">
             <div>
@@ -302,7 +303,12 @@ export const KeySectors = () => {
           {sectorIds.map((id) => {
             const title = t(`items.${id}.title`);
             const description = t(`items.${id}.description`);
-            const focusAreas = t.raw(`items.${id}.focusAreas`) as string[];
+            let focusAreas: string[] = [];
+            try {
+              focusAreas = (t.raw(`items.${id}.focusAreas`) as string[]) || [];
+            } catch (e) {
+              console.error(`Failed to load focusAreas for ${id}:`, e);
+            }
 
             return (
               <SectorCard

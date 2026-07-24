@@ -19,6 +19,7 @@ import { isValidPhone, PHONE_ERROR } from "@/app/lib/validation/phone";
 
 export default function CareersPage() {
   const t = useTranslations("careersPage");
+  const tContact = useTranslations("contactPage");
   
   // JobPosting Schema for Google Jobs Integration
   const jobPostings = [
@@ -335,7 +336,7 @@ export default function CareersPage() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-white/90">
-              Careers &amp; Talents
+              {t("heroBadge")}
             </span>
           </div>
 
@@ -352,7 +353,7 @@ export default function CareersPage() {
           <div className="flex justify-center gap-3 pt-4">
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
             <span className="text-xs font-bold tracking-[0.2em] uppercase text-jibb-orange">
-              Join JIBB Team
+              {t("joinTeam")}
             </span>
             <div className="h-[2px] w-12 bg-jibb-orange/60 self-center" />
           </div>
@@ -367,7 +368,7 @@ export default function CareersPage() {
           <div className="grid md:grid-cols-12 gap-8 items-center">
             <div className="md:col-span-8 space-y-5 text-left">
               <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
-                Shaping the Tokyo-Noida Corridor
+                {t("corridorTitle")}
               </h2>
               <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                 {t("intro")}
@@ -383,16 +384,16 @@ export default function CareersPage() {
             <div className="md:col-span-4 flex justify-center">
               <div className="relative w-full max-w-xs rounded-2xl p-6 bg-card border border-border shadow-jibb flex flex-col gap-4 text-left overflow-hidden">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-jibb-orange/5 rounded-full blur-2xl pointer-events-none" />
-                <h3 className="text-sm font-bold text-foreground tracking-tight uppercase">Quick Info</h3>
+                <h3 className="text-sm font-bold text-foreground tracking-tight uppercase">{t("quickInfoTitle")}</h3>
                 <ul className="space-y-3.5 text-xs text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <span className="text-jibb-orange font-bold">✓</span> Hybrid Work Options
+                    <span className="text-jibb-orange font-bold">✓</span> {t("quickInfo1")}
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-jibb-orange font-bold">✓</span> Global Bilateral Exposure
+                    <span className="text-jibb-orange font-bold">✓</span> {t("quickInfo2")}
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-jibb-orange font-bold">✓</span> Industry-leading mentorship
+                    <span className="text-jibb-orange font-bold">✓</span> {t("quickInfo3")}
                   </li>
                 </ul>
               </div>
@@ -499,13 +500,13 @@ export default function CareersPage() {
                         <div className="p-6 space-y-6 text-sm leading-relaxed">
                           {/* Overview */}
                           <div className="space-y-2">
-                            <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">Role Overview</h4>
+                            <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">{t("roleOverview")}</h4>
                             <p className="text-muted-foreground">{t(`jobs.${job.translationKey}.overview`)}</p>
                           </div>
 
                           {/* Responsibilities */}
                           <div className="space-y-2.5">
-                            <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">Key Responsibilities</h4>
+                            <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">{t("keyResponsibilities")}</h4>
                             <motion.ul
                               variants={{
                                 hidden: { opacity: 0 },
@@ -537,7 +538,7 @@ export default function CareersPage() {
 
                           {/* Requirements */}
                           <div className="space-y-2.5">
-                            <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">What We're Looking For</h4>
+                            <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">{t("whatWeAreLookingFor")}</h4>
                             <motion.ul
                               variants={{
                                 hidden: { opacity: 0 },
@@ -570,12 +571,12 @@ export default function CareersPage() {
                           {/* Details Badge Block */}
                           <div className="bg-primary/5 p-4 rounded-xl border border-primary/10 flex flex-wrap justify-between items-center gap-3">
                             <div>
-                              <span className="text-xs text-muted-foreground block">Qualifications Required</span>
+                              <span className="text-xs text-muted-foreground block">{t("qualificationsRequired")}</span>
                               <span className="text-xs font-bold text-foreground">{t(`jobs.${job.translationKey}.qual`)}</span>
                             </div>
                             <a href="#apply-form" className="shrink-0">
                               <AnimatedButton size="sm" className="font-semibold gap-1.5" onClick={() => toggleJob(job.id)}>
-                                Apply Now <SendHorizontal className="size-3.5" />
+                                {t("applyNow")} <SendHorizontal className="size-3.5" />
                               </AnimatedButton>
                             </a>
                           </div>
@@ -627,7 +628,7 @@ export default function CareersPage() {
                  <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
                    <AlertCircle className="size-5 shrink-0 mt-0.5 text-red-500" />
                    <div className="space-y-1">
-                     <p className="font-semibold text-red-700 dark:text-red-400">Submission Error</p>
+                     <p className="font-semibold text-red-700 dark:text-red-400">{tContact("form.submissionError")}</p>
                      <div className="text-xs text-red-600/90 dark:text-red-400/95 leading-relaxed">
                        {generalError}
                      </div>
@@ -636,7 +637,7 @@ export default function CareersPage() {
                )}
                {/* Honeypot field (hidden from users, visible to bots) */}
                <div className="absolute opacity-0 pointer-events-none -z-10 h-0 w-0 overflow-hidden">
-                 <label htmlFor="careers-website-url">Leave this field blank</label>
+                 <label htmlFor="careers-website-url">{tContact("form.honeypotLabel")}</label>
                  <input
                    id="careers-website-url"
                    type="text"
@@ -668,20 +669,20 @@ export default function CareersPage() {
 
                {/* Position Dropdown */}
                <div className="space-y-1.5">
-                 <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
-                   <Briefcase className="size-3.5 text-muted-foreground" /> Position applied for <span className="text-red-500">*</span>
-                 </label>
-                 <select
-                   name="position"
-                   value={formState.position}
-                   onChange={handleInputChange}
-                   className="flex h-11 w-full rounded-xl border border-input bg-card px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-jibb-orange/20 focus:border-jibb-orange transition-all duration-200"
-                 >
-                   <option value="consultant">Bilateral Business Consultant</option>
-                   <option value="translator">Bilateral Translator / Coordinator</option>
-                   <option value="bde">Business Development Executive</option>
-                 </select>
-               </div>
+                  <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider flex items-center gap-1.5">
+                    <Briefcase className="size-3.5 text-muted-foreground" /> {t("form.positionLabel")} <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    name="position"
+                    value={formState.position}
+                    onChange={handleInputChange}
+                    className="flex h-11 w-full rounded-xl border border-input bg-card px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-jibb-orange/20 focus:border-jibb-orange transition-all duration-200"
+                  >
+                    <option value="consultant">{t("jobs.consultant.title")}</option>
+                    <option value="translator">{t("jobs.translator.title")}</option>
+                    <option value="bde">{t("jobs.bde.title")}</option>
+                  </select>
+                </div>
 
                {/* Email */}
                <div className="space-y-1.5">

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Globe, Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface OfficeLocation {
   id: string;
@@ -30,7 +31,25 @@ const LOCATIONS: OfficeLocation[] = [
 ];
 
 export function OfficeMap() {
+  const t = useTranslations("contactPage");
   const [activeLocId, setActiveLocId] = useState("tokyo");
+
+  const LOCATIONS: OfficeLocation[] = [
+    {
+      id: "tokyo",
+      name: t("tokyoOffice"),
+      city: "Minato-ku, Tokyo",
+      address: t("tokyoAddr"),
+      mapUrl: "https://maps.google.com/maps?q=Tameike%20Suzuki%20Building,%201-2-13%20Akasaka,%20Minato-ku,%20Tokyo&t=&z=16&ie=UTF8&iwloc=&output=embed",
+    },
+    {
+      id: "noida",
+      name: t("noidaOffice"),
+      city: "Sector 136, Noida",
+      address: t("noidaAddr"),
+      mapUrl: "https://maps.google.com/maps?q=Arihant%20Business%20Centre,%20Sector%20136,%20Noida,%20Uttar%20Pradesh&t=&z=16&ie=UTF8&iwloc=&output=embed",
+    },
+  ];
 
   const activeLoc = LOCATIONS.find((loc) => loc.id === activeLocId) || LOCATIONS[0];
 
@@ -52,7 +71,7 @@ export function OfficeMap() {
               }`}
           >
             <MapPin className="size-3.5" />
-            {loc.id === "tokyo" ? "Tokyo HQ" : "Noida HQ"}
+            {loc.id === "tokyo" ? t("tokyoHQ") : t("noidaHQ")}
           </button>
         ))}
       </div>

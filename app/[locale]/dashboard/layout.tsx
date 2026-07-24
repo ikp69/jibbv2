@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { LogoutButton } from "@/components/ui/LogoutButton";
 import { ShieldCheck } from "lucide-react";
@@ -11,6 +12,7 @@ export default async function DashboardLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const tLayout = await getTranslations({ locale, namespace: "layout" });
   const supabase = await createClient();
 
   const {
@@ -59,8 +61,8 @@ export default async function DashboardLayout({
               <ShieldCheck className="size-5 text-jibb-orange animate-soft-pulse" />
             </div>
             <div>
-              <h1 className="text-base font-bold tracking-tight uppercase leading-none">JIBB Portal</h1>
-              <span className="text-[10px] text-white/50 tracking-wider font-semibold">MEMBER CONSOLE</span>
+              <h1 className="text-base font-bold tracking-tight uppercase leading-none">{tLayout("common.portalTitle")}</h1>
+              <span className="text-[10px] text-white/50 tracking-wider font-semibold">{tLayout("common.memberConsole")}</span>
             </div>
           </div>
 

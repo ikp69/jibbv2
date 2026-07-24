@@ -256,6 +256,8 @@
     "servicesTitle": "Bilateral Focus Sectors",
     "whatWeDo": "What We Do",
     "heroTitle": "End-to-End Bilateral Services",
-    "heroDesc": "From initial market landscaping to full operational setup — eight integrated service lines that take Japan–India partnerships from ambition to execution. Our services align with <sectorsLink>our 8 focus sectors</sectorsLink> and <membershipLink>membership tiers</membershipLink>."
+    "heroDesc": "From initial market landscaping to full operational setup — eight integrated service lines that take Japan–India partnerships from ambition to execution. Our services align with <sectorsLink>our 8 focus sectors</sectorsLink> and <membershipLink>membership tiers</membershipLink>.",
+    "serviceLabel": "Service",
+    "tokyoNoidaAxis": "Tokyo — Noida Axis"
   }
 }

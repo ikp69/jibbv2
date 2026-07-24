@@ -464,7 +464,7 @@ export default async function AboutPage({
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10">
               <Landmark className="size-3.5 text-primary" />
-              <span className="text-[10px] font-bold tracking-wider uppercase text-primary">Framework</span>
+              <span className="text-[10px] font-bold tracking-wider uppercase text-primary">{t("visionPage.framework")}</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">
               {t("visionPage.pillarsTitle")}

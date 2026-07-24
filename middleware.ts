@@ -9,6 +9,13 @@ export default async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const locale = pathname.split("/")[1] || "en";
 
+  // Temporary redirection from /ja/* to /en/*
+  if (pathname === "/ja" || pathname.startsWith("/ja/")) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.replace(/^\/ja(\/|$)/, "/en$1");
+    return NextResponse.redirect(url, 307);
+  }
+
   // Redirect /innovation-hub and /newsletter / /resources/newsletter to homepage (temporary)
   if (
     pathname.match(/^\/(?:en|ja)?\/?innovation-hub(?:\/.*)?$/) ||
@@ -22,13 +29,6 @@ export default async function middleware(request: NextRequest) {
   // 1. Update/refresh the Supabase session and get the user
   const { supabaseResponse, user } = await updateSession(request);
 
-  // TEMPORARY: Redirect /ja routes to /en (Japanese translations being verified)
-  if (pathname.startsWith("/ja")) {
-    const enPath = pathname.replace(/^\/ja/, "/en");
-    const url = request.nextUrl.clone();
-    url.pathname = enPath;
-    return NextResponse.redirect(url);
-  }
 
   // Check if target is a dashboard subpage
   const isDashboard = pathname.match(/^\/(en|ja)\/dashboard(\/.*)?$/);

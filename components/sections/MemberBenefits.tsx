@@ -22,7 +22,7 @@ export function MemberBenefits() {
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/5 dark:bg-primary/10 border border-primary/10 backdrop-blur-md">
             <Award className="size-4 text-jibb-orange animate-soft-pulse" />
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-primary dark:text-primary-foreground">
-              Bilateral Advantages
+              {t("advantagesBadge")}
             </span>
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight">

@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!event) {
     return {
-      title: 'Event Not Found | JIBB'
+      title: locale === 'ja' ? 'イベントが見つかりません | JIBB' : 'Event Not Found | JIBB'
     }
   }
 

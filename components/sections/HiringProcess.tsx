@@ -4,11 +4,11 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ClipboardCheck, Code2, FlaskConical, Gift, Sparkles } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { useTranslations } from "next-intl";
 
 interface ProcessStep {
   step: string;
-  title: string;
-  description: string;
+  key: string;
   icon: React.ComponentType<{ className?: string }>;
   color: string;
   borderColor: string;
@@ -17,32 +17,28 @@ interface ProcessStep {
 const STEPS: ProcessStep[] = [
   {
     step: "01",
-    title: "Application Review",
-    description: "We review your qualifications, focusing on cross-border interest, technical skills, and collaborative potential.",
+    key: "review",
     icon: ClipboardCheck,
     color: "text-jibb-orange",
     borderColor: "group-hover:border-jibb-orange/30",
   },
   {
     step: "02",
-    title: "Technical Matchmaking",
-    description: "Meet our Tokyo hardware engineers or Noida software architects. We discuss engineering paradigms and code design.",
+    key: "matchmaking",
     icon: Code2,
     color: "text-blue-400",
     borderColor: "group-hover:border-blue-400/30",
   },
   {
     step: "03",
-    title: "Collaborative Sandbox",
-    description: "A 2-day paid challenge working on a real prototype in our Noida/Tokyo co-development laboratory environment.",
+    key: "sandbox",
     icon: FlaskConical,
     color: "text-jibb-sakura",
     borderColor: "group-hover:border-jibb-sakura/30",
   },
   {
     step: "04",
-    title: "Welcome Aboard",
-    description: "Receive your offer, bicultural alignment support, visa sponsorship coordination, and access to premium health benefits.",
+    key: "welcome",
     icon: Gift,
     color: "text-emerald-400",
     borderColor: "group-hover:border-emerald-400/30",
@@ -50,6 +46,8 @@ const STEPS: ProcessStep[] = [
 ];
 
 export function HiringProcess() {
+  const t = useTranslations("hiringProcess");
+
   return (
     <section className="py-24 bg-jibb-gradient-subtle relative overflow-hidden border-t border-white/5">
       {/* Background Decorative Blur */}
@@ -61,14 +59,14 @@ export function HiringProcess() {
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-jibb-indigo/10 backdrop-blur-md">
             <Sparkles className="size-3.5 text-jibb-orange animate-soft-pulse" />
             <span className="text-[10px] md:text-xs font-semibold tracking-wider uppercase text-jibb-indigo">
-              Join Our Team
+              {t("badge")}
             </span>
           </div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">
-            Our Hiring Process
+            {t("title")}
           </h2>
           <p className="text-sm text-muted-foreground max-w-lg mx-auto leading-relaxed">
-            A transparent, collaborative journey designed to evaluate engineering skills and bicultural alignment.
+            {t("subtitle")}
           </p>
         </div>
 
@@ -92,10 +90,10 @@ export function HiringProcess() {
                   </div>
                   <div className="space-y-1.5">
                     <h3 className="text-base font-bold text-foreground tracking-tight">
-                      {item.title}
+                      {t(`steps.${item.key}.title`)}
                     </h3>
                     <p className="text-[11px] text-muted-foreground leading-relaxed font-medium">
-                      {item.description}
+                      {t(`steps.${item.key}.desc`)}
                     </p>
                   </div>
                 </div>

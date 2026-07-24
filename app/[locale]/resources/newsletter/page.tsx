@@ -35,6 +35,7 @@ function LinkedinIcon({ className }: { className?: string }) {
 
 export default function NewsletterPage() {
   const t = useTranslations("newsletterPage");
+  const tContact = useTranslations("contactPage");
 
   // Form State
   const [name, setName] = useState("");
@@ -241,7 +242,7 @@ export default function NewsletterPage() {
                 <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
                   {/* Honeypot field (hidden from users, visible to bots) */}
                   <div className="absolute opacity-0 pointer-events-none -z-10 h-0 w-0 overflow-hidden">
-                    <label htmlFor="newsletter-website-url">Leave this field blank</label>
+                    <label htmlFor="newsletter-website-url">{tContact("form.honeypotLabel")}</label>
                     <input
                       id="newsletter-website-url"
                       type="text"

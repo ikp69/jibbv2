@@ -222,14 +222,14 @@ export default async function InsightsPage({ params, searchParams }: PageProps) 
                     key={post.slug}
                     className="group flex flex-col h-full bg-card border border-border/80 shadow-jibb hover:shadow-jibb-md rounded-2xl overflow-hidden transition-all duration-300"
                   >
-                    <div className="relative h-48 overflow-hidden">
+                    <Link href={`/resources/insights/${post.slug}`} className="block relative h-48 overflow-hidden cursor-pointer">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={post.image}
                         alt={post.title}
                         className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
-                    </div>
+                    </Link>
 
                     <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                       <div className="space-y-3">

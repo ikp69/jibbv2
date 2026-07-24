@@ -47,6 +47,7 @@ type TabId = "media" | "thought" | "blog" | "social";
 
 export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinPosts }: NewsRoomProps) {
   const t = useTranslations("newsroom");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const [activeTab, setActiveTab] = useState<TabId>("social");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -165,7 +166,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
             date: pr.date,
             author: pr.publisher,
             link: pr.url,
-            badge: "Press Release"
+            badge: locale === "ja" ? "プレスリリース" : "Press Release"
           }))
         };
     }
@@ -309,7 +310,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
                             onClick={() => handleDeleteSocialPost(item.id)}
                             disabled={isDeleting === item.id}
                             className="absolute top-4 right-4 z-20 p-2 bg-red-500 hover:bg-red-600 disabled:bg-red-700 text-white rounded-full shadow-lg transition-all active:scale-95 flex items-center justify-center border border-white/10"
-                            title="Delete LinkedIn Post"
+                            title={tCommon("deleteLinkedInPost")}
                           >
                             {isDeleting === item.id ? (
                               <RefreshCw className="size-4 animate-spin" />
@@ -326,7 +327,7 @@ export function NewsRoom({ mediaPosts, caseStudies, thoughtLeadership, linkedinP
                               width="100%"
                               style={{ border: 'none', borderRadius: '12px' }}
                               allowFullScreen
-                              title="LinkedIn post"
+                              title={tCommon("linkedInPost")}
                               loading="lazy"
                             />
                           </div>
